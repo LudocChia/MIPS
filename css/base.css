@@ -1,0 +1,80 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+button {
+    background: transparent;
+    border: none;
+    outline: none;
+    cursor: pointer;
+}
+
+.btn {
+    line-height: 2;
+    padding: 5px 35px;
+    display: inline-block;
+    border-radius: 10px;
+    color: #21409a;
+    border-color: #21409a;
+    text-transform: capitalize;
+    font-family: inherit;
+    font-size: 16px;
+    cursor: pointer;
+    user-select: none;
+    position: relative;
+    overflow: hidden;
+    vertical-align: middle;
+    transition: color 0.3s ease;
+    z-index: 2;
+}
+
+.btn::before {
+    position: absolute;
+    content: '';
+    left: 0;
+    top: 0;
+    /* background: var(--green); */
+    height: 100%;
+    width: 0;
+    z-index: -1;
+}
+
+.btn:hover::before {
+    width: 100%;
+}
+
+/* li {
+    list-style: none;
+} */
+
+body {
+    font: 16px/1.5 "Microsoft Yahei", "Hiragino Sans GB", "Heiti SC", "WenQuanYi Micro Hei", sans-serif;
+    /* color: #333; */
+    background-image: url('../images/background.png');
+}
+
+ul,
+ol {
+    list-style: none;
+}
+
+em,
+i {
+    font-style: normal;
+}
+
+a {
+    color: #333;
+    text-decoration: none;
+}
+
+sup {
+    color: #21409a;
+    font-size: 1rem;
+}
