@@ -1,0 +1,26 @@
+header {
+    height: 100px;
+    margin-bottom: 30px;
+    background-color: var(--red_brown);
+    width: 100%;
+    box-shadow: 0 2px 6px 0 rgb(0 0 0 / 10%);
+}
+
+.header .wrapper {
+    /* margin-left: 10%; */
+    position: relative;
+    height: 80px;
+    background-color: var(--red_brown);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.logo {
+    margin-top: 20px;
+}
+
+.logo img {
+    display: block;
+    width: 350px;
+}

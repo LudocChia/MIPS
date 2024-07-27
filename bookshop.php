@@ -10,12 +10,12 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="./css/base.css">
-    <link rel="stylesheet" href="./css/common.css">
+    <link rel="stylesheet" href="./css/customer.css">
     <link rel="stylesheet" href="./css/index.css">
 </head>
 
 <body>
-    <?php include "./components/header.php"; ?>
+    <?php include "./components/customer_header.php"; ?>
     <section class="products">
         <div class="container">
             <div class="wrapper">
@@ -36,7 +36,7 @@
     <a href="#" class="back-to-top">
         <span class="material-symbols-outlined">arrow_upward</span>
     </a>
-    <?php include './components/footer.php'; ?>
+    <?php include './components/customer_footer.php'; ?>
     <script src="./js/common.js"></script>
 </body>
 

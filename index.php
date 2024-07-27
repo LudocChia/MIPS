@@ -6,16 +6,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mahans School</title>
     <link rel="icon" type="image/x-icon" href="./images/Mahans_internation_primary_school_logo.png">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="./css/base.css">
-    <link rel="stylesheet" href="./css/common.css">
+    <link rel="stylesheet" href="./css/customer.css">
     <link rel="stylesheet" href="./css/index.css">
 </head>
 
 <body>
-    <?php include './components/header.php'; ?>
+    <?php include './components/customer_header.php'; ?>
     <section class="banner">
         <div class="wrapper">
             <div class="slider">
@@ -50,7 +51,7 @@
             </div>
         </div>
     </section>
-    <?php include './components/footer.php'; ?>
+    <?php include "./components/customer_footer.php"; ?>
     <script src=""></script>
 </body>
 
