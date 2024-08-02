@@ -98,14 +98,6 @@ header {
     width: 450px;
 }
 
-.brand {
-    display: flex;
-    align-items: center;
-    height: 100%;
-    padding: 4%;
-    width: 20%;
-}
-
 /* Footer */
 
 .footer {
@@ -176,7 +168,7 @@ header {
 }
 
 .copyright p {
-    font-family: "Times", "serif";
+    /* font-family: "Times", "serif"; */
     color: white;
 }
 
