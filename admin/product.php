@@ -41,7 +41,6 @@ include "../components/db_connect.php";
                                 <h4>Bookshop</h4>
                                 <i class="bi bi-chevron-down"></i>
                             </a>
-
                         </div>
                         <ul class="sub-menu">
                             <li><a href="category.php"><i class="bi bi-tag"></i>
@@ -52,7 +51,7 @@ include "../components/db_connect.php";
                                     <h4>Product</h4>
                                 </a>
                             </li>
-                            <li><a href="product_size.php" class="active"><i class="bi bi-box-seam"></i>
+                            <li><a href="product_size.php" class="active"><span class="material-symbols-outlined">resize</span>
                                     <h4>Product Size</h4>
                                 </a>
                             </li>
