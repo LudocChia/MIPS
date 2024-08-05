@@ -89,15 +89,22 @@ $all_main_categories = getMainCategories($pdo);
                                 <h4>Bookshop</h4>
                                 <i class="bi bi-chevron-down"></i>
                             </a>
-
                         </div>
                         <ul class="sub-menu">
-                            <li><a href="category.php" class="active"><i class="bi bi-tag"></i>
-                                    <h4>Category</h4>
+                            <li><a href="category.php"><i class="bi bi-tag"></i>
+                                    <h4>Main Category</h4>
+                                </a>
+                            </li>
+                            <li><a href="category.php"><i class="bi bi-tag"></i>
+                                    <h4>Subcategory</h4>
+                                </a>
+                            </li>
+                            <li><a href="product_size.php" class="active"><span class="material-symbols-outlined">resize</span>
+                                    <h4>Product Size</h4>
                                 </a>
                             </li>
                             <li><a href="product.php"><i class="bi bi-box-seam"></i>
-                                    <h4>Product</h4>
+                                    <h4>All Product</h4>
                                 </a>
                             </li>
                         </ul>

@@ -11,7 +11,7 @@ include "../components/db_connect.php";
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bookshop - Mahans School</title>
+    <title>Bookshop Product Size - Mahans School</title>
     <link rel="icon" type="image/x-icon" href="../images/Mahans_internation_primary_school_logo.png">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
@@ -41,19 +41,22 @@ include "../components/db_connect.php";
                                 <h4>Bookshop</h4>
                                 <i class="bi bi-chevron-down"></i>
                             </a>
-
                         </div>
                         <ul class="sub-menu">
                             <li><a href="category.php"><i class="bi bi-tag"></i>
-                                    <h4>Category</h4>
+                                    <h4>Main Category</h4>
+                                </a>
+                            </li>
+                            <li><a href="category.php"><i class="bi bi-tag"></i>
+                                    <h4>Subcategory</h4>
+                                </a>
+                            </li>
+                            <li><a href="product_size.php" class="active"><span class="material-symbols-outlined">resize</span>
+                                    <h4>Product Size</h4>
                                 </a>
                             </li>
                             <li><a href="product.php"><i class="bi bi-box-seam"></i>
-                                    <h4>Product</h4>
-                                </a>
-                            </li>
-                            <li><a href="product_size.php" class="active"><i><i class="bi bi-box-seam"></i>
-                                        <h4>Product Size</h4>
+                                    <h4>All Product</h4>
                                 </a>
                             </li>
                         </ul>
@@ -65,7 +68,7 @@ include "../components/db_connect.php";
             <div class="box-container">
                 <div class="header">
                     <div class="left">
-                        <h1>Bookshop Product</h1>
+                        <h1>Bookshop Product Size</h1>
                     </div>
                     <div class="right">
                         <button id="open-popup"><i class="bi bi-plus-circle"></i>Add Bookshop Product</button>

@@ -35,36 +35,27 @@
                                 <h4>Bookshop</h4>
                                 <i class="bi bi-chevron-down"></i>
                             </a>
-
                         </div>
                         <ul class="sub-menu">
                             <li><a href="category.php"><i class="bi bi-tag"></i>
-                                    <h4>Category</h4>
+                                    <h4>Main Category</h4>
+                                </a>
+                            </li>
+                            <li><a href="category.php"><i class="bi bi-tag"></i>
+                                    <h4>Subcategory</h4>
+                                </a>
+                            </li>
+                            <li><a href="product_size.php"><span class="material-symbols-outlined">resize</span>
+                                    <h4>Product Size</h4>
                                 </a>
                             </li>
                             <li><a href="product.php"><i class="bi bi-box-seam"></i>
-                                    <h4>Product</h4>
+                                    <h4>All Product</h4>
                                 </a>
                             </li>
                         </ul>
                     </li>
                 </ul>
-                <!-- <a href=""></a>
-                <a href="category.php" class="active"><i class="bi bi-receipt">
-                        <h4>Category</h4></a>
-                <a href="product.php"><i class="bi bi-receipt"></i>
-                    <h4>Product</h4>
-                </a>
-                <a href="#"><i class="bi bi-clipboard-data"></i>
-                    <h4>Orders</h4>
-                </a>
-                <a href="#"><i class="bi bi-megaphone"></i>
-                    <h4>Announcement</h4>
-                </a>
-                <a href="#"><i class="bi bi-box-arrow-right"></i>
-                    <h4>Logout</h4>
-                </a>
-            </div> -->
         </aside>
         <!-- END OF ASIDE -->
         <main>
