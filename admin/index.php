@@ -16,7 +16,7 @@
 <body>
     <?php include "../components/admin_header.php"; ?>
     <!-- END OF NAVBAR -->
-    <div class="container">
+    <div class="content-container">
         <aside>
             <button id="close-btn">
                 <i class="bi bi-x"></i>
@@ -37,11 +37,11 @@
                             </a>
                         </div>
                         <ul class="sub-menu">
-                            <li><a href="category.php"><i class="bi bi-tag"></i>
+                            <li><a href="mainCategory.php"><i class="bi bi-tag"></i>
                                     <h4>Main Category</h4>
                                 </a>
                             </li>
-                            <li><a href="category.php"><i class="bi bi-tag"></i>
+                            <li><a href="subcategory.php"><i class="bi bi-tag"></i>
                                     <h4>Subcategory</h4>
                                 </a>
                             </li>
@@ -50,7 +50,7 @@
                                 </a>
                             </li>
                             <li><a href="product.php"><i class="bi bi-box-seam"></i>
-                                    <h4>All Products</h4>
+                                    <h4>All Product</h4>
                                 </a>
                             </li>
                         </ul>

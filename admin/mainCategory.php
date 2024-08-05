@@ -31,7 +31,7 @@ if (isset($_POST["submit"])) {
                 $stmt->bindParam(':parentId', $parentId);
                 try {
                     $stmt->execute();
-                    echo "<script>alert('Successfully Added');document.location.href ='category.php';</script>";
+                    echo "<script>alert('Successfully Added');document.location.href ='mainCategory.php';</script>";
                 } catch (PDOException $e) {
                     echo "<script>alert('Database error: " . $e->getMessage() . "');</script>";
                 }
@@ -91,15 +91,15 @@ $all_main_categories = getMainCategories($pdo);
                             </a>
                         </div>
                         <ul class="sub-menu">
-                            <li><a href="category.php"><i class="bi bi-tag"></i>
+                            <li><a href="mainCategory.php" class="active"><i class="bi bi-tag"></i>
                                     <h4>Main Category</h4>
                                 </a>
                             </li>
-                            <li><a href="category.php"><i class="bi bi-tag"></i>
+                            <li><a href="subcategory.php"><i class="bi bi-tag"></i>
                                     <h4>Subcategory</h4>
                                 </a>
                             </li>
-                            <li><a href="product_size.php" class="active"><span class="material-symbols-outlined">resize</span>
+                            <li><a href="product_size.php"><span class="material-symbols-outlined">resize</span>
                                     <h4>Product Size</h4>
                                 </a>
                             </li>
@@ -114,30 +114,45 @@ $all_main_categories = getMainCategories($pdo);
         </aside>
         <!-- END OF ASIDE -->
         <main class="category">
-            <div class="box-container">
-                <div class="header">
+            <div class="wrapper">
+                <div class="title">
                     <div class="left">
                         <h1>Bookshop Main Category</h1>
                     </div>
                     <div class="right">
                         <button id="open-popup"><i class="bi bi-plus-circle"></i>Add Main Category</button>
+                        <?php
+                        try {
+                            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                            $countQuery = "SELECT COUNT(*) FROM Product_Category WHERE parent_id IS NULL AND is_deleted = 0";
+                            $stmt = $pdo->prepare($countQuery);
+                            $stmt->execute();
+                            $count = $stmt->fetchColumn();
+
+                            echo "<p>Total $count Main Category</p>";
+                        } catch (PDOException $e) {
+                            echo "<script>alert('Database error: " . $e->getMessage() . "');</script>";
+                        }
+                        ?>
                     </div>
                 </div>
-                <?php foreach ($all_main_categories as $category) : ?>
-                    <div class="box">
-                        <h3><?php echo htmlspecialchars($category['category_name']); ?></h3>
-                        <a href="#">
-                            <div class="image-container">
-                                <img src="../uploads/<?php echo htmlspecialchars($category['category_icon']); ?>" alt="Icon for <?php echo htmlspecialchars($category['category_name']); ?>">
-                            </div>
-                        </a>
-                    </div>
-                <?php endforeach; ?>
+                <div class="box-container">
+                    <?php foreach ($all_main_categories as $category) : ?>
+                        <div class="box">
+                            <h3><?php echo htmlspecialchars($category['category_name']); ?></h3>
+                            <a href="#">
+                                <div class="image-container">
+                                    <img src="../uploads/<?php echo htmlspecialchars($category['category_icon']); ?>" alt="Icon for <?php echo htmlspecialchars($category['category_name']); ?>">
+                                </div>
+                            </a>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
             </div>
         </main>
     </div>
     <dialog>
-        <h1>Add Category</h1>
+        <h1>Add Main Category</h1>
         <form class="" action="" method="post" enctype="multipart/form-data">
             <div>
                 <h2>Category Name<sup>*</sup></h2>
@@ -147,19 +162,6 @@ $all_main_categories = getMainCategories($pdo);
             <div>
                 <h2>Category Icon<sup>*</sup></h2>
                 <input type="file" name="image" id="image" accept=".jpg, .jpeg, .png" value="">
-                <p>Please enter full name as per IC or Passport.</p>
-            </div>
-            <div>
-                <h2>Parent Category</h2>
-                <select name="parent_category" id="parent_category">
-                    <option value="">None</option>
-                    <?php foreach ($all_main_categories as $category) {
-                        if ($category['parent_id'] === NULL) {
-                            echo '<option value="' . $category['category_id'] . '">' . $category['category_name'] . '</option>';
-                        }
-                    }
-                    ?>
-                </select>
                 <p>Please enter full name as per IC or Passport.</p>
             </div>
             <div class="controls">

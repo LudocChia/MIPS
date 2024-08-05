@@ -1,30 +1,51 @@
 <?php
 include "../components/db_connect.php";
 
-$msg = [];
-if (isset($_POST['submit'])) {
-    $name = $_POST['name'];
+// Function to display alerts
+function displayAlert($message)
+{
+    echo "<script>alert('$message');</script>";
+}
 
+if (isset($_POST['submit'])) {
+    // Collect form data
+    $name = $_POST['name'];
+    $shoulder_width = $_POST['shoulder_width'];
+    $bust = $_POST['bust'];
+    $waist = $_POST['waist'];
+    $length = $_POST['length'];
+
+    // Validate size name
     if (!empty($name)) {
-        $sql = "INSERT INTO sizes (size_name) VALUES (:name)";
+        // Prepare the SQL statement
+        $sql = "INSERT INTO sizes (size_name, shoulder_width, bust, waist, length) VALUES (:name, :shoulder_width, :bust, :waist, :length)";
         $stmt = $pdo->prepare($sql);
+
+        // Bind parameters
         $stmt->bindParam(':name', $name);
+        $stmt->bindParam(':shoulder_width', $shoulder_width);
+        $stmt->bindParam(':bust', $bust);
+        $stmt->bindParam(':waist', $waist);
+        $stmt->bindParam(':length', $length);
 
         try {
+            // Execute the statement
             $stmt->execute();
-            echo "<script>alert('Successfully Added');document.location.href ='category.php';</script>";
+            displayAlert('Successfully Added');
+            echo "<script>document.location.href ='productSize.php';</script>";
         } catch (PDOException $e) {
-            echo "<script>alert('Database error: " . $e->getMessage() . "');</script>";
+            // Handle SQL execution error
+            displayAlert('Database error: ' . $e->getMessage());
         }
     } else {
-        echo "<script>alert('Please enter a product size name.');</script>";
+        displayAlert('Please enter a product size name.');
     }
 }
+
+// Retrieve existing sizes
 $sql = "SELECT * FROM Sizes";
 $sizes = $pdo->query($sql);
-
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -64,11 +85,11 @@ $sizes = $pdo->query($sql);
                             </a>
                         </div>
                         <ul class="sub-menu">
-                            <li><a href="category.php"><i class="bi bi-tag"></i>
+                            <li><a href="mainCategory.php"><i class="bi bi-tag"></i>
                                     <h4>Main Category</h4>
                                 </a>
                             </li>
-                            <li><a href="category.php"><i class="bi bi-tag"></i>
+                            <li><a href="subcategory.php"><i class="bi bi-tag"></i>
                                     <h4>Subcategory</h4>
                                 </a>
                             </li>
@@ -83,11 +104,12 @@ $sizes = $pdo->query($sql);
                         </ul>
                     </li>
                 </ul>
+            </div>
         </aside>
         <!-- END OF ASIDE -->
-        <main>
-            <div class="box-container">
-                <div class="header">
+        <main class="product-size">
+            <div class="wrapper">
+                <div class="title">
                     <div class="left">
                         <h1>Bookshop Product Size</h1>
                     </div>
@@ -95,9 +117,11 @@ $sizes = $pdo->query($sql);
                         <button id="open-popup"><i class="bi bi-plus-circle"></i>Add Product Size</button>
                     </div>
                 </div>
-                <div class="box">
-                    <div class="image-container">
-                        <a href="#"></a>
+                <div class="box-container">
+                    <div class="box">
+                        <div class="image-container">
+                            <a href="#"></a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -105,20 +129,42 @@ $sizes = $pdo->query($sql);
     </div>
     <dialog id="add-product">
         <h2>Add Product Size</h2>
-        <form action="" method="post">
+        <form action="" method="post" enctype="multipart/form-data">
             <div class="input-field">
                 <h2>Product Size Name<sup>*</sup></h2>
                 <input type="text" name="name" value="<?php echo isset($_POST['name']) ? htmlspecialchars($_POST['name']) : ''; ?>">
-                <p>Please enter the size name (e.g., XS, S, M, L, XL).</p>
+                <p>Please enter the size name (e.g., 100, 110, 120).</p>
+            </div>
+            <div class="input-field">
+                <h2>Shoulder Width (cm)</h2>
+                <input type="number" step="0.01" name="shoulder_width" value="<?php echo isset($_POST['shoulder_width']) ? htmlspecialchars($_POST['shoulder_width']) : ''; ?>">
+            </div>
+            <div class="input-field">
+                <h2>Bust (cm)</h2>
+                <input type="number" step="0.01" name="bust" value="<?php echo isset($_POST['bust']) ? htmlspecialchars($_POST['bust']) : ''; ?>">
+            </div>
+            <div class="input-field">
+                <h2>Waist (cm)</h2>
+                <input type="number" step="0.01" name="waist" value="<?php echo isset($_POST['waist']) ? htmlspecialchars($_POST['waist']) : ''; ?>">
+            </div>
+            <div class="input-field">
+                <h2>Length (cm)</h2>
+                <input type="number" step="0.01" name="length" value="<?php echo isset($_POST['length']) ? htmlspecialchars($_POST['length']) : ''; ?>">
+            </div>
+            <div class="controls">
+                <button type="button" onclick="document.getElementById('add-product').close();" class="close-btn">Cancel</button>
+                <button type="reset">Clear</button>
+                <button type="submit" name="submit">Publish</button>
             </div>
         </form>
-        <div class="controls">
-            <button onclick="showDialog('sub')" class="close-btn">Cancel</button>
-            <button type="reset">Clear</button>
-            <button type="submit" name="submit">Publish</button>
-        </div>
     </dialog>
     <script src="../javascript/admin.js"></script>
+    <script>
+        // Open dialog for adding a size
+        document.getElementById('open-popup').addEventListener('click', function() {
+            document.getElementById('add-product').showModal();
+        });
+    </script>
 </body>
 
 </html>

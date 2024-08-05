@@ -1,5 +1,5 @@
 <nav>
-    <div class="container">
+    <div class="wrapper">
         <img src="../images/Mahans_IPS_logo.png" class="logo" alt="Mahans Internation Primary School logo">
         <div class="profile-area">
             <button id="menu-btn">
