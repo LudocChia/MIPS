@@ -2,7 +2,9 @@ const sideMenu = document.querySelector("aside");
 const menuBtn = document.querySelector("#menu-btn");
 const closeBtn = document.querySelector("#close-btn");
 const userBtn = document.querySelector("#user-btn");
-const profileMenu = document.querySelector(".profile-menu")
+const profileMenu = document.querySelector(".profile-menu");
+const dialog = document.querySelector('dialog');
+
 // const themeToggler = document.querySelector(".theme-toggler");
 
 // Show Sidebar
@@ -30,6 +32,13 @@ document.addEventListener('click', function (event) {
 window.addEventListener('resize', function () {
     if (profileMenu.classList.contains('active')) {
     }
+});
+
+document.querySelector("#open-popup").addEventListener("click", function () {
+    dialog.showModal();
+});
+dialog.querySelector(".close-btn").addEventListener("click", function () {
+    dialog.close();
 });
 
 // Change Theme

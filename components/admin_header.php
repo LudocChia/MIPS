@@ -2,14 +2,17 @@
     <div class="container">
         <img src="../images/Mahans_IPS_logo.png" class="logo" alt="Mahans Internation Primary School logo">
         <div class="profile-area">
+            <button id="menu-btn">
+                <i class="bi bi-list"></i>
+            </button>
             <div class="message-btn">
-                <a href="notification.php"><i class="bi bi-envelope"></i></a>
+                <a href="notification.php"><i class="bi bi-bell-fill"></i></a>
             </div>
             <div class="profile">
                 <!-- <div class="profile-photo">
                     <img src="../uploads/wangbingbing(1).png" alt="王冰冰">
                 </div> -->
-                <i><img src="../uploads/wangbingbing(1).png" alt="王冰冰" alt="" class=" user-img" id="user-btn"></i>
+                <img src="../uploads/wangbingbing(1).png" alt="王冰冰" alt="" class="user-img" id="user-btn">
                 <div class="profile-menu">
                     <div class="user-info">
                         <img src="<?= $user_image_path; ?>" alt="">
@@ -33,9 +36,6 @@
                     </a>
                 </div>
             </div>
-            <button id="menu-btn">
-                <i class="bi bi-list"></i>
-            </button>
         </div>
     </div>
 </nav>

@@ -22,11 +22,38 @@
                 <i class="bi bi-x"></i>
             </button>
             <div class="sidebar">
-                <a href="index.php" class="active"><i class="bi bi-grid"></i>
-                    <h4>Dashboard</h4>
-                </a>
-                <a href="bookshop.php"><i class="bi bi-receipt"></i>
-                    <h4>Bookshop</h4>
+                <ul>
+                    <li>
+                        <a href="index.php" class="active"><i class="bi bi-grid"></i>
+                            <h4>Dashboard</h4>
+                        </a>
+                    </li>
+                    <li>
+                        <div class="icon-link">
+                            <a href="#">
+                                <i class="bi bi-shop-window"></i>
+                                <h4>Bookshop</h4>
+                                <i class="bi bi-chevron-down"></i>
+                            </a>
+
+                        </div>
+                        <ul class="sub-menu">
+                            <li><a href="category.php"><i class="bi bi-tag"></i>
+                                    <h4>Category</h4>
+                                </a>
+                            </li>
+                            <li><a href="product.php"><i class="bi bi-box-seam"></i>
+                                    <h4>Product</h4>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+                <!-- <a href=""></a>
+                <a href="category.php" class="active"><i class="bi bi-receipt">
+                        <h4>Category</h4></a>
+                <a href="product.php"><i class="bi bi-receipt"></i>
+                    <h4>Product</h4>
                 </a>
                 <a href="#"><i class="bi bi-clipboard-data"></i>
                     <h4>Orders</h4>
@@ -37,7 +64,7 @@
                 <a href="#"><i class="bi bi-box-arrow-right"></i>
                     <h4>Logout</h4>
                 </a>
-            </div>
+            </div> -->
         </aside>
         <!-- END OF ASIDE -->
         <main>
