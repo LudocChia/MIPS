@@ -110,6 +110,7 @@ $all_main_categories = getMainCategories($pdo);
                         </ul>
                     </li>
                 </ul>
+            </div>
         </aside>
         <!-- END OF ASIDE -->
         <main class="category">

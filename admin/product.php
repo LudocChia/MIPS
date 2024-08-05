@@ -58,6 +58,7 @@ include "../components/db_connect.php";
                         </ul>
                     </li>
                 </ul>
+            </div>
         </aside>
         <!-- END OF ASIDE -->
         <main>

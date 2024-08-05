@@ -50,12 +50,13 @@
                                 </a>
                             </li>
                             <li><a href="product.php"><i class="bi bi-box-seam"></i>
-                                    <h4>All Product</h4>
+                                    <h4>All Products</h4>
                                 </a>
                             </li>
                         </ul>
                     </li>
                 </ul>
+            </div>
         </aside>
         <!-- END OF ASIDE -->
         <main>

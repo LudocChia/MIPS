@@ -1,6 +1,27 @@
 <?php
 include "../components/db_connect.php";
 
+$msg = [];
+if (isset($_POST['submit'])) {
+    $name = $_POST['name'];
+
+    if (!empty($name)) {
+        $sql = "INSERT INTO sizes (size_name) VALUES (:name)";
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindParam(':name', $name);
+
+        try {
+            $stmt->execute();
+            echo "<script>alert('Successfully Added');document.location.href ='category.php';</script>";
+        } catch (PDOException $e) {
+            echo "<script>alert('Database error: " . $e->getMessage() . "');</script>";
+        }
+    } else {
+        echo "<script>alert('Please enter a product size name.');</script>";
+    }
+}
+$sql = "SELECT * FROM Sizes";
+$sizes = $pdo->query($sql);
 
 ?>
 
@@ -71,7 +92,7 @@ include "../components/db_connect.php";
                         <h1>Bookshop Product Size</h1>
                     </div>
                     <div class="right">
-                        <button id="open-popup"><i class="bi bi-plus-circle"></i>Add Bookshop Product</button>
+                        <button id="open-popup"><i class="bi bi-plus-circle"></i>Add Product Size</button>
                     </div>
                 </div>
                 <div class="box">
@@ -83,49 +104,14 @@ include "../components/db_connect.php";
         </main>
     </div>
     <dialog id="add-product">
-        <h2>Add Bookshop Product</h2>
-        <form action="" method="post" enctype="multipart/form-data">
+        <h2>Add Product Size</h2>
+        <form action="" method="post">
             <div class="input-field">
-                <h2>Category Name<sup>*</sup></h2>
+                <h2>Product Size Name<sup>*</sup></h2>
                 <input type="text" name="name" value="<?php echo isset($_POST['name']) ? htmlspecialchars($_POST['name']) : ''; ?>">
-                <p>Please enter full name as per IC or Passport.</p>
-            </div>
-            <div class="input-field">
-                <h2>Product Category</h2>
-                <select name="parent_category" id="parent_category">
-                    <option value="">None</option>
-                    <?php foreach ($all_main_categories as $category) {
-                        if ($category['parent_id'] === NULL) {
-                            echo '<option value="' . $category['category_id'] . '">' . $category['category_name'] . '</option>';
-                        }
-                    }
-                    ?>
-                </select>
-                <p>Please enter full name as per IC or Passport.</p>
-            </div>
-            <div class="input-field">
-                <h2>Product Image<sup>*</sup></h2>
-                <input type="file" name="image" id="image" accept=".jpg, .jpeg, .png" value="">
-                <p>Please enter full name as per IC or Passport.</p>
-            </div>
-            <div class="input-filed">
-                <h2>Product Description<sup>*</sup></h2>
-                <textarea name="description" id="description" cols="30" rows="10" value=""></textarea>
-                <p>Please enter full name as per IC or Passport.</p>
-            </div>
-            <div class="input-field">
-                <h2>Product Price<sup>*</sup></h2>
-                <input type="text" name="price" value="<?php echo isset($_POST['price']) ? htmlspecialchars($_POST['price']) : ''; ?>">
-                <p>Please enter full name as per IC or Passport.</p>
-            </div>
-            <div class="input-field">
-
-            </div>
-            <div class="input-field">
-
+                <p>Please enter the size name (e.g., XS, S, M, L, XL).</p>
             </div>
         </form>
-        <p>Popup content</p>
         <div class="controls">
             <button onclick="showDialog('sub')" class="close-btn">Cancel</button>
             <button type="reset">Clear</button>
