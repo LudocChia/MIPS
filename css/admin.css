@@ -104,6 +104,14 @@ small {
     color: var(--color-success);
 }
 
+/* LOGIN */
+.login .wrapper {
+    width: 90%;
+    margin: 0 auto;
+}
+
+.login .title {}
+
 /* NAV BAR */
 nav {
     width: 100%;
@@ -358,19 +366,57 @@ form textarea {
 aside {
     margin: 1rem;
     height: 80vh;
+    overflow-y: scroll;
+}
+
+aside::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+aside::-webkit-scrollbar-track {
+    background: #f0f0f0;
+    /* 滚动条轨道颜色 */
+    border-radius: 4px;
+}
+
+aside::-webkit-scrollbar-thumb {
+    background-color: #888;
+    /* 滚动条滑块颜色 */
+    border-radius: 4px;
+    border: 2px solid #f0f0f0;
+    /* 外边框以配合圆角 */
+}
+
+aside::-webkit-scrollbar-thumb:hover {
+    background-color: #555;
+    /* 滑块悬停颜色 */
+}
+
+aside::-webkit-scrollbar-button {
+    background-color: #ccc;
+    /* 按钮背景颜色 */
+    display: none;
+    /* 隐藏滚动按钮 */
+}
+
+aside::-webkit-scrollbar-corner {
+    background-color: #f0f0f0;
+    /* 边角颜色 */
 }
 
 aside button#close-btn {
     display: none;
 }
 
-aside .sidebar li a {
+aside .sidebar ul li a {
+    position: relative;
     display: flex;
     align-items: center;
     gap: 1.2rem;
     height: 4.2rem;
     color: var(--color-gray-light);
-    position: relative;
+
 }
 
 aside .sidebar a i,
@@ -379,8 +425,14 @@ aside .sidebar a span {
     margin-left: 3rem;
 }
 
-aside .sidebar li .sub-menu {
-    padding: 1rem 2rem 1rem 1rem;
+aside .sidebar ul ul {
+    display: none;
+}
+
+aside .sidebar ul .bookshop-show.show,
+aside .sidebar ul .user-show.show1 {
+    padding: 0 0 1rem 1rem;
+    display: block;
     /* margin-top: -10px; */
 }
 
@@ -734,6 +786,10 @@ main .recent-orders a {
 
 /* MEDIA QUERIES */
 @media screen and (max-width: 1200px) {
+    .container {
+        grid-template-columns: 1fr;
+    }
+
     nav .search-bar {
         display: none;
     }
@@ -808,8 +864,9 @@ main .recent-orders a {
     } */
 
     main .insights {
-        grid-template-columns: 1fr;
-        gap: 0;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem;
     }
 
     main .recent-orders {

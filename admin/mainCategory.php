@@ -91,15 +91,15 @@ $all_main_categories = getMainCategories($pdo);
                             </a>
                         </div>
                         <ul class="sub-menu">
-                            <li><a href="mainCategory.php" class="active"><i class="bi bi-tag"></i>
+                            <li><a href="mainCategory.php" class="active"><i class="bi bi-tags-fill"></i>
                                     <h4>Main Category</h4>
                                 </a>
                             </li>
-                            <li><a href="subcategory.php"><i class="bi bi-tag"></i>
+                            <li><a href="subcategory.php"><i class="bi bi-tag-fill"></i>
                                     <h4>Subcategory</h4>
                                 </a>
                             </li>
-                            <li><a href="product_size.php"><span class="material-symbols-outlined">resize</span>
+                            <li><a href="productSize.php"><span class="material-symbols-outlined">resize</span>
                                     <h4>Product Size</h4>
                                 </a>
                             </li>
