@@ -425,12 +425,17 @@ aside .sidebar a span {
     margin-left: 3rem;
 }
 
+aside .sidebar a i.rotate {
+    margin-top: 1.5rem;
+    transform: translateY(-50%) rotate(-180deg);
+}
+
 aside .sidebar ul ul {
     display: none;
 }
 
-aside .sidebar ul .bookshop-show.show,
-aside .sidebar ul .user-show.show1 {
+aside .sidebar ul .bookshop-show.first,
+aside .sidebar ul .user-show.second {
     padding: 0 0 1rem 1rem;
     display: block;
     /* margin-top: -10px; */

@@ -72,36 +72,62 @@ $sizes = $pdo->query($sql);
             <div class="sidebar">
                 <ul>
                     <li>
-                        <a href="index.php"><i class="bi bi-grid"></i>
+                        <a href="index.php" class="active"><i class="bi bi-grid-1x2-fill"></i>
                             <h4>Dashboard</h4>
                         </a>
                     </li>
                     <li>
-                        <div class="icon-link">
-                            <a href="#">
-                                <i class="bi bi-shop-window"></i>
-                                <h4>Bookshop</h4>
-                                <i class="bi bi-chevron-down"></i>
-                            </a>
-                        </div>
-                        <ul class="sub-menu">
-                            <li><a href="mainCategory.php"><i class="bi bi-tags-fill"></i>
+                        <a href="#" class="bookshop-btn">
+                            <i class="bi bi-shop-window"></i>
+                            <h4>Bookshop</h4>
+                            <i class="bi bi-chevron-down first"></i>
+                        </a>
+                        <ul class="bookshop-show">
+                            <li><a href=" mainCategory.php"><i class="bi bi-tags-fill"></i>
                                     <h4>Main Category</h4>
                                 </a>
                             </li>
-                            <li><a href="subcategory.php"><i class="bi bi-tag"></i>
+                            <li><a href="subcategory.php"><i class="bi bi-tag-fill"></i>
                                     <h4>Subcategory</h4>
                                 </a>
                             </li>
-                            <li><a href="productSize.php" class="active"><span class="material-symbols-outlined">resize</span>
+                            <li><a href="productSize.php" class="active"><i class="bi bi-aspect-ratio-fill"></i>
                                     <h4>Product Size</h4>
                                 </a>
                             </li>
-                            <li><a href="product.php"><i class="bi bi-box-seam"></i>
+                            <li><a href="product.php"><i class="bi bi-box-seam-fill"></i>
                                     <h4>All Product</h4>
                                 </a>
                             </li>
                         </ul>
+                    </li>
+                    <li>
+                        <a href="#" class="user-btn">
+                            <i class="bi bi-person-fill"></i>
+                            <h4>User Type</h4>
+                            <i class="bi bi-chevron-down second"></i>
+                        </a>
+                        <ul class="user-show">
+                            <li><a href="admin.php"><i class="bi bi-person-fill-gear"></i>
+                                    <h4>All Admin</h4>
+                                </a>
+                            </li>
+                            <li><a href="teacher.php"><i class="bi bi-mortarboard-fill"></i>
+                                    <h4>All Teacher</h4>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="parent.php"><i class="bi bi-people-fill"></i>
+                                    <h4>All Parent</h4>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="order.php">
+                            <i class="bi bi-receipt"></i>
+                            <h4>Order</h4>
+                        </a>
                     </li>
                 </ul>
             </div>

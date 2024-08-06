@@ -22,7 +22,7 @@
             </button>
             <div class="sidebar">
                 <ul>
-                    <li class="active">
+                    <li>
                         <a href="index.php" class="active"><i class="bi bi-grid-1x2-fill"></i>
                             <h4>Dashboard</h4>
                         </a>
@@ -31,7 +31,7 @@
                         <a href="#" class="bookshop-btn">
                             <i class="bi bi-shop-window"></i>
                             <h4>Bookshop</h4>
-                            <i class="bi bi-chevron-down"></i>
+                            <i class="bi bi-chevron-down first"></i>
                         </a>
                         <ul class="bookshop-show">
                             <li><a href=" mainCategory.php"><i class="bi bi-tags-fill"></i>
@@ -42,7 +42,7 @@
                                     <h4>Subcategory</h4>
                                 </a>
                             </li>
-                            <li><a href="product_size.php"><i class="bi bi-aspect-ratio-fill"></i>
+                            <li><a href="productSize.php"><i class="bi bi-aspect-ratio-fill"></i>
                                     <h4>Product Size</h4>
                                 </a>
                             </li>
@@ -55,8 +55,8 @@
                     <li>
                         <a href="#" class="user-btn">
                             <i class="bi bi-person-fill"></i>
-                            <h4>User</h4>
-                            <i class="bi bi-chevron-down"></i>
+                            <h4>User Type</h4>
+                            <i class="bi bi-chevron-down second"></i>
                         </a>
                         <ul class="user-show">
                             <li><a href="admin.php"><i class="bi bi-person-fill-gear"></i>
@@ -262,29 +262,9 @@
                             </div>
                         </div>
                     </div>
-                    <!-- <div class="item customers">
-            <div class="icon">
-                <i class="bi bi-cart"></i>
-            </div>
-            <div class="right">
-                <div class="info">
-                    <h3>New Customers</h3>
-                    <small class="text-muted">Last 24 Hours</small>
-                </div>
-                <h5 class="success">+25%</h5>
-                <h3>849</h3>
-            </div>
-        </div>
-        <div class="item add-product">
-            <div>
-                <i class="bi bi-plus-circle"></i>
-                <h3>Add Product</h3>
-            </div>
-        </div> -->
                 </div>
             </section>
         </main>
-        <!-- END OF MAIN -->
     </div>
     <script src="../javascript/admin.js"></script>
 </body>

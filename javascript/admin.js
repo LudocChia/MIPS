@@ -34,34 +34,27 @@ window.addEventListener('resize', function () {
     }
 });
 
-$('.btn').click(function () {
-    $(this).toggleClass("click");
-    $('.sidebar').toggleClass("show");
-});
+
+// sidebar toggle
 $('.bookshop-btn').click(function () {
-    $('.sidebar ul .bookshop-show').toggleClass("show");
+    $('.sidebar ul .bookshop-show').toggleClass("first");
     $('.sidebar ul .first').toggleClass("rotate");
 });
+
 $('.user-btn').click(function () {
-    $('.sidebar ul .user-show').toggleClass("show1");
+    $('.sidebar ul .user-show').toggleClass("second");
     $('.sidebar ul .second').toggleClass("rotate");
 });
 $('.sidebar ul li').click(function () {
     $(this).addClass("active").siblings().removeClass("active");
 });
 
+
+// dialog modal
 document.querySelector("#open-popup").addEventListener("click", function () {
     dialog.showModal();
 });
+
 dialog.querySelector(".close-btn").addEventListener("click", function () {
     dialog.close();
 });
-
-
-// Change Theme
-// themeToggler.addEventListener("click", () => {
-//     document.body.classList.toggle('dark-theme-variables');
-
-//     themeToggler.querySelector('i:nth-child(1)').classList.toggle('active');
-//     themeToggler.querySelector('i:nth-child(2)').classList.toggle('active');
-// })
