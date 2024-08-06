@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="../css/visitor.css"></head>
 <body>
-    <?php include "../components/admin_header.php"; ?>
+    <?php include "../visitor/header.php"; ?>
 
 </body>
 </html>
