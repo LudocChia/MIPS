@@ -4,8 +4,7 @@ include "../components/db_connect.php";
 $msg = [];
 if (isset($_POST["submit"])) {
     $name = $_POST["name"];
-    $parentId = !empty($_POST["parent_id"]) ? $_POST["parent_id"] : null;
-
+    $parentId = !empty($_POST["parent_category"]) ? $_POST["parent_category"] : null;
 
     if ($_FILES["image"]["error"] === 4) {
         echo "<script> alert('Image Does Not Exist'); </script>";
@@ -31,7 +30,7 @@ if (isset($_POST["submit"])) {
                 $stmt->bindParam(':parentId', $parentId);
                 try {
                     $stmt->execute();
-                    echo "<script>alert('Successfully Added');document.location.href ='category.php';</script>";
+                    echo "<script>alert('Successfully Added');document.location.href ='subcategory.php';</script>";
                 } catch (PDOException $e) {
                     echo "<script>alert('Database error: " . $e->getMessage() . "');</script>";
                 }
@@ -42,6 +41,16 @@ if (isset($_POST["submit"])) {
     }
 }
 
+// Function to get subcategories
+function getSubcategories($pdo)
+{
+    $sql = "SELECT * FROM Product_Category WHERE parent_id IS NOT NULL AND is_deleted = 0";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+// Function to get main categories for the dropdown
 function getMainCategories($pdo)
 {
     $sql = "SELECT * FROM Product_Category WHERE parent_id IS NULL AND is_deleted = 0";
@@ -50,6 +59,7 @@ function getMainCategories($pdo)
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
+$all_subcategories = getSubcategories($pdo);
 $all_main_categories = getMainCategories($pdo);
 ?>
 
@@ -59,7 +69,7 @@ $all_main_categories = getMainCategories($pdo);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bookshop Category - Mahans School</title>
+    <title>Bookshop Subcategory - Mahans School</title>
     <link rel="icon" type="image/x-icon" href="../images/Mahans_internation_primary_school_logo.png">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
@@ -91,15 +101,15 @@ $all_main_categories = getMainCategories($pdo);
                             </a>
                         </div>
                         <ul class="sub-menu">
-                            <li><a href="category.php"><i class="bi bi-tag"></i>
+                            <li><a href="mainCategory.php"><i class="bi bi-tags-fill"></i>
                                     <h4>Main Category</h4>
                                 </a>
                             </li>
-                            <li><a href="category.php"><i class="bi bi-tag"></i>
+                            <li><a href="subcategory.php" class="active"><i class="bi bi-tag"></i>
                                     <h4>Subcategory</h4>
                                 </a>
                             </li>
-                            <li><a href="product_size.php" class="active"><span class="material-symbols-outlined">resize</span>
+                            <li><a href="productSize.php"><span class="material-symbols-outlined">resize</span>
                                     <h4>Product Size</h4>
                                 </a>
                             </li>
@@ -110,65 +120,76 @@ $all_main_categories = getMainCategories($pdo);
                         </ul>
                     </li>
                 </ul>
+            </div>
         </aside>
         <!-- END OF ASIDE -->
         <main class="category">
-            <div class="box-container">
-                <div class="header">
+            <div class="wrapper">
+                <div class="title">
                     <div class="left">
-                        <h1>Bookshop Main Category</h1>
+                        <h1>Bookshop Subcategory</h1>
                     </div>
                     <div class="right">
-                        <button id="open-popup"><i class="bi bi-plus-circle"></i>Add Main Category</button>
+                        <button id="open-popup"><i class="bi bi-plus-circle"></i>Add Subcategory</button>
                     </div>
                 </div>
-                <?php foreach ($all_main_categories as $category) : ?>
-                    <div class="box">
-                        <h3><?php echo htmlspecialchars($category['category_name']); ?></h3>
-                        <a href="#">
-                            <div class="image-container">
-                                <img src="../uploads/<?php echo htmlspecialchars($category['category_icon']); ?>" alt="Icon for <?php echo htmlspecialchars($category['category_name']); ?>">
-                            </div>
-                        </a>
-                    </div>
-                <?php endforeach; ?>
+                <div class="box-container">
+                    <?php foreach ($all_subcategories as $subcategory) : ?>
+                        <div class="box">
+                            <h3><?php echo htmlspecialchars($subcategory['category_name']); ?></h3>
+                            <a href="#">
+                                <div class="image-container">
+                                    <img src="../uploads/<?php echo htmlspecialchars($subcategory['category_icon']); ?>" alt="Icon for <?php echo htmlspecialchars($category['category_name']); ?>">
+                                </div>
+                            </a>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
             </div>
         </main>
     </div>
-    <dialog>
-        <h1>Add Category</h1>
-        <form class="" action="" method="post" enctype="multipart/form-data">
-            <div>
-                <h2>Category Name<sup>*</sup></h2>
+    <dialog id="add-subcategory-dialog">
+        <h1>Add Subcategory</h1>
+        <form action="" method="post" enctype="multipart/form-data">
+            <div class="input-field">
+                <h2>Subcategory Name<sup>*</sup></h2>
                 <input type="text" name="name" value="<?php echo isset($_POST['name']) ? htmlspecialchars($_POST['name']) : ''; ?>">
-                <p>Please enter full name as per IC or Passport.</p>
+                <p>Please enter the subcategory name.</p>
             </div>
-            <div>
-                <h2>Category Icon<sup>*</sup></h2>
-                <input type="file" name="image" id="image" accept=".jpg, .jpeg, .png" value="">
-                <p>Please enter full name as per IC or Passport.</p>
+            <div class="input-field">
+                <h2>Subcategory Icon<sup>*</sup></h2>
+                <input type="file" name="image" id="image" accept=".jpg, .jpeg, .png">
+                <p>Please upload an image for the subcategory.</p>
             </div>
-            <div>
-                <h2>Parent Category</h2>
-                <select name="parent_category" id="parent_category">
-                    <option value="">None</option>
-                    <?php foreach ($all_main_categories as $category) {
-                        if ($category['parent_id'] === NULL) {
-                            echo '<option value="' . $category['category_id'] . '">' . $category['category_name'] . '</option>';
-                        }
-                    }
-                    ?>
+            <div class="input-field">
+                <h2>Parent Category<sup>*</sup></h2>
+                <select name="parent_category" id="parent_category" required>
+                    <option value="">Select a main category</option>
+                    <?php foreach ($all_main_categories as $mainCategory) : ?>
+                        <option value="<?php echo $mainCategory['category_id']; ?>">
+                            <?php echo htmlspecialchars($mainCategory['category_name']); ?>
+                        </option>
+                    <?php endforeach; ?>
                 </select>
-                <p>Please enter full name as per IC or Passport.</p>
+                <p>Select the main category for this subcategory.</p>
             </div>
             <div class="controls">
-                <button onclick="showDialog('main')">Cancel</button>
+                <button type="button" onclick="document.getElementById('add-subcategory-dialog').close();">Cancel</button>
                 <button type="reset">Clear</button>
                 <button type="submit" name="submit">Publish</button>
             </div>
         </form>
     </dialog>
     <script src="../javascript/admin.js"></script>
+    <script>
+        document.getElementById('open-popup').addEventListener('click', function() {
+            document.getElementById('add-subcategory-dialog').showModal();
+        });
+
+        document.querySelector('.close-btn').addEventListener('click', function() {
+            document.getElementById('add-subcategory-dialog').close();
+        });
+    </script>
 </body>
 
 </html>

@@ -10,13 +10,13 @@ try {
     echo "Connection failed: " . $e->getMessage();
 }
 
-function unique_id()
-{
-    $chars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    $charLength = strlen($chars);
-    $randomString = "";
-    for ($i = 0; $i < 15; $i++) {
-        $randomString .= $chars[mt_rand(0, $charLength - 1)];
-    }
-    return $randomString;
-}
+// function unique_id()
+// {
+//     $chars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+//     $charLength = strlen($chars);
+//     $randomString = "";
+//     for ($i = 0; $i < 15; $i++) {
+//         $randomString .= $chars[mt_rand(0, $charLength - 1)];
+//     }
+//     return $randomString;
+// }

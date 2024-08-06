@@ -19,7 +19,7 @@ closeBtn.addEventListener("click", () => {
 
 // Show Profile Menu
 userBtn.addEventListener('click', function (event) {
-    event.stopPropagation(); // 阻止事件冒泡
+    event.stopPropagation();
     profileMenu.classList.toggle('active');
 });
 
@@ -34,12 +34,29 @@ window.addEventListener('resize', function () {
     }
 });
 
+$('.btn').click(function () {
+    $(this).toggleClass("click");
+    $('.sidebar').toggleClass("show");
+});
+$('.bookshop-btn').click(function () {
+    $('.sidebar ul .bookshop-show').toggleClass("show");
+    $('.sidebar ul .first').toggleClass("rotate");
+});
+$('.user-btn').click(function () {
+    $('.sidebar ul .user-show').toggleClass("show1");
+    $('.sidebar ul .second').toggleClass("rotate");
+});
+$('.sidebar ul li').click(function () {
+    $(this).addClass("active").siblings().removeClass("active");
+});
+
 document.querySelector("#open-popup").addEventListener("click", function () {
     dialog.showModal();
 });
 dialog.querySelector(".close-btn").addEventListener("click", function () {
     dialog.close();
 });
+
 
 // Change Theme
 // themeToggler.addEventListener("click", () => {
