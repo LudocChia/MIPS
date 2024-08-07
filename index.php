@@ -21,7 +21,7 @@
 <body>
     <?php include './components/customer_header.php'; ?>
     <section class="banner">
-        <div>
+        <div class="wrapper">
             <div class="slider">
                 <div class="list">
                     <div class="item">
