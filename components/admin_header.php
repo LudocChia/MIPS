@@ -9,14 +9,11 @@
                 <a href="notification.php"><i class="bi bi-bell-fill"></i></a>
             </div>
             <div class="profile">
-                <!-- <div class="profile-photo">
-                    <img src="../uploads/wangbingbing(1).png" alt="王冰冰">
-                </div> -->
-                <img src="../uploads/wangbingbing(1).png" alt="王冰冰" alt="" class="user-img" id="user-btn">
+                <img src="<?= htmlspecialchars($_SESSION['admin_image']) ?>" alt="Admin Image" class="user-img" id="user-btn">
                 <div class="profile-menu">
                     <div class="user-info">
-                        <img src="<?= $user_image_path; ?>" alt="">
-                        <h4><?php echo $_SESSION['customer_name']; ?></h4>
+                        <img src="<?= htmlspecialchars($_SESSION['admin_image']) ?>" alt="Admin Image" class="user-img" id="user-btn">
+                        <h4><?php echo $_SESSION['admin_name']; ?></h4>
                     </div>
                     <hr>
                     <a href="profile.php" class="profile-menu-link">

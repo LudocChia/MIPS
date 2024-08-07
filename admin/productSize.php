@@ -1,10 +1,11 @@
 <?php
+session_start();
+
 include "../components/db_connect.php";
 
-// Function to display alerts
-function displayAlert($message)
-{
-    echo "<script>alert('$message');</script>";
+if (!isset($_SESSION['admin_id'])) {
+    header('Location: login.php');
+    exit();
 }
 
 if (isset($_POST['submit'])) {
@@ -31,21 +32,31 @@ if (isset($_POST['submit'])) {
         try {
             // Execute the statement
             $stmt->execute();
-            displayAlert('Successfully Added');
+            echo "<sricpt>alert('Successfully Added');</sricpt>";
             echo "<script>document.location.href ='productSize.php';</script>";
         } catch (PDOException $e) {
             // Handle SQL execution error
-            displayAlert('Database error: ' . $e->getMessage());
+            echo "<sricpt>alert('Database error: );</sricpt>";
         }
     } else {
-        displayAlert('Please enter a product size name.');
+        echo "<sricpt>alert('Please enter a product size name.');</sricpt>";
     }
 }
 
 // Retrieve existing sizes
-$sql = "SELECT * FROM Sizes";
-$sizes = $pdo->query($sql);
+
+function getSizes($pdo)
+{
+    $sql = "SELECT * FROM Sizes";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+$all_product_sizes = getSizes($pdo);
 ?>
+
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -72,36 +83,62 @@ $sizes = $pdo->query($sql);
             <div class="sidebar">
                 <ul>
                     <li>
-                        <a href="index.php"><i class="bi bi-grid"></i>
+                        <a href="index.php" class="active"><i class="bi bi-grid-1x2-fill"></i>
                             <h4>Dashboard</h4>
                         </a>
                     </li>
                     <li>
-                        <div class="icon-link">
-                            <a href="#">
-                                <i class="bi bi-shop-window"></i>
-                                <h4>Bookshop</h4>
-                                <i class="bi bi-chevron-down"></i>
-                            </a>
-                        </div>
-                        <ul class="sub-menu">
-                            <li><a href="mainCategory.php"><i class="bi bi-tags-fill"></i>
+                        <a href="#" class="bookshop-btn">
+                            <i class="bi bi-shop-window"></i>
+                            <h4>Bookshop</h4>
+                            <i class="bi bi-chevron-down first"></i>
+                        </a>
+                        <ul class="bookshop-show">
+                            <li><a href=" mainCategory.php"><i class="bi bi-tags-fill"></i>
                                     <h4>Main Category</h4>
                                 </a>
                             </li>
-                            <li><a href="subcategory.php"><i class="bi bi-tag"></i>
+                            <li><a href="subcategory.php"><i class="bi bi-tag-fill"></i>
                                     <h4>Subcategory</h4>
                                 </a>
                             </li>
-                            <li><a href="productSize.php" class="active"><span class="material-symbols-outlined">resize</span>
+                            <li><a href="productSize.php" class="active"><i class="bi bi-aspect-ratio-fill"></i>
                                     <h4>Product Size</h4>
                                 </a>
                             </li>
-                            <li><a href="product.php"><i class="bi bi-box-seam"></i>
+                            <li><a href="product.php"><i class="bi bi-box-seam-fill"></i>
                                     <h4>All Product</h4>
                                 </a>
                             </li>
                         </ul>
+                    </li>
+                    <li>
+                        <a href="#" class="user-btn">
+                            <i class="bi bi-person-fill"></i>
+                            <h4>User Type</h4>
+                            <i class="bi bi-chevron-down second"></i>
+                        </a>
+                        <ul class="user-show">
+                            <li><a href="admin.php"><i class="bi bi-person-fill-gear"></i>
+                                    <h4>All Admin</h4>
+                                </a>
+                            </li>
+                            <li><a href="teacher.php"><i class="bi bi-mortarboard-fill"></i>
+                                    <h4>All Teacher</h4>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="parent.php"><i class="bi bi-people-fill"></i>
+                                    <h4>All Parent</h4>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="order.php">
+                            <i class="bi bi-receipt"></i>
+                            <h4>Order</h4>
+                        </a>
                     </li>
                 </ul>
             </div>
@@ -117,12 +154,46 @@ $sizes = $pdo->query($sql);
                         <button id="open-popup"><i class="bi bi-plus-circle"></i>Add Product Size</button>
                     </div>
                 </div>
-                <div class="box-container">
-                    <div class="box">
-                        <div class="image-container">
-                            <a href="#"></a>
-                        </div>
-                    </div>
+                <div class="table-body">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>
+                                    <h3>Product Size Name</h3>
+                                </th>
+                                <th>
+                                    <h3>Shoulder Width</h3>
+                                </th>
+                                <th>
+                                    <h3>Bust</h3>
+                                </th>
+                                <th>
+                                    <h3>Waist</h3>
+                                </th>
+                                <th>
+                                    <h3>Hip</h3>
+                                </th>
+                                <th>
+                                    <h3>Actions</h3>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($all_product_sizes as $size) { ?>
+                                <tr>
+                                    <td><?= $size['size_name'] ?></td>
+                                    <td><?= $size['shoulder_width'] ?></td>
+                                    <td><?= $size['bust'] ?></td>
+                                    <td><?= $size['waist'] ?></td>
+                                    <td><?= $size['length'] ?></td>
+                                    <td>
+                                        <a href="productSizeEdit.php?id=<?= $size['size_id'] ?>" class="edit"><i class="bi bi-pencil-square"></i></a>
+                                        <a href="productSizeDelete.php?id=<?= $size['size_id'] ?>" class="delete"><i class="bi bi-trash-fill"></i></a>
+                                    </td>
+                                </tr>
+                            <?php } ?>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </main>

@@ -1,5 +1,12 @@
 <?php
+session_start();
+
 include "../components/db_connect.php";
+
+if (!isset($_SESSION['admin_id'])) {
+    header('Location: login.php');
+    exit();
+}
 
 $msg = [];
 if (isset($_POST["submit"])) {
@@ -78,20 +85,18 @@ $all_main_categories = getMainCategories($pdo);
             <div class="sidebar">
                 <ul>
                     <li>
-                        <a href="index.php"><i class="bi bi-grid"></i>
+                        <a href="index.php"><i class="bi bi-grid-1x2-fill"></i>
                             <h4>Dashboard</h4>
                         </a>
                     </li>
                     <li>
-                        <div class="icon-link">
-                            <a href="#">
-                                <i class="bi bi-shop-window"></i>
-                                <h4>Bookshop</h4>
-                                <i class="bi bi-chevron-down"></i>
-                            </a>
-                        </div>
-                        <ul class="sub-menu">
-                            <li><a href="mainCategory.php" class="active"><i class="bi bi-tags-fill"></i>
+                        <a href="#" class="bookshop-btn">
+                            <i class="bi bi-shop-window"></i>
+                            <h4>Bookshop</h4>
+                            <i class="bi bi-chevron-down first"></i>
+                        </a>
+                        <ul class="bookshop-show">
+                            <li><a href=" mainCategory.php" class="active"><i class="bi bi-tags-fill"></i>
                                     <h4>Main Category</h4>
                                 </a>
                             </li>
@@ -99,15 +104,43 @@ $all_main_categories = getMainCategories($pdo);
                                     <h4>Subcategory</h4>
                                 </a>
                             </li>
-                            <li><a href="productSize.php"><span class="material-symbols-outlined">resize</span>
+                            <li><a href="product_size.php"><i class="bi bi-aspect-ratio-fill"></i>
                                     <h4>Product Size</h4>
                                 </a>
                             </li>
-                            <li><a href="product.php"><i class="bi bi-box-seam"></i>
+                            <li><a href="product.php"><i class="bi bi-box-seam-fill"></i>
                                     <h4>All Product</h4>
                                 </a>
                             </li>
                         </ul>
+                    </li>
+                    <li>
+                        <a href="#" class="user-btn">
+                            <i class="bi bi-person-fill"></i>
+                            <h4>User Type</h4>
+                            <i class="bi bi-chevron-down second"></i>
+                        </a>
+                        <ul class="user-show">
+                            <li><a href="admin.php"><i class="bi bi-person-fill-gear"></i>
+                                    <h4>All Admin</h4>
+                                </a>
+                            </li>
+                            <li><a href="teacher.php"><i class="bi bi-mortarboard-fill"></i>
+                                    <h4>All Teacher</h4>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="parent.php"><i class="bi bi-people-fill"></i>
+                                    <h4>All Parent</h4>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="order.php">
+                            <i class="bi bi-receipt"></i>
+                            <h4>Order</h4>
+                        </a>
                     </li>
                 </ul>
             </div>
@@ -153,19 +186,19 @@ $all_main_categories = getMainCategories($pdo);
     </div>
     <dialog>
         <h1>Add Main Category</h1>
-        <form class="" action="" method="post" enctype="multipart/form-data">
-            <div>
+        <form action="" method="post" enctype="multipart/form-data">
+            <div class="input-field">
                 <h2>Category Name<sup>*</sup></h2>
                 <input type="text" name="name" value="<?php echo isset($_POST['name']) ? htmlspecialchars($_POST['name']) : ''; ?>">
                 <p>Please enter full name as per IC or Passport.</p>
             </div>
-            <div>
+            <div class="input-field">
                 <h2>Category Icon<sup>*</sup></h2>
                 <input type="file" name="image" id="image" accept=".jpg, .jpeg, .png" value="">
                 <p>Please enter full name as per IC or Passport.</p>
             </div>
             <div class="controls">
-                <button onclick="showDialog('main')">Cancel</button>
+                <button onclick="showDialog">Cancel</button>
                 <button type="reset">Clear</button>
                 <button type="submit" name="submit">Publish</button>
             </div>
