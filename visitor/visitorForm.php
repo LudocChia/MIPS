@@ -1,4 +1,6 @@
-
+<?php
+    include "../components/db_connect.php";
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -12,8 +14,6 @@
     <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-
-
 </head>
 <body>
     <?php include "../visitor/header.php"; ?>
@@ -68,9 +68,9 @@
         openModal.addEventListener('click', () => {
             modal.showModal();
         })
-        closeModal.addEventListener('click', () => {
-            modal.close();
-        })
+        // closeModal.addEventListener('click', () => {
+        //     modal.close();
+        // })
     </script>
 </body>
 </html>
