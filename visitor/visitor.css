@@ -466,6 +466,24 @@ form textarea {
     font-size: 25px;
     color: #767676;
 }
+.Date{
+    float: right;
+    position: absolute;
+    margin-left: 600px;
+    margin-top: -330px;
+}
+#date{
+    margin-top: 8px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    width: 130%;
+    font-size: 25px;
+    color: #767676;
+}
 .People{
     float: right;
     position: absolute;

@@ -19,41 +19,42 @@
     <?php include "../visitor/header.php"; ?>
     <div class="box1">
         <h1>Please fill up the form </h1>
-        <div class="name">
-            <h2>Name :</h2>
-            <input type="text" id="name" name="Name" >
-        </div>
-        <div class="Phone">
-            <h2>Phone Number :</h2>
-            <input type="text" id="phone" name="Phone" >
-        </div>
-        <div class="Email">
-            <h2>Email Address :</h2>
-            <input type="text" id="email" name="Email" > 
-        </div>
-        <div class="Company">
-            <h2>Company/Organization</h2>
-            <input type="text" id="company" name="Company">
-        </div>
-        <div class="Plate">
-            <h2>Plate Number</h2>
-            <input type="text" id="plate" name="Plate">
-        </div>
-        <div class="Visit">
-            <h2>Visit time</h2>
-            <input type="text" id="visit" name="Visit">
-        </div>
-        <div class="People">
-            <h2>People</h2>
-            <input type="text" id="people" name="People">
-        </div>
-        <div class="Purpose">
-            <h2>Purpose</h2>
-            <textarea id="purpose" name="Purpose" rows="4" cols="5"></textarea>
-        </div>
-        <div>
-            <input type="submit" value="Submit" id="btn" >
-        </div>
+            <div class="name">
+                <h2>Name :</h2>
+                <input type="text" id="name" name="Name" >
+            </div>
+            <div class="Phone">
+                <h2>Phone Number :</h2>
+                <input type="text" id="phone" name="Phone" >
+            </div>
+            <div class="Email">
+                <h2>Email Address :</h2>
+                <input type="text" id="email" name="Email" > 
+            </div>
+            <div class="Company">
+                <h2>Company/Organization</h2>
+                <input type="text" id="company" name="Company">
+            </div>
+            <div class="Plate">
+                <h2>Plate Number</h2>
+                <input type="text" id="plate" name="Plate">
+            </div>
+            <div class="Visit">
+                <h2>Visit time</h2>
+                <input type="text" id="visit" name="Visit">
+            </div>
+
+            <div class="People">
+                <h2>People</h2>
+                <input type="text" id="people" name="People">
+            </div>
+            <div class="Purpose">
+                <h2>Purpose</h2>
+                <textarea id="purpose" name="Purpose" rows="4" cols="5"></textarea>
+            </div>
+            <div>
+                <input type="submit" value="Submit" id="btn" >
+            </div>
 
     </div>
     <dialog  class="modal" id="modal">
@@ -72,5 +73,14 @@
         //     modal.close();
         // })
     </script>
+    <!-- <?php
+        $name = $_REQUEST('Name');
+        $phone = $_REQUEST('Phone');
+        $email = $_REQUEST('Email');
+        $company = $_REQUEST('Company');
+        $plate = $_REQUEST('Plate');
+        $visit = $_REQUEST('Visit');
+        $purpose = $_REQUEST('Purpose')
+    ?> -->
 </body>
 </html>
