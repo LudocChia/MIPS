@@ -1,5 +1,12 @@
 <?php
+session_start();
+
 include "../components/db_connect.php";
+
+if (!isset($_SESSION['admin_id'])) {
+    header('Location: login.php');
+    exit();
+}
 
 // Function to fetch all subcategories
 function getSubcategories($pdo)
@@ -186,11 +193,11 @@ if (isset($_POST['submit'])) {
             </div>
         </aside>
         <!-- END OF ASIDE -->
-        <main class="product">
+        <main class="products">
             <div class="wrapper">
                 <div class="title">
                     <div class="left">
-                        <h1>Bookshop Product</h1>
+                        <h1>Bookshop Products</h1>
                     </div>
                     <div class="right">
                         <button id="open-popup"><i class="bi bi-plus-circle"></i>Add Bookshop Product</button>
@@ -200,12 +207,16 @@ if (isset($_POST['submit'])) {
                     <?php foreach ($all_products as $product) { ?>
                         <div class="box">
                             <div class="image-container">
-                                <a href="productPage.php?pid=<?= htmlspecialchars($product['product_id']); ?>">
+                                <a href="item.php?pid=<?= htmlspecialchars($product['product_id']); ?>">
                                     <img src="<?= htmlspecialchars("../uploads/" . $product['image_url'] . "") ?>" alt="Product Image">
                                     <div class="badge">
                                         <div class="sales-badge"><?= !empty($product['monthly_sales']) ? htmlspecialchars($product['monthly_sales']) : 0 ?> sold this month</div>
                                     </div>
                                 </a>
+                            </div>
+                            <div class="name"><?= htmlspecialchars($product['product_name']); ?></div>
+                            <div class="price">
+                                MYR <?= number_format($product['product_price'], 2); ?>
                             </div>
                         </div>
                     <?php } ?>

@@ -91,8 +91,8 @@
                         }
                     } else {
                         ?>
-                        <!-- <a href="login.php" class="btn login">Login</a>
-                        <a href="register.php" class="btn signup">Sign Up</a> -->
+                        <a href="login.php" class="btn login">Login</a>
+                        <a href="register.php" class="btn signup">Sign Up</a>
                     <?php
                     }
                     ?>

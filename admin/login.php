@@ -1,3 +1,44 @@
+<?php
+
+session_start();
+
+include "../components/db_connect.php";
+
+$errorMsg = '';
+$email = '';
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $email = trim($_POST['email']);
+    $password = trim($_POST['password']);
+
+    $sql = "SELECT * FROM Admin WHERE admin_email = :email AND is_deleted = 0";
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(':email', $email);
+
+    try {
+        $stmt->execute();
+
+        $admin = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($admin && password_verify($password, $admin['admin_password'])) {
+            $_SESSION['admin_id'] = $admin['admin_id'];
+            $_SESSION['admin_name'] = $admin['admin_name'];
+            $_SESSION['admin_type'] = $admin['admin_type'];
+            $_SESSION['admin_email'] = $admin['admin_email'];
+            $_SESSION['admin_image'] = $admin['admin_image'];
+
+
+            header("Location: index.php");
+            exit;
+        } else {
+            $errorMsg = "Invalid email or password.";
+        }
+    } catch (PDOException $e) {
+        $errorMsg = "Database error: " . $e->getMessage();
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -15,25 +56,35 @@
 
 <body>
     <main class="login">
-        <div class="wrapper">
-            <div class="title"><span>Login Form</span></div>
-            <form action="#">
-                <div class="row">
-                    <i class="fas fa-user"></i>
-                    <input type="text" placeholder="Email or Phone" required>
+        <div class="container">
+            <div class="wrapper">
+                <div class="title">
+                    <img src="../images/Mahans_IPS_logo.png" alt="Mahans_ISP_Logo">
                 </div>
-                <div class="row">
-                    <i class="fas fa-lock"></i>
-                    <input type="password" placeholder="Password" required>
-                </div>
-                <div class="row">
-                    <input type="submit" value="Login">
-                    <div class="pass"><a href="#">Forgot Password</a></div>
-                </div>
-            </form>
+                <?php if (!empty($errorMsg)) : ?>
+                    <div class="alert alert-danger">
+                        <?php echo htmlspecialchars($errorMsg); ?>
+                    </div>
+                <?php endif; ?>
+                <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST">
+                    <div class="input-field">
+                        <i class="fas fa-user"></i>
+                        <input type="text" name="email" placeholder="Email" value="<?php echo htmlspecialchars($email); ?>" required>
+                    </div>
+                    <div class="input-field">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" name="password" placeholder="Password" required>
+                    </div>
+                    <div class="pass">
+                        <a href="#">Forgot password?</a>
+                    </div>
+                    <div class="input-field controls">
+                        <input type="submit" value="Login">
+                    </div>
+                </form>
+            </div>
         </div>
     </main>
-
 </body>
 
 </html>

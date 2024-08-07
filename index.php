@@ -21,24 +21,28 @@
 <body>
     <?php include './components/customer_header.php'; ?>
     <section class="banner">
-        <div class="wrapper">
+        <div>
             <div class="slider">
                 <div class="list">
                     <div class="item">
-                        <img src="./images/start_your_online_grocery_shop.jpeg" alt="">
+                        <img src="images/mojave(1).png" alt="">
                     </div>
                     <div class="item">
-                        <img src="./images/stay_home_we_delivery.jpg" alt="">
+                        <img src="images/mojave(2).png" alt="">
                     </div>
                     <div class="item">
-                        <img src="./images/organic-food.png" alt="">
+                        <img src="images/mojave(3).png" alt="">
                     </div>
                     <div class="item">
-                        <img src="./images/1717732903539.jpg" alt="">
+                        <img src="images/mojave(4).png" alt="">
                     </div>
                     <div class="item">
-                        <img src="./images/a7056c19-6780-452a-9ae6-46c6ec849163_s2tntc9_2k.jpeg" alt="">
+                        <img src="images/mojave(5).png" alt="">
                     </div>
+                </div>
+                <div class="buttons">
+                    <button id="prev"><span class="material-symbols-outlined">arrow_back_ios_new</span></button>
+                    <button id="next"><span class="material-symbols-outlined">arrow_forward_ios</span></button>
                 </div>
                 <ul class="dots">
                     <li class="active"></li>
@@ -48,14 +52,10 @@
                     <li></li>
                 </ul>
             </div>
-            <div class="buttons">
-                <button id="prev"><i class="bi bi-chevron-left"></i></button>
-                <button id="next"><i class="bi bi-chevron-right"></i></button>
-            </div>
         </div>
     </section>
     <?php include "./components/customer_footer.php"; ?>
-    <script src=""></script>
+    <script src="./javascript/home.js"></script>
 </body>
 
 </html>

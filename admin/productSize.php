@@ -1,10 +1,11 @@
 <?php
+session_start();
+
 include "../components/db_connect.php";
 
-// Function to display alerts
-function displayAlert($message)
-{
-    echo "<script>alert('$message');</script>";
+if (!isset($_SESSION['admin_id'])) {
+    header('Location: login.php');
+    exit();
 }
 
 if (isset($_POST['submit'])) {
@@ -31,21 +32,31 @@ if (isset($_POST['submit'])) {
         try {
             // Execute the statement
             $stmt->execute();
-            displayAlert('Successfully Added');
+            echo "<sricpt>alert('Successfully Added');</sricpt>";
             echo "<script>document.location.href ='productSize.php';</script>";
         } catch (PDOException $e) {
             // Handle SQL execution error
-            displayAlert('Database error: ' . $e->getMessage());
+            echo "<sricpt>alert('Database error: );</sricpt>";
         }
     } else {
-        displayAlert('Please enter a product size name.');
+        echo "<sricpt>alert('Please enter a product size name.');</sricpt>";
     }
 }
 
 // Retrieve existing sizes
-$sql = "SELECT * FROM Sizes";
-$sizes = $pdo->query($sql);
+
+function getSizes($pdo)
+{
+    $sql = "SELECT * FROM Sizes";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+$all_product_sizes = getSizes($pdo);
 ?>
+
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -143,12 +154,46 @@ $sizes = $pdo->query($sql);
                         <button id="open-popup"><i class="bi bi-plus-circle"></i>Add Product Size</button>
                     </div>
                 </div>
-                <div class="box-container">
-                    <div class="box">
-                        <div class="image-container">
-                            <a href="#"></a>
-                        </div>
-                    </div>
+                <div class="table-body">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>
+                                    <h3>Product Size Name</h3>
+                                </th>
+                                <th>
+                                    <h3>Shoulder Width</h3>
+                                </th>
+                                <th>
+                                    <h3>Bust</h3>
+                                </th>
+                                <th>
+                                    <h3>Waist</h3>
+                                </th>
+                                <th>
+                                    <h3>Hip</h3>
+                                </th>
+                                <th>
+                                    <h3>Actions</h3>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($all_product_sizes as $size) { ?>
+                                <tr>
+                                    <td><?= $size['size_name'] ?></td>
+                                    <td><?= $size['shoulder_width'] ?></td>
+                                    <td><?= $size['bust'] ?></td>
+                                    <td><?= $size['waist'] ?></td>
+                                    <td><?= $size['length'] ?></td>
+                                    <td>
+                                        <a href="productSizeEdit.php?id=<?= $size['size_id'] ?>" class="edit"><i class="bi bi-pencil-square"></i></a>
+                                        <a href="productSizeDelete.php?id=<?= $size['size_id'] ?>" class="delete"><i class="bi bi-trash-fill"></i></a>
+                                    </td>
+                                </tr>
+                            <?php } ?>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </main>

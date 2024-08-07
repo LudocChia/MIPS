@@ -10,46 +10,50 @@ function getAllAdmins($pdo)
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
+function generateAdminId()
+{
+    $prefix = "admin_";
+    $randomString = bin2hex(random_bytes(4));
+    return $prefix . $randomString;
+}
+
 $all_admins = getAllAdmins($pdo);
 
 if (isset($_POST["submit"])) {
     $name = $_POST["name"];
     $email = $_POST["email"];
-    $password = password_hash($_POST["password"], PASSWORD_DEFAULT); // Hash the password
-    $adminType = $_POST["admin_type"];
+    $password = $_POST["password"];
+    $confirmPassword = $_POST["confirm_password"];
+    $adminType = "admin";
+    $adminId = generateAdminId();
 
-    if ($_FILES["image"]["error"] === 4) {
-        echo "<script> alert('Image Does Not Exist'); </script>";
+    if (empty($name) || empty($email) || empty($password) || empty($confirmPassword)) {
+        echo "<script>alert('Please fill in all required fields.');</script>";
+    } elseif ($password !== $confirmPassword) {
+        echo "<script>alert('Passwords do not match.');</script>";
     } else {
-        $fileName = $_FILES["image"]["name"];
-        $fileSize = $_FILES["image"]["size"];
-        $tmpName = $_FILES["image"]["tmp_name"];
-
-        $validImageExtension = ['jpg', 'jpeg', 'png'];
-        $imageExtension = explode('.', $fileName);
-        $imageExtension = strtolower(end($imageExtension));
-        if (!in_array($imageExtension, $validImageExtension)) {
-            echo "<script> alert('Invalid Image Extension'); </script>";
-        } else if ($fileSize > 1000000) {
-            echo "<script> alert('Image Size Is Too Large'); </script>";
+        // Validate email
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            echo "<script>alert('Invalid email format.');</script>";
         } else {
-            $newImageName = uniqid() . '.' . $imageExtension;
-            if (move_uploaded_file($tmpName, '../uploads/' . $newImageName)) {
-                $sql = "INSERT INTO Admin (admin_name, admin_email, admin_image, admin_password, admin_type, is_deleted) VALUES (:name, :email, :image, :password, :adminType, 0)";
+            // Hash the password
+            $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+
+            try {
+                // Insert new admin into the database
+                $sql = "INSERT INTO Admin (admin_id, admin_name, admin_email, admin_password, admin_type, is_deleted) 
+                        VALUES (:adminId, :name, :email, :password, :adminType, 0)";
                 $stmt = $pdo->prepare($sql);
+                $stmt->bindParam(':adminId', $adminId);
                 $stmt->bindParam(':name', $name);
                 $stmt->bindParam(':email', $email);
-                $stmt->bindParam(':image', $newImageName);
-                $stmt->bindParam(':password', $password);
+                $stmt->bindParam(':password', $hashedPassword);
                 $stmt->bindParam(':adminType', $adminType);
-                try {
-                    $stmt->execute();
-                    echo "<script>alert('Admin Successfully Added');document.location.href ='admin.php';</script>";
-                } catch (PDOException $e) {
-                    echo "<script>alert('Database error: " . $e->getMessage() . "');</script>";
-                }
-            } else {
-                echo "<script>alert('Failed to move uploaded file.');</script>";
+                $stmt->execute();
+
+                echo "<script>alert('Admin Successfully Added');document.location.href ='admin.php';</script>";
+            } catch (PDOException $e) {
+                echo "<script>alert('Database error: " . $e->getMessage() . "');</script>";
             }
         }
     }
@@ -199,18 +203,9 @@ if (isset($_POST["submit"])) {
                 <p>Please enter a secure password.</p>
             </div>
             <div class="input-field">
-                <h2>Admin Type<sup>*</sup></h2>
-                <select name="admin_type" required>
-                    <option value="Admin" <?= isset($_POST['admin_type']) && $_POST['admin_type'] == 'Admin' ? 'selected' : '' ?>>Admin</option>
-                    <option value="Superadmin" <?= isset($_POST['admin_type']) && $_POST['admin_type'] == 'Superadmin' ? 'selected' : '' ?>>Superadmin</option>
-                    <option value="Teacher" <?= isset($_POST['admin_type']) && $_POST['admin_type'] == 'Teacher' ? 'selected' : '' ?>>Teacher</option>
-                </select>
-                <p>Please select the admin's role.</p>
-            </div>
-            <div>
-                <h2>Admin Image<sup>*</sup></h2>
-                <input type="file" name="image" id="image" accept=".jpg, .jpeg, .png" value="">
-                <p>Please upload a profile image.</p>
+                <h2>Confirm Password<sup>*</sup></h2>
+                <input type="password" name="confirm_password" required>
+                <p>Please confirm the password.</p>
             </div>
             <div class="controls">
                 <button type="button" class="close-btn">Cancel</button>

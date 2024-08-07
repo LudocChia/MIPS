@@ -1,3 +1,23 @@
+<?php
+
+session_start();
+
+include "../components/db_connect.php";
+
+if (!isset($_SESSION['admin_id'])) {
+    header('Location: login.php');
+    exit();
+}
+
+if (!empty($_SESSION['admin_image'])) {
+    $_SESSION['admin_image'] = '../images/default_profile.png';
+} else {
+    $_SESSION['admin_image'] = "../uploads/" . $_SESSION['admin_image'];
+}
+
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -91,8 +111,8 @@
                         <i class="bi bi-file-bar-graph"></i>
                         <div class="middle">
                             <div class="left">
-                                <h3>Total Sales</h3>
-                                <h1>$25,024</h1>
+                                <h3>Total Registered Admin and Staff</h3>
+                                <h1>100+</h1>
                             </div>
                             <!-- <div class="progress">
                                 <svg>
@@ -110,8 +130,8 @@
                         <i class="bi bi-file-bar-graph"></i>
                         <div class="middle">
                             <div class="left">
-                                <h3>Total Sales</h3>
-                                <h1>$25,024</h1>
+                                <h3>Total Registered Teacher and Student</h3>
+                                <h1>10000+</h1>
                             </div>
                             <!-- <div class="progress">
                                 <svg>
@@ -129,8 +149,8 @@
                         <i class="bi bi-file-bar-graph"></i>
                         <div class="middle">
                             <div class="left">
-                                <h3>Total Sales</h3>
-                                <h1>$25,024</h1>
+                                <h3>Total Registered Customer and Parents</h3>
+                                <h1>1000+</h1>
                             </div>
                             <!-- <div class="progress">
                                 <svg>
@@ -148,8 +168,8 @@
                 <!-- END OF INSIGHTS -->
 
                 <div class="recent-orders">
+                    <h2>Recent Orders</h2>
                     <div class="box-container">
-                        <h2>Recent Orders</h2>
                         <table>
                             <thead>
                                 <tr>
@@ -234,7 +254,7 @@
 
                 <div class="sales-analytics">
                     <div class="box-container">
-                        <h2>Sales Analytics</h2>
+                        <h2>Website Analytics</h2>
                         <div class="item online">
                             <div class="icon">
                                 <i class="bi bi-cart"></i>

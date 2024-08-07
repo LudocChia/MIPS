@@ -24,7 +24,7 @@
     --border-radius-1: 1rem;
     --border-radius-2: 6px;
 
-    /* --box-shadow: 0 0 10px rgb(0 0 0/15%); */
+    --box-shadow: 0 0 10px rgb(0 0 0/15%);
 }
 
 * {
@@ -54,7 +54,7 @@ img {
 }
 
 h1 {
-    font-size: 2.2rem;
+    font-size: 2rem;
 }
 
 h2 {
@@ -104,13 +104,130 @@ small {
     color: var(--color-success);
 }
 
+
+.container {
+    display: grid;
+    width: 96%;
+    margin: 0 auto;
+    gap: 1.8rem;
+    grid-template-columns: 20rem auto;
+}
+
+.wrapper {
+    background-color: var(--color-white);
+    border-radius: var(--card-border-radius);
+    /* box-shadow: var(--box-shadow); */
+    border: 1px solid var(--color-light);
+    transition: all 300ms ease;
+}
+
 /* LOGIN */
+
+.login .container {
+    display: grid;
+    /* height: 100%; */
+    place-items: center;
+    width: 40rem;
+    grid-template-columns: 1fr;
+}
+
 .login .wrapper {
     width: 90%;
     margin: 0 auto;
 }
 
-.login .title {}
+.login .title {
+    margin: 0;
+    line-height: 90px;
+    background: var(--color-primary);
+    padding-left: 20px;
+    border-radius: 1rem 1rem 0 0;
+    color: #fff;
+    font-size: 25px;
+    font-weight: 600;
+}
+
+.login img {
+    padding: 1rem;
+}
+
+.login form {
+    padding: 30px 25px 25px 25px;
+}
+
+.login form .input-field {
+    height: 45px;
+    margin-bottom: 15px;
+    position: relative;
+}
+
+.login form .input-field input {
+    height: 100%;
+    width: 100%;
+    outline: none;
+    padding-left: 60px;
+    border-radius: 5px;
+    border: 1px solid lightgrey;
+    font-size: 16px;
+}
+
+.login form .input-field i {
+    position: absolute;
+    width: 47px;
+    height: 100%;
+    color: #fff;
+    font-size: 18px;
+    background: var(--color-primary);
+    border: 1px var(--color-primary) solid;
+    border-radius: 5px 0 0 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.login form .pass {
+    margin: -1rem 0 1rem 0;
+}
+
+.login form .pass a {
+    color: var(--color-primary);
+    font-size: 17px;
+    text-decoration: none;
+}
+
+.login form .pass a:hover {
+    text-decoration: underline;
+}
+
+.login form .controls input {
+    color: #fff;
+    font-size: 20px;
+    font-weight: 500;
+    padding-left: 0px;
+    background: var(--color-primary);
+    border: 1px solid var(--color-primary);
+    cursor: pointer;
+}
+
+.login form .contorls input:focus {
+    border-color: var(--color-primary);
+    box-shadow: inset 0px 9px 2px 2px rgba(26, 188, 156, 0.25);
+}
+
+.login form .signup-link {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.login form .signup-link a {
+    color: var(--color-primary);
+    font-size: 18px;
+    text-decoration: none;
+}
+
+.login form .signup-link a:hover {
+    text-decoration: underline;
+}
 
 /* NAV BAR */
 nav {
@@ -170,13 +287,13 @@ nav .profile-area button {
 .profile-menu {
     position: absolute;
     background: #fff;
-    top: 90px;
+    top: 100%;
     right: 5px;
     box-shadow: var(--box-shadow);
     border-radius: .5rem;
     padding: 10px 10px;
     text-align: center;
-    width: 20rem;
+    width: 25rem;
     transform: scale(0);
     transform-origin: top right;
     line-height: 2;
@@ -232,13 +349,10 @@ nav .profile-area button {
 .profile-menu-link i {
     font-size: 20px;
     display: inline-block;
-    width: 60px;
     background: #e5e5e5;
-    /* margin:0 10px 10px 0; */
     text-align: center;
     line-height: 40px;
     border-radius: 50%;
-    /* color: #ffffff; */
     margin-right: 20px;
     margin-left: 20px;
 }
@@ -255,22 +369,6 @@ nav .profile-area button {
 
 .profile-menu-link:hover p {
     font-weight: 600;
-}
-
-.container {
-    display: grid;
-    width: 96%;
-    margin: 0 auto;
-    gap: 1.8rem;
-    grid-template-columns: 20rem auto;
-}
-
-.wrapper {
-    background-color: var(--color-white);
-    border-radius: var(--card-border-radius);
-    box-shadow: var(--box-shadow);
-    border: 1px solid var(--color-light);
-    transition: all 300ms ease;
 }
 
 .category .box-container {
@@ -307,25 +405,25 @@ dialog {
     padding: 0.8em 1.5em 1em;
 }
 
-form {
+dialog form {
     text-align: left;
     margin-left: 2rem;
     position: relative;
 }
 
-form input {
-    height: 2rem;
+dialog form input {
+    height: 3rem;
 }
 
-form p {
+dialog form p {
     color: #999;
 }
 
-form h2 {
+dialog form h2 {
     text-transform: capitalize;
 }
 
-form input,
+dialog form input,
 textarea {
     font-size: 1.2rem;
     background: #fff;
@@ -338,29 +436,15 @@ textarea {
     transition: border 0.3s ease;
 }
 
-form input:focus,
-form textarea:focus {
+dialog form input:focus,
+dialog form textarea:focus {
     border: 1px solid var(--color-primary);
 }
 
-form input {
-    height: 50px;
-}
-
-form textarea {
+dialog form textarea {
     min-height: 100px;
     resize: vertical;
 }
-
-/* form button {
-    width: 85%;
-    border-radius: 10px;
-    margin-top: 2%;
-    margin-bottom: 5%;
-    color: #fff;
-    background-color: var(--deep-blue);
-    border-color: var(--deep-blue);
-} */
 
 /* Sidebar */
 aside {
@@ -472,14 +556,10 @@ main {
 
 main .title {
     position: relative;
-    margin: 2rem;
+    margin: 1.5rem;
     display: flex;
     justify-content: space-between;
     text-transform: capitalize;
-}
-
-.title h3 {
-    margin-top: 20px;
 }
 
 .title .left {
@@ -509,8 +589,6 @@ main .title {
     /* Adjust size as necessary */
     vertical-align: middle;
 }
-
-
 
 /* .title .right p {
     margin-top: 35px;
@@ -773,20 +851,147 @@ main .recent-orders a {
     font-weight: 600;
 }
 
+/* PRODUCTS */
+
 .products .box-container {
     display: grid;
-    grid-template-columns: repeat(auto-fit, 290px);
+    grid-template-columns: repeat(auto-fit, 250px);
     border-color: #24262b;
     justify-content: center;
     padding-bottom: 2%;
 }
 
-.products .box-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, 290px);
-    border-color: #24262b;
+.products .box-container .box {
+    position: relative;
+    border: 1px solid #dfe1e5;
+    background-color: #f4f4f4;
+    border-radius: .5rem;
+    padding: 1rem;
+    margin: 0.5rem;
+    /* max-height: 10rem; */
+}
+
+.products .box-container .box .image-container {
+    position: relative;
+    /* height: 304px; */
+    display: flex;
     justify-content: center;
-    padding-bottom: 2%;
+    align-items: center;
+}
+
+
+.products .box-container .image-container img {
+    /* width: 250px; */
+    /* height: 310px; */
+    background-color: white;
+    object-fit: contain;
+    border-radius: 10px;
+}
+
+.products .box-container .box:hover {
+    border: 1px var(--color-primary) solid;
+}
+
+
+.badge {
+    display: flex;
+}
+
+.sales-badge {
+    /* display: inline-block; */
+    text-align: center;
+    align-items: center;
+    color: white;
+    line-height: 30px;
+    margin: 0 8px 8px 0;
+    font-size: 16px;
+    border-radius: 4px;
+    background: #990033;
+    position: absolute;
+    height: 30px;
+    padding: 0 10px;
+    width: auto;
+    left: 2px;
+    top: 1px;
+    cursor: pointer;
+}
+
+/* Table Content */
+.product-size table {
+    width: 100%;
+    background-color: #ffff;
+}
+
+.product-size .table-body {
+    /* width: 95%; */
+    width: 100%;
+    max-height: calc(89% - .8rem);
+    background-color: #fffb;
+    margin: .8rem auto;
+    /* border-radius: .6rem; */
+    overflow: auto;
+}
+
+/* .table-body::-webkit-scrollbar {
+    width: .5rem;
+    height: .5rem;
+}
+
+.table-body::-webkit-scrollbar-thumb {
+    border-radius: .5rem;
+    background-color: black;
+    visibility: hidden;
+}
+
+.table-body:hover::-webkit-scrollbar-thumb {
+    visibility: visible;
+} */
+
+table {
+    width: 100%;
+}
+
+table,
+th,
+td {
+    /* border-collapse: collapse; */
+    padding: 1rem;
+}
+
+table th {
+    color: var(--color-white);
+    position: sticky;
+    top: 0;
+    left: 0;
+    background-color: var(--color-primary);
+}
+
+td img {
+    width: 36px;
+    height: 36px;
+    margin-right: .5rem;
+    border-radius: 50%;
+    vertical-align: middle;
+}
+
+tbody tr:nth-child(even) {
+    background-color: black;
+}
+
+tbody tr:hover {
+    background-color: #fff6;
+}
+
+table,
+th,
+td {
+    padding: 1rem;
+}
+
+thead th {
+    position: sticky;
+    top: 0;
+    Left: 0;
 }
 
 /* MEDIA QUERIES */
@@ -899,6 +1104,10 @@ main .recent-orders a {
 }
 
 @media screen and (max-width: 768px) {
+    h1 {
+        font-size: 1.7rem;
+    }
+
     .wrapper {
         width: 100%;
         grid-template-columns: 1fr;
