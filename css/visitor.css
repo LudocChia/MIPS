@@ -54,30 +54,12 @@ img {
 }
 
 h1 {
-    font-size: 2.2rem;
+    font-size: 3rem;
 }
 
 h2 {
-    font-size: 1.5rem;
+    font-size: 2.5rem;
 }
-
-h3 {
-    font-size: 1.2rem;
-}
-
-h4 {
-    font-size: 1rem;
-}
-
-h5 {
-    font-size: 0.86rem;
-    font-weight: 500;
-}
-
-h6 {
-    font-size: 0.75rem;
-}
-
 p {
     font-size: 1rem;
     color: var(--color-gray-dark);
@@ -342,3 +324,88 @@ form textarea {
     min-height: 100px;
     resize: vertical;
 }
+
+.box1 {
+    margin-left: 100px;
+    margin-right: 100px;
+    margin-top: 25px;
+    margin-bottom: 40px;
+    padding-left: 100px;
+    padding-top: 25px;
+    padding-bottom: 25px;
+    background: rgba(144, 87, 47, 0.175);
+    border-radius: 5px;
+    color: rgb(156, 67, 82);
+}
+.name {
+    margin-top: 25px;
+}
+#name {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    width: 35%;
+    font-size: 25px;
+    color: #9d9d9d;
+}
+.Phone{
+    margin-top: 10px;
+}
+#phone{
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    width: 35%;
+    font-size: 25px;
+}
+.Email{
+    margin-top: 10px;
+}
+#email{
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    width: 35%;
+    font-size: 25px;
+}
+.Company{
+    margin-top: 10px;
+}
+#company{
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    width: 35%;
+    font-size: 25px;
+}
+.Purpose{
+    margin-top: 10px;
+}
+#purpose{
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    width: 92%;
+    font-size: 25px;
+}
+
