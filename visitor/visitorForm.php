@@ -6,66 +6,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Visitor Form - Mahans School</title>
-    <link rel="stylesheet" href="../css/visitor.css">
+    <link rel="stylesheet" href="../visitor/visitor.css" >
     <link rel="icon" type="image/x-icon" href="../images/Mahans_internation_primary_school_logo.png">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
-<style>
-.Plate{
-    float: right;
-    position: absolute;
-    margin-left: 600px;
-    margin-top: -445px;
-}
-#plate{
-    margin-top: 8px;
-    margin-bottom: 10px;
-    border-radius: 10px;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    padding-left: 20px;
-    padding-right: 20px;
-    width: 130%;
-    font-size: 25px;
-}
-.Visit{
-    float: right;
-    position: absolute;
-    margin-left: 600px;
-    margin-top: -330px;
-}
-#visit{
-    margin-top: 8px;
-    margin-bottom: 10px;
-    border-radius: 10px;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    padding-left: 20px;
-    padding-right: 20px;
-    width: 130%;
-    font-size: 25px;
-}
-.People{
-    float: right;
-    position: absolute;
-    margin-left: 600px;
-    margin-top: -220px;
-}
-#people{
-    margin-top: 8px;
-    margin-bottom: 10px;
-    border-radius: 10px;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    padding-left: 20px;
-    padding-right: 20px;
-    width: 130%;
-    font-size: 25px;
-}
-</style>
+
 </head>
 <body>
     <?php include "../visitor/header.php"; ?>
@@ -103,10 +51,14 @@
             <h2>Purpose</h2>
             <textarea id="purpose" name="Purpose" rows="4" cols="5"></textarea>
         </div>
-        <div class="btn">
-            <input type="submit" value="Submit">
+        <div>
+            <input type="submit" value="Submit" id="btn" >
         </div>
 
+    </div>
+    <div class="modal">
+        <h1>Submitted Sucessfully</h1>
+        <input type="submit" value="Ok" id="btn1">
     </div>
 </body>
 </html>
