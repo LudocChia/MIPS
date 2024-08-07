@@ -56,9 +56,21 @@
         </div>
 
     </div>
-    <div class="modal">
-        <h1>Submitted Sucessfully</h1>
+    <dialog  class="modal" id="modal">
+        <h1>Submitted Sucessfully !</h1>
         <input type="submit" value="Ok" id="btn1">
-    </div>
+    </dialog>
+    <script>
+        const modal = document.querySelector('#modal');
+        const openModal = document.querySelector('#btn');
+        const closeModal = document.querySelector('#btn1');
+
+        openModal.addEventListener('click', () => {
+            modal.showModal();
+        })
+        closeModal.addEventListener('click', () => {
+            modal.close();
+        })
+    </script>
 </body>
 </html>
