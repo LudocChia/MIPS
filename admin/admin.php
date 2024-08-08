@@ -10,21 +10,21 @@ function getAllAdmins($pdo)
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
+$all_admins = getAllAdmins($pdo);
+
 function generateAdminId()
 {
-    $prefix = "admin_";
+    $prefix = "AD";
     $randomString = bin2hex(random_bytes(4));
     return $prefix . $randomString;
 }
-
-$all_admins = getAllAdmins($pdo);
 
 if (isset($_POST["submit"])) {
     $name = $_POST["name"];
     $email = $_POST["email"];
     $password = $_POST["password"];
     $confirmPassword = $_POST["confirm_password"];
-    $adminType = "admin";
+    $adminType = "Permanent";
     $adminId = generateAdminId();
 
     if (empty($name) || empty($email) || empty($password) || empty($confirmPassword)) {
@@ -72,6 +72,7 @@ if (isset($_POST["submit"])) {
     <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="../css/base.css">
     <link rel="stylesheet" href="../css/admin.css">
 </head>
 

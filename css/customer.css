@@ -39,7 +39,7 @@
     margin: 50px 50px;
 }
 
-h1 {
+/* h1 {
     text-align: center;
     padding-top: 1.5rem;
     font-size: 1.75rem;
@@ -50,7 +50,7 @@ h1 {
 
 h2 {
     font-size: 1.29rem;
-}
+} */
 
 /* Slider */
 
@@ -137,58 +137,6 @@ h2 {
 
 .slider .dots li.active {
     width: 30px;
-}
-
-.title {
-    position: relative;
-    margin-left: 40px;
-    margin-right: 5%;
-    display: flex;
-    justify-content: space-between;
-    text-transform: capitalize;
-}
-
-.title h3 {
-    margin-top: 20px;
-}
-
-.title .left {
-    max-width: 60%;
-    display: flex;
-    flex-wrap: wrap;
-}
-
-.title .right img {
-    height: 20px;
-    /* Adjust size as necessary */
-    vertical-align: middle;
-}
-
-
-.title .left p {
-    font-size: 15px;
-    align-self: self-end;
-    margin-bottom: 20px;
-    align-items: end;
-    color: white;
-    background-color: var(--deep-blue);
-    border-radius: 4px;
-    padding: 3px 7px;
-}
-
-.title .right p {
-    margin-top: 35px;
-    margin-right: 0;
-}
-
-.title .right .more {
-    position: relative;
-    top: 25px;
-}
-
-.title .right i {
-    margin-left: 5px;
-    /* margin-right: 30px; */
 }
 
 /* Header */
@@ -309,7 +257,7 @@ header {
 
 .products .box-container {
     display: grid;
-    grid-template-columns: repeat(auto-fit, 290px);
+    grid-template-columns: repeat(auto-fit, 250px);
     border-color: #24262b;
     justify-content: center;
     padding-bottom: 2%;
@@ -348,15 +296,41 @@ header {
 }
 
 .products .box-container .box:hover {
-    border: 1px solid var(--deep-blue);
+    border: 1px var(--color-primary) solid;
 }
 
 .products .box-container .box .image-container {
     position: relative;
-    height: 304px;
+    /* height: 304px; */
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.products .box-container .image-container img {
+    /* width: 250px; */
+    /* height: 310px; */
+    background-color: white;
+    object-fit: contain;
+    border-radius: 10px;
+}
+
+.products .box-container .name {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #333;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.products .box-container .price-size-container {
+    display: flex;
+}
+
+.products .box-container .price-size-container .price {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #333;
 }
 
 .back-to-top {

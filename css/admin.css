@@ -27,6 +27,88 @@
     --box-shadow: 0 0 10px rgb(0 0 0/15%);
 }
 
+.click,
+.popup_box {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 5px;
+}
+
+.click {
+    background: #2981bc;
+    color: white;
+    font-size: 22px;
+    font-family: arial;
+    font-weight: bold;
+    padding: 10px 15px;
+    text-align: center;
+    border: 1px solid #0059b3;
+}
+
+.popup_box {
+    width: 400px;
+    background: #f2f2f2;
+    text-align: center;
+    align-items: center;
+    padding: 40px;
+    border: 1px solid #b3b3b3;
+    box-shadow: 0px 5px 10px rgba(0, 0, 0, .2);
+    z-index: 9999;
+    display: none;
+}
+
+.popup_box i {
+    font-size: 60px;
+    color: #eb9447;
+    border: 5px solid #eb9447;
+    padding: 20px 40px;
+    border-radius: 50%;
+    margin: -10px 0 20px 0;
+}
+
+.popup_box h1 {
+    font-size: 30px;
+    color: #1b2631;
+    margin-bottom: 5px;
+}
+
+.popup_box label {
+    font-size: 23px;
+    color: #404040;
+}
+
+.popup_box .btns {
+    margin: 40px 0 0 0;
+}
+
+.btns .btn1,
+.btns .btn2 {
+    background: #999999;
+    color: white;
+    font-size: 18px;
+    border-radius: 5px;
+    border: 1px solid #808080;
+    padding: 10px 13px;
+}
+
+.btns .btn2 {
+    margin-left: 20px;
+    background: #ff3333;
+    border: 1px solid #cc0000;
+}
+
+.btns .btn1:hover {
+    transition: .5s;
+    background: #8c8c8c;
+}
+
+.btns .btn2:hover {
+    transition: .5s;
+    background: #e60000;
+}
+
 .text-muted {
     color: var(--color-gray-light);
 }
@@ -383,6 +465,16 @@ dialog form textarea {
     resize: vertical;
 }
 
+ul.user-show,
+ul.bookshop-show {
+    display: none;
+}
+
+ul.user-show.first,
+ul.bookshop-show.second {
+    display: block;
+}
+
 /* Sidebar */
 aside {
     margin: 1rem;
@@ -446,20 +538,9 @@ aside .sidebar a span {
     margin-left: 3rem;
 }
 
-aside .sidebar a i.rotate {
-    margin-top: 1.5rem;
-    transform: translateY(-50%) rotate(-180deg);
-}
-
 aside .sidebar ul ul {
     display: none;
-}
-
-aside .sidebar ul .bookshop-show.first,
-aside .sidebar ul .user-show.second {
     padding: 0 0 1rem 1rem;
-    display: block;
-    /* margin-top: -10px; */
 }
 
 aside .sidebar a.active {
@@ -490,58 +571,6 @@ main {
     grid-template-columns: 1fr auto;
 
 }
-
-main .title {
-    position: relative;
-    margin: 1.5rem;
-    display: flex;
-    justify-content: space-between;
-    text-transform: capitalize;
-}
-
-.title .left {
-    max-width: 60%;
-    display: flex;
-    flex-wrap: wrap;
-}
-
-.title .left p {
-    font-size: 15px;
-    align-self: self-end;
-    margin-bottom: 20px;
-    align-items: end;
-    color: white;
-    background-color: var(--deep-blue);
-    border-radius: 4px;
-    padding: 3px 7px;
-}
-
-.title .right {
-    display: flex;
-}
-
-
-.title .right img {
-    height: 20px;
-    /* Adjust size as necessary */
-    vertical-align: middle;
-}
-
-/* .title .right p {
-    margin-top: 35px;
-    margin-right: 0;
-} */
-
-.title .right .more {
-    position: relative;
-    top: 25px;
-}
-
-.title .right i {
-    margin-left: 5px;
-    /* margin-right: 30px; */
-}
-
 
 main .insights {
     display: grid;
@@ -789,10 +818,9 @@ main .recent-orders a {
 }
 
 /* PRODUCTS */
-
 .products .box-container {
     display: grid;
-    grid-template-columns: repeat(auto-fit, 250px);
+    grid-template-columns: repeat(auto-fit, 220px);
     border-color: #24262b;
     justify-content: center;
     padding-bottom: 2%;
@@ -823,6 +851,25 @@ main .recent-orders a {
     background-color: white;
     object-fit: contain;
     border-radius: 10px;
+}
+
+.deactivate-product {
+    color: black;
+    display: block;
+    text-align: center;
+    align-items: center;
+    line-height: 40px;
+    margin: 0 8px 8px 0;
+    font-size: 18px;
+    border-radius: 50%;
+    border: 1px solid var(--deep-blue);
+    position: absolute;
+    height: 40px;
+    width: 40px;
+    right: -20px;
+    top: -10px;
+    cursor: pointer;
+    z-index: 999;
 }
 
 .products .box-container .box:hover {

@@ -1,0 +1,42 @@
+.title {
+    position: relative;
+    margin: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    text-transform: capitalize;
+}
+
+.title .left {
+    max-width: 60%;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.title .left p {
+    font-size: 15px;
+    align-self: self-end;
+    margin-bottom: 20px;
+    align-items: end;
+    color: white;
+    background-color: var(--deep-blue);
+    border-radius: 4px;
+    padding: 3px 7px;
+}
+
+.title .right img {
+    height: 20px;
+    vertical-align: middle;
+}
+
+.title .right p {
+    margin-right: 0;
+}
+
+.title .right .more {
+    position: relative;
+    top: 25px;
+}
+
+.title .right i {
+    margin-left: 5px;
+}

@@ -76,6 +76,7 @@ $all_main_categories = getMainCategories($pdo);
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/common.css">
     <link rel="stylesheet" href="../css/admin.css">
 </head>
 
@@ -201,22 +202,13 @@ $all_main_categories = getMainCategories($pdo);
                 <p>Select the main category for this subcategory.</p>
             </div>
             <div class="controls">
-                <button type="button" onclick="document.getElementById('add-subcategory-dialog').close();">Cancel</button>
+                <button type="button" class="close-btn">Cancel</button>
                 <button type="reset">Clear</button>
                 <button type="submit" name="submit">Publish</button>
             </div>
         </form>
     </dialog>
     <script src="../javascript/admin.js"></script>
-    <script>
-        document.getElementById('open-popup').addEventListener('click', function() {
-            document.getElementById('add-subcategory-dialog').showModal();
-        });
-
-        document.querySelector('.close-btn').addEventListener('click', function() {
-            document.getElementById('add-subcategory-dialog').close();
-        });
-    </script>
 </body>
 
 </html>

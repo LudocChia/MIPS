@@ -26,52 +26,52 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="./css/base.css">
+    <link rel="stylesheet" href="./css/common.css">
     <link rel="stylesheet" href="./css/customer.css">
-    <link rel="stylesheet" href="./css/index.css">
 </head>
 
 <body>
     <?php include "./components/customer_header.php"; ?>
-    <section class="products">
+    <section class="bookshop">
         <div class="container">
-            <div class="wrapper">
-                <div class="title">
-                    <div class="left">
-                        <h1>Mahans International Primary School Bookshop</h1>
-                    </div>
-                    <div class="right">
-                        <p>Found <b id="count"><?= count($products) ?></b> results</p>
-                    </div>
-                </div>
-                <div class="box-container" id="list">
-                    <?php if (count($products) > 0) : ?>
-                        <?php foreach ($products as $product) : ?>
-                            <div class="box">
-                                <div class="image-container">
-                                    <a href="product_page.php?pid=<?= htmlspecialchars($product['product_id']); ?>">
-                                        <img src="<?= htmlspecialchars(!empty($product['primary_image']) ? "uploads/" . $product['primary_image'] : 'images/defaultproductimage.png'); ?>" alt="Product Image" class="primary-image">
-                                    </a>
-                                </div>
-                                <div class="name"><?= htmlspecialchars($product['product_name']); ?></div>
-                                <div class="description"><?= htmlspecialchars($product['product_description']); ?></div>
-                                <div class="price-size-container">
-                                    <div class="size"><?= htmlspecialchars($product['product_unit_price']); ?></div>
-                                    <div class="price">MYR <?= number_format($product['product_price'], 2); ?></div>
-                                </div>
-                                <div class="stock">Stock: <?= htmlspecialchars($product['stock_quantity']); ?></div>
-                                <div class="color-gender">
-                                    <span class="color">Color: <?= htmlspecialchars($product['color']); ?></span>
-                                    <span class="gender">Gender: <?= htmlspecialchars($product['gender']); ?></span>
-                                </div>
-                            </div>
-                        <?php endforeach; ?>
-                    <?php else : ?>
-                        <div class="empty">
-                            <img src="images/empty_cart.png" alt="Empty Cart Image">
-                            <h4>No Products Found</h4>
-                            <p>Please check back later for new arrivals!</p>
+            <div class="products">
+                <div class="wrapper">
+                    <div class="title">
+                        <div class="left">
+                            <h1>Mahans International Primary School Bookshop</h1>
                         </div>
-                    <?php endif; ?>
+                        <div class="right">
+                            <p>Found <b id="count"><?= count($products) ?></b> results</p>
+                        </div>
+                    </div>
+                    <div class="box-container">
+                        <?php if (count($products) > 0) : ?>
+                            <?php foreach ($products as $product) : ?>
+                                <div class="box">
+                                    <div class="image-container">
+                                        <a href="item.php?pid=<?= htmlspecialchars($product['product_id']); ?>">
+                                            <img src="<?= htmlspecialchars(!empty($product['primary_image']) ? "uploads/" . $product['primary_image'] : 'images/defaultproductimage.png'); ?>" alt="Product Image" class="primary-image">
+                                        </a>
+                                    </div>
+                                    <div class="name"><?= htmlspecialchars($product['product_name']); ?></div>
+                                    <div class="price-size-container">
+                                        <div class="size"><?= htmlspecialchars($product['product_unit_price']); ?></div>
+                                        <div class="price">MYR <?= number_format($product['product_price'], 2); ?></div>
+                                    </div>
+                                    <div class="color-gender">
+                                        <span class="color">Color: <?= htmlspecialchars($product['color']); ?></span>
+                                        <span class="gender">Gender: <?= htmlspecialchars($product['gender']); ?></span>
+                                    </div>
+                                </div>
+                            <?php endforeach; ?>
+                        <?php else : ?>
+                            <div class="empty">
+                                <img src="images/empty_cart.png" alt="Empty Cart Image">
+                                <h4>No Products Found</h4>
+                                <p>Please check back later for new arrivals!</p>
+                            </div>
+                        <?php endif; ?>
+                    </div>
                 </div>
             </div>
         </div>

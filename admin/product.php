@@ -8,7 +8,6 @@ if (!isset($_SESSION['admin_id'])) {
     exit();
 }
 
-// Function to fetch all subcategories
 function getSubcategories($pdo)
 {
     $sql = "SELECT * FROM Product_Category WHERE parent_id IS NOT NULL AND is_deleted = 0";
@@ -45,66 +44,110 @@ if (isset($_POST['submit'])) {
     $stockQuantity = $_POST['stock_quantity'];
     $color = !empty($_POST['color']) ? $_POST['color'] : null;
     $gender = $_POST['gender'];
+    $productId = isset($_POST['product_id']) ? $_POST['product_id'] : null;
 
-    // Validate required inputs
     if (!empty($name) && !empty($subcategoryId) && !empty($price) && !empty($stockQuantity) && !empty($gender)) {
-        // Handle file upload
-        if ($_FILES['image']['error'] === UPLOAD_ERR_OK) {
-            $fileTmpPath = $_FILES['image']['tmp_name'];
-            $fileName = $_FILES['image']['name'];
-            $fileSize = $_FILES['image']['size'];
-            $fileType = $_FILES['image']['type'];
-            $fileNameCmps = explode(".", $fileName);
-            $fileExtension = strtolower(end($fileNameCmps));
+        if ($productId) {
+            // Update existing product
+            $sql = "UPDATE Product SET product_name = :name, category_id = :subcategory, product_description = :description, 
+                    product_price = :price, product_unit_price = :unit_price, stock_quantity = :stock_quantity, 
+                    color = :color, gender = :gender WHERE product_id = :product_id";
 
-            $allowedfileExtensions = ['jpg', 'jpeg', 'png'];
-            if (in_array($fileExtension, $allowedfileExtensions)) {
-                // Directory where the uploaded file will be moved
-                $uploadFileDir = '../uploads/';
-                $newFileName = uniqid() . '.' . $fileExtension; // Generate unique filename
-                $dest_path = $uploadFileDir . $newFileName;
+            $stmt = $pdo->prepare($sql);
+            $stmt->bindParam(':name', $name);
+            $stmt->bindParam(':subcategory', $subcategoryId);
+            $stmt->bindParam(':description', $description);
+            $stmt->bindParam(':price', $price);
+            $stmt->bindParam(':unit_price', $unitPrice);
+            $stmt->bindParam(':stock_quantity', $stockQuantity);
+            $stmt->bindParam(':color', $color);
+            $stmt->bindParam(':gender', $gender);
+            $stmt->bindParam(':product_id', $productId);
+            $stmt->execute();
 
-                if (move_uploaded_file($fileTmpPath, $dest_path)) {
-                    // Insert product into the Product table
-                    $sql = "INSERT INTO Product (product_name, category_id, product_description, product_price, product_unit_price, stock_quantity, color, gender) 
-                            VALUES (:name, :subcategory, :description, :price, :unit_price, :stock_quantity, :color, :gender)";
-                    $stmt = $pdo->prepare($sql);
-                    $stmt->bindParam(':name', $name);
-                    $stmt->bindParam(':subcategory', $subcategoryId);
-                    $stmt->bindParam(':description', $description);
-                    $stmt->bindParam(':price', $price);
-                    $stmt->bindParam(':unit_price', $unitPrice);
-                    $stmt->bindParam(':stock_quantity', $stockQuantity);
-                    $stmt->bindParam(':color', $color);
-                    $stmt->bindParam(':gender', $gender);
-                    $stmt->execute();
+            echo "<script>alert('Product updated successfully!');</script>";
+        } else {
+            // Add new product
+            if (isset($_FILES['images'])) {
+                $imageCount = count($_FILES['images']['name']);
+                $uploadedImages = [];
+                $allowedfileExtensions = ['jpg', 'jpeg', 'png'];
 
-                    // Get the last inserted product ID
-                    $productId = $pdo->lastInsertId();
+                for ($i = 0; $i < $imageCount; $i++) {
+                    $fileTmpPath = $_FILES['images']['tmp_name'][$i];
+                    $fileName = $_FILES['images']['name'][$i];
+                    $fileSize = $_FILES['images']['size'][$i];
+                    $fileType = $_FILES['images']['type'][$i];
+                    $fileNameCmps = explode(".", $fileName);
+                    $fileExtension = strtolower(end($fileNameCmps));
 
-                    // Insert the image into the Product_Image table
+                    if (in_array($fileExtension, $allowedfileExtensions)) {
+                        $newFileName = uniqid() . '.' . $fileExtension;
+                        $dest_path = '../uploads/' . $newFileName;
+
+                        if (move_uploaded_file($fileTmpPath, $dest_path)) {
+                            $uploadedImages[] = $newFileName;
+                        } else {
+                            echo "<script>alert('There was an error moving the uploaded file: $fileName');</script>";
+                        }
+                    } else {
+                        echo "<script>alert('Upload failed. Allowed file types: " . implode(',', $allowedfileExtensions) . "');</script>";
+                    }
+                }
+
+                $sql = "INSERT INTO Product (product_name, category_id, product_description, product_price, product_unit_price, stock_quantity, color, gender) 
+                        VALUES (:name, :subcategory, :description, :price, :unit_price, :stock_quantity, :color, :gender)";
+                $stmt = $pdo->prepare($sql);
+                $stmt->bindParam(':name', $name);
+                $stmt->bindParam(':subcategory', $subcategoryId);
+                $stmt->bindParam(':description', $description);
+                $stmt->bindParam(':price', $price);
+                $stmt->bindParam(':unit_price', $unitPrice);
+                $stmt->bindParam(':stock_quantity', $stockQuantity);
+                $stmt->bindParam(':color', $color);
+                $stmt->bindParam(':gender', $gender);
+                $stmt->execute();
+
+                $productId = $pdo->lastInsertId();
+
+                $sortOrder = 1;
+                foreach ($uploadedImages as $image) {
                     $sqlImage = "INSERT INTO Product_Image (product_id, image_url, sort_order) VALUES (:product_id, :image_url, :sort_order)";
                     $stmtImage = $pdo->prepare($sqlImage);
-                    $sortOrder = 1; // Default sort order for now
                     $stmtImage->bindParam(':product_id', $productId);
-                    $stmtImage->bindParam(':image_url', $newFileName);
+                    $stmtImage->bindParam(':image_url', $image);
                     $stmtImage->bindParam(':sort_order', $sortOrder);
                     $stmtImage->execute();
-
-                    echo "<script>alert('Product added successfully!');</script>";
-                } else {
-                    echo "<script>alert('There was an error moving the uploaded file.');</script>";
+                    $sortOrder++;
                 }
+
+                header('Loction: product.php');
+                exit();
             } else {
-                echo "<script>alert('Upload failed. Allowed file types: " . implode(',', $allowedfileExtensions) . "');</script>";
+                echo "<script>alert('No files uploaded.');</script>";
             }
-        } else {
-            echo "<script>alert('There was an error uploading the file.');</script>";
         }
     } else {
         echo "<script>alert('Please fill in all required fields.');</script>";
     }
 }
+
+if (isset($_POST['delete'])) {
+    $productId = $_POST['product_id'];
+
+    $sql = "UPDATE Product SET is_deleted = 1 WHERE product_id = :product_id";
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(':product_id', $productId);
+
+    try {
+        $stmt->execute();
+        header('Location: product.php');
+        exit();
+    } catch (PDOException $e) {
+        echo "<script>alert('Database error: " . $e->getMessage() . "');</script>";
+    }
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -120,6 +163,7 @@ if (isset($_POST['submit'])) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/common.css">
     <link rel="stylesheet" href="../css/admin.css">
 </head>
 
@@ -190,6 +234,28 @@ if (isset($_POST['submit'])) {
                             <h4>Order</h4>
                         </a>
                     </li>
+                    <li>
+                        <a href="announment.php">
+                            <i></i>
+                            <h4>Announment</h4>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="deactivate.php">
+                            <i></i>
+                            <h4>Deactivate List</h4>
+                        </a>
+                    </li>
+                    <li>
+                        <i></i>
+                        <h4>Report</h4>
+                        <ul>
+                            <li>
+
+                            </li>
+                        </ul>
+
+                    </li>
                 </ul>
             </div>
         </aside>
@@ -206,14 +272,20 @@ if (isset($_POST['submit'])) {
                 </div>
                 <div class="box-container">
                     <?php foreach ($all_products as $product) { ?>
-                        <div class="box">
+                        <div class="box" data-product-id="<?= htmlspecialchars($product['product_id']); ?>">
                             <div class="image-container">
                                 <a href="item.php?pid=<?= htmlspecialchars($product['product_id']); ?>">
-                                    <img src="<?= htmlspecialchars("../uploads/" . $product['image_url'] . "") ?>" alt="Product Image">
-                                    <div class="badge">
-                                        <div class="sales-badge"><?= !empty($product['monthly_sales']) ? htmlspecialchars($product['monthly_sales']) : 0 ?> sold this month</div>
-                                    </div>
+                                    <img src="<?= htmlspecialchars("../uploads/" . $product['image_url']) ?>" alt="Product Image">
                                 </a>
+                                <form action="" method="POST" style="display:inline;" onsubmit="return showDeleteConfirmDialog(event);">
+                                    <input type="hidden" name="product_id" value="<?= htmlspecialchars($product['product_id']); ?>">
+                                    <input type="hidden" name="delete" value="true">
+                                    <button type="submit" class="delete-product-btn"><i class="bi bi-x-square"></i></button>
+                                </form>
+
+                                <!-- <div class="deactivate-product"> -->
+                                <button type="button" class="edit-product-btn" data-product-id="<?= htmlspecialchars($product['product_id']); ?>"><i class="bi bi-pencil-square"></i></button>
+                                <!-- </div> -->
                             </div>
                             <div class="name"><?= htmlspecialchars($product['product_name']); ?></div>
                             <div class="price">
@@ -225,9 +297,10 @@ if (isset($_POST['submit'])) {
             </div>
         </main>
     </div>
-    <dialog id="add-product">
+    <dialog id="add-data">
         <h2>Add Bookshop Product</h2>
         <form action="" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="product_id" value="">
             <div class="input-field">
                 <h2>Product Name<sup>*</sup></h2>
                 <input type="text" name="name" value="<?php echo isset($_POST['name']) ? htmlspecialchars($_POST['name']) : ''; ?>" required>
@@ -244,9 +317,9 @@ if (isset($_POST['submit'])) {
                 <p>Please select a product category.</p>
             </div>
             <div class="input-field">
-                <h2>Product Image<sup>*</sup></h2>
-                <input type="file" name="image" id="image" accept=".jpg, .jpeg, .png" required>
-                <p>Please upload an image for the product.</p>
+                <h2>Product Images<sup>*</sup></h2>
+                <input type="file" name="images[]" id="images" accept=".jpg, .jpeg, .png" multiple required>
+                <p>Please upload images for the product.</p>
             </div>
             <div class="input-field">
                 <h2>Product Description<sup>*</sup></h2>
@@ -284,17 +357,67 @@ if (isset($_POST['submit'])) {
                 <p>Please select the gender for the product.</p>
             </div>
             <div class="controls">
-                <button type="button" onclick="document.getElementById('add-product').close();">Cancel</button>
+                <button type="button" class="close-btn">Cancel</button>
                 <button type="reset">Clear</button>
                 <button type="submit" name="submit">Publish</button>
             </div>
         </form>
     </dialog>
+    <dialog id="delete-confirm-dialog">
+        <form method="dialog">
+            <h1>Your Product will be Deactivated!</h1>
+            <label>Are you sure to proceed?</label>
+            <div class="btns">
+                <button value="cancel" class="btn1">Cancel Process</button>
+                <button value="confirm" class="btn2">Deactivate Product</button>
+            </div>
+        </form>
+    </dialog>
+
     <script src="../javascript/admin.js"></script>
     <script>
-        // Open dialog for adding a product
-        document.getElementById('open-popup').addEventListener('click', function() {
-            document.getElementById('add-product').showModal();
+        // Handle edit product button click
+        document.querySelectorAll('.edit-product-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const productId = this.dataset.productId;
+
+                fetch(`ajax.php?product_id=${productId}`)
+                    .then(response => response.json())
+                    .then(product => {
+                        document.querySelector('#add-product [name="name"]').value = product.product_name;
+                        document.querySelector('#add-product [name="subcategory"]').value = product.category_id;
+                        document.querySelector('#add-product [name="description"]').value = product.product_description;
+                        document.querySelector('#add-product [name="price"]').value = product.product_price;
+                        document.querySelector('#add-product [name="unit_price"]').value = product.product_unit_price;
+                        document.querySelector('#add-product [name="stock_quantity"]').value = product.stock_quantity;
+                        document.querySelector('#add-product [name="color"]').value = product.color;
+                        document.querySelector('#add-product [name="gender"]').value = product.gender;
+
+                        document.querySelector('#add-product').dataset.productId = productId;
+
+                        document.getElementById('add-product').showModal();
+                    })
+                    .catch(error => {
+                        console.error('Error fetching product data:', error);
+                        alert('Failed to load product data.');
+                    });
+            });
+        });
+        document.addEventListener('DOMContentLoaded', function() {
+            const deleteConfirmDialog = document.getElementById('delete-confirm-dialog');
+            let deleteForm = null;
+
+            window.showDeleteConfirmDialog = function(event) {
+                event.preventDefault();
+                deleteForm = event.target;
+                deleteConfirmDialog.showModal();
+            }
+
+            deleteConfirmDialog.addEventListener('close', function() {
+                if (deleteConfirmDialog.returnValue === 'confirm') {
+                    deleteForm.submit();
+                }
+            });
         });
     </script>
 </body>

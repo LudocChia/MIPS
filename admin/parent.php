@@ -1,64 +1,59 @@
 <?php
-session_start();
-
 include "../components/db_connect.php";
 
-if (!isset($_SESSION['admin_id'])) {
-    header('Location: login.php');
-    exit();
-}
-
-$msg = [];
-if (isset($_POST["submit"])) {
-    $name = $_POST["name"];
-    $parentId = !empty($_POST["parent_id"]) ? $_POST["parent_id"] : null;
-
-
-    if ($_FILES["image"]["error"] === 4) {
-        echo "<script> alert('Image Does Not Exist'); </script>";
-    } else {
-        $fileName = $_FILES["image"]["name"];
-        $fileSize = $_FILES["image"]["size"];
-        $tmpName = $_FILES["image"]["tmp_name"];
-
-        $validImageExtension = ['jpg', 'jpeg', 'png'];
-        $imageExtension = explode('.', $fileName);
-        $imageExtension = strtolower(end($imageExtension));
-        if (!in_array($imageExtension, $validImageExtension)) {
-            echo "<script> alert('Invalid Image Extension'); </script>";
-        } else if ($fileSize > 1000000) {
-            echo "<script> alert('Image Size Is Too Large'); </script>";
-        } else {
-            $newImageName = uniqid() . '.' . $imageExtension;
-            if (move_uploaded_file($tmpName, '../uploads/' . $newImageName)) {
-                $sql = "INSERT INTO Product_Category (category_name, category_icon, parent_id, is_deleted) VALUES (:name, :icon, :parentId, 0)";
-                $stmt = $pdo->prepare($sql);
-                $stmt->bindParam(':name', $name);
-                $stmt->bindParam(':icon', $newImageName);
-                $stmt->bindParam(':parentId', $parentId);
-                try {
-                    $stmt->execute();
-                    header('Location: mainCategory.php');
-                    exit();
-                } catch (PDOException $e) {
-                    echo "<script>alert('Database error: " . $e->getMessage() . "');</script>";
-                }
-            } else {
-                echo "<script>alert('Failed to move uploaded file.');</script>";
-            }
-        }
-    }
-}
-
-function getMainCategories($pdo)
+function getAllParents($pdo)
 {
-    $sql = "SELECT * FROM Product_Category WHERE parent_id IS NULL AND is_deleted = 0";
+    $sql = "SELECT * FROM Customer WHERE is_deleted = 0";
     $stmt = $pdo->prepare($sql);
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
-$all_main_categories = getMainCategories($pdo);
+$all_parents = getAllParents($pdo);
+
+function generateParentsId()
+{
+    $prefix = "PR";
+    $randomString = bin2hex(random_bytes(4));
+    return $prefix . $randomString;
+}
+
+if (isset($_POST["submit"])) {
+    $parentId = generateParentsId();
+    $name = $_POST["name"];
+    $email = $_POST["email"];
+    $password = $_POST["password"];
+    $confirmPassword = $_POST["confirm_password"];
+    $parentType = "parent";
+
+    if (empty($name) || empty($email) || empty($password) || empty($confirmPassword)) {
+        echo "<script>alert('Please fill in all required fields.');</script>";
+    } elseif ($password !== $confirmPassword) {
+        echo "<script>alert('Passwords do not match.');</script>";
+    } else {
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            echo "<script>alert('Invalid email format.');</script>";
+        } else {
+            $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+
+            try {
+                $sql = "INSERT INTO Customer (customer_id, customer_name, customer_email, customer_password, customer_type, is_deleted) 
+                        VALUES (:customerId, :name, :email, :password, :customerType, 0)";
+                $stmt = $pdo->prepare($sql);
+                $stmt->bindParam(':customerId', $parentId);
+                $stmt->bindParam(':name', $name);
+                $stmt->bindParam(':email', $email);
+                $stmt->bindParam(':password', $hashedPassword);
+                $stmt->bindParam(':customerType', $parentType);
+                $stmt->execute();
+
+                echo "<script>alert('Parent Successfully Added');document.location.href ='Parent.php';</script>";
+            } catch (PDOException $e) {
+                echo "<script>alert('Database error: " . $e->getMessage() . "');</script>";
+            }
+        }
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -67,14 +62,13 @@ $all_main_categories = getMainCategories($pdo);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bookshop Category - Mahans School</title>
+    <title>All Parents - Mahans School</title>
     <link rel="icon" type="image/x-icon" href="../images/Mahans_internation_primary_school_logo.png">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="../css/base.css">
-    <link rel="stylesheet" href="../css/common.css">
     <link rel="stylesheet" href="../css/admin.css">
 </head>
 
@@ -99,7 +93,7 @@ $all_main_categories = getMainCategories($pdo);
                             <i class="bi bi-chevron-down first"></i>
                         </a>
                         <ul class="bookshop-show">
-                            <li><a href=" mainCategory.php" class="active"><i class="bi bi-tags-fill"></i>
+                            <li><a href="mainCategory.php"><i class="bi bi-tags-fill"></i>
                                     <h4>Main Category</h4>
                                 </a>
                             </li>
@@ -133,7 +127,7 @@ $all_main_categories = getMainCategories($pdo);
                                 </a>
                             </li>
                             <li>
-                                <a href="parent.php"><i class="bi bi-people-fill"></i>
+                                <a href="parent.php" class="active"><i class="bi bi-people-fill"></i>
                                     <h4>All Parent</h4>
                                 </a>
                             </li>
@@ -153,19 +147,19 @@ $all_main_categories = getMainCategories($pdo);
             <div class="wrapper">
                 <div class="title">
                     <div class="left">
-                        <h1>Bookshop Main Category</h1>
+                        <h1>Mahans Parents</h1>
                     </div>
                     <div class="right">
-                        <button id="open-popup"><i class="bi bi-plus-circle"></i>Add Main Category</button>
+                        <button id="open-popup"><i class="bi bi-person-fill-add"></i>Add New Parent</button>
                         <?php
                         try {
                             $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-                            $countQuery = "SELECT COUNT(*) FROM Product_Category WHERE parent_id IS NULL AND is_deleted = 0";
+                            $countQuery = "SELECT COUNT(*) FROM Customer WHERE customer_type = 'parent' AND is_deleted = 0";
                             $stmt = $pdo->prepare($countQuery);
                             $stmt->execute();
                             $count = $stmt->fetchColumn();
 
-                            echo "<p>Total $count Main Category</p>";
+                            echo "<p>Total $count Parent(s)</p>";
                         } catch (PDOException $e) {
                             echo "<script>alert('Database error: " . $e->getMessage() . "');</script>";
                         }
@@ -173,12 +167,12 @@ $all_main_categories = getMainCategories($pdo);
                     </div>
                 </div>
                 <div class="box-container">
-                    <?php foreach ($all_main_categories as $category) : ?>
+                    <?php foreach ($all_parents as $parent) : ?>
                         <div class="box">
-                            <h3><?php echo htmlspecialchars($category['category_name']); ?></h3>
+                            <h3><?php echo htmlspecialchars($parent['customer_name']); ?></h3>
                             <a href="#">
                                 <div class="image-container">
-                                    <img src="../uploads/<?php echo htmlspecialchars($category['category_icon']); ?>" alt="Icon for <?php echo htmlspecialchars($category['category_name']); ?>">
+                                    <img src="../uploads/<?php echo htmlspecialchars($parent['customer_image']); ?>" alt="Image for <?php echo htmlspecialchars($parent['customer_name']); ?>">
                                 </div>
                             </a>
                         </div>
@@ -188,17 +182,27 @@ $all_main_categories = getMainCategories($pdo);
         </main>
     </div>
     <dialog>
-        <h1>Add Main Category</h1>
+        <h1>Add New Parent</h1>
         <form action="" method="post" enctype="multipart/form-data">
             <div class="input-field">
-                <h2>Category Name<sup>*</sup></h2>
-                <input type="text" name="name" value="<?php echo isset($_POST['name']) ? htmlspecialchars($_POST['name']) : ''; ?>">
-                <p>Please enter full name as per IC or Passport.</p>
+                <h2>Parent Name<sup>*</sup></h2>
+                <input type="text" name="name" value="<?php echo isset($_POST['name']) ? htmlspecialchars($_POST['name']) : ''; ?>" required>
+                <p>Please enter the parent's full name.</p>
             </div>
             <div class="input-field">
-                <h2>Category Icon<sup>*</sup></h2>
-                <input type="file" name="image" id="image" accept=".jpg, .jpeg, .png" value="">
-                <p>Please enter full name as per IC or Passport.</p>
+                <h2>Parent Email<sup>*</sup></h2>
+                <input type="email" name="email" value="<?php echo isset($_POST['email']) ? htmlspecialchars($_POST['email']) : ''; ?>" required>
+                <p>Please enter the parent's email address.</p>
+            </div>
+            <div class="input-field">
+                <h2>Password<sup>*</sup></h2>
+                <input type="password" name="password" required>
+                <p>Please enter a secure password.</p>
+            </div>
+            <div class="input-field">
+                <h2>Confirm Password<sup>*</sup></h2>
+                <input type="password" name="confirm_password" required>
+                <p>Please confirm the password.</p>
             </div>
             <div class="controls">
                 <button type="button" class="close-btn">Cancel</button>

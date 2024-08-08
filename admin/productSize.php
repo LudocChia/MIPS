@@ -9,20 +9,16 @@ if (!isset($_SESSION['admin_id'])) {
 }
 
 if (isset($_POST['submit'])) {
-    // Collect form data
     $name = $_POST['name'];
     $shoulder_width = $_POST['shoulder_width'];
     $bust = $_POST['bust'];
     $waist = $_POST['waist'];
     $length = $_POST['length'];
 
-    // Validate size name
     if (!empty($name)) {
-        // Prepare the SQL statement
         $sql = "INSERT INTO sizes (size_name, shoulder_width, bust, waist, length) VALUES (:name, :shoulder_width, :bust, :waist, :length)";
         $stmt = $pdo->prepare($sql);
 
-        // Bind parameters
         $stmt->bindParam(':name', $name);
         $stmt->bindParam(':shoulder_width', $shoulder_width);
         $stmt->bindParam(':bust', $bust);
@@ -30,20 +26,16 @@ if (isset($_POST['submit'])) {
         $stmt->bindParam(':length', $length);
 
         try {
-            // Execute the statement
             $stmt->execute();
-            echo "<sricpt>alert('Successfully Added');</sricpt>";
-            echo "<script>document.location.href ='productSize.php';</script>";
+            header('Location: mainCategory.php');
+            exit();
         } catch (PDOException $e) {
-            // Handle SQL execution error
             echo "<sricpt>alert('Database error: );</sricpt>";
         }
     } else {
         echo "<sricpt>alert('Please enter a product size name.');</sricpt>";
     }
 }
-
-// Retrieve existing sizes
 
 function getSizes($pdo)
 {
@@ -71,6 +63,7 @@ $all_product_sizes = getSizes($pdo);
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/common.css">
     <link rel="stylesheet" href="../css/admin.css">
 </head>
 
@@ -84,7 +77,7 @@ $all_product_sizes = getSizes($pdo);
             <div class="sidebar">
                 <ul>
                     <li>
-                        <a href="index.php" class="active"><i class="bi bi-grid-1x2-fill"></i>
+                        <a href="index.php"><i class="bi bi-grid-1x2-fill"></i>
                             <h4>Dashboard</h4>
                         </a>
                     </li>
@@ -224,19 +217,13 @@ $all_product_sizes = getSizes($pdo);
                 <input type="number" step="0.01" name="length" value="<?php echo isset($_POST['length']) ? htmlspecialchars($_POST['length']) : ''; ?>">
             </div>
             <div class="controls">
-                <button type="button" onclick="document.getElementById('add-product').close();" class="close-btn">Cancel</button>
+                <button type="button" class="close-btn">Cancel</button>
                 <button type="reset">Clear</button>
                 <button type="submit" name="submit">Publish</button>
             </div>
         </form>
     </dialog>
     <script src="../javascript/admin.js"></script>
-    <script>
-        // Open dialog for adding a size
-        document.getElementById('open-popup').addEventListener('click', function() {
-            document.getElementById('add-product').showModal();
-        });
-    </script>
 </body>
 
 </html>

@@ -1,60 +1,71 @@
-const sideMenu = document.querySelector("aside");
-const menuBtn = document.querySelector("#menu-btn");
-const closeBtn = document.querySelector("#close-btn");
-const userBtn = document.querySelector("#user-btn");
-const profileMenu = document.querySelector(".profile-menu");
-const dialog = document.querySelector('dialog');
+document.addEventListener('DOMContentLoaded', function () {
+    const sideMenu = document.querySelector("aside");
+    const menuBtn = document.querySelector("#menu-btn");
+    const closeBtn = document.querySelector("#close-btn");
+    const userBtn = document.querySelector("#user-btn");
+    const profileMenu = document.querySelector(".profile-menu");
+    const dialog = document.querySelector('dialog');
+    // const themeToggler = document.querySelector(".theme-toggler");
 
-// const themeToggler = document.querySelector(".theme-toggler");
+    // Show Sidebar
+    menuBtn.addEventListener("click", () => {
+        sideMenu.style.display = "block";
+    });
 
-// Show Sidebar
-menuBtn.addEventListener("click", () => {
-    sideMenu.style.display = "block";
-});
+    // Close Sidebar
+    closeBtn.addEventListener("click", () => {
+        sideMenu.style.display = "none";
+    });
 
-// Close Sidebar
-closeBtn.addEventListener("click", () => {
-    sideMenu.style.display = "none";
-});
+    // Show Profile Menu
+    userBtn.addEventListener('click', function (event) {
+        event.stopPropagation();
+        profileMenu.classList.toggle('active');
+    });
 
-// Show Profile Menu
-userBtn.addEventListener('click', function (event) {
-    event.stopPropagation();
-    profileMenu.classList.toggle('active');
-});
+    document.addEventListener('click', function (event) {
+        if (!profileMenu.contains(event.target) && !userBtn.contains(event.target)) {
+            profileMenu.classList.remove('active');
+        }
+    });
 
-document.addEventListener('click', function (event) {
-    if (!profileMenu.contains(event.target) && !userBtn.contains(event.target)) {
-        profileMenu.classList.remove('active');
+    window.addEventListener('resize', function () {
+        if (profileMenu.classList.contains('active')) {
+            profileMenu.classList.remove('active');
+        }
+    });
+
+    // sidebar
+    const activeListItem = document.querySelector('.sidebar ul ul li a.active');
+    if (activeListItem) {
+        const parentUl = activeListItem.closest('ul');
+        parentUl.style.display = 'block';
+        const parentA = parentUl.previousElementSibling;
+        parentA.querySelector('i.bi.bi-chevron-down').classList.add('rotate');
     }
-});
 
-window.addEventListener('resize', function () {
-    if (profileMenu.classList.contains('active')) {
-    }
-});
+    document.querySelectorAll('.bookshop-btn, .user-btn').forEach(button => {
+        button.addEventListener('click', function () {
+            const sublist = this.nextElementSibling;
+            const icon = this.querySelector('i.bi.bi-chevron-down');
+            if (sublist.style.display === 'block') {
+                sublist.style.display = 'none';
+                icon.classList.remove('rotate');
+            } else {
+                sublist.style.display = 'block';
+                icon.classList.add('rotate');
+            }
+        });
+    });
 
+    // dialog modal
+    document.querySelector("#open-popup").addEventListener("click", function () {
+        document.getElementById('add-data').showModal();
+    });
 
-// sidebar toggle
-$('.bookshop-btn').click(function () {
-    $('.sidebar ul .bookshop-show').toggleClass("first");
-    $('.sidebar ul .first').toggleClass("rotate");
-});
-
-$('.user-btn').click(function () {
-    $('.sidebar ul .user-show').toggleClass("second");
-    $('.sidebar ul .second').toggleClass("rotate");
-});
-$('.sidebar ul li').click(function () {
-    $(this).addClass("active").siblings().removeClass("active");
-});
-
-
-// dialog modal
-document.querySelector("#open-popup").addEventListener("click", function () {
-    dialog.showModal();
-});
-
-dialog.querySelector(".close-btn").addEventListener("click", function () {
-    dialog.close();
+    document.querySelector('.close-btn').addEventListener('click', function () {
+        const dialog = document.querySelector('dialog');
+        dialog.close();
+        dialog.querySelector('form').reset();
+    });
 });
