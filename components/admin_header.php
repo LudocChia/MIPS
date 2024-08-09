@@ -1,6 +1,8 @@
-<nav>
+<header>
     <div class="wrapper">
-        <img src="../images/Mahans_IPS_logo.png" class="logo" alt="Mahans Internation Primary School logo">
+        <a href="index.php">
+            <img src="../images/Mahans_IPS_logo.png" class="logo" alt="Mahans Internation Primary School logo">
+        </a>
         <div class="profile-area">
             <button id="menu-btn">
                 <i class="bi bi-list"></i>
@@ -12,7 +14,7 @@
                 <img src="<?= htmlspecialchars($_SESSION['admin_image']) ?>" alt="Admin Image" class="user-img" id="user-btn">
                 <div class="profile-menu">
                     <div class="user-info">
-                        <img src="<?= htmlspecialchars($_SESSION['admin_image']) ?>" alt="Admin Image" class="user-img" id="user-btn">
+                        <img src="<?= htmlspecialchars($_SESSION['admin_image']) ?>" alt="Admin Image">
                         <h4><?php echo $_SESSION['admin_name']; ?></h4>
                     </div>
                     <hr>
@@ -35,4 +37,4 @@
             </div>
         </div>
     </div>
-</nav>
+</header>

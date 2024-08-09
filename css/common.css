@@ -27,6 +27,13 @@
     --box-shadow: 0 0 10px rgb(0 0 0/15%);
 }
 
+/* NAV BAR */
+header {
+    width: 100%;
+    background: var(--color-primary);
+    padding: 1rem 0;
+}
+
 /* Title */
 .title {
     position: relative;

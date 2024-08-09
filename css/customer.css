@@ -141,29 +141,187 @@ h2 {
 
 /* Header */
 header {
-    height: 120px;
-    margin-bottom: 30px;
-    background-color: var(--color-primary);
     width: 100%;
-    box-shadow: 0 2px 6px 0 rgb(0 0 0 / 10%);
+    background-color: var(--color-primary);
+    padding: 1rem 0;
 }
 
-.header .wrapper {
+header .wrapper {
+    display: flex;
     position: relative;
-    height: 7rem;
+    width: 90%;
+    align-items: center;
+    justify-content: space-between;
     background-color: var(--color-primary);
+}
+
+header img.logo {
+    width: 35rem;
+}
+
+.navbar {
+    position: relative;
+    /* width: 100%; */
+    /* padding: 5%; */
+    /* height: 100%; */
+    /* display: flex; */
+    /* align-items: center; */
+}
+
+.navbar i {
+    margin-right: 7px;
+}
+
+
+.navbar ul {
+    margin-top: 10px;
+    width: 100%;
+    margin-left: -20px;
+}
+
+.navbar ul li {
+    display: inline-block;
+    margin-left: 4%;
+    transition: all 0.5s ease;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.navbar ul li #headIcon {
+    display: block;
+    font-size: 22px;
+}
+
+.navbar ul li a {
+    text-decoration: none;
+    font-size: 17px;
+    color: black;
+    margin-left: 10px;
+}
+
+#menuIcon {
+    display: none;
+}
+
+
+header .profile-area {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: 1rem;
+
 }
 
-.logo {
-    margin-top: 40px;
-}
-
-.logo img {
+header .profile-area .user-img {
     display: block;
-    width: 450px;
+    width: 4rem;
+    height: 4rem;
+    border-radius: 50%;
+    cursor: pointer;
+    object-fit: cover;
+}
+
+header .profile-area i {
+    display: block;
+    font-size: 1.7rem;
+    background: #f3f5f7;
+    height: 4rem;
+    width: 4rem;
+    text-align: center;
+    line-height: 45px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.profile-area button {
+    display: none;
+}
+
+.profile-menu {
+    position: absolute;
+    background: #fff;
+    top: 100%;
+    right: 5px;
+    box-shadow: var(--box-shadow);
+    border-radius: .5rem;
+    padding: 10px 10px;
+    text-align: center;
+    width: 25rem;
+    transform: scale(0);
+    transform-origin: top right;
+    line-height: 2;
+    z-index: 999;
+}
+
+.profile-menu.active {
+    transform: scale(1.0);
+    transition: .2s linear;
+}
+
+
+.user-info {
+    display: flex;
+    align-items: center
+}
+
+.user-info h4 {
+    font-weight: 500;
+}
+
+.user-info img {
+    margin-top: 10px;
+    margin-left: 20px;
+    margin-right: 20px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.profile-menu hr {
+    border: 0;
+    height: 1px;
+    width: 100%;
+    background: #ccc;
+    margin: 15px 0 10px;
+}
+
+.profile-menu-link {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: #525252;
+    margin: 12px 0;
+}
+
+.profile-menu-link p {
+    width: 100%;
+    text-align: left;
+}
+
+.profile-menu-link i {
+    font-size: 20px;
+    display: inline-block;
+    background: #e5e5e5;
+    text-align: center;
+    line-height: 40px;
+    border-radius: 50%;
+    margin-right: 20px;
+    margin-left: 20px;
+}
+
+.profile-menu-link span {
+    font-size: 22px;
+    margin-right: 20px;
+    transition: transform 0.5s;
+}
+
+.profile-menu-link:hover span {
+    transform: translatex(5px);
+}
+
+.profile-menu-link:hover p {
+    font-weight: 600;
 }
 
 /* Footer */
