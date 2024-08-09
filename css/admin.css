@@ -238,15 +238,12 @@ header .profile-area .user-img {
 }
 
 header .profile-area i {
-    display: block;
+    display: flex;
     font-size: 1.7rem;
-    background: #f3f5f7;
-    height: 4rem;
-    width: 4rem;
-    text-align: center;
-    line-height: 45px;
-    border-radius: 50%;
     cursor: pointer;
+    background-color: var(--color-white);
+    padding: 1.2rem;
+    border-radius: 50%;
 }
 
 .profile-area button {
@@ -924,21 +921,17 @@ thead th {
         grid-template-columns: 1fr;
     }
 
-    nav .search-bar {
-        display: none;
-    }
-
-    nav .profile-area {
+    header .profile-area {
         gap: 2rem;
     }
 
-    nav .profile-area button#menu-btn {
+    header .profile-area button#menu-btn {
         display: block;
         background: transparent;
         color: var(--color-dark);
     }
 
-    nav .wrapper {
+    header .wrapper {
         width: 94%;
         grid-template-columns: 7rem auto;
     }
@@ -1060,18 +1053,21 @@ thead th {
         }
     }
 
-    nav img.logo {
+    header img.logo {
         width: 20rem;
     }
 
-    nav .profile-area i {
+    header .profile-area i {
         font-size: 1.5rem;
-        height: 3rem;
-        width: 3rem;
-        line-height: 40px;
+        /* height: 3rem; */
+        /* width: 3rem; */
+        border-radius: 50%;
+        background-color: var(--color-white);
+        padding: 10px;
+        /* line-height: 40px; */
     }
 
-    nav .profile-area .user-img {
+    header .profile-area .user-img {
         width: 3rem;
         height: 3rem;
     }

@@ -9,7 +9,7 @@
         <div class="navbar" id="nav">
             <ul>
                 <li>
-                    <a href="bookshop.php">Bookshop</a>
+                    <a href="bookshop.php"><i class="bi bi-shop-window"></i>Bookshop</a>
                 </li>
             </ul>
         </div>

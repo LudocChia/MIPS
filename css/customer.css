@@ -39,27 +39,6 @@
     margin: 50px 50px;
 }
 
-/* h1 {
-    text-align: center;
-    padding-top: 1.5rem;
-    font-size: 1.75rem;
-    position: relative;
-    margin-bottom: 15px;
-    margin-right: 10px;
-}
-
-h2 {
-    font-size: 1.29rem;
-} */
-
-/* Slider */
-
-/* .banner .wrapper {
-    position: relative;
-    height: 500px;
-    overflow: hidden;
-} */
-
 .banner {
     height: 500px;
     margin: 2rem auto;
@@ -161,10 +140,10 @@ header img.logo {
 
 .navbar {
     position: relative;
-    /* width: 100%; */
-    /* padding: 5%; */
-    /* height: 100%; */
-    /* display: flex; */
+    display: flex;
+    color: var(--color-white);
+    width: 20%;
+    c
     /* align-items: center; */
 }
 
@@ -233,6 +212,18 @@ header .profile-area i {
     cursor: pointer;
 }
 
+.btn.login {
+    background-color: var(--color-gray-dark);
+    color: var(--color-white);
+    border: 2px solid var(--color-gray-dark);
+}
+
+.btn.signup {
+    background-color: var(--color-white);
+    color: var(--color-primary);
+    border: 2px solid var(--color-primary);
+}
+
 .profile-area button {
     display: none;
 }
@@ -257,7 +248,6 @@ header .profile-area i {
     transform: scale(1.0);
     transition: .2s linear;
 }
-
 
 .user-info {
     display: flex;
@@ -669,13 +659,6 @@ header .profile-area i {
     width: 200%;
 }
 
-
-@media screen and (max-width: 768px) {
-    .slider {
-        height: 400px;
-    }
-}
-
 .productInfo {
     padding: 1.2em;
 }
@@ -711,10 +694,47 @@ header .profile-area i {
     border: 1px solid #ccc;
 }
 
-
-
 /* Media */
+@media screen and (max-width: 1200px) {
+    header img.logo {
+        width: 30rem;
+    }
+
+    .navbar {
+        display: none;
+    }
+
+    .navbar.navactive {
+        display: flex;
+        flex-direction: column;
+        background-color: #fff;
+        position: absolute;
+        border-radius: .5rem;
+        top: 90px;
+        width: 60%;
+        height: 200px;
+        left: 0;
+        padding: 20px;
+        transform: translateX(50%);
+        box-shadow: var(--box-shadow);
+        z-index: 1000;
+    }
+
+    #menuIcon {
+        display: flex;
+        font-size: 1.3rem;
+        cursor: pointer;
+        padding: 10px;
+        border-radius: 50%;
+        background-color: var(--color-white);
+    }
+}
+
 @media screen and (max-width: 768px) {
+
+    header img.logo {
+        width: 25rem;
+    }
 
     .footer-col,
     .footer-col:nth-child(1),
@@ -726,6 +746,7 @@ header .profile-area i {
     .slider {
         height: 400px;
     }
+
 }
 
 @media(max-width: 574px) {

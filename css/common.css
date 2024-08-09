@@ -27,6 +27,41 @@
     --box-shadow: 0 0 10px rgb(0 0 0/15%);
 }
 
+/* Button */
+.btn {
+    /* line-height: 2; */
+    /* padding: 5px 35px; */
+    display: inline-block;
+    border-radius: 10px;
+    /* color: var(--color-primary); */
+    /* border-color: var(--color-primary); */
+    text-transform: capitalize;
+    /* font-family: inherit; */
+    /* font-size: 16px; */
+    /* cursor: pointer; */
+    /* user-select: none; */
+    /* position: relative; */
+    /* overflow: hidden; */
+    /* vertical-align: middle; */
+    /* transition: color 0.3s ease; */
+    /* z-index: 2; */
+}
+
+.btn::before {
+    position: absolute;
+    content: '';
+    left: 0;
+    top: 0;
+    /* background: var(--green); */
+    height: 100%;
+    width: 0;
+    z-index: -1;
+}
+
+.btn:hover::before {
+    width: 100%;
+}
+
 /* NAV BAR */
 header {
     width: 100%;
