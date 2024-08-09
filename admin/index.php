@@ -8,13 +8,6 @@ if (!isset($_SESSION['admin_id'])) {
     header('Location: login.php');
     exit();
 }
-
-if (!empty($_SESSION['admin_image'])) {
-    $_SESSION['admin_image'] = '../images/default_profile.png';
-} else {
-    $_SESSION['admin_image'] = "../uploads/" . $_SESSION['admin_image'];
-}
-
 ?>
 
 
@@ -31,6 +24,7 @@ if (!empty($_SESSION['admin_image'])) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/common.css">
     <link rel="stylesheet" href="../css/admin.css">
 </head>
 

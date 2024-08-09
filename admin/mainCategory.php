@@ -187,7 +187,7 @@ $all_main_categories = getMainCategories($pdo);
             </div>
         </main>
     </div>
-    <dialog>
+    <dialog id="add-data">
         <h1>Add Main Category</h1>
         <form action="" method="post" enctype="multipart/form-data">
             <div class="input-field">
@@ -204,6 +204,16 @@ $all_main_categories = getMainCategories($pdo);
                 <button type="button" class="close-btn">Cancel</button>
                 <button type="reset">Clear</button>
                 <button type="submit" name="submit">Publish</button>
+            </div>
+        </form>
+    </dialog>
+    <dialog id="delete-confirm-dialog">
+        <form method="dialog">
+            <h1>Your Main Category will be Deactivated!</h1>
+            <label>Are you sure to proceed?</label>
+            <div class="btns">
+                <button value="cancel" class="btn1">Cancel Process</button>
+                <button value="confirm" class="btn2">Deactivate Product</button>
             </div>
         </form>
     </dialog>

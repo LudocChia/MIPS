@@ -36,19 +36,18 @@ function getAllProducts($pdo)
 $all_products = getAllProducts($pdo);
 
 if (isset($_POST['submit'])) {
-    $name = $_POST['name'];
-    $subcategoryId = $_POST['subcategory'];
-    $description = !empty($_POST['description']) ? $_POST['description'] : null;
-    $price = $_POST['price'];
-    $unitPrice = !empty($_POST['unit_price']) ? $_POST['unit_price'] : null;
-    $stockQuantity = $_POST['stock_quantity'];
-    $color = !empty($_POST['color']) ? $_POST['color'] : null;
-    $gender = $_POST['gender'];
-    $productId = isset($_POST['product_id']) ? $_POST['product_id'] : null;
+    $name = htmlspecialchars(trim($_POST['name']));
+    $subcategoryId = htmlspecialchars(trim($_POST['subcategory']));
+    $description = !empty($_POST['description']) ? htmlspecialchars(trim($_POST['description'])) : null;
+    $price = htmlspecialchars(trim($_POST['price']));
+    $unitPrice = !empty($_POST['unit_price']) ? htmlspecialchars(trim($_POST['unit_price'])) : null;
+    $stockQuantity = htmlspecialchars(trim($_POST['stock_quantity']));
+    $color = !empty($_POST['color']) ? htmlspecialchars(trim($_POST['color'])) : null;
+    $gender = htmlspecialchars(trim($_POST['gender']));
+    $productId = isset($_POST['product_id']) ? htmlspecialchars(trim($_POST['product_id'])) : null;
 
     if (!empty($name) && !empty($subcategoryId) && !empty($price) && !empty($stockQuantity) && !empty($gender)) {
         if ($productId) {
-            // Update existing product
             $sql = "UPDATE Product SET product_name = :name, category_id = :subcategory, product_description = :description, 
                     product_price = :price, product_unit_price = :unit_price, stock_quantity = :stock_quantity, 
                     color = :color, gender = :gender WHERE product_id = :product_id";
@@ -65,7 +64,46 @@ if (isset($_POST['submit'])) {
             $stmt->bindParam(':product_id', $productId);
             $stmt->execute();
 
-            echo "<script>alert('Product updated successfully!');</script>";
+            if (isset($_FILES['images']) && $_FILES['images']['error'][0] != UPLOAD_ERR_NO_FILE) {
+                $deleteImagesSql = "DELETE FROM Product_Image WHERE product_id = :product_id";
+                $stmtDeleteImages = $pdo->prepare($deleteImagesSql);
+                $stmtDeleteImages->bindParam(':product_id', $productId);
+                $stmtDeleteImages->execute();
+
+                $imageCount = count($_FILES['images']['name']);
+                $uploadedImages = [];
+                $allowedfileExtensions = ['jpg', 'jpeg', 'png'];
+
+                for ($i = 0; $i < $imageCount; $i++) {
+                    $fileTmpPath = $_FILES['images']['tmp_name'][$i];
+                    $fileName = $_FILES['images']['name'][$i];
+                    $fileNameCmps = explode(".", $fileName);
+                    $fileExtension = strtolower(end($fileNameCmps));
+
+                    if (in_array($fileExtension, $allowedfileExtensions)) {
+                        $newFileName = uniqid() . '.' . $fileExtension;
+                        $dest_path = '../uploads/' . $newFileName;
+
+                        if (move_uploaded_file($fileTmpPath, $dest_path)) {
+                            $uploadedImages[] = $newFileName;
+
+                            $sqlImage = "INSERT INTO Product_Image (product_id, image_url, sort_order) VALUES (:product_id, :image_url, :sort_order)";
+                            $stmtImage = $pdo->prepare($sqlImage);
+                            $stmtImage->bindParam(':product_id', $productId);
+                            $stmtImage->bindParam(':image_url', $newFileName);
+                            $stmtImage->bindValue(':sort_order', $i + 1);
+                            $stmtImage->execute();
+                        } else {
+                            echo "<script>alert('There was an error moving the uploaded file: $fileName');</script>";
+                        }
+                    } else {
+                        echo "<script>alert('Upload failed. Allowed file types: " . implode(',', $allowedfileExtensions) . "');</script>";
+                    }
+                }
+            }
+
+            header('Location: product.php');
+            exit();
         } else {
             // Add new product
             if (isset($_FILES['images'])) {
@@ -121,7 +159,7 @@ if (isset($_POST['submit'])) {
                     $sortOrder++;
                 }
 
-                header('Loction: product.php');
+                header('Location: product.php');
                 exit();
             } else {
                 echo "<script>alert('No files uploaded.');</script>";
@@ -172,7 +210,7 @@ if (isset($_POST['delete'])) {
     <div class="container">
         <aside>
             <button id="close-btn">
-                <i class="bi bi-x"></i>
+                <i class="bi bi-layout-sidebar-inset"></i>
             </button>
             <div class="sidebar">
                 <ul>
@@ -207,6 +245,24 @@ if (isset($_POST['delete'])) {
                         </ul>
                     </li>
                     <li>
+                        <a href="order.php">
+                            <i class="bi bi-receipt"></i>
+                            <h4>Order</h4>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="announment.php">
+                            <i class="bi bi-megaphone-fill"></i>
+                            <h4>Announment</h4>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="deactivate.php">
+                            <i class="bi bi-trash2-fill"></i>
+                            <h4>Deactivate List</h4>
+                        </a>
+                    </li>
+                    <li>
                         <a href="#" class="user-btn">
                             <i class="bi bi-person-fill"></i>
                             <h4>User Type</h4>
@@ -228,33 +284,16 @@ if (isset($_POST['delete'])) {
                             </li>
                         </ul>
                     </li>
-                    <li>
-                        <a href="order.php">
-                            <i class="bi bi-receipt"></i>
-                            <h4>Order</h4>
+                    <li><a href="#">
+                            <i class="bi bi-file-text-fill"></i>
+                            <h4>Report</h4>
+                            <i class="bi bi-chevron-down first"></i>
                         </a>
-                    </li>
-                    <li>
-                        <a href="announment.php">
-                            <i></i>
-                            <h4>Announment</h4>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="deactivate.php">
-                            <i></i>
-                            <h4>Deactivate List</h4>
-                        </a>
-                    </li>
-                    <li>
-                        <i></i>
-                        <h4>Report</h4>
                         <ul>
                             <li>
 
                             </li>
                         </ul>
-
                     </li>
                 </ul>
             </div>
@@ -277,15 +316,14 @@ if (isset($_POST['delete'])) {
                                 <a href="item.php?pid=<?= htmlspecialchars($product['product_id']); ?>">
                                     <img src="<?= htmlspecialchars("../uploads/" . $product['image_url']) ?>" alt="Product Image">
                                 </a>
-                                <form action="" method="POST" style="display:inline;" onsubmit="return showDeleteConfirmDialog(event);">
-                                    <input type="hidden" name="product_id" value="<?= htmlspecialchars($product['product_id']); ?>">
-                                    <input type="hidden" name="delete" value="true">
-                                    <button type="submit" class="delete-product-btn"><i class="bi bi-x-square"></i></button>
-                                </form>
-
-                                <!-- <div class="deactivate-product"> -->
-                                <button type="button" class="edit-product-btn" data-product-id="<?= htmlspecialchars($product['product_id']); ?>"><i class="bi bi-pencil-square"></i></button>
-                                <!-- </div> -->
+                                <div class="actions">
+                                    <form action="" method="POST" style="display:inline;" onsubmit="return showDeleteConfirmDialog(event);">
+                                        <input type="hidden" name="product_id" value="<?= htmlspecialchars($product['product_id']); ?>">
+                                        <input type="hidden" name="delete" value="true">
+                                        <button type="submit" class="delete-product-btn"><i class="bi bi-x-square-fill"></i></button>
+                                    </form>
+                                    <button type="button" class="edit-product-btn" data-product-id="<?= htmlspecialchars($product['product_id']); ?>"><i class="bi bi-pencil-square"></i></button>
+                                </div>
                             </div>
                             <div class="name"><?= htmlspecialchars($product['product_name']); ?></div>
                             <div class="price">
@@ -297,7 +335,7 @@ if (isset($_POST['delete'])) {
             </div>
         </main>
     </div>
-    <dialog id="add-data">
+    <dialog id="add-edit-data">
         <h2>Add Bookshop Product</h2>
         <form action="" method="post" enctype="multipart/form-data">
             <input type="hidden" name="product_id" value="">
@@ -318,7 +356,7 @@ if (isset($_POST['delete'])) {
             </div>
             <div class="input-field">
                 <h2>Product Images<sup>*</sup></h2>
-                <input type="file" name="images[]" id="images" accept=".jpg, .jpeg, .png" multiple required>
+                <input type="file" name="images[]" id="images" accept=".jpg, .jpeg, .png" multiple>
                 <p>Please upload images for the product.</p>
             </div>
             <div class="input-field">
@@ -357,7 +395,7 @@ if (isset($_POST['delete'])) {
                 <p>Please select the gender for the product.</p>
             </div>
             <div class="controls">
-                <button type="button" class="close-btn">Cancel</button>
+                <button type="button" class="cancel">Cancel</button>
                 <button type="reset">Clear</button>
                 <button type="submit" name="submit">Publish</button>
             </div>
@@ -367,56 +405,55 @@ if (isset($_POST['delete'])) {
         <form method="dialog">
             <h1>Your Product will be Deactivated!</h1>
             <label>Are you sure to proceed?</label>
-            <div class="btns">
-                <button value="cancel" class="btn1">Cancel Process</button>
-                <button value="confirm" class="btn2">Deactivate Product</button>
+            <div class="controls">
+                <button value="cancel" class="cancel">Cancel</button>
+                <button value="confirm" class="deactivate">Deactivate</button>
             </div>
         </form>
     </dialog>
-
     <script src="../javascript/admin.js"></script>
     <script>
-        // Handle edit product button click
+        document.querySelector('form').addEventListener('submit', function(event) {
+            const filesInput = document.querySelector('#images');
+            const fileList = Array.from(filesInput.files);
+
+            fileList.forEach((file, index) => {
+                const sortOrderInput = document.createElement('input');
+                sortOrderInput.type = 'hidden';
+                sortOrderInput.name = 'image_orders[]';
+                sortOrderInput.value = index + 1;
+                this.appendChild(sortOrderInput);
+            });
+        });
+
         document.querySelectorAll('.edit-product-btn').forEach(button => {
             button.addEventListener('click', function() {
                 const productId = this.dataset.productId;
 
-                fetch(`ajax.php?product_id=${productId}`)
+                fetch(`ajax.php?action=get_product&product_id=${productId}`)
                     .then(response => response.json())
                     .then(product => {
-                        document.querySelector('#add-product [name="name"]').value = product.product_name;
-                        document.querySelector('#add-product [name="subcategory"]').value = product.category_id;
-                        document.querySelector('#add-product [name="description"]').value = product.product_description;
-                        document.querySelector('#add-product [name="price"]').value = product.product_price;
-                        document.querySelector('#add-product [name="unit_price"]').value = product.product_unit_price;
-                        document.querySelector('#add-product [name="stock_quantity"]').value = product.stock_quantity;
-                        document.querySelector('#add-product [name="color"]').value = product.color;
-                        document.querySelector('#add-product [name="gender"]').value = product.gender;
+                        if (product.error) {
+                            alert(product.error);
+                        } else {
+                            document.querySelector('#add-edit-data [name="product_id"]').value = product.product_id;
+                            document.querySelector('#add-edit-data [name="name"]').value = product.product_name;
+                            document.querySelector('#add-edit-data [name="subcategory"]').value = product.category_id;
+                            document.querySelector('#add-edit-data [name="description"]').value = product.product_description;
+                            document.querySelector('#add-edit-data [name="price"]').value = product.product_price;
+                            document.querySelector('#add-edit-data [name="unit_price"]').value = product.product_unit_price;
+                            document.querySelector('#add-edit-data [name="stock_quantity"]').value = product.stock_quantity;
+                            document.querySelector('#add-edit-data [name="color"]').value = product.color;
+                            document.querySelector('#add-edit-data [name="gender"]').value = product.gender;
 
-                        document.querySelector('#add-product').dataset.productId = productId;
-
-                        document.getElementById('add-product').showModal();
+                            document.querySelector('#add-edit-data h2').textContent = "Edit Bookshop Product";
+                            document.getElementById('add-edit-data').showModal();
+                        }
                     })
                     .catch(error => {
                         console.error('Error fetching product data:', error);
                         alert('Failed to load product data.');
                     });
-            });
-        });
-        document.addEventListener('DOMContentLoaded', function() {
-            const deleteConfirmDialog = document.getElementById('delete-confirm-dialog');
-            let deleteForm = null;
-
-            window.showDeleteConfirmDialog = function(event) {
-                event.preventDefault();
-                deleteForm = event.target;
-                deleteConfirmDialog.showModal();
-            }
-
-            deleteConfirmDialog.addEventListener('close', function() {
-                if (deleteConfirmDialog.returnValue === 'confirm') {
-                    deleteForm.submit();
-                }
             });
         });
     </script>

@@ -27,27 +27,26 @@
     --box-shadow: 0 0 10px rgb(0 0 0/15%);
 }
 
-.click,
-.popup_box {
+#delete-confirm-dialog {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     border-radius: 5px;
-}
+    width: 450px;
 
-.click {
-    background: #2981bc;
-    color: white;
-    font-size: 22px;
-    font-family: arial;
-    font-weight: bold;
-    padding: 10px 15px;
+
+    background: #f2f2f2;
     text-align: center;
-    border: 1px solid #0059b3;
+    align-items: center;
+    padding: var(--padding-1);
+    border: 1px solid #b3b3b3;
+    box-shadow: var(--box-shadow);
+    /* z-index: 9999; */
+    /* display: none; */
 }
 
-.popup_box {
+/* #delete-confirm-dialog {
     width: 400px;
     background: #f2f2f2;
     text-align: center;
@@ -57,57 +56,8 @@
     box-shadow: 0px 5px 10px rgba(0, 0, 0, .2);
     z-index: 9999;
     display: none;
-}
+} */
 
-.popup_box i {
-    font-size: 60px;
-    color: #eb9447;
-    border: 5px solid #eb9447;
-    padding: 20px 40px;
-    border-radius: 50%;
-    margin: -10px 0 20px 0;
-}
-
-.popup_box h1 {
-    font-size: 30px;
-    color: #1b2631;
-    margin-bottom: 5px;
-}
-
-.popup_box label {
-    font-size: 23px;
-    color: #404040;
-}
-
-.popup_box .btns {
-    margin: 40px 0 0 0;
-}
-
-.btns .btn1,
-.btns .btn2 {
-    background: #999999;
-    color: white;
-    font-size: 18px;
-    border-radius: 5px;
-    border: 1px solid #808080;
-    padding: 10px 13px;
-}
-
-.btns .btn2 {
-    margin-left: 20px;
-    background: #ff3333;
-    border: 1px solid #cc0000;
-}
-
-.btns .btn1:hover {
-    transition: .5s;
-    background: #8c8c8c;
-}
-
-.btns .btn2:hover {
-    transition: .5s;
-    background: #e60000;
-}
 
 .text-muted {
     color: var(--color-gray-light);
@@ -478,7 +428,7 @@ ul.bookshop-show.second {
 /* Sidebar */
 aside {
     margin: 1rem;
-    height: 80vh;
+    height: 82vh;
     overflow-y: scroll;
 }
 
@@ -869,7 +819,7 @@ main .recent-orders a {
     right: -20px;
     top: -10px;
     cursor: pointer;
-    z-index: 999;
+    /* z-index: 999; */
 }
 
 .products .box-container .box:hover {
@@ -877,26 +827,16 @@ main .recent-orders a {
 }
 
 
-.badge {
+.actions {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    gap: 0.5rem;
     display: flex;
 }
 
-.sales-badge {
-    /* display: inline-block; */
-    text-align: center;
-    align-items: center;
-    color: white;
-    line-height: 30px;
-    margin: 0 8px 8px 0;
-    font-size: 16px;
-    border-radius: 4px;
-    background: #990033;
-    position: absolute;
-    height: 30px;
-    padding: 0 10px;
-    width: auto;
-    left: 2px;
-    top: 1px;
+.actions i {
+    font-size: 1.5rem;
     cursor: pointer;
 }
 

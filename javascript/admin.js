@@ -2,9 +2,10 @@ document.addEventListener('DOMContentLoaded', function () {
     const sideMenu = document.querySelector("aside");
     const menuBtn = document.querySelector("#menu-btn");
     const closeBtn = document.querySelector("#close-btn");
+    // const cancelBtn = document.querySelector(".cancle");
     const userBtn = document.querySelector("#user-btn");
     const profileMenu = document.querySelector(".profile-menu");
-    const dialog = document.querySelector('dialog');
+    // const dialog = document.querySelector('dialog');
     // const themeToggler = document.querySelector(".theme-toggler");
 
     // Show Sidebar
@@ -60,12 +61,28 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // dialog modal
     document.querySelector("#open-popup").addEventListener("click", function () {
-        document.getElementById('add-data').showModal();
+        document.getElementById('add-edit-data').showModal();
     });
 
-    document.querySelector('.close-btn').addEventListener('click', function () {
-        const dialog = document.querySelector('dialog');
+    document.querySelector('#add-edit-data .cancel').addEventListener('click', function () {
+        const dialog = document.getElementById('add-edit-data');
         dialog.close();
         dialog.querySelector('form').reset();
+    });
+
+    // Handle delete confirmation dialog
+    const deleteConfirmDialog = document.getElementById('delete-confirm-dialog');
+    let deleteForm = null;
+
+    window.showDeleteConfirmDialog = function (event) {
+        event.preventDefault();
+        deleteForm = event.target;
+        deleteConfirmDialog.showModal();
+    }
+
+    deleteConfirmDialog.addEventListener('close', function () {
+        if (deleteConfirmDialog.returnValue === 'confirm') {
+            deleteForm.submit();
+        }
     });
 });

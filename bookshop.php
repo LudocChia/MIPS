@@ -1,9 +1,11 @@
 <?php
+
+session_start();
+
 include "./components/db_connect.php";
 
 // Fetch products from the database
-$sql = "SELECT p.product_id, p.product_name, p.product_description, p.product_price, 
-               p.product_unit_price, p.stock_quantity, p.color, p.gender, 
+$sql = "SELECT p.product_id, p.product_name, p.product_description, p.product_price, p.stock_quantity, p.color, p.gender, 
                pi.image_url AS primary_image
         FROM Product p
         LEFT JOIN Product_Image pi ON p.product_id = pi.product_id AND pi.sort_order = 1
@@ -55,7 +57,6 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                     </div>
                                     <div class="name"><?= htmlspecialchars($product['product_name']); ?></div>
                                     <div class="price-size-container">
-                                        <div class="size"><?= htmlspecialchars($product['product_unit_price']); ?></div>
                                         <div class="price">MYR <?= number_format($product['product_price'], 2); ?></div>
                                     </div>
                                     <div class="color-gender">

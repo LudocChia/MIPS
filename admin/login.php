@@ -37,6 +37,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $errorMsg = "Database error: " . $e->getMessage();
     }
 }
+
+if (!empty($_SESSION['admin_image'])) {
+    $_SESSION['admin_image'] = '../images/default_profile.png';
+} else {
+    $_SESSION['admin_image'] = "../uploads/" . $_SESSION['admin_image'];
+}
+
 ?>
 
 <!DOCTYPE html>
