@@ -21,7 +21,7 @@ $all_subcategories = getSubcategories($pdo);
 function getAllProducts($pdo)
 {
     $sql = "
-        SELECT p.product_id, p.product_name, p.product_description, p.product_price, p.product_unit_price, 
+        SELECT p.product_id, p.product_name, p.product_description, p.product_price,
                p.stock_quantity, p.color, p.gender, pi.image_url
         FROM Product p
         LEFT JOIN Product_Image pi ON p.product_id = pi.product_id
@@ -40,7 +40,6 @@ if (isset($_POST['submit'])) {
     $subcategoryId = htmlspecialchars(trim($_POST['subcategory']));
     $description = !empty($_POST['description']) ? htmlspecialchars(trim($_POST['description'])) : null;
     $price = htmlspecialchars(trim($_POST['price']));
-    $unitPrice = !empty($_POST['unit_price']) ? htmlspecialchars(trim($_POST['unit_price'])) : null;
     $stockQuantity = htmlspecialchars(trim($_POST['stock_quantity']));
     $color = !empty($_POST['color']) ? htmlspecialchars(trim($_POST['color'])) : null;
     $gender = htmlspecialchars(trim($_POST['gender']));
@@ -49,7 +48,7 @@ if (isset($_POST['submit'])) {
     if (!empty($name) && !empty($subcategoryId) && !empty($price) && !empty($stockQuantity) && !empty($gender)) {
         if ($productId) {
             $sql = "UPDATE Product SET product_name = :name, category_id = :subcategory, product_description = :description, 
-                    product_price = :price, product_unit_price = :unit_price, stock_quantity = :stock_quantity, 
+                    product_price = :price, stock_quantity = :stock_quantity, 
                     color = :color, gender = :gender WHERE product_id = :product_id";
 
             $stmt = $pdo->prepare($sql);
@@ -57,7 +56,6 @@ if (isset($_POST['submit'])) {
             $stmt->bindParam(':subcategory', $subcategoryId);
             $stmt->bindParam(':description', $description);
             $stmt->bindParam(':price', $price);
-            $stmt->bindParam(':unit_price', $unitPrice);
             $stmt->bindParam(':stock_quantity', $stockQuantity);
             $stmt->bindParam(':color', $color);
             $stmt->bindParam(':gender', $gender);
@@ -133,14 +131,13 @@ if (isset($_POST['submit'])) {
                     }
                 }
 
-                $sql = "INSERT INTO Product (product_name, category_id, product_description, product_price, product_unit_price, stock_quantity, color, gender) 
-                        VALUES (:name, :subcategory, :description, :price, :unit_price, :stock_quantity, :color, :gender)";
+                $sql = "INSERT INTO Product (product_name, category_id, product_description, product_price, stock_quantity, color, gender) 
+                        VALUES (:name, :subcategory, :description, :price, :stock_quantity, :color, :gender)";
                 $stmt = $pdo->prepare($sql);
                 $stmt->bindParam(':name', $name);
                 $stmt->bindParam(':subcategory', $subcategoryId);
                 $stmt->bindParam(':description', $description);
                 $stmt->bindParam(':price', $price);
-                $stmt->bindParam(':unit_price', $unitPrice);
                 $stmt->bindParam(':stock_quantity', $stockQuantity);
                 $stmt->bindParam(':color', $color);
                 $stmt->bindParam(':gender', $gender);
@@ -194,7 +191,7 @@ if (isset($_POST['delete'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bookshop - Mahans School</title>
+    <title>Bookshop Product| Mahans School</title>
     <link rel="icon" type="image/x-icon" href="../images/Mahans_internation_primary_school_logo.png">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
@@ -370,11 +367,6 @@ if (isset($_POST['delete'])) {
                 <p>Please enter the product price.</p>
             </div>
             <div class="input-field">
-                <h2>Product Unit Price<sup>*</sup></h2>
-                <input type="text" name="unit_price" value="<?php echo isset($_POST['unit_price']) ? htmlspecialchars($_POST['unit_price']) : ''; ?>">
-                <p>Please enter the product unit price (e.g., per piece, per set).</p>
-            </div>
-            <div class="input-field">
                 <h2>Stock Quantity<sup>*</sup></h2>
                 <input type="number" name="stock_quantity" value="<?php echo isset($_POST['stock_quantity']) ? htmlspecialchars($_POST['stock_quantity']) : ''; ?>" required>
                 <p>Please enter the stock quantity available.</p>
@@ -394,7 +386,7 @@ if (isset($_POST['delete'])) {
                 </select>
                 <p>Please select the gender for the product.</p>
             </div>
-            <div class="controls">
+            <div class="input-field controls">
                 <button type="button" class="cancel">Cancel</button>
                 <button type="reset">Clear</button>
                 <button type="submit" name="submit">Publish</button>
@@ -441,7 +433,6 @@ if (isset($_POST['delete'])) {
                             document.querySelector('#add-edit-data [name="subcategory"]').value = product.category_id;
                             document.querySelector('#add-edit-data [name="description"]').value = product.product_description;
                             document.querySelector('#add-edit-data [name="price"]').value = product.product_price;
-                            document.querySelector('#add-edit-data [name="unit_price"]').value = product.product_unit_price;
                             document.querySelector('#add-edit-data [name="stock_quantity"]').value = product.stock_quantity;
                             document.querySelector('#add-edit-data [name="color"]').value = product.color;
                             document.querySelector('#add-edit-data [name="gender"]').value = product.gender;

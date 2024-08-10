@@ -12,6 +12,7 @@
     --color-purple: rgb(160, 99, 245);
 
     --color-primary-light: rgba(71, 7, 234, 0.2);
+    --color-primary-dark: rgba(144, 88, 47);
     --color-success-light: rgba(34, 202, 75, 0.2);
     --color-danger-light: rgba(255, 67, 54, 0.2);
     --color-purple-light: rgba(160, 99, 245, 0.2);
@@ -32,10 +33,12 @@
     /* line-height: 2; */
     /* padding: 5px 35px; */
     display: inline-block;
-    border-radius: 10px;
-    /* color: var(--color-primary); */
-    /* border-color: var(--color-primary); */
+    border-radius: 5px;
+    color: var(--color-white);
+    background-color: var(--color-primary);
     text-transform: capitalize;
+    padding: 10px 10px;
+    font-size: 1.2rem;
     /* font-family: inherit; */
     /* font-size: 16px; */
     /* cursor: pointer; */
@@ -62,12 +65,280 @@
     width: 100%;
 }
 
+
+/* LOGIN */
+#login-form .wrapper {
+    width: 90%;
+    margin: 0 auto;
+}
+
+#login-form .title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    background: var(--color-primary);
+    border-radius: 1rem 1rem 0 0;
+}
+
+#login-form img {
+    padding: 1rem;
+}
+
+#login-form form {
+    padding: 30px 25px 25px 25px;
+}
+
+#login-form .input-container {
+    position: relative;
+    height: 50px;
+    margin-bottom: 3rem;
+    width: 100%;
+}
+
+#login-form .input-field {
+    height: 45px;
+    position: relative;
+    margin-bottom: 0.5rem;
+}
+
+#login-form .input-field input {
+    height: 100%;
+    width: 100%;
+    outline: none;
+    padding-left: 60px;
+    border-radius: 5px;
+    border: 1px solid var(--color-gray-light);
+    font-size: 16px;
+}
+
+#login-form .input-field i {
+    position: absolute;
+    width: 47px;
+    height: 100%;
+    color: var(--color-white);
+    font-size: 1.5rem;
+    background: var(--color-primary);
+    border: 1px var(--color-primary) solid;
+    border-radius: 5px 0 0 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#login-form .pass {
+    margin: -1rem 0 1rem 0;
+}
+
+#login-form .pass a {
+    color: var(--color-primary);
+    font-size: 1.4rem;
+    text-decoration: none;
+}
+
+#login-form .signup-link {
+    text-align: center;
+    margin-top: 20px;
+}
+
+#login-form .signup-link a {
+    color: var(--color-primary);
+    font-size: 18px;
+    text-decoration: none;
+}
+
+#login-form .signup-link a:hover {
+    text-decoration: underline;
+}
+
+/* sup */
+sup {
+    color: var(--color-primary);
+    font-size: 1rem;
+}
+
+/* dialog {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-sizing: border-box;
+    width: calc(100% - 1em);
+    max-width: 60rem;
+    border: 1px solid #ddd;
+    border-radius: 0.5em;
+    text-align: center;
+    padding: 0.8em 1.5em 1em;
+}
+
+dialog form {
+    text-align: left;
+    margin-left: 2rem;
+    position: relative;
+}
+
+dialog form p {
+    color: #999;
+}
+
+dialog form h2 {
+    text-transform: capitalize;
+}
+
+dialog form input,
+textarea {
+    font-size: 1.2rem;
+    background: #fff;
+    outline: none;
+    padding: .6rem;
+    box-shadow: var(--box-shadow);
+    margin: .5rem 0;
+    border: 1px solid #ddd;
+    width: 85%;
+    transition: border 0.3s ease;
+}
+
+dialog form input:focus,
+dialog form textarea:focus {
+    border: 1px solid var(--color-primary);
+}
+
+dialog form textarea {
+    min-height: 100px;
+    resize: vertical;
+} */
+
+
 /* NAV BAR */
 header {
     width: 100%;
     background: var(--color-primary);
     padding: 1rem 0;
 }
+
+header .wrapper {
+    display: flex;
+    position: relative;
+    align-items: center;
+    justify-content: space-between;
+    background-color: var(--color-primary);
+    border: none;
+    margin: 0 auto;
+}
+
+header .profile-area {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+
+}
+
+header .profile-area .user-img {
+    display: block;
+    width: 4rem;
+    height: 4rem;
+    border-radius: 50%;
+    cursor: pointer;
+    object-fit: cover;
+}
+
+header .profile-area i {
+    display: flex;
+    font-size: 1.7rem;
+    cursor: pointer;
+    background-color: var(--color-white);
+    padding: 1.2rem;
+    border-radius: 50%;
+}
+
+.profile-menu {
+    position: absolute;
+    background: #fff;
+    top: 100%;
+    right: 5px;
+    box-shadow: var(--box-shadow);
+    border-radius: .5rem;
+    padding: 10px 10px;
+    text-align: center;
+    width: 25rem;
+    transform: scale(0);
+    transform-origin: top right;
+    line-height: 2;
+    z-index: 999;
+}
+
+.profile-menu.active {
+    transform: scale(1.0);
+    transition: .2s linear;
+}
+
+
+.user-info {
+    display: flex;
+    align-items: center
+}
+
+.user-info h4 {
+    font-weight: 500;
+}
+
+.user-info img {
+    margin-top: 10px;
+    margin-left: 20px;
+    margin-right: 20px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.profile-menu hr {
+    border: 0;
+    height: 1px;
+    width: 100%;
+    background: #ccc;
+    margin: 15px 0 10px;
+}
+
+.profile-menu-link {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: #525252;
+    margin: 12px 0;
+}
+
+.profile-menu-link p {
+    width: 100%;
+    text-align: left;
+}
+
+.profile-menu-link i {
+    font-size: 20px;
+    display: inline-block;
+    background: #e5e5e5;
+    text-align: center;
+    line-height: 40px;
+    border-radius: 50%;
+    margin-right: 20px;
+    margin-left: 20px;
+}
+
+.profile-menu-link span {
+    font-size: 22px;
+    margin-right: 20px;
+    transition: transform 0.5s;
+}
+
+.profile-menu-link:hover span {
+    transform: translatex(5px);
+}
+
+.profile-menu-link:hover p {
+    font-weight: 600;
+}
+
 
 /* Title */
 .title {
@@ -90,7 +361,7 @@ header {
     margin-bottom: 20px;
     align-items: end;
     color: white;
-    background-color: var(--deep-blue);
+    background-color: var(--color-primary);
     border-radius: 4px;
     padding: 3px 7px;
 }
@@ -163,7 +434,7 @@ header {
     /* padding: 10px 48px; */
     width: fit-content;
     margin: 20px auto;
-    margin-left: 5%;
+    margin-left: 7%;
     border-radius: 5px;
     background-color: white;
 }
@@ -199,10 +470,28 @@ header {
 
     }
 
-    @media screen and (max-width: 768px) {
-        .title {
-            display: flex;
-        }
-
+    header .profile-area {
+        gap: 2rem;
     }
+}
+
+@media screen and (max-width: 768px) {
+    .title {
+        display: flex;
+    }
+
+    header .profile-area i {
+        font-size: 1.5rem;
+        border-radius: 50%;
+        background-color: var(--color-white);
+        padding: 10px;
+    }
+
+    header .profile-area .user-img {
+        width: 3rem;
+        height: 3rem;
+    }
+
+
+
 }

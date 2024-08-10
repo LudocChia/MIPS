@@ -1,3 +1,11 @@
+<?php
+
+session_start();
+
+include "./components/db_connect.php";
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 

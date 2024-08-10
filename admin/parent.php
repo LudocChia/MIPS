@@ -1,9 +1,12 @@
 <?php
+
+session_start();
+
 include "../components/db_connect.php";
 
 function getAllParents($pdo)
 {
-    $sql = "SELECT * FROM Customer WHERE is_deleted = 0";
+    $sql = "SELECT * FROM Parent WHERE is_deleted = 0";
     $stmt = $pdo->prepare($sql);
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -11,7 +14,7 @@ function getAllParents($pdo)
 
 $all_parents = getAllParents($pdo);
 
-function generateParentsId()
+function generateParentId()
 {
     $prefix = "PR";
     $randomString = bin2hex(random_bytes(4));
@@ -19,12 +22,11 @@ function generateParentsId()
 }
 
 if (isset($_POST["submit"])) {
-    $parentId = generateParentsId();
+    $parentId = generateParentId();
     $name = $_POST["name"];
     $email = $_POST["email"];
     $password = $_POST["password"];
     $confirmPassword = $_POST["confirm_password"];
-    $parentType = "parent";
 
     if (empty($name) || empty($email) || empty($password) || empty($confirmPassword)) {
         echo "<script>alert('Please fill in all required fields.');</script>";
@@ -37,23 +39,24 @@ if (isset($_POST["submit"])) {
             $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
             try {
-                $sql = "INSERT INTO Customer (customer_id, customer_name, customer_email, customer_password, customer_type, is_deleted) 
-                        VALUES (:customerId, :name, :email, :password, :customerType, 0)";
+                $sql = "INSERT INTO Parent (parent_id, parent_name, parent_email, parent_password, is_deleted) 
+                        VALUES (:parentId, :name, :email, :password, 0)";
                 $stmt = $pdo->prepare($sql);
-                $stmt->bindParam(':customerId', $parentId);
+                $stmt->bindParam(':parentId', $parentId);
                 $stmt->bindParam(':name', $name);
                 $stmt->bindParam(':email', $email);
                 $stmt->bindParam(':password', $hashedPassword);
-                $stmt->bindParam(':customerType', $parentType);
                 $stmt->execute();
 
-                echo "<script>alert('Parent Successfully Added');document.location.href ='Parent.php';</script>";
+                header('Location: parent.php');
+                exit();
             } catch (PDOException $e) {
                 echo "<script>alert('Database error: " . $e->getMessage() . "');</script>";
             }
         }
     }
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -155,7 +158,7 @@ if (isset($_POST["submit"])) {
                         <?php
                         try {
                             $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-                            $countQuery = "SELECT COUNT(*) FROM Customer WHERE customer_type = 'parent' AND is_deleted = 0";
+                            $countQuery = "SELECT COUNT(*) FROM Parent WHERE is_deleted = 0";
                             $stmt = $pdo->prepare($countQuery);
                             $stmt->execute();
                             $count = $stmt->fetchColumn();
@@ -170,10 +173,10 @@ if (isset($_POST["submit"])) {
                 <div class="box-container">
                     <?php foreach ($all_parents as $parent) : ?>
                         <div class="box">
-                            <h3><?php echo htmlspecialchars($parent['customer_name']); ?></h3>
+                            <h3><?php echo htmlspecialchars($parent['parent_name']); ?></h3>
                             <a href="#">
                                 <div class="image-container">
-                                    <img src="../uploads/<?php echo htmlspecialchars($parent['customer_image']); ?>" alt="Image for <?php echo htmlspecialchars($parent['customer_name']); ?>">
+                                    <img src="../uploads/<?php echo htmlspecialchars($parent['parent_image']); ?>" alt="Image for <?php echo htmlspecialchars($parent['parent_name']); ?>">
                                 </div>
                             </a>
                         </div>
@@ -182,7 +185,7 @@ if (isset($_POST["submit"])) {
             </div>
         </main>
     </div>
-    <dialog>
+    <dialog id="add-edit-data">
         <h1>Add New Parent</h1>
         <form action="" method="post" enctype="multipart/form-data">
             <div class="input-field">
@@ -205,8 +208,8 @@ if (isset($_POST["submit"])) {
                 <input type="password" name="confirm_password" required>
                 <p>Please confirm the password.</p>
             </div>
-            <div class="controls">
-                <button type="button" class="close-btn">Cancel</button>
+            <div class="input-field controls">
+                <button type="button" class="cancel">Cancel</button>
                 <button type="reset">Clear</button>
                 <button type="submit" name="submit">Publish</button>
             </div>

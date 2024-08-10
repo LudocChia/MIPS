@@ -25,10 +25,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['admin_name'] = $admin['admin_name'];
             $_SESSION['admin_type'] = $admin['admin_type'];
             $_SESSION['admin_email'] = $admin['admin_email'];
-            $_SESSION['admin_image'] = $admin['admin_image'];
+            $_SESSION['admin_image'] = !empty($admin['admin_image']) ? $admin['admin_image'] : '../images/default_profile.png';
 
 
-            header("Location: index.php");
+            header("Location: /mahans/admin");
             exit;
         } else {
             $errorMsg = "Invalid email or password.";
@@ -36,12 +36,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } catch (PDOException $e) {
         $errorMsg = "Database error: " . $e->getMessage();
     }
-}
-
-if (!empty($_SESSION['admin_image'])) {
-    $_SESSION['admin_image'] = '../images/default_profile.png';
-} else {
-    $_SESSION['admin_image'] = "../uploads/" . $_SESSION['admin_image'];
 }
 
 ?>
@@ -52,18 +46,19 @@ if (!empty($_SESSION['admin_image'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Login Page - Mahans School</title>
+    <title>Admin Login | Mahans School</title>
     <link rel="icon" type="image/x-icon" href="../images/Mahans_internation_primary_school_logo.png">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/common.css">
     <link rel="stylesheet" href="../css/admin.css">
 </head>
 
 <body>
-    <main class="login">
+    <main id="login-form">
         <div class="container">
             <div class="wrapper">
                 <div class="title">
@@ -75,19 +70,25 @@ if (!empty($_SESSION['admin_image'])) {
                     </div>
                 <?php endif; ?>
                 <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST">
-                    <div class="input-field">
-                        <i class="fas fa-user"></i>
-                        <input type="text" name="email" placeholder="Email" value="<?php echo htmlspecialchars($email); ?>" required>
+                    <div class="input-container">
+                        <div class="input-field">
+                            <i class="fas fa-user"></i>
+                            <input type="text" name="email" placeholder="Email" value="<?php echo htmlspecialchars($email); ?>" required>
+                        </div>
+                        <p>Please enter your email</p>
                     </div>
-                    <div class="input-field">
-                        <i class="fas fa-lock"></i>
-                        <input type="password" name="password" placeholder="Password" required>
+                    <div class="input-container">
+                        <div class="input-field">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" name="password" placeholder="Password" required>
+                        </div>
+                        <p>Please enter your password</p>
                     </div>
                     <div class="pass">
                         <a href="#">Forgot password?</a>
                     </div>
-                    <div class="input-field controls">
-                        <input type="submit" value="Login">
+                    <div class="controls">
+                        <button type="submit" class="btn">Login</button>
                     </div>
                 </form>
             </div>

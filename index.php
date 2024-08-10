@@ -1,3 +1,10 @@
+<?php
+
+session_start();
+
+include "./components/db_connect.php";
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -14,48 +21,52 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="./css/base.css">
+    <link rel="stylesheet" href="./css/common.css">
     <link rel="stylesheet" href="./css/customer.css">
-    <link rel="stylesheet" href="./css/index.css">
 </head>
 
 <body>
     <?php include './components/customer_header.php'; ?>
+    <?php include './components/customer_login.php'; ?>
     <section class="banner">
-        <div class="wrapper">
-            <div class="slider">
-                <div class="list">
-                    <div class="item">
-                        <img src="images/mojave(1).png" alt="">
+        <div class="container">
+            <div class="wrapper">
+                <div class="slider">
+                    <div class="list">
+                        <div class="item">
+                            <img src="images/mojave(1).png" alt="">
+                        </div>
+                        <div class="item">
+                            <img src="images/mojave(2).png" alt="">
+                        </div>
+                        <div class="item">
+                            <img src="images/mojave(3).png" alt="">
+                        </div>
+                        <div class="item">
+                            <img src="images/mojave(4).png" alt="">
+                        </div>
+                        <div class="item">
+                            <img src="images/mojave(5).png" alt="">
+                        </div>
                     </div>
-                    <div class="item">
-                        <img src="images/mojave(2).png" alt="">
+                    <div class="buttons">
+                        <button id="prev"><span class="material-symbols-outlined">arrow_back_ios_new</span></button>
+                        <button id="next"><span class="material-symbols-outlined">arrow_forward_ios</span></button>
                     </div>
-                    <div class="item">
-                        <img src="images/mojave(3).png" alt="">
-                    </div>
-                    <div class="item">
-                        <img src="images/mojave(4).png" alt="">
-                    </div>
-                    <div class="item">
-                        <img src="images/mojave(5).png" alt="">
-                    </div>
+                    <ul class="dots">
+                        <li class="active"></li>
+                        <li></li>
+                        <li></li>
+                        <li></li>
+                        <li></li>
+                    </ul>
                 </div>
-                <div class="buttons">
-                    <button id="prev"><span class="material-symbols-outlined">arrow_back_ios_new</span></button>
-                    <button id="next"><span class="material-symbols-outlined">arrow_forward_ios</span></button>
-                </div>
-                <ul class="dots">
-                    <li class="active"></li>
-                    <li></li>
-                    <li></li>
-                    <li></li>
-                    <li></li>
-                </ul>
             </div>
         </div>
     </section>
     <?php include "./components/customer_footer.php"; ?>
     <script src="./javascript/home.js"></script>
+    <script src="./javascript/customer.js"></script>
 </body>
 
 </html>

@@ -64,7 +64,7 @@ $stockQuantity = $product['stock_quantity'] ?? 0;
     <div class="breadcrumbs">
         <ul>
             <li>
-                <a href="home.php">Home</a>
+                <a href="/mahans">Home</a>
             </li>
             <li>
                 <span class="material-symbols-outlined">navigate_next</span>
@@ -88,20 +88,25 @@ $stockQuantity = $product['stock_quantity'] ?? 0;
                         <h1><?php echo htmlspecialchars($product['product_name']); ?></h1>
                         <p><?php echo htmlspecialchars($product['category_name']); ?></p>
                     </div>
+                    <div class="right">
+                        <button id="open-popup"><i class="bi bi-plus-circle"></i>Add to cart</button>
+                    </div>
                 </div>
                 <section class="product-details">
                     <section class="product-container">
                         <div class="picture-div">
-                            <?php if (!empty($images)) : ?>
-                                <img id="picture" alt="<?php echo htmlspecialchars($images[0]['image_url']); ?>" src="uploads/<?php echo htmlspecialchars($images[0]['image_url']); ?>">
-                                <div class="thumbnails">
-                                    <?php foreach ($images as $image) : ?>
-                                        <img class="thumbnail" src="uploads/<?php echo htmlspecialchars($image['image_url']); ?>" style="width: 80px;">
-                                    <?php endforeach; ?>
-                                </div>
-                            <?php else : ?>
-                                <p>No images available.</p>
-                            <?php endif; ?>
+                            <div class="product-image">
+                                <?php if (!empty($images)) : ?>
+                                    <img id="picture" alt="<?php echo htmlspecialchars($images[0]['image_url']); ?>" src="uploads/<?php echo htmlspecialchars($images[0]['image_url']); ?>">
+                            </div>
+                            <div class="thumbnails">
+                                <?php foreach ($images as $image) : ?>
+                                    <img class="thumbnail" src="uploads/<?php echo htmlspecialchars($image['image_url']); ?>" style="width: 80px;">
+                                <?php endforeach; ?>
+                            </div>
+                        <?php else : ?>
+                            <p>No images available.</p>
+                        <?php endif; ?>
                         </div>
                         <div class="productInfo">
                             <h2>Product Description</h2>
