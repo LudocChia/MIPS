@@ -38,6 +38,7 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 <body>
     <?php include "./components/customer_header.php"; ?>
+    <?php include "./components/customer_login.php"; ?>
     <section class="bookshop">
         <div class="container">
             <div class="products">
@@ -47,7 +48,7 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             <h1>Mahans International Primary School Bookshop</h1>
                         </div>
                         <div class="right">
-                            <p>Found <b id="count"><?= count($products) ?></b> results</p>
+                            <p>Total <b id="count"><?= count($products) ?></b> products</p>
                         </div>
                     </div>
                     <div class="box-container">
@@ -86,6 +87,7 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </a>
     <?php include './components/customer_footer.php'; ?>
     <script src="./js/common.js"></script>
+    <script src="./javascript/customer.js"></script>
 </body>
 
 </html>

@@ -29,7 +29,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['user_email'] = $parent['parent_email'];
             $_SESSION['user_image'] = !empty($parent['parent_image']) ? $parent['parent_image'] : './images/default_profile.png';
 
-            header("Referer:0");
+            header("Location: index.php");
             exit;
         }
 
@@ -81,15 +81,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="pass">
             <a href="#">Forgot password?</a>
         </div>
-        <div class="input-field controls">
+        <div class="controls">
             <button type="button" class="cancel">Cancel</button>
-            <button type="button" class="btn">Login</button>
+            <button type="submit" class="btn">Login</button>
         </div>
     </form>
 </dialog>
 
 <script>
     document.querySelector("#login-btn").addEventListener("click", function() {
+        scrollPosition = window.pageYOffset;
+        scrollPosition = window.pageYOffset;
+
+        document.body.style.overflowY = 'hidden';
+        document.body.style.paddingRight = '15px';
+        document.body.style.backgroundColor = 'white';
+
         document.getElementById('login-form').showModal();
     });
 
@@ -97,5 +104,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         const dialog = document.getElementById('login-form');
         dialog.close();
         dialog.querySelector('form').reset();
+
+        document.body.style.overflowY = '';
+        document.body.style.paddingRight = '';
+        document.body.style.backgroundColor = '';
+
+        window.scrollTo(0, scrollPosition);
     });
 </script>

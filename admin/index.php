@@ -17,7 +17,7 @@ if (!isset($_SESSION['admin_id'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard | Mahans School</title>
+    <title>Dashboard - Mahans School</title>
     <link rel="icon" type="image/x-icon" href="../images/Mahans_internation_primary_school_logo.png">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
@@ -49,7 +49,7 @@ if (!isset($_SESSION['admin_id'])) {
                             <i class="bi bi-chevron-down first"></i>
                         </a>
                         <ul class="bookshop-show">
-                            <li><a href=" mainCategory.php"><i class="bi bi-tags-fill"></i>
+                            <li><a href="mainCategory.php"><i class="bi bi-tags-fill"></i>
                                     <h4>Main Category</h4>
                                 </a>
                             </li>
@@ -57,7 +57,7 @@ if (!isset($_SESSION['admin_id'])) {
                                     <h4>Subcategory</h4>
                                 </a>
                             </li>
-                            <li><a href="productSize.php"><i class="bi bi-aspect-ratio-fill"></i>
+                            <li><a href="size.php"><i class="bi bi-aspect-ratio-fill"></i>
                                     <h4>Product Size</h4>
                                 </a>
                             </li>
@@ -85,6 +85,11 @@ if (!isset($_SESSION['admin_id'])) {
                             <li>
                                 <a href="parent.php"><i class="bi bi-people-fill"></i>
                                     <h4>All Parent</h4>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="student.php"><i class="bi bi-people-fill"></i>
+                                    <h4>All Student</h4>
                                 </a>
                             </li>
                         </ul>

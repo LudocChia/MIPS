@@ -27,7 +27,7 @@ if (isset($_POST['submit'])) {
 
         try {
             $stmt->execute();
-            header('Location: mainCategory.php');
+            header('Refresh:0');
             exit();
         } catch (PDOException $e) {
             echo "<sricpt>alert('Database error: );</sricpt>";
@@ -48,15 +48,13 @@ function getSizes($pdo)
 $all_product_sizes = getSizes($pdo);
 ?>
 
-
-
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bookshop Product Size | Mahans School</title>
+    <title>Bookshop Apparel Size - Mahans School</title>
     <link rel="icon" type="image/x-icon" href="../images/Mahans_internation_primary_school_logo.png">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
@@ -97,7 +95,7 @@ $all_product_sizes = getSizes($pdo);
                                 </a>
                             </li>
                             <li><a href="productSize.php" class="active"><i class="bi bi-aspect-ratio-fill"></i>
-                                    <h4>Product Size</h4>
+                                    <h4>Apparel Size</h4>
                                 </a>
                             </li>
                             <li><a href="product.php"><i class="bi bi-box-seam-fill"></i>
@@ -142,10 +140,10 @@ $all_product_sizes = getSizes($pdo);
             <div class="wrapper">
                 <div class="title">
                     <div class="left">
-                        <h1>Bookshop Product Size</h1>
+                        <h1>Apparel Size</h1>
                     </div>
                     <div class="right">
-                        <button id="open-popup"><i class="bi bi-plus-circle"></i>Add Product Size</button>
+                        <button id="open-popup" class="btn btn-outline"><i class="bi bi-plus-circle"></i>Add Apparel Size</button>
                     </div>
                 </div>
                 <div class="table-body">
@@ -153,7 +151,7 @@ $all_product_sizes = getSizes($pdo);
                         <thead>
                             <tr>
                                 <th>
-                                    <h3>Product Size Name</h3>
+                                    <h3>Apparel Size Name</h3>
                                 </th>
                                 <th>
                                     <h3>Shoulder Width</h3>
@@ -181,8 +179,8 @@ $all_product_sizes = getSizes($pdo);
                                     <td><?= $size['waist'] ?></td>
                                     <td><?= $size['length'] ?></td>
                                     <td>
-                                        <a href="productSizeEdit.php?id=<?= $size['size_id'] ?>" class="edit"><i class="bi bi-pencil-square"></i></a>
-                                        <a href="productSizeDelete.php?id=<?= $size['size_id'] ?>" class="delete"><i class="bi bi-trash-fill"></i></a>
+                                        <button id="edit"><i class="bi bi-pencil-square"></i></button>
+                                        <button id="delete"><i class="bi bi-trash-fill"></i></button>
                                     </td>
                                 </tr>
                             <?php } ?>
@@ -192,8 +190,8 @@ $all_product_sizes = getSizes($pdo);
             </div>
         </main>
     </div>
-    <dialog id="add-product">
-        <h2>Add Product Size</h2>
+    <dialog id="add-edit-data">
+        <h2>Add Apparel Size</h2>
         <form action="" method="post" enctype="multipart/form-data">
             <div class="input-field">
                 <h2>Product Size Name<sup>*</sup></h2>
@@ -217,7 +215,7 @@ $all_product_sizes = getSizes($pdo);
                 <input type="number" step="0.01" name="length" value="<?php echo isset($_POST['length']) ? htmlspecialchars($_POST['length']) : ''; ?>">
             </div>
             <div class="controls">
-                <button type="button" class="close-btn">Cancel</button>
+                <button type="button" class="cancel">Cancel</button>
                 <button type="reset">Clear</button>
                 <button type="submit" name="submit">Publish</button>
             </div>

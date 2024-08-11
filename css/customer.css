@@ -2,7 +2,7 @@
 :root {
     --color-white: #ffffff;
     --color-light: #f0eff5;
-    --color-gray-light: #86848c;
+    --color-gray-light: #ccc;
     --color-gray-dark: #56555e;
     --color-dark: #27282f;
     --color-primary: rgb(144, 88, 47);
@@ -35,6 +35,10 @@
 .wrapper {
     border-radius: var(--card-border-radius);
     border: 1px solid var(--color-light);
+}
+
+#login-form {
+    border-radius: var(--card-border-radius);
 }
 
 #login-form img {
@@ -276,14 +280,12 @@ header img.logo {
 
 .btn.login {
     background-color: var(--color-gray-light);
-    color: var(--color-white);
-    border: 2px solid var(--color-gray-light);
+    color: black;
 }
 
 .btn.signup {
     background-color: var(--color-white);
     color: var(--color-primary);
-    border: 2px solid var(--color-primary);
 }
 
 /* 
@@ -751,11 +753,6 @@ header img.logo {
         width: 50%;
         margin-bottom: 30px;
     }
-
-    .slider {
-        /* height: 400px; */
-    }
-
 }
 
 @media(max-width: 574px) {

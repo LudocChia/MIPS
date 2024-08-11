@@ -2,7 +2,7 @@
 :root {
     --color-white: #ffffff;
     --color-light: #f0eff5;
-    --color-gray-light: #86848c;
+    --color-gray-light: #ccc;
     --color-gray-dark: #56555e;
     --color-dark: #27282f;
     --color-primary: rgb(144, 88, 47);
@@ -28,10 +28,29 @@
     --box-shadow: 0 0 10px rgb(0 0 0/15%);
 }
 
+
+
+.size-button {
+    padding: 10px 15px;
+    margin: 5px;
+    border: 1px solid var(--color-gray-light);
+    background-color: #f9f9f9;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.size-button:hover {
+    background-color: #ddd;
+}
+
+.size-button.selected {
+    background-color: #333;
+    color: #fff;
+}
+
+
 /* Button */
 .btn {
-    /* line-height: 2; */
-    /* padding: 5px 35px; */
     display: inline-block;
     border-radius: 5px;
     color: var(--color-white);
@@ -39,32 +58,46 @@
     text-transform: capitalize;
     padding: 10px 10px;
     font-size: 1.2rem;
-    /* font-family: inherit; */
-    /* font-size: 16px; */
-    /* cursor: pointer; */
-    /* user-select: none; */
-    /* position: relative; */
-    /* overflow: hidden; */
-    /* vertical-align: middle; */
-    /* transition: color 0.3s ease; */
-    /* z-index: 2; */
+    cursor: pointer;
 }
 
-.btn::before {
+.btn-full {
+    background-color: var(--color-primary);
+    color: white;
+    border: none
+}
+
+.btn-full:hover {
+    background-color: #734523;
+    /* Darker shade for hover */
+}
+
+/* Outline Button */
+.btn-outline {
+    background-color: #fff7f5;
+    color: #90582f;
+    border: 2px solid #90582f;
+}
+
+/* .btn-outline:hover {
+    background-color: #90582f;
+    color: white;
+} */
+
+/* .btn::before {
     position: absolute;
     content: '';
     left: 0;
     top: 0;
-    /* background: var(--green); */
+    background: var(--green);
     height: 100%;
     width: 0;
     z-index: -1;
-}
+} */
 
-.btn:hover::before {
+/* .btn:hover::before {
     width: 100%;
-}
-
+} */
 
 /* LOGIN */
 #login-form .wrapper {
@@ -210,6 +243,7 @@ dialog form textarea {
 
 
 /* NAV BAR */
+
 header {
     width: 100%;
     background: var(--color-primary);
@@ -366,6 +400,11 @@ header .profile-area i {
     padding: 3px 7px;
 }
 
+.title .right {
+    margin-top: 0;
+    display: flex;
+}
+
 .title .right img {
     height: 20px;
     vertical-align: middle;
@@ -381,7 +420,7 @@ header .profile-area i {
 }
 
 .title .right i {
-    margin-left: 5px;
+    margin-right: 5px;
 }
 
 /* Delete Confirm Dialog */
@@ -462,22 +501,13 @@ header .profile-area i {
 
 @media screen and (max-width: 1200px) {
     .title {
-        display: flex;
-    }
-
-    .title .left {
-        max-width: 100%;
-
-    }
-
-    header .profile-area {
-        gap: 2rem;
+        justify-content: space-between;
     }
 }
 
 @media screen and (max-width: 768px) {
     .title {
-        display: flex;
+        justify-content: space-between;
     }
 
     header .profile-area i {

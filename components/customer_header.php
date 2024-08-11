@@ -8,8 +8,14 @@
         <span class="fas fa-bars" id="menuIcon" onclick="toggle()"></span>
         <div class="navbar" id="nav">
             <ul>
+                <!-- <li>
+                    <a href="index.php"><span class="material-symbols-outlined">local_library</span></i>Student Performance</a>
+                </li> -->
                 <li>
-                    <a href="activity.php"><span class="material-symbols-outlined">celebration</span>School Activity</a>
+                    <a href="meal.php"><span class="material-symbols-outlined">food_bank</span>Student Meal Plan</a>
+                </li>
+                <li>
+                    <a href="event.php"><i class="bi bi-calendar4-event"></i>School Event</a>
                 </li>
                 <li>
                     <a href="bookshop.php"><i class="bi bi-shop-window"></i>Bookshop</a>
@@ -56,7 +62,7 @@
                 } else {
                 ?>
                     <button class="btn login" id="login-btn">Login</button>
-                    <button class="btn signup" id="signup-btn">Sign Up</button>
+                    <button class="btn btn-outline" id="signup-btn">Sign Up</button>
                 <?php
                 }
                 ?>

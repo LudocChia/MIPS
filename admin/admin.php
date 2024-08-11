@@ -1,7 +1,13 @@
 <?php
+
+session_start();
 include "../components/db_connect.php";
 
-// Function to fetch all existing admins
+if (!isset($_SESSION['admin_id'])) {
+    header('Location: login.php');
+    exit();
+}
+
 function getAllAdmins($pdo)
 {
     $sql = "SELECT * FROM Admin WHERE is_deleted = 0";
@@ -24,7 +30,7 @@ if (isset($_POST["submit"])) {
     $email = $_POST["email"];
     $password = $_POST["password"];
     $confirmPassword = $_POST["confirm_password"];
-    $adminType = "Permanent";
+    $adminType = "admin";
     $adminId = generateAdminId();
 
     if (empty($name) || empty($email) || empty($password) || empty($confirmPassword)) {
@@ -32,15 +38,12 @@ if (isset($_POST["submit"])) {
     } elseif ($password !== $confirmPassword) {
         echo "<script>alert('Passwords do not match.');</script>";
     } else {
-        // Validate email
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             echo "<script>alert('Invalid email format.');</script>";
         } else {
-            // Hash the password
             $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
             try {
-                // Insert new admin into the database
                 $sql = "INSERT INTO Admin (admin_id, admin_name, admin_email, admin_password, admin_type, is_deleted) 
                         VALUES (:adminId, :name, :email, :password, :adminType, 0)";
                 $stmt = $pdo->prepare($sql);
@@ -73,6 +76,7 @@ if (isset($_POST["submit"])) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/common.css">
     <link rel="stylesheet" href="../css/admin.css">
 </head>
 
@@ -105,7 +109,7 @@ if (isset($_POST["submit"])) {
                                     <h4>Subcategory</h4>
                                 </a>
                             </li>
-                            <li><a href="product_size.php"><i class="bi bi-aspect-ratio-fill"></i>
+                            <li><a href="size.php"><i class="bi bi-aspect-ratio-fill"></i>
                                     <h4>Product Size</h4>
                                 </a>
                             </li>
@@ -135,6 +139,11 @@ if (isset($_POST["submit"])) {
                                     <h4>All Parent</h4>
                                 </a>
                             </li>
+                            <li>
+                                <a href="student.php"><i class="bi bi-people-fill"></i>
+                                    <h4>All Student</h4>
+                                </a>
+                            </li>
                         </ul>
                     </li>
                     <li>
@@ -147,14 +156,14 @@ if (isset($_POST["submit"])) {
             </div>
         </aside>
         <!-- END OF ASIDE -->
-        <main class="category">
+        <main class="admin">
             <div class="wrapper">
                 <div class="title">
                     <div class="left">
                         <h1>Mahans Admin</h1>
                     </div>
                     <div class="right">
-                        <button id="open-popup"><i class="bi bi-person-fill-add"></i> Add New Admin</button>
+                        <button id="open-popup"><i class="bi bi-person-fill-add"></i>Add New Admin</button>
                         <?php
                         try {
                             $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -170,22 +179,51 @@ if (isset($_POST["submit"])) {
                         ?>
                     </div>
                 </div>
-                <div class="box-container">
-                    <?php foreach ($all_admins as $admin) : ?>
-                        <div class="box">
-                            <h3><?php echo htmlspecialchars($admin['admin_name']); ?></h3>
-                            <a href="#">
-                                <div class="image-container">
-                                    <img src="../uploads/<?php echo htmlspecialchars($admin['admin_image']); ?>" alt="Image for <?php echo htmlspecialchars($admin['admin_name']); ?>">
-                                </div>
-                            </a>
-                        </div>
-                    <?php endforeach; ?>
+                <div class="table-body">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>
+                                    <h3>Admin ID</h3>
+                                </th>
+                                <th>
+                                    <h3>Admin Name</h3>
+                                </th>
+                                <th>
+                                    <h3>Admin Email</h3>
+                                </th>
+                                <th>
+                                    <h3>Admin Register Date</h3>
+                                </th>
+                                <th>
+                                    <h3>Actions</h3>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($all_admins as $admin) { ?>
+                                <tr>
+                                    <td><?php echo htmlspecialchars($admin['admin_id']); ?></td>
+                                    <td><?php echo htmlspecialchars($admin['admin_name']); ?></td>
+                                    <td><?php echo htmlspecialchars($admin['admin_email']); ?></td>
+                                    <td><?php echo htmlspecialchars($admin['register_date']); ?></td>
+                                    <td>
+                                        <form action="" method="POST" style="display:inline;">
+                                            <input type="hidden" name="admin_id" value="<?= htmlspecialchars($admin['admin_id']); ?>">
+                                            <input type="hidden" name="delete" value="true">
+                                            <button type="submit" class="delete-admin-btn"><i class="bi bi-x-square-fill"></i></button>
+                                        </form>
+                                        <button type="button" class="edit-admin-btn" data-admin-id="<?= htmlspecialchars($admin['admin_id']); ?>"><i class="bi bi-pencil-square"></i></button>
+                                    </td>
+                                </tr>
+                            <?php } ?>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </main>
     </div>
-    <dialog>
+    <dialog id="add-edit-data">
         <h1>Add New Admin</h1>
         <form action="" method="post" enctype="multipart/form-data">
             <div class="input-field">
@@ -209,13 +247,48 @@ if (isset($_POST["submit"])) {
                 <p>Please confirm the password.</p>
             </div>
             <div class="controls">
-                <button type="button" class="close-btn">Cancel</button>
+                <button type="button" class="cancel">Cancel</button>
                 <button type="reset">Clear</button>
                 <button type="submit" name="submit">Publish</button>
             </div>
         </form>
     </dialog>
+    <dialog id="delete-confirm-dialog">
+        <form method="dialog">
+            <h1>Admin will be Deactivated!</h1>
+            <label>Are you sure to proceed?</label>
+            <div class="controls">
+                <button value="cancel" class="cancel">Cancel</button>
+                <button value="confirm" class="deactivate">Deactivate</button>
+            </div>
+        </form>
+    </dialog>
     <script src="../javascript/admin.js"></script>
+    <script>
+        document.querySelectorAll('.edit-admin-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const adminId = this.dataset.adminId;
+
+                fetch(`ajax.php?action=get_admin&admin_id=${adminId}`)
+                    .then(response => response.json())
+                    .then(admin => {
+                        if (admin.error) {
+                            alert(admin.error);
+                        } else {
+                            document.querySelector('#add-edit-data [name="name"]').value = admin.admin_name;
+                            document.querySelector('#add-edit-data [name="email"]').value = admin.admin_email;
+
+                            document.querySelector('#add-edit-data h1').textContent = "Edit Admin";
+                            document.getElementById('add-edit-data').showModal();
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching admin data:', error);
+                        alert('Failed to load admin data.');
+                    });
+            });
+        });
+    </script>
 </body>
 
 </html>

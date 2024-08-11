@@ -1,64 +1,71 @@
 <?php
+
 session_start();
 
 include "../components/db_connect.php";
 
-if (!isset($_SESSION['admin_id'])) {
-    header('Location: login.php');
-    exit();
-}
-
-$msg = [];
-if (isset($_POST["submit"])) {
-    $name = $_POST["name"];
-    $parentId = !empty($_POST["parent_id"]) ? $_POST["parent_id"] : null;
-
-
-    if ($_FILES["image"]["error"] === 4) {
-        echo "<script> alert('Image Does Not Exist'); </script>";
-    } else {
-        $fileName = $_FILES["image"]["name"];
-        $fileSize = $_FILES["image"]["size"];
-        $tmpName = $_FILES["image"]["tmp_name"];
-
-        $validImageExtension = ['jpg', 'jpeg', 'png'];
-        $imageExtension = explode('.', $fileName);
-        $imageExtension = strtolower(end($imageExtension));
-        if (!in_array($imageExtension, $validImageExtension)) {
-            echo "<script> alert('Invalid Image Extension'); </script>";
-        } else if ($fileSize > 1000000) {
-            echo "<script> alert('Image Size Is Too Large'); </script>";
-        } else {
-            $newImageName = uniqid() . '.' . $imageExtension;
-            if (move_uploaded_file($tmpName, '../uploads/' . $newImageName)) {
-                $sql = "INSERT INTO Product_Category (category_name, category_icon, parent_id, is_deleted) VALUES (:name, :icon, :parentId, 0)";
-                $stmt = $pdo->prepare($sql);
-                $stmt->bindParam(':name', $name);
-                $stmt->bindParam(':icon', $newImageName);
-                $stmt->bindParam(':parentId', $parentId);
-                try {
-                    $stmt->execute();
-                    header('Location: mainCategory.php');
-                    exit();
-                } catch (PDOException $e) {
-                    echo "<script>alert('Database error: " . $e->getMessage() . "');</script>";
-                }
-            } else {
-                echo "<script>alert('Failed to move uploaded file.');</script>";
-            }
-        }
-    }
-}
-
-function getMainCategories($pdo)
+function getAllStudents($pdo)
 {
-    $sql = "SELECT * FROM Product_Category WHERE parent_id IS NULL AND is_deleted = 0";
+    $sql = "SELECT * FROM Student WHERE is_deleted = 0";
     $stmt = $pdo->prepare($sql);
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
-$all_main_categories = getMainCategories($pdo);
+$all_students = getAllStudents($pdo);
+
+function handleFileUpload($file, $studentId)
+{
+    if ($file['error'] === UPLOAD_ERR_NO_FILE) {
+        return null;
+    }
+
+    $allowedfileExtensions = ['jpg', 'jpeg', 'png'];
+    $fileName = $file['name'];
+    $fileTmpPath = $file['tmp_name'];
+    $fileExtension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+
+    if (in_array($fileExtension, $allowedfileExtensions)) {
+        $newFileName = $studentId . '_' . uniqid() . '.' . $fileExtension;
+        $dest_path = '../uploads/' . $newFileName;
+
+        if (move_uploaded_file($fileTmpPath, $dest_path)) {
+            return $newFileName;
+        } else {
+            echo "<script>alert('There was an error moving the uploaded file: $fileName');</script>";
+            return null;
+        }
+    } else {
+        echo "<script>alert('Upload failed. Allowed file types: " . implode(',', $allowedfileExtensions) . "');</script>";
+        return null;
+    }
+}
+
+if (isset($_POST["submit"])) {
+    $studentId = $_POST["student_id"];
+    $name = $_POST["name"];
+    $class = $_POST["class"];
+
+
+    try {
+        $studentImage = handleFileUpload($_FILES['student_image'], $studentId);
+
+        $sql = "INSERT INTO Student (student_id, student_name, student_class, student_image, is_deleted) 
+                        VALUES (:studentId, :name, :class, :student_image, 0)";
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindParam(':studentId', $studentId);
+        $stmt->bindParam(':name', $name);
+        $stmt->bindParam(':class', $class);
+        $stmt->bindParam(':student_image', $studentImage);
+        $stmt->execute();
+
+        header('Location: student.php');
+        exit();
+    } catch (PDOException $e) {
+        echo "<script>alert('Database error: " . $e->getMessage() . "');</script>";
+    }
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -67,7 +74,7 @@ $all_main_categories = getMainCategories($pdo);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bookshop Main Category | Mahans School</title>
+    <title>All Students - Mahans School</title>
     <link rel="icon" type="image/x-icon" href="../images/Mahans_internation_primary_school_logo.png">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
@@ -99,7 +106,7 @@ $all_main_categories = getMainCategories($pdo);
                             <i class="bi bi-chevron-down first"></i>
                         </a>
                         <ul class="bookshop-show">
-                            <li><a href=" mainCategory.php" class="active"><i class="bi bi-tags-fill"></i>
+                            <li><a href="mainCategory.php"><i class="bi bi-tags-fill"></i>
                                     <h4>Main Category</h4>
                                 </a>
                             </li>
@@ -129,12 +136,17 @@ $all_main_categories = getMainCategories($pdo);
                                 </a>
                             </li>
                             <li><a href="teacher.php"><i class="bi bi-mortarboard-fill"></i>
-                                    <h4>All Teacher</h4>
+                                    <h4>All Teachers</h4>
                                 </a>
                             </li>
                             <li>
                                 <a href="parent.php"><i class="bi bi-people-fill"></i>
-                                    <h4>All Parent</h4>
+                                    <h4>All Parents</h4>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="student.php" class="active"><i class="bi bi-people-fill"></i>
+                                    <h4>All Students</h4>
                                 </a>
                             </li>
                         </ul>
@@ -153,19 +165,19 @@ $all_main_categories = getMainCategories($pdo);
             <div class="wrapper">
                 <div class="title">
                     <div class="left">
-                        <h1>Bookshop Main Category</h1>
+                        <h1>Mahans Students</h1>
                     </div>
                     <div class="right">
-                        <button id="open-popup" class="btn btn-outline"><i class="bi bi-plus-circle"></i>Add Main Category</button>
+                        <button id="open-popup"><i class="bi bi-person-fill-add"></i>Add New Student</button>
                         <?php
                         try {
                             $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-                            $countQuery = "SELECT COUNT(*) FROM Product_Category WHERE parent_id IS NULL AND is_deleted = 0";
+                            $countQuery = "SELECT COUNT(*) FROM Student WHERE is_deleted = 0";
                             $stmt = $pdo->prepare($countQuery);
                             $stmt->execute();
                             $count = $stmt->fetchColumn();
 
-                            echo "<p>Total $count Main Categories</p>";
+                            echo "<p>Total $count Student(s)</p>";
                         } catch (PDOException $e) {
                             echo "<script>alert('Database error: " . $e->getMessage() . "');</script>";
                         }
@@ -173,12 +185,12 @@ $all_main_categories = getMainCategories($pdo);
                     </div>
                 </div>
                 <div class="box-container">
-                    <?php foreach ($all_main_categories as $category) : ?>
+                    <?php foreach ($all_students as $student) : ?>
                         <div class="box">
-                            <h3><?php echo htmlspecialchars($category['category_name']); ?></h3>
+                            <h3><?php echo htmlspecialchars($student['student_name']); ?></h3>
                             <a href="#">
                                 <div class="image-container">
-                                    <img src="../uploads/<?php echo htmlspecialchars($category['category_icon']); ?>" alt="Icon for <?php echo htmlspecialchars($category['category_name']); ?>">
+                                    <img src="../uploads/<?php echo htmlspecialchars($student['student_image']); ?>" alt="Image for <?php echo htmlspecialchars($student['student_name']); ?>">
                                 </div>
                             </a>
                         </div>
@@ -187,33 +199,38 @@ $all_main_categories = getMainCategories($pdo);
             </div>
         </main>
     </div>
-    <dialog id="add-data">
-        <h1>Add Main Category</h1>
+    <dialog id="add-edit-data">
+        <h1>Add New Student</h1>
         <form action="" method="post" enctype="multipart/form-data">
-            <div class="input-field">
-                <h2>Category Name<sup>*</sup></h2>
-                <input type="text" name="name" value="<?php echo isset($_POST['name']) ? htmlspecialchars($_POST['name']) : ''; ?>">
-                <p>Please enter full name as per IC or Passport.</p>
+            <input type="hidden" name="student_id" value="">
+            <div class="input-container">
+                <h2>Student ID<sup>*</sup></h2>
+                <input type="text" name="student_id" value="<?php echo isset($_POST['student_id']) ? htmlspecialchars($_POST['student_id']) : ''; ?>" required>
+                <p>Please enter the student's ID.</p>
             </div>
-            <div class="input-field">
-                <h2>Category Icon<sup>*</sup></h2>
-                <input type="file" name="image" id="image" accept=".jpg, .jpeg, .png" value="">
-                <p>Please enter full name as per IC or Passport.</p>
+            <div class="input-container">
+                <h2>Student Name<sup>*</sup></h2>
+                <input type="text" name="name" value="<?php echo isset($_POST['name']) ? htmlspecialchars($_POST['name']) : ''; ?>" required>
+                <p>Please enter the student's full name.</p>
             </div>
-            <div class="controls">
-                <button type="button" class="close-btn">Cancel</button>
+            <div class="input-container">
+                <h2>Student Email<sup>*</sup></h2>
+                <input type="email" name="email" value="<?php echo isset($_POST['email']) ? htmlspecialchars($_POST['email']) : ''; ?>" required>
+                <p>Please enter the student's email address.</p>
+            </div>
+            <div class="input-container">
+                <h2>Student Class</h2>
+                <input type="text" name="class" value="<?php echo isset($_POST['class']) ? htmlspecialchars($_POST['class']) : ''; ?>" required>
+            </div>
+            <div class="input-container">
+                <h2>Student Image<sup>*</sup></h2>
+                <input type="file" name="student_image" id="student_image" accept=".jpg, .jpeg, .png" required>
+                <p>Please upload an image for the student.</p>
+            </div>
+            <div class="input-container controls">
+                <button type="button" class="cancel">Cancel</button>
                 <button type="reset">Clear</button>
                 <button type="submit" name="submit">Publish</button>
-            </div>
-        </form>
-    </dialog>
-    <dialog id="delete-confirm-dialog">
-        <form method="dialog">
-            <h1>Your Main Category will be Deactivated!</h1>
-            <label>Are you sure to proceed?</label>
-            <div class="btns">
-                <button value="cancel" class="btn1">Cancel Process</button>
-                <button value="confirm" class="btn2">Deactivate Product</button>
             </div>
         </form>
     </dialog>
