@@ -1,6 +1,4 @@
-<?php
-    include "../components/db_connect.php";
-?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -19,6 +17,7 @@
     <?php include "../visitor/header.php"; ?>
     <div class="box1">
         <h1>Please fill up the form </h1>
+        <form action="submit.php" method="post">
             <div class="name">
                 <h2>Name :</h2>
                 <input type="text" id="name" name="Name" >
@@ -39,11 +38,14 @@
                 <h2>Plate Number</h2>
                 <input type="text" id="plate" name="Plate">
             </div>
-            <div class="Visit">
-                <h2>Visit time</h2>
-                <input type="text" id="visit" name="Visit">
+            <div class="Date">
+                <h2>Visit Date</h2>
+                <input type="date" id="date" name="Date">
             </div>
-
+            <div class="Time">
+                <h2>Visit Time</h2>
+                <input type="text" id="time" name="Time" placeholder="XX.XXAM/PM">
+            </div>
             <div class="People">
                 <h2>People</h2>
                 <input type="text" id="people" name="People">
@@ -55,9 +57,9 @@
             <div>
                 <input type="submit" value="Submit" id="btn" >
             </div>
-
+        </form>
     </div>
-    <dialog  class="modal" id="modal">
+    <!-- <dialog  class="modal" id="modal">
         <h1>Submitted Sucessfully !</h1>
         <input type="submit" value="Ok" id="btn1">
     </dialog>
@@ -69,18 +71,10 @@
         openModal.addEventListener('click', () => {
             modal.showModal();
         })
-        // closeModal.addEventListener('click', () => {
-        //     modal.close();
-        // })
-    </script>
-    <!-- <?php
-        $name = $_REQUEST('Name');
-        $phone = $_REQUEST('Phone');
-        $email = $_REQUEST('Email');
-        $company = $_REQUEST('Company');
-        $plate = $_REQUEST('Plate');
-        $visit = $_REQUEST('Visit');
-        $purpose = $_REQUEST('Purpose')
-    ?> -->
+        closeModal.addEventListener('click', () => {
+            modal.close();
+        })
+    </script> -->
+
 </body>
 </html>
