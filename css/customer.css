@@ -27,6 +27,11 @@
     --box-shadow: 0 0 10px rgb(0 0 0/15%);
 }
 
+body {
+    font-family: 'Abril Fatface Regular', serif;
+}
+
+
 .container {
     max-width: 85%;
     margin: 3rem auto;
@@ -44,110 +49,6 @@
 #login-form img {
     width: 100px;
 }
-
-/* #login-form {
-    width: 100%;
-    max-width: 450px;
-    background: var(--color-light);
-    padding: 0;
-}
-
-#login-form .title {
-    margin: 0;
-    padding: 0;
-    line-height: 90px;
-    background: var(--color-primary);
-    border-radius: 1rem 1rem 0 0;
-    color: #fff;
-    font-size: 25px;
-    font-weight: 600;
-}
-
-#login-form img {
-    width: 100px;
-}
-
-dialog #login-form {
-    padding: 0;
-}
-
-#login-form .input-field {
-    height: 45px;
-    margin-bottom: 15px;
-    position: relative;
-}
-
-#login-form .input-field input {
-    height: 100%;
-    width: 100%;
-    outline: none;
-    padding-left: 60px;
-    border-radius: 5px;
-    border: 1px solid lightgrey;
-    font-size: 16px;
-}
-
-#login-form .input-field i {
-    position: absolute;
-    width: 47px;
-    height: 100%;
-    color: #fff;
-    font-size: 18px;
-    background: var(--color-primary);
-    border: 1px var(--color-primary) solid;
-    border-radius: 5px 0 0 5px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-#login-form .pass {
-    margin: -1rem 0 1rem 0;
-}
-
-#login-form .pass a {
-    color: var(--color-primary);
-    font-size: 17px;
-    text-decoration: none;
-}
-
-#login-form .pass a:hover {
-    text-decoration: underline;
-}
-
-#login-form .controls {
-    display: flex;
-}
-
-#login-form .controls input {
-    color: #fff;
-    font-size: 20px;
-    font-weight: 500;
-    padding-left: 0px;
-    background: var(--color-primary);
-    border: 1px solid var(--color-primary);
-    cursor: pointer;
-}
-
-#login-form .contorls input:focus {
-    border-color: var(--color-primary);
-    box-shadow: inset 0px 9px 2px 2px rgba(26, 188, 156, 0.25);
-}
-
-#login-form .signup-link {
-    text-align: center;
-    margin-top: 20px;
-}
-
-#login-form .signup-link a {
-    color: var(--color-primary);
-    font-size: 18px;
-    text-decoration: none;
-}
-
-#login-form .signup-link a:hover {
-    text-decoration: underline;
-} */
 
 #login-form {
     position: fixed;

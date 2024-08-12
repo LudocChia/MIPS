@@ -3,7 +3,7 @@
     --color-white: #ffffff;
     --color-light: #f0eff5;
     --color-gray-light: #ccc;
-    --color-gray-dark: #56555e;
+    --color-gray-super-light: #e5e5e5;
     --color-dark: #27282f;
     --color-primary: rgb(144, 88, 47);
     --color-success: rgb(34, 202, 75);
@@ -28,7 +28,65 @@
     --box-shadow: 0 0 10px rgb(0 0 0/15%);
 }
 
+dialog {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-sizing: border-box;
+    width: calc(100% - 1em);
+    max-width: 60rem;
+    border-radius: 0.5em;
+    text-align: center;
+    padding: 0.8em 1.5em 1em;
+}
 
+dialog form {
+    text-align: left;
+    margin-left: 2rem;
+    position: relative;
+}
+
+dialog form input {
+    height: 3rem;
+}
+
+dialog form p {
+    color: #999;
+}
+
+dialog form h2 {
+    text-transform: capitalize;
+}
+
+dialog form input {
+    margin-right: 0.5rem;
+    height: 3rem;
+    color: #24262b;
+}
+
+dialog form input,
+textarea {
+    font-size: 1.2rem;
+    background: #fff;
+    outline: none;
+    padding: .6rem;
+    box-shadow: var(--box-shadow);
+    /* margin: .5rem 0; */
+    border: 1px solid #ddd;
+    width: 85%;
+    transition: border 0.3s ease;
+}
+
+dialog form input:focus,
+dialog form textarea:focus {
+    border: 1px solid var(--color-primary);
+}
+
+dialog form textarea {
+    min-height: 100px;
+    resize: vertical;
+}
 
 .size-button {
     padding: 10px 15px;
@@ -47,7 +105,6 @@
     background-color: #333;
     color: #fff;
 }
-
 
 /* Button */
 .btn {
@@ -72,7 +129,6 @@
     /* Darker shade for hover */
 }
 
-/* Outline Button */
 .btn-outline {
     background-color: #fff7f5;
     color: #90582f;
@@ -190,60 +246,7 @@ sup {
     font-size: 1rem;
 }
 
-/* dialog {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    box-sizing: border-box;
-    width: calc(100% - 1em);
-    max-width: 60rem;
-    border: 1px solid #ddd;
-    border-radius: 0.5em;
-    text-align: center;
-    padding: 0.8em 1.5em 1em;
-}
-
-dialog form {
-    text-align: left;
-    margin-left: 2rem;
-    position: relative;
-}
-
-dialog form p {
-    color: #999;
-}
-
-dialog form h2 {
-    text-transform: capitalize;
-}
-
-dialog form input,
-textarea {
-    font-size: 1.2rem;
-    background: #fff;
-    outline: none;
-    padding: .6rem;
-    box-shadow: var(--box-shadow);
-    margin: .5rem 0;
-    border: 1px solid #ddd;
-    width: 85%;
-    transition: border 0.3s ease;
-}
-
-dialog form input:focus,
-dialog form textarea:focus {
-    border: 1px solid var(--color-primary);
-}
-
-dialog form textarea {
-    min-height: 100px;
-    resize: vertical;
-} */
-
-
 /* NAV BAR */
-
 header {
     width: 100%;
     background: var(--color-primary);
@@ -401,7 +404,7 @@ header .profile-area i {
 }
 
 .title .right {
-    margin-top: 0;
+    /* position: relative; */
     display: flex;
 }
 
@@ -411,7 +414,9 @@ header .profile-area i {
 }
 
 .title .right p {
-    margin-right: 0;
+    display: flex;
+    align-items: center;
+    white-space: pre;
 }
 
 .title .right .more {
@@ -455,7 +460,7 @@ header .profile-area i {
 .controls .deactivate {
     margin-left: 20px;
     background: var(--color-danger);
-    border: 1px solid #cc0000;
+    border: 1px solid var(--color-danger);
 }
 
 .controls .cancel:hover {
@@ -470,12 +475,17 @@ header .profile-area i {
 
 .breadcrumbs {
     padding: 10px 25px;
-    /* padding: 10px 48px; */
     width: fit-content;
+    /* font-size: 1.2rem; */
     margin: 20px auto;
-    margin-left: 7%;
+    margin-left: 7.5%;
     border-radius: 5px;
     background-color: white;
+    border: 1px solid var(--color-gray-super-light);
+}
+
+.breadcrumbs h3 {
+    font-weight: 500;
 }
 
 .breadcrumbs ul {
@@ -490,13 +500,14 @@ header .profile-area i {
 }
 
 .breadcrumbs ul li a:hover {
-    border-bottom: 2px solid #21409a;
-    color: #21409a;
+    border-bottom: 2px solid var(--color-primary);
+    color: var(--color-primary);
 }
 
 .breadcrumbs ul li:last-child a {
-    color: var(--deep-blue);
-    font-weight: 500;
+    color: var(--color-primary);
+    border: none;
+    pointer-events: none;
 }
 
 @media screen and (max-width: 1200px) {
@@ -521,7 +532,4 @@ header .profile-area i {
         width: 3rem;
         height: 3rem;
     }
-
-
-
 }

@@ -24,6 +24,13 @@ function getProductDetail($pdo, $product_id)
     return $stmt->fetch(PDO::FETCH_ASSOC);
 }
 
+$product = getProductDetail($pdo, $product_id);
+
+if (!$product) {
+    header('Location: error.php');
+    exit();
+}
+
 function getProductSizes($pdo, $product_id)
 {
     $stmt = $pdo->prepare("
@@ -36,6 +43,8 @@ function getProductSizes($pdo, $product_id)
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
+$sizes = getProductSizes($pdo, $product_id);
+
 function getProductImages($pdo, $product_id)
 {
     $stmt = $pdo->prepare("SELECT image_url FROM Product_Image WHERE product_id = ? ORDER BY sort_order");
@@ -43,7 +52,9 @@ function getProductImages($pdo, $product_id)
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
-function getParentChildren($pdo, $parent_id)
+$images = getProductImages($pdo, $product_id);
+
+function getParentChildren($pdo, $user_id)
 {
     $stmt = $pdo->prepare("
         SELECT s.student_id, s.student_name
@@ -51,20 +62,17 @@ function getParentChildren($pdo, $parent_id)
         JOIN Student s ON ps.student_id = s.student_id
         WHERE ps.parent_id = ?
     ");
-    $stmt->execute([$parent_id]);
+    $stmt->execute([$user_id]);
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
-$product = getProductDetail($pdo, $product_id);
+$children = getParentChildren($pdo, $_SESSION['user_id'] ?? null);
 
-if (!$product) {
-    header('Location: error.php');
-    exit();
+if (empty($children)) {
+    echo "<script>alert('No children found for the parent.');</script>";
+} else {
+    echo "<script>console.log('Children found: " . count($children) . "');</script>";
 }
-
-$images = getProductImages($pdo, $product_id);
-$sizes = getProductSizes($pdo, $product_id);
-$children = getParentChildren($pdo, $_SESSION['parent_id'] ?? null);
 
 $stockQuantity = $product['stock_quantity'] ?? 0;
 
@@ -73,9 +81,8 @@ if (isset($_POST['submit'])) {
     $sizeId = $_POST['size_id'];
     $productPrice = $_POST['product_price'];
     $childId = $_POST['child'];
-    $parentId = $_SESSION['parent_id']; // Assuming the parent ID is stored in the session
+    $parentId = $_SESSION['user_id'];
 
-    // Handle file upload
     $targetDir = "uploads/receipts/";
     $fileName = basename($_FILES["payment_image"]["name"]);
     $targetFilePath = $targetDir . $fileName;
@@ -85,7 +92,6 @@ if (isset($_POST['submit'])) {
         try {
             $pdo->beginTransaction();
 
-            // Insert into Orders table
             $orderQuery = "INSERT INTO Orders (order_id, parent_student_id, order_price) 
                            VALUES (:order_id, (SELECT parent_student_id FROM Parent_Student WHERE parent_id = :parent_id AND student_id = :student_id), :order_price)";
             $orderStmt = $pdo->prepare($orderQuery);
@@ -96,7 +102,6 @@ if (isset($_POST['submit'])) {
             $orderStmt->bindParam(':order_price', $productPrice);
             $orderStmt->execute();
 
-            // Insert into Order_Item table
             $orderItemQuery = "INSERT INTO Order_Item (order_item_id, order_id, product_id, product_size_id, product_quantity, order_subtotal) 
                                VALUES (:order_item_id, :order_id, :product_id, :product_size_id, 1, :order_subtotal)";
             $orderItemStmt = $pdo->prepare($orderItemQuery);
@@ -158,19 +163,25 @@ if (isset($_POST['submit'])) {
     <div class="breadcrumbs">
         <ul>
             <li>
-                <a href="/mahans">Home</a>
+                <a href="/mahans">
+                    <h3>Home</h3>
+                </a>
             </li>
             <li>
                 <span class="material-symbols-outlined">navigate_next</span>
             </li>
             <li>
-                <a href="bookshop.php">Bookshop</a>
+                <a href="bookshop.php">
+                    <h3>Bookshop</h3>
+                </a>
             </li>
             <li>
                 <span class="material-symbols-outlined">navigate_next</span>
             </li>
             <li>
-                <a href="#"><?php echo htmlspecialchars($product['product_name']); ?></a>
+                <a href="#">
+                    <h3><?php echo htmlspecialchars($product['product_name']); ?></h3>
+                </a>
             </li>
         </ul>
     </div>

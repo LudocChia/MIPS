@@ -7,18 +7,29 @@ include 'admin_class.php';
 $crud = new Action();
 
 switch ($action) {
+    case 'get_order':
+        if (isset($_GET['order_id'])) {
+            echo $crud->get_order($_GET['order_id']);
+        } else {
+            echo json_encode(['error' => 'Order ID not provided']);
+        }
+        break;
     case 'get_parent':
         if (isset($_GET['parent_id'])) {
             echo $crud->get_parent($_GET['parent_id']);
         } else {
             echo json_encode(['error' => 'Parent ID not provided']);
         }
+        break;
     case 'get_admin':
         if (isset($_GET['admin_id'])) {
             echo $crud->get_admin($_GET['admin_id']);
         } else {
             echo json_encode(['error' => 'Admin ID not provided']);
         }
+        break;
+    case 'get_order':
+        echo $crud->get_order();
         break;
     case 'get_product':
         if (isset($_GET['product_id'])) {
