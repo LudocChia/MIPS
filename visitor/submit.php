@@ -25,17 +25,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $purpose = $conn->real_escape_string($_POST['Purpose']);
 
     // SQL query to insert data into the database
-    // $sql = "INSERT INTO visitor(`No`, `name`, `phone_num`, `email`, `company`, `purpose`, `plate_num`, `time`, `date`, `people`) 
-    // VALUES ('[$name]','[$phone]','[$email]','[$company]','[$plate]','[$visit]','[$people]','[$time]','[$date]','[$purpose]')";
-    // $search = mysqli_query($conn,$sql);
+    $sql = "INSERT INTO `visitor`(`name`, `phone_num`, `email`, `company`, `purpose`, `plate_num`, `time`, `date`, `people`) 
+    VALUES ('$name','$phone','$email','$company','$purpose','$plate','$time','$date','$people')";
+    $search = mysqli_query($conn,$sql);
     
 
     // Execute the query and check if the insertion was successful
-    // if ($conn->query($search) === TRUE) {
-    //     echo "New record created successfully";
-    // } else {
-    //     echo "Error: " . $sql . "<br>" . $conn->error;
-    // }
+    if ($conn->query($search) === TRUE) {
+        echo "New record created successfully";
+    } else {
+        echo "Error: " . $sql . "<br>" . $conn->error;
+    }
 }
 
 // Close the connection
