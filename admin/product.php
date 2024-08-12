@@ -474,7 +474,7 @@ if (isset($_POST['delete'])) {
                                 checkbox.checked = product.sizes.includes(checkbox.value);
                             });
 
-                            document.querySelector('#add-edit-data h2').textContent = "Edit Bookshop Product";
+                            document.querySelector('#add-edit-data h1').textContent = "Edit Bookshop Product";
                             document.getElementById('add-edit-data').showModal();
                         }
                     })

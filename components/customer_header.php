@@ -8,11 +8,11 @@
         <span class="fas fa-bars" id="menuIcon" onclick="toggle()"></span>
         <div class="navbar" id="nav">
             <ul>
-                <!-- <li>
-                    <a href="index.php"><span class="material-symbols-outlined">local_library</span></i>Student Performance</a>
-                </li> -->
                 <li>
-                    <a href="meal.php"><span class="material-symbols-outlined">food_bank</span>Student Meal Plan</a>
+                    <a href="index.php"><span class="material-symbols-outlined icon-adjust">local_library</span></i>Student Performance</a>
+                </li>
+                <li>
+                    <a href="meal.php"><span class="material-symbols-outlined icon-adjust">food_bank</span>Student Meal Plan</a>
                 </li>
                 <li>
                     <a href="event.php"><i class="bi bi-calendar4-event"></i>School Event</a>

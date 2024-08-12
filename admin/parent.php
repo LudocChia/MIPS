@@ -195,7 +195,7 @@ if (isset($_POST['deactivate'])) {
                         <h1>Mahans Parents</h1>
                     </div>
                     <div class="right">
-                        <button id="open-popup" class="btn btn-outline"><i class="bi bi-person-fill-add"></i>Add New Parent</button>
+                        <button class="btn btn-outline" id="open-popup"><i class="bi bi-person-fill-add"></i>Add New Parent</button>
                         <?php
                         try {
                             $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -259,30 +259,37 @@ if (isset($_POST['deactivate'])) {
         <h1>Add/Edit Parent</h1>
         <form action="" method="post" enctype="multipart/form-data">
             <input type="hidden" name="parent_id" value="">
-            <div class="input-field">
-                <h2>Parent Name<sup>*</sup></h2>
-                <input type="text" name="name" value="<?php echo isset($_POST['name']) ? htmlspecialchars($_POST['name']) : ''; ?>" required>
+            <div class="input-container">
+                <div class="input-field">
+                    <h2>Parent Name<sup>*</sup></h2>
+                    <input type="text" name="name" value="<?php echo isset($_POST['name']) ? htmlspecialchars($_POST['name']) : ''; ?>" required>
+                </div>
                 <p>Please enter the parent's full name.</p>
             </div>
-            <div class="input-field">
-                <h2>Parent Email<sup>*</sup></h2>
-                <input type="email" name="email" value="<?php echo isset($_POST['email']) ? htmlspecialchars($_POST['email']) : ''; ?>" required>
+            <div class="input-container">
+                <div class="input-field">
+                    <h2>Parent Email<sup>*</sup></h2>
+                    <input type="email" name="email" value="<?php echo isset($_POST['email']) ? htmlspecialchars($_POST['email']) : ''; ?>" required>
+                </div>
                 <p>Please enter the parent's email address.</p>
             </div>
-            <div class="input-field">
-                <h2>Password<sup>*</sup></h2>
-                <input type="password" name="password" required>
+            <div class="input-container">
+                <div class="input-field">
+                    <h2>Password<sup>*</sup></h2>
+                    <input type="password" name="password" required>
+                </div>
                 <p>Please enter a secure password.</p>
             </div>
-            <div class="input-field">
-                <h2>Confirm Password<sup>*</sup></h2>
-                <input type="password" name="confirm_password" required>
+            <div class="input-container">
+                <div class="input-field">
+                    <h2>Confirm Password<sup>*</sup></h2>
+                    <input type="password" name="confirm_password" required>
+                </div>
                 <p>Please confirm the password.</p>
             </div>
-            <div class="input-field">
+            <div class="input-container">
                 <h2>Children Information</h2>
                 <div id="children-info">
-                    <!-- Placeholder for dynamic child information input fields -->
                     <div class="child-info">
                         <label>Student ID:</label>
                         <input type="text" name="student_ids[]" required>
@@ -297,10 +304,10 @@ if (isset($_POST['deactivate'])) {
                             <option value="guardian">Guardian</option>
                         </select>
                     </div>
+                    <button type="button" id="add-child-btn">Add Another Child</button>
                 </div>
-                <button type="button" id="add-child-btn">Add Another Child</button>
             </div>
-            <div class="input-field controls">
+            <div class="input-container controls">
                 <button type="button" class="cancel">Cancel</button>
                 <button type="reset">Clear</button>
                 <button type="submit" name="submit">Publish</button>

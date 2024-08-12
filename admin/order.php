@@ -8,60 +8,83 @@ if (!isset($_SESSION['admin_id'])) {
     exit();
 }
 
-// Function to fetch all existing admins
-function getAllAdmins($pdo)
+function getAllOrders($pdo)
 {
-    $sql = "SELECT * FROM Admin WHERE is_deleted = 0";
+    $sql = "SELECT o.order_id, o.order_datetime, o.order_price, p.parent_name
+            FROM Orders o
+            JOIN Parent_Student ps ON o.parent_student_id = ps.parent_student_id
+            JOIN Parent p ON ps.parent_id = p.parent_id
+            WHERE o.is_deleted = 0";
     $stmt = $pdo->prepare($sql);
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
-$all_admins = getAllAdmins($pdo);
+$all_orders = getAllOrders($pdo);
 
-function generateAdminId()
+function generateOrderId()
 {
-    $prefix = "AD";
-    $randomString = bin2hex(random_bytes(4));
-    return $prefix . $randomString;
+    return uniqid('ORD');
 }
 
 if (isset($_POST["submit"])) {
-    $name = $_POST["name"];
-    $email = $_POST["email"];
-    $password = $_POST["password"];
-    $confirmPassword = $_POST["confirm_password"];
-    $adminType = "admin";
-    $adminId = generateAdminId();
+    $parent_student_id = $_POST["parent_student_id"];
+    $order_price = $_POST["order_price"];
+    $order_status = $_POST["order_status"];
+    $order_id = generateOrderId();
+    $product_ids = $_POST['product_id'];
+    $quantities = $_POST['product_quantity'];
 
-    if (empty($name) || empty($email) || empty($password) || empty($confirmPassword)) {
+    if (empty($parent_student_id) || empty($order_price) || empty($order_status) || empty($product_ids) || empty($quantities)) {
         echo "<script>alert('Please fill in all required fields.');</script>";
-    } elseif ($password !== $confirmPassword) {
-        echo "<script>alert('Passwords do not match.');</script>";
     } else {
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            echo "<script>alert('Invalid email format.');</script>";
-        } else {
-            $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+        try {
+            $pdo->beginTransaction();
 
-            try {
-                $sql = "INSERT INTO Admin (admin_id, admin_name, admin_email, admin_password, admin_type, is_deleted) 
-                        VALUES (:adminId, :name, :email, :password, :adminType, 0)";
-                $stmt = $pdo->prepare($sql);
-                $stmt->bindParam(':adminId', $adminId);
-                $stmt->bindParam(':name', $name);
-                $stmt->bindParam(':email', $email);
-                $stmt->bindParam(':password', $hashedPassword);
-                $stmt->bindParam(':adminType', $adminType);
-                $stmt->execute();
+            $sqlOrder = "INSERT INTO Orders (order_id, parent_student_id, order_price, is_deleted) 
+                         VALUES (:orderId, :parent_student_id, :order_price, 0)";
+            $stmtOrder = $pdo->prepare($sqlOrder);
+            $stmtOrder->bindParam(':orderId', $order_id);
+            $stmtOrder->bindParam(':parent_student_id', $parent_student_id);
+            $stmtOrder->bindParam(':order_price', $order_price);
+            $stmtOrder->execute();
 
-                echo "<script>alert('Admin Successfully Added');document.location.href ='admin.php';</script>";
-            } catch (PDOException $e) {
-                echo "<script>alert('Database error: " . $e->getMessage() . "');</script>";
+            $sqlPayment = "INSERT INTO Payment (payment_id, parent_student_id, order_id, payment_amount, payment_status, payment_image) 
+                           VALUES (:paymentId, :parent_student_id, :order_id, :payment_amount, :payment_status, '')";
+            $payment_id = uniqid('PAY');
+            $stmtPayment = $pdo->prepare($sqlPayment);
+            $stmtPayment->bindParam(':paymentId', $payment_id);
+            $stmtPayment->bindParam(':parent_student_id', $parent_student_id);
+            $stmtPayment->bindParam(':order_id', $order_id);
+            $stmtPayment->bindParam(':payment_amount', $order_price);
+            $stmtPayment->bindParam(':payment_status', $order_status);
+            $stmtPayment->execute();
+
+            foreach ($product_ids as $index => $product_id) {
+                $quantity = $quantities[$index];
+                $sqlOrderItem = "INSERT INTO Order_Item (order_item_id, order_id, product_id, product_quantity, order_subtotal, is_deleted) 
+                                 VALUES (:order_item_id, :order_id, :product_id, :product_quantity, :order_subtotal, 0)";
+                $stmtOrderItem = $pdo->prepare($sqlOrderItem);
+                $order_item_id = uniqid('OI');
+                $stmtOrderItem->bindParam(':order_item_id', $order_item_id);
+                $stmtOrderItem->bindParam(':order_id', $order_id);
+                $stmtOrderItem->bindParam(':product_id', $product_id);
+                $stmtOrderItem->bindParam(':product_quantity', $quantity);
+                $stmtOrderItem->bindParam(':order_subtotal', $order_price);
+                $stmtOrderItem->execute();
             }
+
+            $pdo->commit();
+
+            echo "<script>alert('Order Successfully Added');document.location.href ='order.php';</script>";
+        } catch (PDOException $e) {
+            $pdo->rollBack();
+            echo "<script>alert('Database error: " . $e->getMessage() . "');</script>";
         }
     }
 }
+
+
 ?>
 
 <!DOCTYPE html>
@@ -70,7 +93,7 @@ if (isset($_POST["submit"])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bookshop Admin - Mahans School</title>
+    <title>Bookshop Order - Mahans School</title>
     <link rel="icon" type="image/x-icon" href="../images/Mahans_internation_primary_school_logo.png">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
@@ -86,7 +109,7 @@ if (isset($_POST["submit"])) {
     <div class="container">
         <aside>
             <button id="close-btn">
-                <i class="bi bi-x"></i>
+                <i class="bi bi-layout-sidebar-inset"></i>
             </button>
             <div class="sidebar">
                 <ul>
@@ -121,13 +144,32 @@ if (isset($_POST["submit"])) {
                         </ul>
                     </li>
                     <li>
+                        <a href="order.php" class="active">
+                            <i class="bi bi-receipt"></i>
+                            <h4>Order</h4>
+                            <span id="pending-order-count"></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="announment.php">
+                            <i class="bi bi-megaphone-fill"></i>
+                            <h4>Announcement</h4>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="deactivate.php">
+                            <i class="bi bi-trash2-fill"></i>
+                            <h4>Deactivate List</h4>
+                        </a>
+                    </li>
+                    <li>
                         <a href="#" class="user-btn">
                             <i class="bi bi-person-fill"></i>
                             <h4>User Type</h4>
                             <i class="bi bi-chevron-down second"></i>
                         </a>
                         <ul class="user-show">
-                            <li><a href="admin.php" class="active"><i class="bi bi-person-fill-gear"></i>
+                            <li><a href="admin.php"><i class="bi bi-person-fill-gear"></i>
                                     <h4>All Admin</h4>
                                 </a>
                             </li>
@@ -140,18 +182,17 @@ if (isset($_POST["submit"])) {
                                     <h4>All Parent</h4>
                                 </a>
                             </li>
-                            <li>
-                                <a href="student.php"><i class="bi bi-people-fill"></i>
-                                    <h4>All Student</h4>
-                                </a>
-                            </li>
                         </ul>
                     </li>
-                    <li>
-                        <a href="order.php">
-                            <i class="bi bi-receipt"></i>
-                            <h4>Order</h4>
+                    <li><a href="#">
+                            <i class="bi bi-file-text-fill"></i>
+                            <h4>Report</h4>
+                            <i class="bi bi-chevron-down first"></i>
                         </a>
+                        <ul>
+                            <li>
+                            </li>
+                        </ul>
                     </li>
                 </ul>
             </div>
@@ -161,19 +202,19 @@ if (isset($_POST["submit"])) {
             <div class="wrapper">
                 <div class="title">
                     <div class="left">
-                        <h1>Mahans Admin</h1>
+                        <h1>Bookshop Order</h1>
                     </div>
                     <div class="right">
-                        <button id="open-popup"><i class="bi bi-person-fill-add"></i>Add New Admin</button>
+                        <button class="btn btn-outline" id="open-popup"><i class="bi bi-plus-circle"></i></i>Add New Order</button>
                         <?php
                         try {
                             $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-                            $countQuery = "SELECT COUNT(*) FROM Admin WHERE is_deleted = 0";
+                            $countQuery = "SELECT COUNT(*) FROM Payment WHERE payment_status = 0";
                             $stmt = $pdo->prepare($countQuery);
                             $stmt->execute();
                             $count = $stmt->fetchColumn();
 
-                            echo "<p>Total $count Admin(s)</p>";
+                            echo "<p>Total $count Pending Order(s)</p>";
                         } catch (PDOException $e) {
                             echo "<script>alert('Database error: " . $e->getMessage() . "');</script>";
                         }
@@ -185,16 +226,16 @@ if (isset($_POST["submit"])) {
                         <thead>
                             <tr>
                                 <th>
-                                    <h3>Admin ID</h3>
+                                    <h3>Order ID</h3>
                                 </th>
                                 <th>
-                                    <h3>Admin Name</h3>
+                                    <h3>Parent Name</h3>
                                 </th>
                                 <th>
-                                    <h3>Admin Email</h3>
+                                    <h3>Order Date</h3>
                                 </th>
                                 <th>
-                                    <h3>Admin Register Date</h3>
+                                    <h3>Order Amount</h3>
                                 </th>
                                 <th>
                                     <h3>Actions</h3>
@@ -202,19 +243,20 @@ if (isset($_POST["submit"])) {
                             </tr>
                         </thead>
                         <tbody>
-                            <?php foreach ($all_admins as $admin) { ?>
+                            <?php foreach ($all_orders as $order) { ?>
                                 <tr>
-                                    <td><?php echo htmlspecialchars($admin['admin_id']); ?></td>
-                                    <td><?php echo htmlspecialchars($admin['admin_name']); ?></td>
-                                    <td><?php echo htmlspecialchars($admin['admin_email']); ?></td>
-                                    <td><?php echo htmlspecialchars($admin['register_date']); ?></td>
+                                    <td><?php echo htmlspecialchars($order['order_id']); ?></td>
+                                    <td><?php echo htmlspecialchars($order['parent_name']); ?></td>
+                                    <td><?php echo htmlspecialchars($order['order_datetime']); ?></td>
+                                    <td>MYR <?php echo htmlspecialchars($order['order_price']); ?></td>
                                     <td>
                                         <form action="" method="POST" style="display:inline;">
-                                            <input type="hidden" name="admin_id" value="<?= htmlspecialchars($admin['admin_id']); ?>">
+                                            <input type="hidden" name="order_id" value="<?= htmlspecialchars($order['order_id']); ?>">
                                             <input type="hidden" name="delete" value="true">
-                                            <button type="submit" class="delete-admin-btn"><i class="bi bi-x-square-fill"></i></button>
+                                            <button type="submit" class="delete-order-btn"><i class="bi bi-x-square-fill"></i></button>
                                         </form>
-                                        <button type="button" class="edit-admin-btn" data-admin-id="<?= htmlspecialchars($admin['admin_id']); ?>"><i class="bi bi-pencil-square"></i></button>
+                                        <button type="button" class=""><i class="bi bi-info-circle-fill"></i></button>
+                                        <button type="button" class="edit-order-btn" data-order-id="<?= htmlspecialchars($order['order_id']); ?>"><i class="bi bi-pencil-square"></i></button>
                                     </td>
                                 </tr>
                             <?php } ?>
@@ -225,29 +267,57 @@ if (isset($_POST["submit"])) {
         </main>
     </div>
     <dialog id="add-edit-data">
-        <h1>Add New Admin</h1>
+        <h1>Add/Edit Order</h1>
         <form action="" method="post" enctype="multipart/form-data">
-            <div class="input-field">
-                <h2>Admin Name<sup>*</sup></h2>
-                <input type="text" name="name" value="<?php echo isset($_POST['name']) ? htmlspecialchars($_POST['name']) : ''; ?>" required>
-                <p>Please enter the admin's full name.</p>
+            <div class="input-container">
+                <h2>Parent ID<sup>*</sup></h2>
+                <select name="parent_student_id" required>
+                    <!-- Populate with parent options -->
+                </select>
+                <p>Please select the parent.</p>
             </div>
-            <div class="input-field">
-                <h2>Admin Email<sup>*</sup></h2>
-                <input type="email" name="email" value="<?php echo isset($_POST['email']) ? htmlspecialchars($_POST['email']) : ''; ?>" required>
-                <p>Please enter the admin's email address.</p>
+            <div class="input-container">
+                <h2>Order Amount (RM)<sup>*</sup></h2>
+                <input type="number" step="0.01" name="order_price" required>
+                <p>Please enter the order amount.</p>
             </div>
-            <div class="input-field">
-                <h2>Password<sup>*</sup></h2>
-                <input type="password" name="password" required>
-                <p>Please enter a secure password.</p>
+            <div class="input-container">
+                <h2>Order Status<sup>*</sup></h2>
+                <select name="order_status" required>
+                    <option value="pending">Pending</option>
+                    <option value="completed">Completed</option>
+                    <option value="failed">Failed</option>
+                </select>
+                <p>Please select the order status.</p>
             </div>
-            <div class="input-field">
-                <h2>Confirm Password<sup>*</sup></h2>
-                <input type="password" name="confirm_password" required>
-                <p>Please confirm the password.</p>
+            <div class="input-container">
+                <h2>Order Item Details</h2>
+                <div id="product-list">
+                    <!-- Initial product input field -->
+                    <div class="product-info">
+                        <div class="input-container">
+                            <div class="input-field">
+                                <h2>Product ID<sup>*</sup></h2>
+                                <input type="text" name="product_id[]" required>
+                            </div>
+                            <div class="input-field">
+                                <h2>Quantity<sup>*</sup></h2>
+                                <input type="number" name="product_quantity[]" min="1" required>
+                            </div>
+                        </div>
+                        <div class="input-container">
+                            <h2>Product Image</h2>
+                            <img name="product_image" src="" alt="Product Image" style="width: 100px; height: 100px;">
+                        </div>
+                    </div>
+                </div>
+                <button type="button" id="add-product-btn">Add Another Product</button>
             </div>
-            <div class="controls">
+            <div class="input-container">
+                <h2>Payment Receipt</h2>
+                <img name="payment_image" src="" alt="Payment Image" style="width: 100px; height: 100px;">
+            </div>
+            <div class="input-container controls">
                 <button type="button" class="cancel">Cancel</button>
                 <button type="reset">Clear</button>
                 <button type="submit" name="submit">Publish</button>
@@ -256,7 +326,7 @@ if (isset($_POST["submit"])) {
     </dialog>
     <dialog id="delete-confirm-dialog">
         <form method="dialog">
-            <h1>Admin will be Deactivated!</h1>
+            <h1>Order will be Deactivated!</h1>
             <label>Are you sure to proceed?</label>
             <div class="controls">
                 <button value="cancel" class="cancel">Cancel</button>
@@ -266,26 +336,62 @@ if (isset($_POST["submit"])) {
     </dialog>
     <script src="../javascript/admin.js"></script>
     <script>
-        document.querySelectorAll('.edit-admin-btn').forEach(button => {
+        document.getElementById('add-product-btn').addEventListener('click', function() {
+            // Clone the first product-info div
+            const productInfo = document.querySelector('.product-info').cloneNode(true);
+
+            // Clear the input fields in the cloned product-info
+            const inputs = productInfo.querySelectorAll('input');
+            inputs.forEach(input => input.value = '');
+
+            // Append the cloned product-info to the product-list div
+            document.getElementById('product-list').appendChild(productInfo);
+        });
+
+        $(document).ready(function() {
+            $.ajax({
+                url: 'ajax.php?action=get_pending_count',
+                type: 'GET',
+                success: function(response) {
+                    if (parseInt(response) > 0) {
+                        $('#pending-order-count').text(response);
+                    } else {
+                        $('#pending-order-count').hide();
+                    }
+                },
+                error: function() {
+                    $('#pending-order-count').hide();
+                }
+            });
+        });
+
+        document.querySelectorAll('.edit-order-btn').forEach(button => {
             button.addEventListener('click', function() {
-                const adminId = this.dataset.adminId;
+                const orderId = this.dataset.orderId;
 
-                fetch(`ajax.php?action=get_admin&admin_id=${adminId}`)
+                fetch(`ajax.php?action=get_order&order_id=${orderId}`)
                     .then(response => response.json())
-                    .then(admin => {
-                        if (admin.error) {
-                            alert(admin.error);
+                    .then(orderDetails => {
+                        if (orderDetails.error) {
+                            alert(orderDetails.error);
                         } else {
-                            document.querySelector('#add-edit-data [name="name"]').value = admin.admin_name;
-                            document.querySelector('#add-edit-data [name="email"]').value = admin.admin_email;
+                            const order = orderDetails[0];
 
-                            document.querySelector('#add-edit-data h1').textContent = "Edit Admin";
+                            document.querySelector('#add-edit-data [name="parent_student_id"]').value = order.parent_student_id;
+                            document.querySelector('#add-edit-data [name="order_price"]').value = order.order_price;
+
+                            document.querySelector('#add-edit-data [name="payment_status"]').value = order.payment_status;
+                            document.querySelector('#add-edit-data [name="payment_image"]').src = order.payment_image;
+                            document.querySelector('#add-edit-data [name="product_name"]').textContent = order.product_name;
+                            document.querySelector('#add-edit-data [name="product_image"]').src = order.product_image;
+
+                            document.querySelector('#add-edit-data h1').textContent = "Edit Order";
                             document.getElementById('add-edit-data').showModal();
                         }
                     })
                     .catch(error => {
-                        console.error('Error fetching admin data:', error);
-                        alert('Failed to load admin data.');
+                        console.error('Error fetching order data:', error);
+                        alert('Failed to load order data.');
                     });
             });
         });

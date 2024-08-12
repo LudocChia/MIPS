@@ -9,16 +9,55 @@ class Action
         $this->db = $pdo;
     }
 
-    public function get_parent($parentId)
+    public function get_pending_count()
     {
         $sql = "
-            SELECT parent_id, parent_name, parent_email
-            FROM Parent
-            WHERE parent_id = :parent_id AND is_deleted = 0
+            SELECT COUNT(*)
+            FROM Orders o
+            JOIN Payment p ON o.order_id = p.order_id
+            WHERE o.is_deleted = 0 AND p.payment_status = 'pending'
         ";
 
         $stmt = $this->db->prepare($sql);
-        $stmt->bindParam(':parent_id', $parentId);
+        $stmt->execute();
+        return $stmt->fetchColumn();
+    }
+
+    public function get_order($order_id)
+    {
+        $sql = "
+            SELECT o.order_id, o.order_price, p.payment_status, p.payment_image, 
+                   oi.product_id, oi.product_quantity, prod.product_name, prod_img.image_url as product_image
+            FROM Orders o
+            LEFT JOIN Payment p ON o.order_id = p.order_id
+            LEFT JOIN Order_Item oi ON o.order_id = oi.order_id
+            LEFT JOIN Product prod ON oi.product_id = prod.product_id
+            LEFT JOIN Product_Image prod_img ON prod.product_id = prod_img.product_id AND prod_img.sort_order = 1
+            WHERE o.order_id = :order_id AND o.is_deleted = 0
+        ";
+
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':order_id', $order_id);
+        $stmt->execute();
+        $orderDetails = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        if ($orderDetails) {
+            return json_encode($orderDetails);
+        } else {
+            return json_encode(['error' => 'Order not found']);
+        }
+    }
+
+    public function get_parent($parent_id)
+    {
+        $sql = "
+        SELECT parent_id, parent_name, parent_email
+        FROM Parent
+        WHERE parent_id = :parent_id AND is_deleted = 0
+    ";
+
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':parent_id', $parent_id);
         $stmt->execute();
         $parent = $stmt->fetch(PDO::FETCH_ASSOC);
 

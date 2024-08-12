@@ -53,8 +53,6 @@ if (isset($_POST["submit"])) {
                 $stmt->bindParam(':password', $hashedPassword);
                 $stmt->bindParam(':adminType', $adminType);
                 $stmt->execute();
-
-                echo "<script>alert('Admin Successfully Added');document.location.href ='admin.php';</script>";
             } catch (PDOException $e) {
                 echo "<script>alert('Database error: " . $e->getMessage() . "');</script>";
             }
@@ -163,7 +161,7 @@ if (isset($_POST["submit"])) {
                         <h1>Mahans Admin</h1>
                     </div>
                     <div class="right">
-                        <button id="open-popup"><i class="bi bi-person-fill-add"></i>Add New Admin</button>
+                        <button class="btn btn-outline" id="open-popup"><i class="bi bi-person-fill-add"></i>Add New Admin</button>
                         <?php
                         try {
                             $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
