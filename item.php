@@ -68,12 +68,6 @@ function getParentChildren($pdo, $user_id)
 
 $children = getParentChildren($pdo, $_SESSION['user_id'] ?? null);
 
-if (empty($children)) {
-    echo "<script>alert('No children found for the parent.');</script>";
-} else {
-    echo "<script>console.log('Children found: " . count($children) . "');</script>";
-}
-
 $stockQuantity = $product['stock_quantity'] ?? 0;
 
 if (isset($_POST['submit'])) {
@@ -293,29 +287,35 @@ if (isset($_POST['submit'])) {
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script src="javascript/common.js"></script>
     <script type="text/javascript">
-        document.querySelector('.buy-now').addEventListener('click', function() {
-            const selectedSizeButton = document.querySelector('.size-button.selected');
-            if (!selectedSizeButton) {
-                alert('Please select a size.');
-                return;
-            }
+        document.addEventListener("DOMContentLoaded", function() {
+            document.querySelector('.buy-now').addEventListener('click', function() {
+                <?php if (!isset($_SESSION['user_id'])) : ?>
+                    document.getElementById('login-form').showModal();
+                <?php else : ?>
+                    // Existing logic for handling the purchase if the user is logged in
+                    const selectedSizeButton = document.querySelector('.size-button.selected');
+                    if (!selectedSizeButton) {
+                        alert('Please select a size.');
+                        return;
+                    }
 
-            const sizeId = selectedSizeButton.getAttribute('data-size-id');
-            const productName = '<?= htmlspecialchars($product['product_name']) ?>';
-            const productPrice = '<?= number_format($product['product_price'], 2) ?>';
+                    const sizeId = selectedSizeButton.getAttribute('data-size-id');
+                    const productName = '<?= htmlspecialchars($product['product_name']) ?>';
+                    const productPrice = '<?= number_format($product['product_price'], 2) ?>';
 
-            document.getElementById('product-id').value = '<?= $product_id ?>';
-            document.getElementById('size-id').value = sizeId;
-            document.getElementById('product-price').value = productPrice;
+                    document.getElementById('product-id').value = '<?= $product_id ?>';
+                    document.getElementById('size-id').value = sizeId;
+                    document.getElementById('product-price').value = productPrice;
 
-            document.getElementById('product-name-display').textContent = productName;
-            document.getElementById('selected-size-display').textContent = selectedSizeButton.textContent;
-            document.getElementById('product-price-display').textContent = 'MYR ' + productPrice;
+                    document.getElementById('product-name-display').textContent = productName;
+                    document.getElementById('selected-size-display').textContent = selectedSizeButton.textContent;
+                    document.getElementById('product-price-display').textContent = 'MYR ' + productPrice;
 
-            const dialog = document.getElementById('buy-now-dialog');
-            dialog.showModal();
+                    const dialog = document.getElementById('buy-now-dialog');
+                    dialog.showModal();
+                <?php endif; ?>
+            });
         });
-
         document.querySelectorAll('.size-button').forEach(button => {
             button.addEventListener('click', function() {
                 document.querySelectorAll('.size-button').forEach(btn => btn.classList.remove('selected'));

@@ -67,6 +67,7 @@ include "./components/db_connect.php";
     <?php include "./components/customer_footer.php"; ?>
     <script src="./javascript/home.js"></script>
     <script src="./javascript/customer.js"></script>
+    <script src="../javascript/index.js"></script>
 </body>
 
 </html>

@@ -12,15 +12,15 @@ session_start();
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EpicEase - Shopping Cart</title>
-    <link rel="icon" type="image/x-icon" href="./images/logo2.0.png">
+    <title>Shopping Cart- Mahans</title>
+    <link rel="icon" type="image/x-icon" href="./images/Mahans_internation_primary_school_logo.png">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="./css/base.css">
     <link rel="stylesheet" href="./css/common.css">
-    <link rel="stylesheet" href="./css/index.css">
+    <link rel="stylesheet" href="./css/customer.css">
 </head>
 
 <body>
@@ -98,7 +98,7 @@ session_start();
     <a href="#" class="backToTop">
         <span class="material-symbols-outlined">arrow_upward</span>
     </a>
-    <?php include 'components/footer.php'; ?>
+    <?php include './components/customer_footer.php'; ?>
     <?php echo "<script>var cartData = " . json_encode($cartItems) . ";</script>"; ?>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <?php include 'components/alert.php'; ?>

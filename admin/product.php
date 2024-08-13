@@ -139,7 +139,6 @@ if (isset($_POST['submit'])) {
             header('Location: product.php');
             exit();
         } else {
-            // Add new product
             $sql = "INSERT INTO Product (product_name, category_id, product_description, product_price, stock_quantity, color, gender) 
                     VALUES (:name, :subcategory, :description, :price, :stock_quantity, :color, :gender)";
             $stmt = $pdo->prepare($sql);
@@ -353,7 +352,7 @@ if (isset($_POST['delete'])) {
         </main>
     </div>
     <dialog id="add-edit-data">
-        <h2>Add Bookshop Product</h2>
+        <h1>Add Bookshop Product</h1>
         <form action="" method="post" enctype="multipart/form-data">
             <input type="hidden" name="product_id" value="">
             <div class="input-field">
@@ -471,9 +470,8 @@ if (isset($_POST['delete'])) {
                             document.querySelector('#add-edit-data [name="gender"]').value = product.gender;
 
                             document.querySelectorAll('#sizes input[type="checkbox"]').forEach(checkbox => {
-                                checkbox.checked = product.sizes.includes(checkbox.value);
+                                checkbox.checked = product.sizes.includes(parseInt(checkbox.value));
                             });
-
                             document.querySelector('#add-edit-data h1').textContent = "Edit Bookshop Product";
                             document.getElementById('add-edit-data').showModal();
                         }

@@ -7,6 +7,9 @@ include 'admin_class.php';
 $crud = new Action();
 
 switch ($action) {
+    case 'get_pending_count':
+        echo $crud->get_pending_count();
+        break;
     case 'get_order':
         if (isset($_GET['order_id'])) {
             echo $crud->get_order($_GET['order_id']);
@@ -28,9 +31,6 @@ switch ($action) {
             echo json_encode(['error' => 'Admin ID not provided']);
         }
         break;
-    case 'get_order':
-        echo $crud->get_order();
-        break;
     case 'get_product':
         if (isset($_GET['product_id'])) {
             echo $crud->get_product($_GET['product_id']);
@@ -43,5 +43,12 @@ switch ($action) {
         break;
     default:
         echo json_encode(['error' => 'Invalid action']);
+        break;
+    case 'update_order_status':
+        if (isset($_POST['order_id']) && isset($_POST['order_status'])) {
+            echo $crud->update_order_status($_POST['order_id'], $_POST['order_status']);
+        } else {
+            echo json_encode(['error' => 'Order ID or status not provided']);
+        }
         break;
 }

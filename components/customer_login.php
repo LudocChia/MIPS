@@ -29,7 +29,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['user_email'] = $parent['parent_email'];
             $_SESSION['user_image'] = !empty($parent['parent_image']) ? $parent['parent_image'] : './images/default_profile.png';
 
-            header("Location: ../index.php");
+            header("Location: ../mahans");
             exit;
         }
 
@@ -43,7 +43,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['user_email'] = $student['student_email'];
             $_SESSION['user_image'] = !empty($student['student_image']) ? $student['student_image'] : './images/default_profile.png';
 
-            header("Location: ../index.php");
+            header("Location: ../mahans");
             exit;
         }
 

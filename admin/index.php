@@ -167,61 +167,71 @@ if (!isset($_SESSION['admin_id'])) {
                     <!-- END OF SALES -->
                 </div>
                 <!-- END OF INSIGHTS -->
-
                 <div class="recent-orders">
-                    <h2>Recent Orders</h2>
-                    <div class="box-container">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Product</th>
-                                    <th>Customer</th>
-                                    <th>Price</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>iPhone 14</td>
-                                    <td>John Doe</td>
-                                    <td>$1200</td>
-                                    <td><span class="success">Paid</span></td>
-                                </tr>
-                                <tr>
-                                    <td>iPhone 14</td>
-                                    <td>John Doe</td>
-                                    <td>$1200</td>
-                                    <td><span class="success">Paid</span></td>
-                                </tr>
-                                <tr>
-                                    <td>iPhone 14</td>
-                                    <td>John Doe</td>
-                                    <td>$1200</td>
-                                    <td><span class="success">Paid</span></td>
-                                </tr>
-                                <tr>
-                                    <td>iPhone 14</td>
-                                    <td>John Doe</td>
-                                    <td>$1200</td>
-                                    <td><span class="success">Paid</span></td>
-                                </tr>
-                                <tr>
-                                    <td>iPhone 14</td>
-                                    <td>John Doe</td>
-                                    <td>$1200</td>
-                                    <td><span class="success">Paid</span></td>
-                                </tr>
-                            </tbody>
-                        </table>
+                    <div class="wrapper">
+                        <!-- <div class="recent-orders"> -->
+                        <div class="title">
+                            <div class="left">
+                                <h2>Recent Orders</h2>
+                            </div>
+                        </div>
+                        <div class="table-body">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Product</th>
+                                        <th>Customer</th>
+                                        <th>Price</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>iPhone 14</td>
+                                        <td>John Doe</td>
+                                        <td>$1200</td>
+                                        <td><span class="success">Paid</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>iPhone 14</td>
+                                        <td>John Doe</td>
+                                        <td>$1200</td>
+                                        <td><span class="success">Paid</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>iPhone 14</td>
+                                        <td>John Doe</td>
+                                        <td>$1200</td>
+                                        <td><span class="success">Paid</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>iPhone 14</td>
+                                        <td>John Doe</td>
+                                        <td>$1200</td>
+                                        <td><span class="success">Paid</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>iPhone 14</td>
+                                        <td>John Doe</td>
+                                        <td>$1200</td>
+                                        <td><span class="success">Paid</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </section>
             <section class="right">
                 <div class="recent-updates">
-                    <div class="box-container">
-                        <h2>Recent Updates</h2>
+                    <div class="wrapper">
+                        <div class="title">
+                            <div class="right">
+                                <h2>Recent Updates</h2>
+                            </div>
+                        </div>
+                        </title>
                         <div class="updates">
-
                             <div class="update">
                                 <div class="profile-photo">
                                     <img src="../uploads/wangbingbing(2).jpg">
@@ -252,17 +262,20 @@ if (!isset($_SESSION['admin_id'])) {
                         </div>
                     </div>
                 </div>
-
                 <div class="sales-analytics">
-                    <div class="box-container">
-                        <h2>Website Analytics</h2>
+                    <div class="wrapper">
+                        <div class="title">
+                            <div class="right">
+                                <h2>Website Analytics</h2>
+                            </div>
+                        </div>
                         <div class="item online">
                             <div class="icon">
                                 <i class="bi bi-cart"></i>
                             </div>
                             <div class="right">
                                 <div class="info">
-                                    <h3>Online Orders</h3>
+                                    <h3>Website traffic</h3>
                                     <small class="text-muted">Last 24 Hours</small>
                                 </div>
                                 <h5 class="success">+39%</h5>
@@ -275,7 +288,7 @@ if (!isset($_SESSION['admin_id'])) {
                             </div>
                             <div class="right">
                                 <div class="info">
-                                    <h3>Offline Orders</h3>
+                                    <h3>Online Cash-In</h3>
                                     <small class="text-muted">Last 24 Hours</small>
                                 </div>
                                 <h5 class="danger">-17%</h5>

@@ -23,6 +23,26 @@ class Action
         return $stmt->fetchColumn();
     }
 
+    public function update_order_status($order_id, $order_status)
+    {
+        $sql = "UPDATE Orders o
+            JOIN Payment p ON o.order_id = p.order_id
+            SET p.payment_status = :order_status
+            WHERE o.order_id = :order_id AND o.is_deleted = 0";
+
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':order_id', $order_id);
+        $stmt->bindParam(':order_status', $order_status);
+
+        try {
+            $stmt->execute();
+            return json_encode(['success' => true]);
+        } catch (PDOException $e) {
+            return json_encode(['error' => 'Database error: ' . $e->getMessage()]);
+        }
+    }
+
+
     public function get_order($order_id)
     {
         $sql = "
@@ -114,11 +134,13 @@ class Action
 
             $product['sizes'] = $sizes;
 
+            error_log(json_encode($product));  // Add this line to log the response data
             return json_encode($product);
         } else {
             return json_encode(['error' => 'Product not found']);
         }
     }
+
 
     public function delete_product()
     {

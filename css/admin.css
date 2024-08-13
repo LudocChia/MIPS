@@ -384,12 +384,8 @@ main .insights>div {
     padding: var(--card-padding);
     border-radius: var(--card-border-radius);
     margin-top: 1rem;
-    box-shadow: var(--box-shadow);
+    /* box-shadow: var(--box-shadow); */
     transition: all 300ms ease;
-}
-
-main .insights>div:hover {
-    box-shadow: none;
 }
 
 main .insights>div i {
@@ -485,9 +481,9 @@ main .recent-orders table {
     background: var(--color-white);
     width: 100%;
     border-radius: var(--card-border-radius);
-    padding: var(--card-padding);
+    /* padding: var(--card-padding); */
     text-align: center;
-    box-shadow: var(--box-shadow);
+    /* box-shadow: var(--box-shadow); */
     transition: all 300ms ease;
 }
 
@@ -513,28 +509,17 @@ main .recent-orders a {
 }
 
 /* RIGHT */
-.right {
-    margin-top: 1.4rem;
-}
-
 .right .recent-updates {
+    background: var(--color-white);
+    /* padding: var(--card-padding); */
+    border-radius: var(--card-border-radius);
+    box-shadow: var(--box-shadow);
+    transition: all 300ms ease;
     margin-top: 1rem;
 }
 
 .right .recent-updates h2 {
     margin-bottom: 0.8rem;
-}
-
-.right .recent-updates .updates {
-    background: var(--color-white);
-    padding: var(--card-padding);
-    border-radius: var(--card-border-radius);
-    box-shadow: var(--box-shadow);
-    transition: all 300ms ease;
-}
-
-.right .recent-updates .updates:hover {
-    box-shadow: none;
 }
 
 .right .recent-updates .updates .update {
@@ -544,29 +529,19 @@ main .recent-orders a {
     margin-bottom: 1rem;
 }
 
-/* SALES ANALYTICS */
+/* Website ANALYTICS */
 .right .sales-analytics {
     margin-top: 2rem;
 }
 
-.right .sales-analytics h2 {
-    margin-bottom: 0.8rem;
-}
-
 .right .sales-analytics .item {
-    background: var(--color-white);
     display: flex;
     align-items: center;
     gap: 1rem;
     margin-bottom: 0.7rem;
     padding: 1.4rem var(--card-padding);
     border-radius: var(--card-border-radius);
-    box-shadow: var(--box-shadow);
     transition: all 300ms ease;
-}
-
-.right .sales-analytics .item:hover {
-    box-shadow: none;
 }
 
 .right .sales-analytics .item .right {

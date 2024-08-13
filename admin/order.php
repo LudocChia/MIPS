@@ -10,15 +10,17 @@ if (!isset($_SESSION['admin_id'])) {
 
 function getAllOrders($pdo)
 {
-    $sql = "SELECT o.order_id, o.order_datetime, o.order_price, p.parent_name
+    $sql = "SELECT o.order_id, o.order_datetime, o.order_price, p.parent_name, pm.payment_status
             FROM Orders o
             JOIN Parent_Student ps ON o.parent_student_id = ps.parent_student_id
             JOIN Parent p ON ps.parent_id = p.parent_id
+            JOIN Payment pm ON o.order_id = pm.order_id
             WHERE o.is_deleted = 0";
     $stmt = $pdo->prepare($sql);
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
+
 
 $all_orders = getAllOrders($pdo);
 
@@ -238,6 +240,9 @@ if (isset($_POST["submit"])) {
                                     <h3>Order Amount</h3>
                                 </th>
                                 <th>
+                                    <h3>Status</h3>
+                                </th>
+                                <th>
                                     <h3>Actions</h3>
                                 </th>
                             </tr>
@@ -249,6 +254,16 @@ if (isset($_POST["submit"])) {
                                     <td><?php echo htmlspecialchars($order['parent_name']); ?></td>
                                     <td><?php echo htmlspecialchars($order['order_datetime']); ?></td>
                                     <td>MYR <?php echo htmlspecialchars($order['order_price']); ?></td>
+                                    <td>
+                                        <form action="" method="POST" style="display:inline;">
+                                            <input type="hidden" name="order_id" value="<?= htmlspecialchars($order['order_id']); ?>">
+                                            <select name="order_status" class="status-select">
+                                                <option value="pending" <?= $order['payment_status'] == 'pending' ? 'selected' : ''; ?>>Pending</option>
+                                                <option value="completed" <?= $order['payment_status'] == 'completed' ? 'selected' : ''; ?>>Completed</option>
+                                                <option value="failed" <?= $order['payment_status'] == 'failed' ? 'selected' : ''; ?>>Failed</option>
+                                            </select>
+                                        </form>
+                                    </td>
                                     <td>
                                         <form action="" method="POST" style="display:inline;">
                                             <input type="hidden" name="order_id" value="<?= htmlspecialchars($order['order_id']); ?>">
@@ -337,14 +352,11 @@ if (isset($_POST["submit"])) {
     <script src="../javascript/admin.js"></script>
     <script>
         document.getElementById('add-product-btn').addEventListener('click', function() {
-            // Clone the first product-info div
             const productInfo = document.querySelector('.product-info').cloneNode(true);
 
-            // Clear the input fields in the cloned product-info
             const inputs = productInfo.querySelectorAll('input');
             inputs.forEach(input => input.value = '');
 
-            // Append the cloned product-info to the product-list div
             document.getElementById('product-list').appendChild(productInfo);
         });
 
@@ -365,34 +377,50 @@ if (isset($_POST["submit"])) {
             });
         });
 
-        document.querySelectorAll('.edit-order-btn').forEach(button => {
-            button.addEventListener('click', function() {
-                const orderId = this.dataset.orderId;
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.status-select').forEach(select => {
+                select.addEventListener('change', function() {
+                    const orderId = this.closest('form').querySelector('input[name="order_id"]').value;
+                    const orderStatus = this.value;
 
-                fetch(`ajax.php?action=get_order&order_id=${orderId}`)
-                    .then(response => response.json())
-                    .then(orderDetails => {
-                        if (orderDetails.error) {
-                            alert(orderDetails.error);
-                        } else {
-                            const order = orderDetails[0];
+                    fetch('ajax.php?action=update_order_status', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/x-www-form-urlencoded'
+                            },
+                            body: new URLSearchParams({
+                                order_id: orderId,
+                                order_status: orderStatus
+                            })
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                fetch('ajax.php?action=get_pending_count')
+                                    .then(response => response.text())
+                                    .then(count => {
+                                        const pendingOrderCountElement = document.getElementById('pending-order-count');
+                                        if (parseInt(count) > 0) {
+                                            pendingOrderCountElement.textContent = `(${count})`;
+                                            pendingOrderCountElement.style.display = 'inline';
+                                        } else {
+                                            pendingOrderCountElement.style.display = 'none';
+                                        }
+                                    })
+                                    .catch(error => {
+                                        console.error('Error fetching pending order count:', error);
+                                        alert('Failed to update pending order count.');
+                                    });
 
-                            document.querySelector('#add-edit-data [name="parent_student_id"]').value = order.parent_student_id;
-                            document.querySelector('#add-edit-data [name="order_price"]').value = order.order_price;
-
-                            document.querySelector('#add-edit-data [name="payment_status"]').value = order.payment_status;
-                            document.querySelector('#add-edit-data [name="payment_image"]').src = order.payment_image;
-                            document.querySelector('#add-edit-data [name="product_name"]').textContent = order.product_name;
-                            document.querySelector('#add-edit-data [name="product_image"]').src = order.product_image;
-
-                            document.querySelector('#add-edit-data h1').textContent = "Edit Order";
-                            document.getElementById('add-edit-data').showModal();
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error fetching order data:', error);
-                        alert('Failed to load order data.');
-                    });
+                            } else {
+                                alert('Failed to update order status: ' + data.error);
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error updating order status:', error);
+                            alert('Failed to update order status.');
+                        });
+                });
             });
         });
     </script>
