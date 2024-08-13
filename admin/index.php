@@ -9,6 +9,8 @@ if (!isset($_SESSION['admin_id'])) {
     exit();
 }
 
+$currentPage = basename($_SERVER['PHP_SELF']);
+
 ?>
 
 
@@ -18,7 +20,7 @@ if (!isset($_SESSION['admin_id'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - Mahans School</title>
+    <title>Dashboard - MIPS</title>
     <link rel="icon" type="image/x-icon" href="../images/Mahans_internation_primary_school_logo.png">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
@@ -32,96 +34,7 @@ if (!isset($_SESSION['admin_id'])) {
 <body>
     <?php include "../components/admin_header.php"; ?>
     <div class="container">
-        <aside>
-            <button id="close-btn">
-                <i class="bi bi-layout-sidebar-inset"></i>
-            </button>
-            <div class="sidebar">
-                <ul>
-                    <li>
-                        <a href="index.php" class="active"><i class="bi bi-grid-1x2-fill"></i>
-                            <h4>Dashboard</h4>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" class="bookshop-btn">
-                            <i class="bi bi-shop-window"></i>
-                            <h4>Bookshop</h4>
-                            <i class="bi bi-chevron-down first"></i>
-                        </a>
-                        <ul class="bookshop-show">
-                            <li><a href="mainCategory.php"><i class="bi bi-tags-fill"></i>
-                                    <h4>Main Category</h4>
-                                </a>
-                            </li>
-                            <li><a href="subcategory.php"><i class="bi bi-tag-fill"></i>
-                                    <h4>Subcategory</h4>
-                                </a>
-                            </li>
-                            <li><a href="size.php"><i class="bi bi-aspect-ratio-fill"></i>
-                                    <h4>Product Size</h4>
-                                </a>
-                            </li>
-                            <li><a href="product.php"><i class="bi bi-box-seam-fill"></i>
-                                    <h4>All Product</h4>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="order.php">
-                            <i class="bi bi-receipt"></i>
-                            <h4>Order</h4>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="announment.php">
-                            <i class="bi bi-megaphone-fill"></i>
-                            <h4>Announment</h4>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="deactivate.php">
-                            <i class="bi bi-trash2-fill"></i>
-                            <h4>Deactivate List</h4>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" class="user-btn">
-                            <i class="bi bi-person-fill"></i>
-                            <h4>User Type</h4>
-                            <i class="bi bi-chevron-down second"></i>
-                        </a>
-                        <ul class="user-show">
-                            <li><a href="admin.php"><i class="bi bi-person-fill-gear"></i>
-                                    <h4>All Admin</h4>
-                                </a>
-                            </li>
-                            <li><a href="teacher.php"><i class="bi bi-mortarboard-fill"></i>
-                                    <h4>All Teacher</h4>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="parent.php"><i class="bi bi-people-fill"></i>
-                                    <h4>All Parent</h4>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li><a href="#">
-                            <i class="bi bi-file-text-fill"></i>
-                            <h4>Report</h4>
-                            <i class="bi bi-chevron-down first"></i>
-                        </a>
-                        <ul>
-                            <li>
-
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
-        </aside>
+        <?php include "../components/admin_sidebar.php"; ?>
         <!-- END OF ASIDE -->
         <main>
             <section class="middle">

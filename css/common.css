@@ -47,6 +47,10 @@ dialog form {
     position: relative;
 }
 
+/* dialog form title {
+    margin: 1rem;
+} */
+
 dialog form input[type="text"],
 dialog form input[type="file"] {
     height: 3rem;

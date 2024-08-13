@@ -9,6 +9,7 @@ if (!isset($_SESSION['admin_id'])) {
     exit();
 }
 
+$currentPage = basename($_SERVER['PHP_SELF']);
 function getSubcategories($pdo)
 {
     $sql = "SELECT * FROM Product_Category WHERE parent_id IS NOT NULL AND is_deleted = 0";
@@ -209,7 +210,7 @@ if (isset($_POST['delete'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bookshop Product - Mahans School</title>
+    <title>Bookshop Product - MIPS</title>
     <link rel="icon" type="image/x-icon" href="../images/Mahans_internation_primary_school_logo.png">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
@@ -223,7 +224,8 @@ if (isset($_POST['delete'])) {
 <body>
     <?php include "../components/admin_header.php"; ?>
     <div class="container">
-        <aside>
+        <?php include "../components/admin_sidebar.php"; ?>
+        <!-- <aside>
             <button id="close-btn">
                 <i class="bi bi-layout-sidebar-inset"></i>
             </button>
@@ -312,7 +314,7 @@ if (isset($_POST['delete'])) {
                     </li>
                 </ul>
             </div>
-        </aside>
+        </aside> -->
         <!-- END OF ASIDE -->
         <main class="products">
             <div class="wrapper">
@@ -352,7 +354,14 @@ if (isset($_POST['delete'])) {
         </main>
     </div>
     <dialog id="add-edit-data">
-        <h1>Add Bookshop Product</h1>
+        <div class="title">
+            <div class="left">
+                <h1>Add Bookshop Product</h1>
+            </div>
+            <div class="right">
+                <button class="cancel"><i class="bi bi-x-square"></i></button>
+            </div>
+        </div>
         <form action="" method="post" enctype="multipart/form-data">
             <input type="hidden" name="product_id" value="">
             <div class="input-field">
@@ -453,7 +462,6 @@ if (isset($_POST['delete'])) {
         document.querySelectorAll('.edit-product-btn').forEach(button => {
             button.addEventListener('click', function() {
                 const productId = this.dataset.productId;
-
                 fetch(`ajax.php?action=get_product&product_id=${productId}`)
                     .then(response => response.json())
                     .then(product => {
