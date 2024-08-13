@@ -34,7 +34,7 @@ if (!isset($_SESSION['admin_id'])) {
     <div class="container">
         <aside>
             <button id="close-btn">
-                <i class="bi bi-x"></i>
+                <i class="bi bi-layout-sidebar-inset"></i>
             </button>
             <div class="sidebar">
                 <ul>
@@ -69,6 +69,24 @@ if (!isset($_SESSION['admin_id'])) {
                         </ul>
                     </li>
                     <li>
+                        <a href="order.php">
+                            <i class="bi bi-receipt"></i>
+                            <h4>Order</h4>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="announment.php">
+                            <i class="bi bi-megaphone-fill"></i>
+                            <h4>Announment</h4>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="deactivate.php">
+                            <i class="bi bi-trash2-fill"></i>
+                            <h4>Deactivate List</h4>
+                        </a>
+                    </li>
+                    <li>
                         <a href="#" class="user-btn">
                             <i class="bi bi-person-fill"></i>
                             <h4>User Type</h4>
@@ -88,18 +106,18 @@ if (!isset($_SESSION['admin_id'])) {
                                     <h4>All Parent</h4>
                                 </a>
                             </li>
-                            <li>
-                                <a href="student.php"><i class="bi bi-people-fill"></i>
-                                    <h4>All Student</h4>
-                                </a>
-                            </li>
                         </ul>
                     </li>
-                    <li>
-                        <a href="order.php">
-                            <i class="bi bi-receipt"></i>
-                            <h4>Order</h4>
+                    <li><a href="#">
+                            <i class="bi bi-file-text-fill"></i>
+                            <h4>Report</h4>
+                            <i class="bi bi-chevron-down first"></i>
                         </a>
+                        <ul>
+                            <li>
+
+                            </li>
+                        </ul>
                     </li>
                 </ul>
             </div>
@@ -109,10 +127,10 @@ if (!isset($_SESSION['admin_id'])) {
             <section class="middle">
                 <div class="insights">
                     <div class="sales">
-                        <i class="bi bi-file-bar-graph"></i>
+                        <i class="bi bi-person-plus"></i>
                         <div class="middle">
                             <div class="left">
-                                <h3>Total Registered Admin and Staff</h3>
+                                <h3>Total Registered Parents and Students</h3>
                                 <h1>100+</h1>
                             </div>
                             <!-- <div class="progress">
@@ -128,10 +146,10 @@ if (!isset($_SESSION['admin_id'])) {
                     </div>
                     <!-- END OF SALES -->
                     <div class="sales">
-                        <i class="bi bi-file-bar-graph"></i>
+                        <i class="bi bi-person-gear"></i>
                         <div class="middle">
                             <div class="left">
-                                <h3>Total Registered Teacher and Student</h3>
+                                <h3>Total Registered Admin and Teacher</h3>
                                 <h1>10000+</h1>
                             </div>
                             <!-- <div class="progress">
@@ -147,10 +165,10 @@ if (!isset($_SESSION['admin_id'])) {
                     </div>
                     <!-- END OF EXPENSE -->
                     <div class="sales">
-                        <i class="bi bi-file-bar-graph"></i>
+                        <i class="bi bi-credit-card"></i>
                         <div class="middle">
                             <div class="left">
-                                <h3>Total Registered Customer and Parents</h3>
+                                <h3>Total Cash in Amount</h3>
                                 <h1>1000+</h1>
                             </div>
                             <!-- <div class="progress">
@@ -173,6 +191,9 @@ if (!isset($_SESSION['admin_id'])) {
                         <div class="title">
                             <div class="left">
                                 <h2>Recent Orders</h2>
+                            </div>
+                            <div class="right">
+                                <a href="./order.php" class="more">View All<i class="bi bi-chevron-right"></i></a>
                             </div>
                         </div>
                         <div class="table-body">
@@ -226,15 +247,18 @@ if (!isset($_SESSION['admin_id'])) {
                 <div class="recent-updates">
                     <div class="wrapper">
                         <div class="title">
-                            <div class="right">
+                            <div class="left">
                                 <h2>Recent Updates</h2>
+                            </div>
+                            <div class="right">
+
                             </div>
                         </div>
                         </title>
                         <div class="updates">
                             <div class="update">
                                 <div class="profile-photo">
-                                    <img src="../uploads/wangbingbing(2).jpg">
+                                    <!-- <img src="../uploads/wangbingbing(2).jpg"> -->
                                 </div>
                                 <div class="message">
                                     <p><b>Admin</b> received a new order</p>
@@ -243,7 +267,7 @@ if (!isset($_SESSION['admin_id'])) {
                             </div>
                             <div class="update">
                                 <div class="profile-photo">
-                                    <img src="../uploads/wangbingbing(3).jpg">
+                                    <!-- <img src="../uploads/wangbingbing(3).jpg"> -->
                                 </div>
                                 <div class="message">
                                     <p><b>Admin</b> received a new order</p>
@@ -252,7 +276,7 @@ if (!isset($_SESSION['admin_id'])) {
                             </div>
                             <div class="update">
                                 <div class="profile-photo">
-                                    <img src="../uploads/wangbingbing(4).png">
+                                    <!-- <img src="../uploads/wangbingbing(4).png"> -->
                                 </div>
                                 <div class="message">
                                     <p><b>Admin</b> received a new order</p>
