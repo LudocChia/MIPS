@@ -57,6 +57,7 @@ img {
 }
 
 h1 {
+    margin-left: 24px;
     font-size: 3rem;
 }
 
@@ -542,6 +543,23 @@ form textarea {
 #btn1:active{
     opacity: 90%;
 }
+.Place{
+    float: right;
+    position: absolute;
+    margin-left: 600px;
+    margin-top: -105px;
+}
+#place{
+    margin-top: 10px;
+    text-align: center;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-radius: 10px;
+    width: 150%;
+    font-size: 25px;
+    color: #767676;
+}
+
 @media screen and (max-width: 1200px){
 
 }
