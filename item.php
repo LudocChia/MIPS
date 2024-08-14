@@ -198,11 +198,11 @@ if (isset($_POST['submit'])) {
                         <div class="picture-div">
                             <div class="product-image">
                                 <?php if (!empty($images)) : ?>
-                                    <img id="picture" alt="<?php echo htmlspecialchars($images[0]['image_url']); ?>" src="uploads/<?php echo htmlspecialchars($images[0]['image_url']); ?>">
+                                    <img id="picture" alt="<?php echo htmlspecialchars($images[0]['image_url']); ?>" src="uploads/product/<?php echo htmlspecialchars($images[0]['image_url']); ?>">
                             </div>
                             <div class="thumbnails">
                                 <?php foreach ($images as $image) : ?>
-                                    <img class="thumbnail" src="uploads/<?php echo htmlspecialchars($image['image_url']); ?>" style="width: 80px;">
+                                    <img class="thumbnail" src="uploads/product/<?php echo htmlspecialchars($image['image_url']); ?>" style="width: 80px;">
                                 <?php endforeach; ?>
                             </div>
                         <?php else : ?>

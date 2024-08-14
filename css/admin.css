@@ -334,7 +334,8 @@ aside .sidebar ul li span {
 }
 
 aside .sidebar a i,
-aside .sidebar a span {
+aside .sidebar a span,
+aside .sidebar a svg {
     font-size: 1.7rem;
     margin-left: 3rem;
 }

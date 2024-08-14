@@ -11,16 +11,32 @@ if (!isset($_SESSION['admin_id'])) {
 
 $currentPage = basename($_SERVER['PHP_SELF']);
 
+// Function to handle file uploads
+function handleFileUpload($file)
+{
+    // Your file upload logic here if needed
+}
+
+// Add or edit size
 if (isset($_POST['submit'])) {
     $name = $_POST['name'];
     $shoulder_width = $_POST['shoulder_width'];
     $bust = $_POST['bust'];
     $waist = $_POST['waist'];
     $length = $_POST['length'];
+    $sizeId = isset($_POST['product_size_id']) ? $_POST['product_size_id'] : null;
 
     if (!empty($name)) {
-        $sql = "INSERT INTO sizes (size_name, shoulder_width, bust, waist, length) VALUES (:name, :shoulder_width, :bust, :waist, :length)";
-        $stmt = $pdo->prepare($sql);
+        if ($sizeId) {
+            // Update existing size
+            $sql = "UPDATE Sizes SET size_name = :name, shoulder_width = :shoulder_width, bust = :bust, waist = :waist, length = :length WHERE size_id = :size_id";
+            $stmt = $pdo->prepare($sql);
+            $stmt->bindParam(':size_id', $sizeId);
+        } else {
+            // Insert new size
+            $sql = "INSERT INTO Sizes (size_name, shoulder_width, bust, waist, length) VALUES (:name, :shoulder_width, :bust, :waist, :length)";
+            $stmt = $pdo->prepare($sql);
+        }
 
         $stmt->bindParam(':name', $name);
         $stmt->bindParam(':shoulder_width', $shoulder_width);
@@ -30,13 +46,30 @@ if (isset($_POST['submit'])) {
 
         try {
             $stmt->execute();
-            header('Refresh:0');
+            header('Location: size.php');
             exit();
         } catch (PDOException $e) {
-            echo "<sricpt>alert('Database error: );</sricpt>";
+            echo "<script>alert('Database error: " . $e->getMessage() . "');</script>";
         }
     } else {
-        echo "<sricpt>alert('Please enter a product size name.');</sricpt>";
+        echo "<script>alert('Please enter a product size name.');</script>";
+    }
+}
+
+// Delete size
+if (isset($_POST['delete'])) {
+    $sizeId = $_POST['product_size_id'];
+
+    $sql = "DELETE FROM Sizes WHERE size_id = :size_id";
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(':size_id', $sizeId);
+
+    try {
+        $stmt->execute();
+        header('Location: size.php');
+        exit();
+    } catch (PDOException $e) {
+        echo "<script>alert('Database error: " . $e->getMessage() . "');</script>";
     }
 }
 
@@ -58,7 +91,7 @@ $all_product_sizes = getSizes($pdo);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bookshop Apparel Size - MIPS</title>
-    <link rel="icon" type="image/x-icon" href="../images/Mahans_internation_primary_school_logo.png">
+    <link rel="icon" type="image/x-icon" href="../images/Mahans_IPS_icon.png">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -87,37 +120,29 @@ $all_product_sizes = getSizes($pdo);
                     <table>
                         <thead>
                             <tr>
-                                <th>
-                                    <h3>Apparel Size Name</h3>
-                                </th>
-                                <th>
-                                    <h3>Shoulder Width</h3>
-                                </th>
-                                <th>
-                                    <h3>Bust</h3>
-                                </th>
-                                <th>
-                                    <h3>Waist</h3>
-                                </th>
-                                <th>
-                                    <h3>Hip</h3>
-                                </th>
-                                <th>
-                                    <h3>Actions</h3>
-                                </th>
+                                <th>Apparel Size Name</th>
+                                <th>Shoulder Width</th>
+                                <th>Bust</th>
+                                <th>Waist</th>
+                                <th>Length</th>
+                                <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php foreach ($all_product_sizes as $size) { ?>
                                 <tr>
-                                    <td><?= $size['size_name'] ?></td>
-                                    <td><?= $size['shoulder_width'] ?></td>
-                                    <td><?= $size['bust'] ?></td>
-                                    <td><?= $size['waist'] ?></td>
-                                    <td><?= $size['length'] ?></td>
+                                    <td><?= htmlspecialchars($size['size_name']); ?></td>
+                                    <td><?= htmlspecialchars($size['shoulder_width']); ?></td>
+                                    <td><?= htmlspecialchars($size['bust']); ?></td>
+                                    <td><?= htmlspecialchars($size['waist']); ?></td>
+                                    <td><?= htmlspecialchars($size['length']); ?></td>
                                     <td>
-                                        <button id="edit"><i class="bi bi-pencil-square"></i></button>
-                                        <button id="delete"><i class="bi bi-trash-fill"></i></button>
+                                        <form action="" method="POST" style="display:inline;" onsubmit="return showDeleteConfirmDialog(event);">
+                                            <input type="hidden" name="product_size_id" value="<?= htmlspecialchars($size['size_id']); ?>">
+                                            <input type="hidden" name="delete" value="true">
+                                            <button type="submit" class="delete-category-btn"><i class="bi bi-x-square-fill"></i></button>
+                                        </form>
+                                        <button type="button" class="edit-size-btn" data-size-id="<?= htmlspecialchars($size['size_id']); ?>"><i class="bi bi-pencil-square"></i></button>
                                     </td>
                                 </tr>
                             <?php } ?>
@@ -130,26 +155,27 @@ $all_product_sizes = getSizes($pdo);
     <dialog id="add-edit-data">
         <h2>Add Apparel Size</h2>
         <form action="" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="product_size_id" value="">
             <div class="input-field">
                 <h2>Product Size Name<sup>*</sup></h2>
-                <input type="text" name="name" value="<?php echo isset($_POST['name']) ? htmlspecialchars($_POST['name']) : ''; ?>">
+                <input type="text" name="name" required>
                 <p>Please enter the size name (e.g., 100, 110, 120).</p>
             </div>
             <div class="input-field">
                 <h2>Shoulder Width (cm)</h2>
-                <input type="number" step="0.01" name="shoulder_width" value="<?php echo isset($_POST['shoulder_width']) ? htmlspecialchars($_POST['shoulder_width']) : ''; ?>">
+                <input type="number" step="0.01" name="shoulder_width">
             </div>
             <div class="input-field">
                 <h2>Bust (cm)</h2>
-                <input type="number" step="0.01" name="bust" value="<?php echo isset($_POST['bust']) ? htmlspecialchars($_POST['bust']) : ''; ?>">
+                <input type="number" step="0.01" name="bust">
             </div>
             <div class="input-field">
                 <h2>Waist (cm)</h2>
-                <input type="number" step="0.01" name="waist" value="<?php echo isset($_POST['waist']) ? htmlspecialchars($_POST['waist']) : ''; ?>">
+                <input type="number" step="0.01" name="waist">
             </div>
             <div class="input-field">
                 <h2>Length (cm)</h2>
-                <input type="number" step="0.01" name="length" value="<?php echo isset($_POST['length']) ? htmlspecialchars($_POST['length']) : ''; ?>">
+                <input type="number" step="0.01" name="length">
             </div>
             <div class="controls">
                 <button type="button" class="cancel">Cancel</button>
@@ -158,7 +184,48 @@ $all_product_sizes = getSizes($pdo);
             </div>
         </form>
     </dialog>
+    <dialog id="delete-confirm-dialog">
+        <form method="dialog">
+            <h1>This Product Size will be Deactivated!</h1>
+            <label>Are you sure to proceed?</label>
+            <div class="controls">
+                <button value="cancel" class="cancel">Cancel</button>
+                <button value="confirm" class="deactivate">Deactivate</button>
+            </div>
+        </form>
+    </dialog>
     <script src="../javascript/admin.js"></script>
+    <script>
+        document.querySelectorAll('.edit-size-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const sizeId = this.dataset.sizeId;
+                fetch(`ajax.php?action=get_size&size_id=${sizeId}`)
+                    .then(response => response.json())
+                    .then(size => {
+                        if (size.error) {
+                            alert(size.error);
+                        } else {
+                            document.querySelector('#add-edit-data [name="product_size_id"]').value = size.size_id;
+                            document.querySelector('#add-edit-data [name="name"]').value = size.size_name;
+                            document.querySelector('#add-edit-data [name="shoulder_width"]').value = size.shoulder_width;
+                            document.querySelector('#add-edit-data [name="bust"]').value = size.bust;
+                            document.querySelector('#add-edit-data [name="waist"]').value = size.waist;
+                            document.querySelector('#add-edit-data [name="length"]').value = size.length;
+                            document.querySelector('#add-edit-data h2').textContent = "Edit Apparel Size";
+                            document.getElementById('add-edit-data').showModal();
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching size data:', error);
+                        alert('Failed to load size data.');
+                    });
+            });
+        });
+
+        document.querySelector('.cancel').addEventListener('click', function() {
+            document.getElementById('add-edit-data').close();
+        });
+    </script>
 </body>
 
 </html>

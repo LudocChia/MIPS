@@ -7,6 +7,20 @@ include 'admin_class.php';
 $crud = new Action();
 
 switch ($action) {
+    case 'get_category':
+        if (isset($_GET['category_id'])) {
+            echo $crud->get_category($_GET['category_id']);
+        } else {
+            echo json_encode(['error' => 'Category ID not provided']);
+        }
+        break;
+    case 'get_size':
+        if (isset($_GET['size_id'])) {
+            echo $crud->get_size($_GET['size_id']);
+        } else {
+            echo json_encode(['error' => 'Size ID not provided']);
+        }
+        break;
     case 'get_pending_count':
         echo $crud->get_pending_count();
         break;
@@ -31,6 +45,13 @@ switch ($action) {
             echo json_encode(['error' => 'Admin ID not provided']);
         }
         break;
+    case 'get_student':
+        if (isset($_GET['student_id'])) {
+            echo $crud->get_student($_GET['student_id']);
+        } else {
+            echo json_encode(['error' => 'Student ID not provided']);
+        }
+        break;
     case 'get_product':
         if (isset($_GET['product_id'])) {
             echo $crud->get_product($_GET['product_id']);
@@ -52,14 +73,11 @@ switch ($action) {
             echo json_encode(['error' => 'Grade ID not provided']);
         }
         break;
-    case 'delete_product':
-        echo $crud->delete_product();
-        break;
-    case 'update_order_status':
-        if (isset($_POST['order_id']) && isset($_POST['order_status'])) {
-            echo $crud->update_order_status($_POST['order_id'], $_POST['order_status']);
+    case 'get_subcategory':
+        if (isset($_GET['subcategory_id'])) {
+            echo $crud->get_subcategory($_GET['subcategory_id']);
         } else {
-            echo json_encode(['error' => 'Order ID or status not provided']);
+            echo json_encode(['error' => 'Subcategory ID not provided']);
         }
         break;
     default:

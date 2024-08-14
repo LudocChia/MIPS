@@ -56,7 +56,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <dialog id="login-form">
     <div class="title">
-        <img src="./images/Mahans_internation_primary_school_logo.png" alt="Mahans_ISP_Logo">
+        <img src="./images/Mahans_IPS_icon.png" alt="Mahans_ISP_Logo">
     </div>
     <?php if (!empty($errorMsg)) : ?>
         <div class="alert alert-danger">

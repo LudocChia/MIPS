@@ -48,13 +48,17 @@ function isActive($pageName, $currentPage)
             </li>
             <li>
                 <a href="grade.php" class="<?= isActive('grade.php', $currentPage); ?>">
-                    <i class="bi bi-people-fill"></i>
+                    <svg width="20px" data-name="Layer 2" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                        <path fill="none" stroke="#86848c" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M29.917 38H1V8h46v30" class="stroke-353535"></path>
+                        <circle cx="38" cy="30" fill="none" r="5" stroke="#86848c" stroke-miterlimit="10" stroke-width="2" class="stroke-353535"></circle>
+                        <path fill="none" stroke="#86848c" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M35 34.25V41l3-1.5 3 1.5v-6.75M6 14h4M38 14h4M6 20h24v6H6zM6 32h8" class="stroke-353535"></path>
+                    </svg>
                     <h4>Grade</h4>
                 </a>
             </li>
             <li>
                 <a href="class.php" class="<?= isActive('class.php', $currentPage); ?>">
-                    <i class="bi bi-people-fill"></i>
+                    <i class="bi bi-easel2-fill"></i>
                     <h4>Class</h4>
                 </a>
             </li>
@@ -75,7 +79,12 @@ function isActive($pageName, $currentPage)
                             <h4>All Admin</h4>
                         </a>
                     </li>
-                    <li><a href="teacher.php" class="<?= isActive('teacher.php', $currentPage); ?>"><i class="bi bi-mortarboard-fill"></i>
+                    <li><a href="teacher.php" class="<?= isActive('teacher.php', $currentPage); ?>"><svg width="20px" data-name="Layer 1" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12.5 11.5H15a1.5 1.5 0 0 0 1.5-1.5h0A1.5 1.5 0 0 0 15 8.5H4.5a3 3 0 0 0-3 3v2a3 3 0 0 0 1.456 2.573" fill="none" stroke="#86848c" stroke-linecap="round" stroke-linejoin="round" class="stroke-000000"></path>
+                                <path d="M7.5 16.5v6H9a1.5 1.5 0 0 0 1.5-1.5v-9.5M7.5 22.5H6A1.5 1.5 0 0 1 4.5 21v-9.5" fill="none" stroke="#86848c" stroke-linecap="round" stroke-linejoin="round" class="stroke-000000"></path>
+                                <circle cx="7.5" cy="4.5" r="2.5" fill="none" stroke="#86848c" stroke-linecap="round" stroke-linejoin="round" class="stroke-000000"></circle>
+                                <path d="M12 3.5h10.5v12h-10" fill="none" stroke="#86848c" stroke-linecap="round" stroke-linejoin="round" class="stroke-000000"></path>
+                            </svg>
                             <h4>All Teacher</h4>
                         </a>
                     </li>
@@ -85,7 +94,7 @@ function isActive($pageName, $currentPage)
                         </a>
                     </li>
                     <li>
-                        <a href="student.php" class="<?= isActive('student.php', $currentPage); ?>"><i class="bi bi-people-fill"></i>
+                        <a href="student.php" class="<?= isActive('student.php', $currentPage); ?>"><i class="bi bi-mortarboard-fill"></i>
                             <h4>All Student</h4>
                         </a>
                     </li>

@@ -9,6 +9,61 @@ class Action
         $this->db = $pdo;
     }
 
+    public function get_category($category_id)
+    {
+        $sql = "
+            SELECT category_id, category_name, category_icon, parent_id 
+            FROM Product_Category 
+            WHERE category_id = :category_id AND is_deleted = 0
+        ";
+
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':category_id', $category_id);
+        $stmt->execute();
+        $category = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($category) {
+            return json_encode($category);
+        } else {
+            return json_encode(['error' => 'Category not found']);
+        }
+    }
+
+    public function get_subcategory($subcategory_id)
+    {
+        $sql = "
+            SELECT category_id, category_name, category_icon, parent_id
+            FROM Product_Category
+            WHERE category_id = :subcategory_id AND is_deleted = 0
+        ";
+
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':subcategory_id', $subcategory_id);
+        $stmt->execute();
+        $subcategory = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($subcategory) {
+            return json_encode($subcategory);
+        } else {
+            return json_encode(['error' => 'Subcategory not found']);
+        }
+    }
+
+    public function get_subcategory_count()
+    {
+        $sql = "
+            SELECT COUNT(*) as total_count
+            FROM Product_Category
+            WHERE parent_id IS NOT NULL AND is_deleted = 0
+        ";
+
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute();
+        $count = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        return json_encode($count);
+    }
+
     public function get_pending_count()
     {
         $sql = "
@@ -21,6 +76,21 @@ class Action
         $stmt = $this->db->prepare($sql);
         $stmt->execute();
         return $stmt->fetchColumn();
+    }
+
+    public function get_size($size_id)
+    {
+        $sql = "SELECT * FROM Sizes WHERE size_id = :size_id";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':size_id', $size_id);
+        $stmt->execute();
+        $size = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($size) {
+            return json_encode($size);
+        } else {
+            return json_encode(['error' => 'Size not found']);
+        }
     }
 
     public function update_order_status($order_id, $order_status)
@@ -39,6 +109,21 @@ class Action
             return json_encode(['success' => true]);
         } catch (PDOException $e) {
             return json_encode(['error' => 'Database error: ' . $e->getMessage()]);
+        }
+    }
+
+    public function get_student($student_id)
+    {
+        $sql = "SELECT * FROM Student WHERE student_id = :student_id AND is_deleted = 0";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':student_id', $student_id);
+        $stmt->execute();
+        $student = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($student) {
+            return json_encode($student);
+        } else {
+            return json_encode(['error' => 'Student not found']);
         }
     }
 

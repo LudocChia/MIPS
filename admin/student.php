@@ -101,7 +101,7 @@ if (isset($_POST["submit"])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>All Students - MIPS</title>
-    <link rel="icon" type="image/x-icon" href="../images/Mahans_internation_primary_school_logo.png">
+    <link rel="icon" type="image/x-icon" href="../images/Mahans_IPS_icon.png">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -123,20 +123,7 @@ if (isset($_POST["submit"])) {
                         <h1>Mahans Students</h1>
                     </div>
                     <div class="right">
-                        <button id="open-popup"><i class="bi bi-person-fill-add"></i>Add New Student</button>
-                        <?php
-                        try {
-                            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-                            $countQuery = "SELECT COUNT(*) FROM Student WHERE is_deleted = 0";
-                            $stmt = $pdo->prepare($countQuery);
-                            $stmt->execute();
-                            $count = $stmt->fetchColumn();
-
-                            echo "<p>Total $count Student(s)</p>";
-                        } catch (PDOException $e) {
-                            echo "<script>alert('Database error: " . $e->getMessage() . "');</script>";
-                        }
-                        ?>
+                        <button id="open-popup" class="btn btn-outline"><i class="bi bi-person-fill-add"></i>Add New Student</button>
                     </div>
                 </div>
                 <div class="box-container">

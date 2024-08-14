@@ -57,7 +57,7 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 <div class="box">
                                     <div class="image-container">
                                         <a href="item.php?pid=<?= htmlspecialchars($product['product_id']); ?>">
-                                            <img src="<?= htmlspecialchars(!empty($product['primary_image']) ? "uploads/" . $product['primary_image'] : 'images/defaultproductimage.png'); ?>" alt="Product Image" class="primary-image">
+                                            <img src="<?= htmlspecialchars(!empty($product['primary_image']) ? "uploads/product/" . $product['primary_image'] : 'images/defaultproductimage.png'); ?>" alt="Product Image" class="primary-image">
                                         </a>
                                     </div>
                                     <div class="name"><?= htmlspecialchars($product['product_name']); ?></div>
