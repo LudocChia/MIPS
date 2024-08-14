@@ -17,7 +17,7 @@
     <?php include "../visitor/header.php"; ?>
     <div class="box1">
         <h1>Please fill up the form </h1>
-        <form action="submit.php" method="post">
+        <form action="submit1.php" method="post">
             <div class="name">
                 <h2>Name :</h2>
                 <input type="text" id="name" name="Name" required>
@@ -31,27 +31,35 @@
                 <input type="text" id="email" name="Email" required> 
             </div>
             <div class="Company">
-                <h2>Company/Organization</h2>
+                <h2>Company/Organization :</h2>
                 <input type="text" id="company" name="Company" required>
             </div>
             <div class="Plate">
-                <h2>Plate Number</h2>
+                <h2>Plate Number :</h2>
                 <input type="text" id="plate" name="Plate" required>
             </div>
             <div class="Date">
-                <h2>Visit Date</h2>
+                <h2>Visit Date :</h2>
                 <input type="date" id="date" name="Date" required>
             </div>
             <div class="Time">
-                <h2>Visit Time</h2>
+                <h2>Visit Time :</h2>
                 <input type="text" id="time" name="Time" placeholder="XX.XXAM/PM" required>
             </div>
             <div class="People">
-                <h2>People</h2>
+                <h2>People :</h2>
                 <input type="text" id="people" name="People" required>
             </div>
+            <div class="Place">
+                <h2>Place :</h2>
+                <select name="place" id="place" required>
+                    <option value="js" >Jing Shun</option>
+                    <option value="sv" >Studio Virtue</option>
+                </select>
+            </div>
+
             <div class="Purpose">
-                <h2>Purpose</h2>
+                <h2>Purpose :</h2>
                 <textarea id="purpose" name="Purpose" rows="4" cols="5" required></textarea>
             </div>
             <div>

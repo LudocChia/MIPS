@@ -57,7 +57,9 @@ img {
 }
 
 h1 {
-    margin-left: 24px;
+    margin-top: 10px;
+    margin-left: 50px;
+    color: rgb(156, 67, 82);
     font-size: 3rem;
 }
 
@@ -329,237 +331,16 @@ form textarea {
     min-height: 100px;
     resize: vertical;
 }
-
-.box1 {
-    margin-left: 100px;
-    margin-right: 100px;
-    margin-top: 25px;
-    margin-bottom: 40px;
-    padding-left: 100px;
-    padding-top: 30px;
-    padding-bottom: 30px;
+.row {
+    border: 1px solid black;
+    border-radius: 10px;
+    padding: 10px;
+    margin-left: 50px;
+    margin-right: 50px;
+    margin-bottom: 5px;
+    color: rgb(156, 67, 82);
     background: rgba(144, 87, 47, 0.175);
-    border-radius: 5px;
-    color: rgb(156, 67, 82);
-    box-shadow: rgba(179, 172, 168, 0.55) 0px 0px 15px -4px;
 }
-.modal{
-    position: fixed;
-    margin-left: 0px;
-    margin-right: 400px;
-    max-width: 80ch;
-    margin-top: -50px;
-    margin-bottom: 40px;
-    padding-left: 50px;
-    padding-top: 50px;
-    padding-bottom: 50px;
-    border-radius: 5px;
-    color: rgb(156, 67, 82);
-    box-shadow: rgba(179, 172, 168, 0.55) 0px 0px 15px -4px;
-    border-color: #999;
-    background-color: whitesmoke;
-    opacity: 98%;
-}
-.name {
-    margin-top: 25px;
-}
-#name {
-    margin-top: 10px;
-    margin-bottom: 10px;
-    border-radius: 10px;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    padding-left: 20px;
-    padding-right: 20px;
-    width: 35%;
-    font-size: 25px;
-    color: #767676;
-}
-.Phone{
-    margin-top: 10px;
-}
-#phone{
-    margin-top: 10px;
-    margin-bottom: 10px;
-    border-radius: 10px;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    padding-left: 20px;
-    padding-right: 20px;
-    width: 35%;
-    font-size: 25px;
-    color: #767676;
-}
-.Email{
-    margin-top: 10px;
-}
-#email{
-    margin-top: 10px;
-    margin-bottom: 10px;
-    border-radius: 10px;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    padding-left: 20px;
-    padding-right: 20px;
-    width: 35%;
-    font-size: 25px;
-    color: #767676;
-}
-.Company{
-    margin-top: 10px;
-}
-#company{
-    margin-top: 10px;
-    margin-bottom: 10px;
-    border-radius: 10px;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    padding-left: 20px;
-    padding-right: 20px;
-    width: 35%;
-    font-size: 25px;
-    color: #767676;
-}
-.Purpose{
-    margin-top: 10px;
-}
-#purpose{
-    margin-top: 10px;
-    margin-bottom: 10px;
-    border-radius: 10px;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    padding-left: 20px;
-    padding-right: 20px;
-    width: 90%;
-    font-size: 25px;
-    color: #767676;
-}
-.Plate{
-    float: right;
-    position: absolute;
-    margin-left: 600px;
-    margin-top: -445px;
-}
-#plate{
-    margin-top: 8px;
-    margin-bottom: 10px;
-    border-radius: 10px;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    padding-left: 20px;
-    padding-right: 20px;
-    width: 130%;
-    font-size: 25px;
-    color: #767676;
-}
-.Date{
-    float: right;
-    position: absolute;
-    margin-left: 600px;
-    margin-top: -330px;
-}
-#date{
-    margin-top: 8px;
-    margin-bottom: 10px;
-    border-radius: 10px;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    padding-left: 20px;
-    padding-right: 20px;
-    width: 100%;
+#info{
     font-size: 20px;
-    color: #767676;
-}
-.Time{
-    float: right;
-    position: absolute;
-    margin-left: 850px;
-    margin-top: -330px;
-}
-#time{
-    margin-top: 8px;
-    margin-bottom: 10px;
-    border-radius: 10px;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    padding-left: 20px;
-    padding-right: 20px;
-    width: 70%;
-    font-size: 20px;
-    color: #767676;
-}
-.People{
-    float: right;
-    position: absolute;
-    margin-left: 600px;
-    margin-top: -220px;
-}
-#people{
-    margin-top: 8px;
-    margin-bottom: 10px;
-    border-radius: 10px;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    padding-left: 20px;
-    padding-right: 20px;
-    width: 130%;
-    font-size: 25px;
-    color: #767676;
-}
-#btn{
-    margin-left: 25px;
-    margin-top: 25px;
-    padding-top: 25px;
-    padding-bottom: 50px;
-    padding-right: 100px;
-    padding-left: 100px;
-    border-radius: 20px;
-    font-size: 30px;
-    background-color: rgb(144, 88, 47);
-    color: whitesmoke;
-}
-#btn:hover{
-    cursor: pointer;
-}
-#btn:active{
-    opacity: 90%;
-}
-#btn1{
-    margin-left: -25px;
-    margin-top: 10px;
-    padding-top: 20px;
-    padding-bottom: 20px;
-    padding-left: 100px;
-    padding-right: 100px;
-    font-size: 25px;
-    border-radius: 20px;
-    background-color: rgb(144, 88, 47);
-    color: whitesmoke;
-}
-#btn1:hover{
-    cursor: pointer;
-}
-#btn1:active{
-    opacity: 90%;
-}
-.Place{
-    float: right;
-    position: absolute;
-    margin-left: 600px;
-    margin-top: -105px;
-}
-#place{
-    margin-top: 10px;
-    text-align: center;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    border-radius: 10px;
-    width: 150%;
-    font-size: 25px;
-    color: #767676;
-}
-
-@media screen and (max-width: 1200px){
-
 }
