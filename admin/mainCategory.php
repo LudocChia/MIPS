@@ -90,9 +90,6 @@ $all_main_categories = getMainCategories($pdo);
                 <div class="title">
                     <div class="left">
                         <h1>Bookshop Main Category</h1>
-                    </div>
-                    <div class="right">
-                        <button id="open-popup" class="btn btn-outline"><i class="bi bi-plus-circle"></i>Add Main Category</button>
                         <?php
                         try {
                             $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -106,6 +103,9 @@ $all_main_categories = getMainCategories($pdo);
                             echo "<script>alert('Database error: " . $e->getMessage() . "');</script>";
                         }
                         ?>
+                    </div>
+                    <div class="right">
+                        <button id="open-popup" class="btn btn-outline"><i class="bi bi-plus-circle"></i>Add Main Category</button>
                     </div>
                 </div>
                 <div class="box-container">
@@ -123,8 +123,15 @@ $all_main_categories = getMainCategories($pdo);
             </div>
         </main>
     </div>
-    <dialog id="add-data">
-        <h1>Add Main Category</h1>
+    <dialog id="add-edit-data">
+        <div class="title">
+            <div class="left">
+                <h1>Add Main Category</h1>
+            </div>
+            <div class="right">
+                <button class="cancel"><i class="bi bi-x-circle"></i></button>
+            </div>
+        </div>
         <form action="" method="post" enctype="multipart/form-data">
             <div class="input-field">
                 <h2>Category Name<sup>*</sup></h2>
@@ -137,7 +144,7 @@ $all_main_categories = getMainCategories($pdo);
                 <p>Please enter full name as per IC or Passport.</p>
             </div>
             <div class="controls">
-                <button type="button" class="close-btn">Cancel</button>
+                <button type="button" class="cancel">Cancel</button>
                 <button type="reset">Clear</button>
                 <button type="submit" name="submit">Publish</button>
             </div>

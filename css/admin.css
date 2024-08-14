@@ -361,6 +361,11 @@ aside .sidebar a:hover {
     color: var(--color-primary);
 }
 
+.rotate {
+    transform: rotate(180deg);
+    transition: transform 0.3s ease;
+}
+
 aside .sidebar h4 {
     font-weight: 500;
 }
@@ -389,19 +394,12 @@ main .insights>div {
 }
 
 main .insights>div i {
+    display: inline-block;
     background: var(--color-primary);
     padding: 0.5rem;
     border-radius: 50%;
     color: var(--color-white);
     font-size: 2rem;
-}
-
-main .insights>div.expenses i {
-    background: var(--color-danger);
-}
-
-main .insights>div.income i {
-    background: var(--color-success);
 }
 
 main .insights>div .middle {
@@ -526,11 +524,11 @@ main .recent-orders a {
 }
 
 /* Website ANALYTICS */
-.right .sales-analytics {
+.right .web-analytics {
     margin-top: 2rem;
 }
 
-.right .sales-analytics .item {
+.right .web-analytics .item {
     display: flex;
     align-items: center;
     gap: 1rem;
@@ -540,7 +538,7 @@ main .recent-orders a {
     transition: all 300ms ease;
 }
 
-.right .sales-analytics .item .right {
+.right .web-analytics .item .right {
     display: flex;
     justify-content: space-between;
     align-items: start;
@@ -548,44 +546,12 @@ main .recent-orders a {
     width: 100%;
 }
 
-.right .sales-analytics .item .icon {
-    padding: 2rem;
+.right .web-analytics .item .icon {
+    padding: 1rem;
     color: var(--color-white);
     border-radius: 50%;
     background: var(--color-primary);
     display: flex;
-}
-
-.right .sales-analytics .item.offline .icon {
-    background: var(--color-danger);
-}
-
-.right .sales-analytics .item.customers .icon {
-    background: var(--color-success);
-}
-
-.right .sales-analytics .add-product {
-    background: transparent;
-    border: 2px dashed var(--color-primary);
-    color: var(--color-primary);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.right .sales-analytics .add-product:hover {
-    background: var(--color-primary);
-    color: white;
-}
-
-.right .sales-analytics .add-product div {
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
-}
-
-.right .sales-analytics .add-product div h3 {
-    font-weight: 600;
 }
 
 /* PRODUCTS */

@@ -13,16 +13,36 @@ $currentPage = basename($_SERVER['PHP_SELF']);
 
 function getAllStudents($pdo)
 {
-    $sql = "SELECT * FROM Student WHERE is_deleted = 0";
+    $sql = "
+        SELECT s.*, c.class_name 
+        FROM Student s
+        LEFT JOIN Class c ON s.class_id = c.class_id
+        WHERE s.is_deleted = 0
+    ";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+function getAllClasses($pdo)
+{
+    $sql = "SELECT * FROM Class WHERE is_deleted = 0";
     $stmt = $pdo->prepare($sql);
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
 $all_students = getAllStudents($pdo);
+$all_classes = getAllClasses($pdo);
 
 function handleFileUpload($file, $studentId)
 {
+    $uploadDir = '../uploads/student/';
+
+    if (!is_dir($uploadDir)) {
+        mkdir($uploadDir, 0777, true);
+    }
+
     if ($file['error'] === UPLOAD_ERR_NO_FILE) {
         return null;
     }
@@ -34,7 +54,7 @@ function handleFileUpload($file, $studentId)
 
     if (in_array($fileExtension, $allowedfileExtensions)) {
         $newFileName = $studentId . '_' . uniqid() . '.' . $fileExtension;
-        $dest_path = '../uploads/' . $newFileName;
+        $dest_path = $uploadDir . $newFileName;
 
         if (move_uploaded_file($fileTmpPath, $dest_path)) {
             return $newFileName;
@@ -51,18 +71,17 @@ function handleFileUpload($file, $studentId)
 if (isset($_POST["submit"])) {
     $studentId = $_POST["student_id"];
     $name = $_POST["name"];
-    $class = $_POST["class"];
-
+    $classId = $_POST["class_id"];
 
     try {
         $studentImage = handleFileUpload($_FILES['student_image'], $studentId);
 
-        $sql = "INSERT INTO Student (student_id, student_name, student_class, student_image, is_deleted) 
-                        VALUES (:studentId, :name, :class, :student_image, 0)";
+        $sql = "INSERT INTO Student (student_id, student_name, class_id, student_image, is_deleted) 
+                        VALUES (:studentId, :name, :classId, :student_image, 0)";
         $stmt = $pdo->prepare($sql);
         $stmt->bindParam(':studentId', $studentId);
         $stmt->bindParam(':name', $name);
-        $stmt->bindParam(':class', $class);
+        $stmt->bindParam(':classId', $classId);
         $stmt->bindParam(':student_image', $studentImage);
         $stmt->execute();
 
@@ -124,9 +143,10 @@ if (isset($_POST["submit"])) {
                     <?php foreach ($all_students as $student) : ?>
                         <div class="box">
                             <h3><?php echo htmlspecialchars($student['student_name']); ?></h3>
+                            <p>Class: <?php echo htmlspecialchars($student['class_name']); ?></p>
                             <a href="#">
                                 <div class="image-container">
-                                    <img src="../uploads/<?php echo htmlspecialchars($student['student_image']); ?>" alt="Image for <?php echo htmlspecialchars($student['student_name']); ?>">
+                                    <img src="../uploads/student/<?php echo htmlspecialchars($student['student_image']); ?>" alt="Image for <?php echo htmlspecialchars($student['student_name']); ?>">
                                 </div>
                             </a>
                         </div>
@@ -150,13 +170,14 @@ if (isset($_POST["submit"])) {
                 <p>Please enter the student's full name.</p>
             </div>
             <div class="input-container">
-                <h2>Student Email<sup>*</sup></h2>
-                <input type="email" name="email" value="<?php echo isset($_POST['email']) ? htmlspecialchars($_POST['email']) : ''; ?>" required>
-                <p>Please enter the student's email address.</p>
-            </div>
-            <div class="input-container">
-                <h2>Student Class</h2>
-                <input type="text" name="class" value="<?php echo isset($_POST['class']) ? htmlspecialchars($_POST['class']) : ''; ?>" required>
+                <h2>Class<sup>*</sup></h2>
+                <select name="class_id" required>
+                    <option value="">Select Class</option>
+                    <?php foreach ($all_classes as $class) : ?>
+                        <option value="<?= htmlspecialchars($class['class_id']) ?>"><?= htmlspecialchars($class['class_name']) ?></option>
+                    <?php endforeach; ?>
+                </select>
+                <p>Please select the student's class.</p>
             </div>
             <div class="input-container">
                 <h2>Student Image<sup>*</sup></h2>

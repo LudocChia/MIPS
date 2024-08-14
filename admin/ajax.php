@@ -38,11 +38,22 @@ switch ($action) {
             echo json_encode(['error' => 'Product ID not provided']);
         }
         break;
+    case 'get_class':
+        if (isset($_GET['class_id'])) {
+            echo $crud->get_class($_GET['class_id']);
+        } else {
+            echo json_encode(['error' => 'Class ID not provided']);
+        }
+        break;
+    case 'get_grade':
+        if (isset($_GET['grade_id'])) {
+            echo $crud->get_grade($_GET['grade_id']);
+        } else {
+            echo json_encode(['error' => 'Grade ID not provided']);
+        }
+        break;
     case 'delete_product':
         echo $crud->delete_product();
-        break;
-    default:
-        echo json_encode(['error' => 'Invalid action']);
         break;
     case 'update_order_status':
         if (isset($_POST['order_id']) && isset($_POST['order_status'])) {
@@ -50,5 +61,8 @@ switch ($action) {
         } else {
             echo json_encode(['error' => 'Order ID or status not provided']);
         }
+        break;
+    default:
+        echo json_encode(['error' => 'Invalid action']);
         break;
 }

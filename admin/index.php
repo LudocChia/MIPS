@@ -55,14 +55,14 @@ $currentPage = basename($_SERVER['PHP_SELF']);
                                 </div>
                             </div> -->
                         </div>
-                        <small class="text-muted">Last 24 Hours</small>
+                        <small class="text-muted">Last 12 Months</small>
                     </div>
                     <!-- END OF SALES -->
                     <div class="sales">
                         <i class="bi bi-person-gear"></i>
                         <div class="middle">
                             <div class="left">
-                                <h3>Total Registered Admin and Teacher</h3>
+                                <h3>Total Registered Admin and Staff</h3>
                                 <h1>10000+</h1>
                             </div>
                             <!-- <div class="progress">
@@ -74,7 +74,7 @@ $currentPage = basename($_SERVER['PHP_SELF']);
                                 </div>
                             </div> -->
                         </div>
-                        <small class="text-muted">Last 24 Hours</small>
+                        <small class="text-muted">Last 12 Months</small>
                     </div>
                     <!-- END OF EXPENSE -->
                     <div class="sales">
@@ -82,7 +82,7 @@ $currentPage = basename($_SERVER['PHP_SELF']);
                         <div class="middle">
                             <div class="left">
                                 <h3>Total Cash in Amount</h3>
-                                <h1>1000+</h1>
+                                <h1>MYR 100</h1>
                             </div>
                             <!-- <div class="progress">
                                 <svg>
@@ -93,7 +93,7 @@ $currentPage = basename($_SERVER['PHP_SELF']);
                                 </div>
                             </div> -->
                         </div>
-                        <small class="text-muted">Last 24 Hours</small>
+                        <small class="text-muted">Last 12 Months</small>
                     </div>
                     <!-- END OF SALES -->
                 </div>
@@ -199,33 +199,33 @@ $currentPage = basename($_SERVER['PHP_SELF']);
                         </div>
                     </div>
                 </div>
-                <div class="sales-analytics">
+                <div class="web-analytics">
                     <div class="wrapper">
                         <div class="title">
-                            <div class="right">
+                            <div class="left">
                                 <h2>Website Analytics</h2>
                             </div>
                         </div>
-                        <div class="item online">
+                        <div class="item">
                             <div class="icon">
-                                <i class="bi bi-cart"></i>
+                                <span class="material-symbols-outlined">travel_explore</span>
                             </div>
                             <div class="right">
                                 <div class="info">
-                                    <h3>Website traffic</h3>
+                                    <h3>Page Views</h3>
                                     <small class="text-muted">Last 24 Hours</small>
                                 </div>
                                 <h5 class="success">+39%</h5>
                                 <h3>3849</h3>
                             </div>
                         </div>
-                        <div class="item offline">
+                        <div class="item">
                             <div class="icon">
-                                <i class="bi bi-cart"></i>
+                                <span class="material-symbols-outlined">co_present</span>
                             </div>
                             <div class="right">
                                 <div class="info">
-                                    <h3>Online Cash-In</h3>
+                                    <h3>Unique Visitors</h3>
                                     <small class="text-muted">Last 24 Hours</small>
                                 </div>
                                 <h5 class="danger">-17%</h5>
