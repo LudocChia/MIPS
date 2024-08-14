@@ -4,18 +4,45 @@ session_start();
 
 include "../components/db_connect.php";
 
+if (!isset($_SESSION['admin_id'])) {
+    header('Location: login.php');
+    exit();
+}
+
+$currentPage = basename($_SERVER['PHP_SELF']);
+
 function getAllStudents($pdo)
 {
-    $sql = "SELECT * FROM Student WHERE is_deleted = 0";
+    $sql = "
+        SELECT s.*, c.class_name 
+        FROM Student s
+        LEFT JOIN Class c ON s.class_id = c.class_id
+        WHERE s.is_deleted = 0
+    ";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+function getAllClasses($pdo)
+{
+    $sql = "SELECT * FROM Class WHERE is_deleted = 0";
     $stmt = $pdo->prepare($sql);
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
 $all_students = getAllStudents($pdo);
+$all_classes = getAllClasses($pdo);
 
 function handleFileUpload($file, $studentId)
 {
+    $uploadDir = '../uploads/student/';
+
+    if (!is_dir($uploadDir)) {
+        mkdir($uploadDir, 0777, true);
+    }
+
     if ($file['error'] === UPLOAD_ERR_NO_FILE) {
         return null;
     }
@@ -27,7 +54,7 @@ function handleFileUpload($file, $studentId)
 
     if (in_array($fileExtension, $allowedfileExtensions)) {
         $newFileName = $studentId . '_' . uniqid() . '.' . $fileExtension;
-        $dest_path = '../uploads/' . $newFileName;
+        $dest_path = $uploadDir . $newFileName;
 
         if (move_uploaded_file($fileTmpPath, $dest_path)) {
             return $newFileName;
@@ -44,18 +71,17 @@ function handleFileUpload($file, $studentId)
 if (isset($_POST["submit"])) {
     $studentId = $_POST["student_id"];
     $name = $_POST["name"];
-    $class = $_POST["class"];
-
+    $classId = $_POST["class_id"];
 
     try {
         $studentImage = handleFileUpload($_FILES['student_image'], $studentId);
 
-        $sql = "INSERT INTO Student (student_id, student_name, student_class, student_image, is_deleted) 
-                        VALUES (:studentId, :name, :class, :student_image, 0)";
+        $sql = "INSERT INTO Student (student_id, student_name, class_id, student_image, is_deleted) 
+                        VALUES (:studentId, :name, :classId, :student_image, 0)";
         $stmt = $pdo->prepare($sql);
         $stmt->bindParam(':studentId', $studentId);
         $stmt->bindParam(':name', $name);
-        $stmt->bindParam(':class', $class);
+        $stmt->bindParam(':classId', $classId);
         $stmt->bindParam(':student_image', $studentImage);
         $stmt->execute();
 
@@ -74,7 +100,7 @@ if (isset($_POST["submit"])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>All Students - Mahans School</title>
+    <title>All Students - MIPS</title>
     <link rel="icon" type="image/x-icon" href="../images/Mahans_internation_primary_school_logo.png">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
@@ -88,78 +114,7 @@ if (isset($_POST["submit"])) {
 <body>
     <?php include "../components/admin_header.php"; ?>
     <div class="container">
-        <aside>
-            <button id="close-btn">
-                <i class="bi bi-x"></i>
-            </button>
-            <div class="sidebar">
-                <ul>
-                    <li>
-                        <a href="index.php"><i class="bi bi-grid-1x2-fill"></i>
-                            <h4>Dashboard</h4>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" class="bookshop-btn">
-                            <i class="bi bi-shop-window"></i>
-                            <h4>Bookshop</h4>
-                            <i class="bi bi-chevron-down first"></i>
-                        </a>
-                        <ul class="bookshop-show">
-                            <li><a href="mainCategory.php"><i class="bi bi-tags-fill"></i>
-                                    <h4>Main Category</h4>
-                                </a>
-                            </li>
-                            <li><a href="subcategory.php"><i class="bi bi-tag-fill"></i>
-                                    <h4>Subcategory</h4>
-                                </a>
-                            </li>
-                            <li><a href="size.php"><i class="bi bi-aspect-ratio-fill"></i>
-                                    <h4>Product Size</h4>
-                                </a>
-                            </li>
-                            <li><a href="product.php"><i class="bi bi-box-seam-fill"></i>
-                                    <h4>All Product</h4>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="#" class="user-btn">
-                            <i class="bi bi-person-fill"></i>
-                            <h4>User Type</h4>
-                            <i class="bi bi-chevron-down second"></i>
-                        </a>
-                        <ul class="user-show">
-                            <li><a href="admin.php"><i class="bi bi-person-fill-gear"></i>
-                                    <h4>All Admin</h4>
-                                </a>
-                            </li>
-                            <li><a href="teacher.php"><i class="bi bi-mortarboard-fill"></i>
-                                    <h4>All Teachers</h4>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="parent.php"><i class="bi bi-people-fill"></i>
-                                    <h4>All Parents</h4>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="student.php" class="active"><i class="bi bi-people-fill"></i>
-                                    <h4>All Students</h4>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="order.php">
-                            <i class="bi bi-receipt"></i>
-                            <h4>Order</h4>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </aside>
+        <?php include "../components/admin_sidebar.php"; ?>
         <!-- END OF ASIDE -->
         <main class="category">
             <div class="wrapper">
@@ -188,9 +143,10 @@ if (isset($_POST["submit"])) {
                     <?php foreach ($all_students as $student) : ?>
                         <div class="box">
                             <h3><?php echo htmlspecialchars($student['student_name']); ?></h3>
+                            <p>Class: <?php echo htmlspecialchars($student['class_name']); ?></p>
                             <a href="#">
                                 <div class="image-container">
-                                    <img src="../uploads/<?php echo htmlspecialchars($student['student_image']); ?>" alt="Image for <?php echo htmlspecialchars($student['student_name']); ?>">
+                                    <img src="../uploads/student/<?php echo htmlspecialchars($student['student_image']); ?>" alt="Image for <?php echo htmlspecialchars($student['student_name']); ?>">
                                 </div>
                             </a>
                         </div>
@@ -214,13 +170,14 @@ if (isset($_POST["submit"])) {
                 <p>Please enter the student's full name.</p>
             </div>
             <div class="input-container">
-                <h2>Student Email<sup>*</sup></h2>
-                <input type="email" name="email" value="<?php echo isset($_POST['email']) ? htmlspecialchars($_POST['email']) : ''; ?>" required>
-                <p>Please enter the student's email address.</p>
-            </div>
-            <div class="input-container">
-                <h2>Student Class</h2>
-                <input type="text" name="class" value="<?php echo isset($_POST['class']) ? htmlspecialchars($_POST['class']) : ''; ?>" required>
+                <h2>Class<sup>*</sup></h2>
+                <select name="class_id" required>
+                    <option value="">Select Class</option>
+                    <?php foreach ($all_classes as $class) : ?>
+                        <option value="<?= htmlspecialchars($class['class_id']) ?>"><?= htmlspecialchars($class['class_name']) ?></option>
+                    <?php endforeach; ?>
+                </select>
+                <p>Please select the student's class.</p>
             </div>
             <div class="input-container">
                 <h2>Student Image<sup>*</sup></h2>

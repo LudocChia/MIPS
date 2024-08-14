@@ -11,7 +11,7 @@ include "./components/db_connect.php";
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mahans School</title>
+    <title>Mahans Internation Primary School</title>
     <link rel="icon" type="image/x-icon" href="./images/Mahans_internation_primary_school_logo.png">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
@@ -67,6 +67,7 @@ include "./components/db_connect.php";
     <?php include "./components/customer_footer.php"; ?>
     <script src="./javascript/home.js"></script>
     <script src="./javascript/customer.js"></script>
+    <script src="../javascript/index.js"></script>
 </body>
 
 </html>

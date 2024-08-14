@@ -8,9 +8,9 @@
         <span class="fas fa-bars" id="menuIcon" onclick="toggle()"></span>
         <div class="navbar" id="nav">
             <ul>
-                <li>
+                <!-- <li>
                     <a href="index.php"><span class="material-symbols-outlined icon-adjust">local_library</span></i>Student Performance</a>
-                </li>
+                </li> -->
                 <li>
                     <a href="meal.php"><span class="material-symbols-outlined icon-adjust">food_bank</span>Student Meal Plan</a>
                 </li>
@@ -76,22 +76,51 @@
         const userBtn = document.querySelector("#user-btn");
         const profileMenu = document.querySelector(".profile-menu");
 
-        // Show Profile Menu
-        userBtn.addEventListener('click', function(event) {
-            event.stopPropagation();
-            profileMenu.classList.toggle('active');
-        });
+        if (userBtn && profileMenu) {
+            userBtn.addEventListener('click', function(event) {
+                event.stopPropagation();
+                profileMenu.classList.toggle('active');
+            });
 
-        document.addEventListener('click', function(event) {
-            if (!profileMenu.contains(event.target) && !userBtn.contains(event.target)) {
-                profileMenu.classList.remove('active');
-            }
-        });
+            document.addEventListener('click', function(event) {
+                if (!profileMenu.contains(event.target) && !userBtn.contains(event.target)) {
+                    profileMenu.classList.remove('active');
+                }
+            });
 
-        window.addEventListener('resize', function() {
-            if (profileMenu.classList.contains('active')) {
-                profileMenu.classList.remove('active');
-            }
-        });
+            window.addEventListener('resize', function() {
+                if (profileMenu.classList.contains('active')) {
+                    profileMenu.classList.remove('active');
+                }
+            });
+        }
+
+        const burgerMenu = document.getElementById("burger-menu");
+        const navMenu = document.getElementById("nav-menu");
+        const searchContainer = document.getElementById("search-container");
+
+        if (burgerMenu && navMenu && searchContainer) {
+            burgerMenu.addEventListener("click", function() {
+                navMenu.classList.toggle("active");
+                searchContainer.classList.toggle("active");
+            });
+        }
+
+        const menuIcon = document.getElementById("menuIcon");
+        const nav = document.getElementById("nav");
+
+        if (menuIcon && nav) {
+            menuIcon.addEventListener("click", function() {
+                console.log('menuIcon clicked');
+                nav.classList.toggle("navactive");
+                console.log('nav class list:', nav.classList);
+            });
+
+            document.addEventListener("click", function(event) {
+                if (!nav.contains(event.target) && !menuIcon.contains(event.target)) {
+                    nav.classList.remove("navactive");
+                }
+            });
+        }
     });
 </script>

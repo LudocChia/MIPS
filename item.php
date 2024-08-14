@@ -68,19 +68,13 @@ function getParentChildren($pdo, $user_id)
 
 $children = getParentChildren($pdo, $_SESSION['user_id'] ?? null);
 
-if (empty($children)) {
-    echo "<script>alert('No children found for the parent.');</script>";
-} else {
-    echo "<script>console.log('Children found: " . count($children) . "');</script>";
-}
-
 $stockQuantity = $product['stock_quantity'] ?? 0;
 
 if (isset($_POST['submit'])) {
     $productId = $_POST['product_id'];
     $sizeId = $_POST['size_id'];
     $productPrice = $_POST['product_price'];
-    $childId = $_POST['child'];
+    $selectedChildren = $_POST['child'] ?? [];
     $parentId = $_SESSION['user_id'];
 
     $targetDir = "uploads/receipts/";
@@ -92,39 +86,41 @@ if (isset($_POST['submit'])) {
         try {
             $pdo->beginTransaction();
 
-            $orderQuery = "INSERT INTO Orders (order_id, parent_student_id, order_price) 
-                           VALUES (:order_id, (SELECT parent_student_id FROM Parent_Student WHERE parent_id = :parent_id AND student_id = :student_id), :order_price)";
-            $orderStmt = $pdo->prepare($orderQuery);
-            $orderId = uniqid('ORD');
-            $orderStmt->bindParam(':order_id', $orderId);
-            $orderStmt->bindParam(':parent_id', $parentId);
-            $orderStmt->bindParam(':student_id', $childId);
-            $orderStmt->bindParam(':order_price', $productPrice);
-            $orderStmt->execute();
+            foreach ($selectedChildren as $childId) {
+                $orderQuery = "INSERT INTO Orders (order_id, parent_student_id, order_price) 
+                               VALUES (:order_id, (SELECT parent_student_id FROM Parent_Student WHERE parent_id = :parent_id AND student_id = :student_id), :order_price)";
+                $orderStmt = $pdo->prepare($orderQuery);
+                $orderId = uniqid('ORD');
+                $orderStmt->bindParam(':order_id', $orderId);
+                $orderStmt->bindParam(':parent_id', $parentId);
+                $orderStmt->bindParam(':student_id', $childId);
+                $orderStmt->bindParam(':order_price', $productPrice);
+                $orderStmt->execute();
 
-            $orderItemQuery = "INSERT INTO Order_Item (order_item_id, order_id, product_id, product_size_id, product_quantity, order_subtotal) 
-                               VALUES (:order_item_id, :order_id, :product_id, :product_size_id, 1, :order_subtotal)";
-            $orderItemStmt = $pdo->prepare($orderItemQuery);
-            $orderItemId = uniqid('OI');
-            $orderItemStmt->bindParam(':order_item_id', $orderItemId);
-            $orderItemStmt->bindParam(':order_id', $orderId);
-            $orderItemStmt->bindParam(':product_id', $productId);
-            $orderItemStmt->bindParam(':product_size_id', $sizeId);
-            $orderItemStmt->bindParam(':order_subtotal', $productPrice);
-            $orderItemStmt->execute();
+                $orderItemQuery = "INSERT INTO Order_Item (order_item_id, order_id, product_id, product_size_id, product_quantity, order_subtotal) 
+                                   VALUES (:order_item_id, :order_id, :product_id, :product_size_id, 1, :order_subtotal)";
+                $orderItemStmt = $pdo->prepare($orderItemQuery);
+                $orderItemId = uniqid('OI');
+                $orderItemStmt->bindParam(':order_item_id', $orderItemId);
+                $orderItemStmt->bindParam(':order_id', $orderId);
+                $orderItemStmt->bindParam(':product_id', $productId);
+                $orderItemStmt->bindParam(':product_size_id', $sizeId);
+                $orderItemStmt->bindParam(':order_subtotal', $productPrice);
+                $orderItemStmt->execute();
 
-            // Insert into Payment table
-            $paymentQuery = "INSERT INTO Payment (payment_id, parent_student_id, order_id, payment_amount, payment_status, payment_image) 
-                             VALUES (:payment_id, (SELECT parent_student_id FROM Parent_Student WHERE parent_id = :parent_id AND student_id = :student_id), :order_id, :payment_amount, 'pending', :payment_image)";
-            $paymentStmt = $pdo->prepare($paymentQuery);
-            $paymentId = uniqid('PAY');
-            $paymentStmt->bindParam(':payment_id', $paymentId);
-            $paymentStmt->bindParam(':parent_id', $parentId);
-            $paymentStmt->bindParam(':student_id', $childId);
-            $paymentStmt->bindParam(':order_id', $orderId);
-            $paymentStmt->bindParam(':payment_amount', $productPrice);
-            $paymentStmt->bindParam(':payment_image', $targetFilePath);
-            $paymentStmt->execute();
+                // Insert into Payment table
+                $paymentQuery = "INSERT INTO Payment (payment_id, parent_student_id, order_id, payment_amount, payment_status, payment_image) 
+                                 VALUES (:payment_id, (SELECT parent_student_id FROM Parent_Student WHERE parent_id = :parent_id AND student_id = :student_id), :order_id, :payment_amount, 'pending', :payment_image)";
+                $paymentStmt = $pdo->prepare($paymentQuery);
+                $paymentId = uniqid('PAY');
+                $paymentStmt->bindParam(':payment_id', $paymentId);
+                $paymentStmt->bindParam(':parent_id', $parentId);
+                $paymentStmt->bindParam(':student_id', $childId);
+                $paymentStmt->bindParam(':order_id', $orderId);
+                $paymentStmt->bindParam(':payment_amount', $productPrice);
+                $paymentStmt->bindParam(':payment_image', $targetFilePath);
+                $paymentStmt->execute();
+            }
 
             $pdo->commit();
 
@@ -146,7 +142,7 @@ if (isset($_POST['submit'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo htmlspecialchars($product['product_name']); ?> - Mahans School</title>
+    <title><?php echo htmlspecialchars($product['product_name']); ?> - MIPS</title>
     <link rel="icon" type="image/x-icon" href="./images/Mahans_internation_primary_school_logo.png">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
@@ -247,31 +243,37 @@ if (isset($_POST['submit'])) {
     </div>
 
     <dialog id="buy-now-dialog">
-        <h2>Purchase Product</h2>
+        <h1>Purchase Product</h1>
         <form action="" method="post" enctype="multipart/form-data">
             <input type="hidden" name="product_id" id="product-id" value="">
             <input type="hidden" name="size_id" id="size-id" value="">
             <input type="hidden" name="product_price" id="product-price" value="">
-
-            <div class="input-field">
-                <h2>Product Name</h2>
-                <p id="product-name-display">Product Name Here</p>
+            <div class="input-container">
+                <div class="input-field">
+                    <h2>Product Name</h2>
+                    <input type="text" name="product_name" id="product-name-display" value="Product Name Here" readonly>
+                </div>
             </div>
-            <div class="input-field">
-                <h2>Selected Size</h2>
-                <p id="selected-size-display">Selected Size Here</p>
+            <div class="input-container">
+                <div class="input-field">
+                    <h2>Selected Size</h2>
+                    <input type="text" name="selected_size" id="selected-size-display" value="Selected Size Here" readonly>
+                </div>
             </div>
-            <div class="input-field">
-                <h2>Price (RM)</h2>
-                <p id="product-price-display">Product Price Here</p>
+            <div class="input-container">
+                <div class="input-field">
+                    <h2>Price (RM)</h2>
+                    <input type="text" name="product_price_display" id="product-price-display" value="Product Price Here" readonly>
+                </div>
             </div>
             <div class="input-container">
                 <h2>Select Child<sup>*</sup></h2>
-                <select name="child" id="child" required>
-                    <?php foreach ($children as $child) : ?>
-                        <option value="<?= htmlspecialchars($child['student_id']) ?>"><?= htmlspecialchars($child['student_name']) ?></option>
-                    <?php endforeach; ?>
-                </select>
+                <?php foreach ($children as $child) : ?>
+                    <label>
+                        <input type="checkbox" name="child[]" value="<?= htmlspecialchars($child['student_id']) ?>">
+                        <?= htmlspecialchars($child['student_name']) ?>
+                    </label><br>
+                <?php endforeach; ?>
                 <p>Please select which child you are buying for.</p>
             </div>
             <div class="input-container">
@@ -293,27 +295,33 @@ if (isset($_POST['submit'])) {
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script src="javascript/common.js"></script>
     <script type="text/javascript">
-        document.querySelector('.buy-now').addEventListener('click', function() {
-            const selectedSizeButton = document.querySelector('.size-button.selected');
-            if (!selectedSizeButton) {
-                alert('Please select a size.');
-                return;
-            }
+        document.addEventListener("DOMContentLoaded", function() {
+            document.querySelector('.buy-now').addEventListener('click', function() {
+                <?php if (!isset($_SESSION['user_id'])) : ?>
+                    document.getElementById('login-form').showModal();
+                <?php else : ?>
+                    const selectedSizeButton = document.querySelector('.size-button.selected');
+                    if (!selectedSizeButton) {
+                        alert('Please select a size.');
+                        return;
+                    }
 
-            const sizeId = selectedSizeButton.getAttribute('data-size-id');
-            const productName = '<?= htmlspecialchars($product['product_name']) ?>';
-            const productPrice = '<?= number_format($product['product_price'], 2) ?>';
+                    const sizeId = selectedSizeButton.getAttribute('data-size-id');
+                    const productName = '<?= htmlspecialchars($product['product_name']) ?>';
+                    const productPrice = '<?= number_format($product['product_price'], 2) ?>';
 
-            document.getElementById('product-id').value = '<?= $product_id ?>';
-            document.getElementById('size-id').value = sizeId;
-            document.getElementById('product-price').value = productPrice;
+                    document.getElementById('product-id').value = '<?= $product_id ?>';
+                    document.getElementById('size-id').value = sizeId;
+                    document.getElementById('product-price').value = productPrice;
 
-            document.getElementById('product-name-display').textContent = productName;
-            document.getElementById('selected-size-display').textContent = selectedSizeButton.textContent;
-            document.getElementById('product-price-display').textContent = 'MYR ' + productPrice;
+                    document.getElementById('product-name-display').value = productName;
+                    document.getElementById('selected-size-display').value = selectedSizeButton.textContent;
+                    document.getElementById('product-price-display').value = 'MYR ' + productPrice;
 
-            const dialog = document.getElementById('buy-now-dialog');
-            dialog.showModal();
+                    const dialog = document.getElementById('buy-now-dialog');
+                    dialog.showModal();
+                <?php endif; ?>
+            });
         });
 
         document.querySelectorAll('.size-button').forEach(button => {

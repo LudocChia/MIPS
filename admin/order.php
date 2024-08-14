@@ -1,6 +1,7 @@
 <?php
 
 session_start();
+
 include "../components/db_connect.php";
 
 if (!isset($_SESSION['admin_id'])) {
@@ -8,17 +9,21 @@ if (!isset($_SESSION['admin_id'])) {
     exit();
 }
 
+$currentPage = basename($_SERVER['PHP_SELF']);
+
 function getAllOrders($pdo)
 {
-    $sql = "SELECT o.order_id, o.order_datetime, o.order_price, p.parent_name
+    $sql = "SELECT o.order_id, o.order_datetime, o.order_price, p.parent_name, pm.payment_status
             FROM Orders o
             JOIN Parent_Student ps ON o.parent_student_id = ps.parent_student_id
             JOIN Parent p ON ps.parent_id = p.parent_id
+            JOIN Payment pm ON o.order_id = pm.order_id
             WHERE o.is_deleted = 0";
     $stmt = $pdo->prepare($sql);
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
+
 
 $all_orders = getAllOrders($pdo);
 
@@ -93,7 +98,7 @@ if (isset($_POST["submit"])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bookshop Order - Mahans School</title>
+    <title>Bookshop Order - MIPS</title>
     <link rel="icon" type="image/x-icon" href="../images/Mahans_internation_primary_school_logo.png">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
@@ -107,96 +112,7 @@ if (isset($_POST["submit"])) {
 <body>
     <?php include "../components/admin_header.php"; ?>
     <div class="container">
-        <aside>
-            <button id="close-btn">
-                <i class="bi bi-layout-sidebar-inset"></i>
-            </button>
-            <div class="sidebar">
-                <ul>
-                    <li>
-                        <a href="index.php"><i class="bi bi-grid-1x2-fill"></i>
-                            <h4>Dashboard</h4>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" class="bookshop-btn">
-                            <i class="bi bi-shop-window"></i>
-                            <h4>Bookshop</h4>
-                            <i class="bi bi-chevron-down first"></i>
-                        </a>
-                        <ul class="bookshop-show">
-                            <li><a href="mainCategory.php"><i class="bi bi-tags-fill"></i>
-                                    <h4>Main Category</h4>
-                                </a>
-                            </li>
-                            <li><a href="subcategory.php"><i class="bi bi-tag-fill"></i>
-                                    <h4>Subcategory</h4>
-                                </a>
-                            </li>
-                            <li><a href="size.php"><i class="bi bi-aspect-ratio-fill"></i>
-                                    <h4>Product Size</h4>
-                                </a>
-                            </li>
-                            <li><a href="product.php"><i class="bi bi-box-seam-fill"></i>
-                                    <h4>All Product</h4>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="order.php" class="active">
-                            <i class="bi bi-receipt"></i>
-                            <h4>Order</h4>
-                            <span id="pending-order-count"></span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="announment.php">
-                            <i class="bi bi-megaphone-fill"></i>
-                            <h4>Announcement</h4>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="deactivate.php">
-                            <i class="bi bi-trash2-fill"></i>
-                            <h4>Deactivate List</h4>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" class="user-btn">
-                            <i class="bi bi-person-fill"></i>
-                            <h4>User Type</h4>
-                            <i class="bi bi-chevron-down second"></i>
-                        </a>
-                        <ul class="user-show">
-                            <li><a href="admin.php"><i class="bi bi-person-fill-gear"></i>
-                                    <h4>All Admin</h4>
-                                </a>
-                            </li>
-                            <li><a href="teacher.php"><i class="bi bi-mortarboard-fill"></i>
-                                    <h4>All Teacher</h4>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="parent.php"><i class="bi bi-people-fill"></i>
-                                    <h4>All Parent</h4>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li><a href="#">
-                            <i class="bi bi-file-text-fill"></i>
-                            <h4>Report</h4>
-                            <i class="bi bi-chevron-down first"></i>
-                        </a>
-                        <ul>
-                            <li>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
-        </aside>
+        <?php include "../components/admin_sidebar.php"; ?>
         <!-- END OF ASIDE -->
         <main class="admin">
             <div class="wrapper">
@@ -238,6 +154,9 @@ if (isset($_POST["submit"])) {
                                     <h3>Order Amount</h3>
                                 </th>
                                 <th>
+                                    <h3>Status</h3>
+                                </th>
+                                <th>
                                     <h3>Actions</h3>
                                 </th>
                             </tr>
@@ -249,6 +168,16 @@ if (isset($_POST["submit"])) {
                                     <td><?php echo htmlspecialchars($order['parent_name']); ?></td>
                                     <td><?php echo htmlspecialchars($order['order_datetime']); ?></td>
                                     <td>MYR <?php echo htmlspecialchars($order['order_price']); ?></td>
+                                    <td>
+                                        <form action="" method="POST" style="display:inline;">
+                                            <input type="hidden" name="order_id" value="<?= htmlspecialchars($order['order_id']); ?>">
+                                            <select name="order_status" class="status-select">
+                                                <option value="pending" <?= $order['payment_status'] == 'pending' ? 'selected' : ''; ?>>Pending</option>
+                                                <option value="completed" <?= $order['payment_status'] == 'completed' ? 'selected' : ''; ?>>Completed</option>
+                                                <option value="failed" <?= $order['payment_status'] == 'failed' ? 'selected' : ''; ?>>Failed</option>
+                                            </select>
+                                        </form>
+                                    </td>
                                     <td>
                                         <form action="" method="POST" style="display:inline;">
                                             <input type="hidden" name="order_id" value="<?= htmlspecialchars($order['order_id']); ?>">
@@ -337,14 +266,11 @@ if (isset($_POST["submit"])) {
     <script src="../javascript/admin.js"></script>
     <script>
         document.getElementById('add-product-btn').addEventListener('click', function() {
-            // Clone the first product-info div
             const productInfo = document.querySelector('.product-info').cloneNode(true);
 
-            // Clear the input fields in the cloned product-info
             const inputs = productInfo.querySelectorAll('input');
             inputs.forEach(input => input.value = '');
 
-            // Append the cloned product-info to the product-list div
             document.getElementById('product-list').appendChild(productInfo);
         });
 
@@ -365,34 +291,50 @@ if (isset($_POST["submit"])) {
             });
         });
 
-        document.querySelectorAll('.edit-order-btn').forEach(button => {
-            button.addEventListener('click', function() {
-                const orderId = this.dataset.orderId;
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.status-select').forEach(select => {
+                select.addEventListener('change', function() {
+                    const orderId = this.closest('form').querySelector('input[name="order_id"]').value;
+                    const orderStatus = this.value;
 
-                fetch(`ajax.php?action=get_order&order_id=${orderId}`)
-                    .then(response => response.json())
-                    .then(orderDetails => {
-                        if (orderDetails.error) {
-                            alert(orderDetails.error);
-                        } else {
-                            const order = orderDetails[0];
+                    fetch('ajax.php?action=update_order_status', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/x-www-form-urlencoded'
+                            },
+                            body: new URLSearchParams({
+                                order_id: orderId,
+                                order_status: orderStatus
+                            })
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                fetch('ajax.php?action=get_pending_count')
+                                    .then(response => response.text())
+                                    .then(count => {
+                                        const pendingOrderCountElement = document.getElementById('pending-order-count');
+                                        if (parseInt(count) > 0) {
+                                            pendingOrderCountElement.textContent = `(${count})`;
+                                            pendingOrderCountElement.style.display = 'inline';
+                                        } else {
+                                            pendingOrderCountElement.style.display = 'none';
+                                        }
+                                    })
+                                    .catch(error => {
+                                        console.error('Error fetching pending order count:', error);
+                                        alert('Failed to update pending order count.');
+                                    });
 
-                            document.querySelector('#add-edit-data [name="parent_student_id"]').value = order.parent_student_id;
-                            document.querySelector('#add-edit-data [name="order_price"]').value = order.order_price;
-
-                            document.querySelector('#add-edit-data [name="payment_status"]').value = order.payment_status;
-                            document.querySelector('#add-edit-data [name="payment_image"]').src = order.payment_image;
-                            document.querySelector('#add-edit-data [name="product_name"]').textContent = order.product_name;
-                            document.querySelector('#add-edit-data [name="product_image"]').src = order.product_image;
-
-                            document.querySelector('#add-edit-data h1').textContent = "Edit Order";
-                            document.getElementById('add-edit-data').showModal();
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error fetching order data:', error);
-                        alert('Failed to load order data.');
-                    });
+                            } else {
+                                alert('Failed to update order status: ' + data.error);
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error updating order status:', error);
+                            alert('Failed to update order status.');
+                        });
+                });
             });
         });
     </script>

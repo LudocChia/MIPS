@@ -59,22 +59,21 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // dialog modal
     document.querySelector("#open-popup").addEventListener("click", function () {
         document.getElementById('add-edit-data').showModal();
     });
 
-    document.querySelector('#add-edit-data .cancel').addEventListener('click', function () {
-        const dialog = document.getElementById('add-edit-data');
-        dialog.close();
-        dialog.querySelector('form').reset();
-    });
-
-    // Handle delete confirmation dialog
-    const deleteConfirmDialog = document.getElementById('delete-confirm-dialog');
-    let deleteForm = null;
-
-    window.showDeleteConfirmDialog = function (event) {
+    document.querySelectorAll('#add-edit-data .cancel, #delete-confirm-dialog .cancel').forEach(button => {
+        button.addEventListener('click', function () {
+            const dialog = this.closest('dialog');
+            if (dialog) {
+                dialog.close();
+                if (dialog.id === 'add-edit-data') {
+                    dialog.querySelector('form').reset();
+                }
+            }
+        });
+    }); window.showDeleteConfirmDialog = function (event) {
         event.preventDefault();
         deleteForm = event.target;
         deleteConfirmDialog.showModal();

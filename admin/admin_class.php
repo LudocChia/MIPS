@@ -23,6 +23,68 @@ class Action
         return $stmt->fetchColumn();
     }
 
+    public function update_order_status($order_id, $order_status)
+    {
+        $sql = "UPDATE Orders o
+            JOIN Payment p ON o.order_id = p.order_id
+            SET p.payment_status = :order_status
+            WHERE o.order_id = :order_id AND o.is_deleted = 0";
+
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':order_id', $order_id);
+        $stmt->bindParam(':order_status', $order_status);
+
+        try {
+            $stmt->execute();
+            return json_encode(['success' => true]);
+        } catch (PDOException $e) {
+            return json_encode(['error' => 'Database error: ' . $e->getMessage()]);
+        }
+    }
+
+    public function get_class($class_id)
+    {
+        $sql = "
+            SELECT c.class_id, c.class_name, c.grade_id, c.class_teacher_id, g.grade_name, a.admin_name AS teacher_name
+            FROM Class c
+            LEFT JOIN Grade g ON c.grade_id = g.grade_id
+            LEFT JOIN Admin a ON c.class_teacher_id = a.admin_id
+            WHERE c.class_id = :class_id AND c.is_deleted = 0
+        ";
+
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':class_id', $class_id);
+        $stmt->execute();
+        $class = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($class) {
+            return json_encode($class);
+        } else {
+            return json_encode(['error' => 'Class not found']);
+        }
+    }
+
+    public function get_grade($grade_id)
+    {
+        $sql = "
+            SELECT grade_id, grade_name, grade_level
+            FROM Grade
+            WHERE grade_id = :grade_id AND is_deleted = 0
+        ";
+
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':grade_id', $grade_id);
+        $stmt->execute();
+        $grade = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($grade) {
+            return json_encode($grade);
+        } else {
+            return json_encode(['error' => 'Grade not found']);
+        }
+    }
+
+
     public function get_order($order_id)
     {
         $sql = "
@@ -114,11 +176,13 @@ class Action
 
             $product['sizes'] = $sizes;
 
+            error_log(json_encode($product));  // Add this line to log the response data
             return json_encode($product);
         } else {
             return json_encode(['error' => 'Product not found']);
         }
     }
+
 
     public function delete_product()
     {
