@@ -148,7 +148,7 @@ if (isset($_POST['delete'])) {
                         <h1>Mahans Students</h1>
                     </div>
                     <div class="right">
-                        <button id="open-popup" class="btn btn-outline"><i class="bi bi-person-fill-add"></i>Add New Student</button>
+                        <button id="open-popup" class="btn btn-outline-primary"><i class="bi bi-person-fill-add"></i>Add New Student</button>
                     </div>
                 </div>
                 <div class="table-body">

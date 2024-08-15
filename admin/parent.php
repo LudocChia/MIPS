@@ -155,7 +155,7 @@ if (isset($_POST['deactivate'])) {
                         <h1>Mahans Parents</h1>
                     </div>
                     <div class="right">
-                        <button class="btn btn-outline" id="open-popup"><i class="bi bi-person-fill-add"></i>Add New Parent</button>
+                        <button class="btn btn-outline-primary" id="open-popup"><i class="bi bi-person-fill-add"></i>Add New Parent</button>
                         <?php
                         try {
                             $countQuery = "SELECT COUNT(*) FROM Parent WHERE is_deleted = 0";

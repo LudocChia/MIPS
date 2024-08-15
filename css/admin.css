@@ -30,7 +30,6 @@
 .wrapper {
     background-color: var(--color-white);
     border-radius: var(--card-border-radius);
-    border: 1px solid var(--color-light);
     transition: all 300ms ease;
 }
 
@@ -47,8 +46,6 @@
     padding: var(--padding-1);
     border: 1px solid #b3b3b3;
     box-shadow: var(--box-shadow);
-    /* z-index: 9999; */
-    /* display: none; */
 }
 
 /* #delete-confirm-dialog {
@@ -455,9 +452,6 @@ main .recent-orders {
     margin-top: 2rem;
 }
 
-main .recent-orders h2 {
-    margin-bottom: 0.8rem;
-}
 
 main .recent-orders table {
     background: var(--color-white);
@@ -612,20 +606,6 @@ main .recent-orders a {
 }
 
 /* Table Content */
-.product-size table {
-    width: 100%;
-    background-color: #ffff;
-}
-
-.product-size .table-body {
-    /* width: 95%; */
-    width: 100%;
-    max-height: calc(89% - .8rem);
-    background-color: #fffb;
-    margin: .8rem auto;
-    /* border-radius: .6rem; */
-    overflow: auto;
-}
 
 /* .table-body::-webkit-scrollbar {
     width: .5rem;
@@ -641,53 +621,6 @@ main .recent-orders a {
 .table-body:hover::-webkit-scrollbar-thumb {
     visibility: visible;
 } */
-
-table {
-    width: 100%;
-}
-
-table,
-th,
-td {
-    /* border-collapse: collapse; */
-    /* padding: 1rem; */
-}
-
-table th {
-    color: var(--color-white);
-    position: sticky;
-    top: 0;
-    left: 0;
-    background-color: var(--color-primary);
-}
-
-td img {
-    width: 36px;
-    height: 36px;
-    margin-right: .5rem;
-    border-radius: 50%;
-    vertical-align: middle;
-}
-
-/* tbody tr:nth-child(even) {
-    background-color: black;
-} */
-
-tbody tr:hover {
-    background-color: #fff6;
-}
-
-table,
-th,
-td {
-    padding: 1rem;
-}
-
-thead th {
-    position: sticky;
-    top: 0;
-    Left: 0;
-}
 
 /* MEDIA QUERIES */
 @media screen and (max-width: 1200px) {

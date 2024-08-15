@@ -172,7 +172,7 @@ $recentOrders = getRecentOrders($pdo, 5);
                                 <h2>Recent Orders</h2>
                             </div>
                             <div class="right">
-                                <a href="./order.php" class="more">View All<i class="bi bi-chevron-right"></i></a>
+                                <!-- <a href="./order.php" class="more">View All<i class="bi bi-chevron-right"></i></a> -->
                             </div>
                         </div>
                         <div class="table-body">

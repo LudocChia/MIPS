@@ -151,7 +151,7 @@ $all_main_categories = getMainCategories($pdo);
                         <h1>Bookshop Main Category</h1>
                     </div>
                     <div class="right">
-                        <button id="open-popup" class="btn btn-outline"><i class="bi bi-plus-circle"></i>Add Main Category</button>
+                        <button id="open-popup" class="btn btn-outline-primary"><i class="bi bi-plus-circle"></i>Add Main Category</button>
                     </div>
                 </div>
                 <div class="box-container">

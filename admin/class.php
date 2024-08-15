@@ -98,7 +98,7 @@ $all_classes = getClasses($pdo);
                             echo "<script>alert('Database error: " . $e->getMessage() . "');</script>";
                         }
                         ?>
-                        <button id="open-popup" class="btn btn-outline"><i class="bi bi-plus-circle"></i>Add New Class</button>
+                        <button id="open-popup" class="btn btn-outline-primary"><i class="bi bi-plus-circle"></i>Add New Class</button>
                     </div>
                 </div>
                 <div class="table-body">

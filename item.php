@@ -27,10 +27,23 @@ function getProductDetail($pdo, $product_id)
 
 $product = getProductDetail($pdo, $product_id);
 
-if (!$product) {
-    header('Location: error.php');
-    exit();
+function getApparelSizes($pdo, $product_id)
+{
+    $stmt = $pdo->prepare("
+        SELECT s.size_name, s.shoulder_width, s.bust, s.waist, s.length, ps.size_id
+        FROM Sizes s
+        JOIN Product_Size ps ON s.size_id = ps.size_id
+        JOIN Product p ON ps.product_id = p.product_id
+        WHERE p.product_id = :product_id
+        AND p.is_deleted = 0
+        ORDER BY s.size_name ASC
+    ");
+    $stmt->bindParam(':product_id', $product_id, PDO::PARAM_INT);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
+
+$get_apparel_sizes = getApparelSizes($pdo, $product_id);
 
 function getProductSizes($pdo, $product_id)
 {
@@ -241,6 +254,49 @@ if (isset($_POST['submit'])) {
             </div>
         </div>
     </div>
+    <section class="size-chart">
+        <div class="container">
+            <div class="wrapper">
+                <div class="title">
+                    <div class="left">
+                        <h1>Apparel Size</h1>
+                    </div>
+                    <div class="right">
+                    </div>
+                </div>
+                <div class="table-body">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Apparel Size Name</th>
+                                <th>Shoulder Width</th>
+                                <th>Bust</th>
+                                <th>Waist</th>
+                                <th>Length</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php if (!empty($get_apparel_sizes)) : ?>
+                                <?php foreach ($get_apparel_sizes as $size) : ?>
+                                    <tr>
+                                        <td><?= htmlspecialchars($size['size_name']); ?></td>
+                                        <td><?= htmlspecialchars($size['shoulder_width']); ?></td>
+                                        <td><?= htmlspecialchars($size['bust']); ?></td>
+                                        <td><?= htmlspecialchars($size['waist']); ?></td>
+                                        <td><?= htmlspecialchars($size['length']); ?></td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            <?php else : ?>
+                                <tr>
+                                    <td colspan="6">No apparel sizes available.</td>
+                                </tr>
+                            <?php endif; ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <dialog id="buy-now-dialog">
         <h1>Purchase Product</h1>

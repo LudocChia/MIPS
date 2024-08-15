@@ -80,6 +80,13 @@ switch ($action) {
             echo json_encode(['error' => 'Subcategory ID not provided']);
         }
         break;
+    case 'update_order_status':
+        if (isset($_POST['order_id']) && isset($_POST['order_status'])) {
+            echo $crud->update_order_status($_POST['order_id'], $_POST['order_status']);
+        } else {
+            echo json_encode(['error' => 'Order ID or order status not provided']);
+        }
+        break;
     default:
         echo json_encode(['error' => 'Invalid action']);
         break;

@@ -113,7 +113,7 @@ $all_product_sizes = getSizes($pdo);
                         <h1>Apparel Size</h1>
                     </div>
                     <div class="right">
-                        <button id="open-popup" class="btn btn-outline"><i class="bi bi-plus-circle"></i>Add Apparel Size</button>
+                        <button id="open-popup" class="btn btn-outline-primary"><i class="bi bi-plus-circle"></i>Add Apparel Size</button>
                     </div>
                 </div>
                 <div class="table-body">

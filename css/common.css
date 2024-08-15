@@ -418,6 +418,52 @@ header .profile-area i {
 }
 
 
+table {
+    width: 100%;
+}
+
+
+table th {
+    color: var(--color-white);
+    position: sticky;
+    top: 0;
+    left: 0;
+    background-color: var(--color-primary);
+}
+
+td img {
+    width: 36px;
+    height: 36px;
+    margin-right: .5rem;
+    border-radius: 50%;
+    vertical-align: middle;
+}
+
+/* tbody tr:nth-child(even) {
+    background-color: black;
+} */
+
+tbody tr:hover {
+    background-color: #fff6;
+}
+
+table,
+th,
+td {
+    padding: 1rem;
+}
+
+table {
+    padding-top: 0;
+}
+
+thead th {
+    position: sticky;
+    top: 0;
+    Left: 0;
+}
+
+
 /* Title */
 .title {
     position: relative;

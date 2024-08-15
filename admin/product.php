@@ -232,7 +232,7 @@ if (isset($_POST['delete'])) {
                         <h1>Bookshop Products</h1>
                     </div>
                     <div class="right">
-                        <button id="open-popup" class="btn btn-outline"><i class="bi bi-plus-circle"></i>Add Bookshop Product</button>
+                        <button id="open-popup" class="btn btn-outline-primary"><i class="bi bi-plus-circle"></i>Add Bookshop Product</button>
                         <p></p>
                     </div>
                 </div>

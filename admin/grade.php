@@ -69,7 +69,7 @@ $all_grades = getGrades($pdo);
                         <h1>Grade Management</h1>
                     </div>
                     <div class="right">
-                        <button id="open-popup" class="btn btn-outline"><i class="bi bi-plus-circle"></i>Add New Grade</button>
+                        <button id="open-popup" class="btn btn-outline-primary"><i class="bi bi-plus-circle"></i>Add New Grade</button>
                     </div>
                 </div>
                 <div class="table-body">
