@@ -260,8 +260,8 @@ $recentOrders = getRecentOrders($pdo, 5);
                                     <h3>Page Views</h3>
                                     <small class="text-muted">Last 24 Hours</small>
                                 </div>
-                                <h5 class="success">+39%</h5>
-                                <h3>3849</h3>
+                                <h5 class="success">+1%</h5>
+                                <h3>1</h3>
                             </div>
                         </div>
                         <div class="item">
@@ -273,8 +273,8 @@ $recentOrders = getRecentOrders($pdo, 5);
                                     <h3>Unique Visitors</h3>
                                     <small class="text-muted">Last 24 Hours</small>
                                 </div>
-                                <h5 class="danger">-17%</h5>
-                                <h3>3849</h3>
+                                <h5 class="danger">0%</h5>
+                                <h3>1</h3>
                             </div>
                         </div>
                     </div>

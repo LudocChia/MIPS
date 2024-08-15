@@ -274,23 +274,6 @@ if (isset($_POST["submit"])) {
             document.getElementById('product-list').appendChild(productInfo);
         });
 
-        $(document).ready(function() {
-            $.ajax({
-                url: 'ajax.php?action=get_pending_count',
-                type: 'GET',
-                success: function(response) {
-                    if (parseInt(response) > 0) {
-                        $('#pending-order-count').text(response);
-                    } else {
-                        $('#pending-order-count').hide();
-                    }
-                },
-                error: function() {
-                    $('#pending-order-count').hide();
-                }
-            });
-        });
-
         document.addEventListener('DOMContentLoaded', function() {
             document.querySelectorAll('.status-select').forEach(select => {
                 select.addEventListener('change', function() {
