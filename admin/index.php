@@ -11,6 +11,73 @@ if (!isset($_SESSION['admin_id'])) {
 
 $currentPage = basename($_SERVER['PHP_SELF']);
 
+function getTotalParentsAndStudents($pdo)
+{
+    $sqlParents = "SELECT COUNT(*) as total_parents FROM Parent WHERE is_deleted = 0";
+    $stmtParents = $pdo->query($sqlParents);
+    $totalParents = $stmtParents->fetch(PDO::FETCH_ASSOC)['total_parents'];
+
+    $sqlStudents = "SELECT COUNT(*) as total_students FROM Student WHERE is_deleted = 0";
+    $stmtStudents = $pdo->query($sqlStudents);
+    $totalStudents = $stmtStudents->fetch(PDO::FETCH_ASSOC)['total_students'];
+
+    return $totalParents + $totalStudents;
+}
+
+$totalParentsAndStudents = getTotalParentsAndStudents($pdo);
+
+function getTotalAdmins($pdo)
+{
+    $sqlAdmins = "SELECT COUNT(*) as total_admins FROM Admin WHERE is_deleted = 0";
+    $stmtAdmins = $pdo->query($sqlAdmins);
+    return $stmtAdmins->fetch(PDO::FETCH_ASSOC)['total_admins'];
+}
+
+$totalAdmins = getTotalAdmins($pdo);
+
+function getTotalCashInAmount($pdo)
+{
+    $sqlCashIn = "SELECT SUM(payment_amount) as total_cash_in FROM Payment WHERE payment_status = 'completed'";
+    $stmtCashIn = $pdo->query($sqlCashIn);
+    return $stmtCashIn->fetch(PDO::FETCH_ASSOC)['total_cash_in'];
+}
+
+$totalCashIn = getTotalCashInAmount($pdo);
+
+function getRecentOrders($pdo, $limit = 5)
+{
+    $sqlRecentOrders = "
+        SELECT 
+            o.order_id, 
+            p.product_name, 
+            ps.student_id, 
+            s.student_name, 
+            oi.order_subtotal, 
+            py.payment_status
+        FROM 
+            Orders o
+        JOIN 
+            Order_Item oi ON o.order_id = oi.order_id
+        JOIN 
+            Product p ON oi.product_id = p.product_id
+        JOIN 
+            Parent_Student ps ON o.parent_student_id = ps.parent_student_id
+        JOIN 
+            Student s ON ps.student_id = s.student_id
+        JOIN 
+            Payment py ON o.order_id = py.order_id
+        ORDER BY 
+            o.order_datetime DESC
+        LIMIT :limit
+    ";
+    $stmtRecentOrders = $pdo->prepare($sqlRecentOrders);
+    $stmtRecentOrders->bindValue(':limit', (int)$limit, PDO::PARAM_INT);
+    $stmtRecentOrders->execute();
+    return $stmtRecentOrders->fetchAll(PDO::FETCH_ASSOC);
+}
+
+$recentOrders = getRecentOrders($pdo, 5);
+
 ?>
 
 
@@ -35,7 +102,6 @@ $currentPage = basename($_SERVER['PHP_SELF']);
     <?php include "../components/admin_header.php"; ?>
     <div class="container">
         <?php include "../components/admin_sidebar.php"; ?>
-        <!-- END OF ASIDE -->
         <main>
             <section class="middle">
                 <div class="insights">
@@ -44,7 +110,7 @@ $currentPage = basename($_SERVER['PHP_SELF']);
                         <div class="middle">
                             <div class="left">
                                 <h3>Total Registered Parents and Students</h3>
-                                <h1>100+</h1>
+                                <h1><?php echo $totalParentsAndStudents; ?></h1>
                             </div>
                             <!-- <div class="progress">
                                 <svg>
@@ -63,7 +129,7 @@ $currentPage = basename($_SERVER['PHP_SELF']);
                         <div class="middle">
                             <div class="left">
                                 <h3>Total Registered Admin and Staff</h3>
-                                <h1>10000+</h1>
+                                <h1><?php echo $totalAdmins; ?></h1>
                             </div>
                             <!-- <div class="progress">
                                 <svg>
@@ -82,7 +148,7 @@ $currentPage = basename($_SERVER['PHP_SELF']);
                         <div class="middle">
                             <div class="left">
                                 <h3>Total Cash in Amount</h3>
-                                <h1>MYR 100</h1>
+                                <h1>MYR <?php echo number_format($totalCashIn, 2); ?></h1>
                             </div>
                             <!-- <div class="progress">
                                 <svg>
@@ -120,36 +186,15 @@ $currentPage = basename($_SERVER['PHP_SELF']);
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>iPhone 14</td>
-                                        <td>John Doe</td>
-                                        <td>$1200</td>
-                                        <td><span class="success">Paid</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>iPhone 14</td>
-                                        <td>John Doe</td>
-                                        <td>$1200</td>
-                                        <td><span class="success">Paid</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>iPhone 14</td>
-                                        <td>John Doe</td>
-                                        <td>$1200</td>
-                                        <td><span class="success">Paid</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>iPhone 14</td>
-                                        <td>John Doe</td>
-                                        <td>$1200</td>
-                                        <td><span class="success">Paid</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>iPhone 14</td>
-                                        <td>John Doe</td>
-                                        <td>$1200</td>
-                                        <td><span class="success">Paid</span></td>
-                                    </tr>
+                                    <?php foreach ($recentOrders as $order) { ?>
+                                        <tr>
+                                            <td><?php echo htmlspecialchars($order['product_name']); ?></td>
+                                            <td><?php echo htmlspecialchars($order['student_name']); ?></td>
+                                            <td>MYR <?php echo number_format($order['order_subtotal'], 2); ?></td>
+                                            <td><span class="<?php echo $order['payment_status'] == 'completed' ? 'success' : 'pending'; ?>">
+                                                    <?php echo ucfirst($order['payment_status']); ?></span></td>
+                                        </tr>
+                                    <?php } ?>
                                 </tbody>
                             </table>
                         </div>

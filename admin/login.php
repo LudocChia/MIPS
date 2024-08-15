@@ -67,7 +67,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="container">
             <div class="wrapper">
                 <div class="title">
-                    <img src="../images/Mahans_IPS_icon.png" alt="Mahans_ISP_Logo">
+                    <img src="../images/Mahans_IPS_logo.png" alt="Mahans_ISP_Logo">
                 </div>
                 <?php if (!empty($errorMsg)) : ?>
                     <div class="alert alert-danger">
