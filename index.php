@@ -3,6 +3,8 @@
 session_start();
 
 include "./components/db_connect.php";
+include "./components/customer_login.php"
+
 ?>
 
 <!DOCTYPE html>
@@ -27,7 +29,6 @@ include "./components/db_connect.php";
 
 <body>
     <?php include './components/customer_header.php'; ?>
-    <?php include './components/customer_login.php'; ?>
     <section class="banner">
         <div class="container">
             <div class="wrapper">

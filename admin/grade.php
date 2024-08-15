@@ -69,19 +69,6 @@ $all_grades = getGrades($pdo);
                         <h1>Grade Management</h1>
                     </div>
                     <div class="right">
-                        <?php
-                        try {
-                            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-                            $countQuery = "SELECT COUNT(*) FROM Grade WHERE is_deleted = 0";
-                            $stmt = $pdo->prepare($countQuery);
-                            $stmt->execute();
-                            $count = $stmt->fetchColumn();
-
-                            echo "<p>Total $count Grades</p>";
-                        } catch (PDOException $e) {
-                            echo "<script>alert('Database error: " . $e->getMessage() . "');</script>";
-                        }
-                        ?>
                         <button id="open-popup" class="btn btn-outline"><i class="bi bi-plus-circle"></i>Add New Grade</button>
                     </div>
                 </div>
@@ -91,6 +78,8 @@ $all_grades = getGrades($pdo);
                             <tr>
                                 <th>Grade Name</th>
                                 <th>Grade Level</th>
+                                <th>Total Classes</th>
+                                <th>Total Students</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -99,8 +88,10 @@ $all_grades = getGrades($pdo);
                                 <tr>
                                     <td><?php echo htmlspecialchars($grade['grade_name']); ?></td>
                                     <td><?php echo htmlspecialchars($grade['grade_level']); ?></td>
+                                    <td></td>
+                                    <td></td>
                                     <td>
-                                        <form action="" method="POST" style="display:inline;" onsubmit="return confirm('Are you sure you want to deactivate this grade?');">
+                                        <form action="" method="POST" style="display:inline;" onsubmit="return showDeleteConfirmDialog(event);">
                                             <input type="hidden" name="grade_id" value="<?= htmlspecialchars($grade['grade_id']); ?>">
                                             <input type="hidden" name="deactivate" value="true">
                                             <button type="submit" class="delete-grade-btn"><i class="bi bi-x-square-fill"></i></button>

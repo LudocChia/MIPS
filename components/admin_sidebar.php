@@ -44,6 +44,7 @@ function isActive($pageName, $currentPage)
                 <a href="order.php" class="<?= isActive('order.php', $currentPage); ?>">
                     <i class="bi bi-receipt"></i>
                     <h4>Order</h4>
+                    <span id="pending-order-count"></span>
                 </a>
             </li>
             <li>

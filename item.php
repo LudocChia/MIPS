@@ -2,7 +2,8 @@
 
 session_start();
 
-include 'components/db_connect.php';
+include './components/db_connect.php';
+include "./components/customer_login.php";
 
 $product_id = $_GET['pid'] ?? null;
 if (!$product_id) {
@@ -155,7 +156,6 @@ if (isset($_POST['submit'])) {
 
 <body>
     <?php include 'components/customer_header.php'; ?>
-    <?php include 'components/customer_login.php'; ?>
     <div class="breadcrumbs">
         <ul>
             <li>
@@ -291,13 +291,14 @@ if (isset($_POST['submit'])) {
 
 
     <?php include 'components/customer_footer.php'; ?>
-    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script src="javascript/common.js"></script>
+    <script src="javascript/customer.js"></script>
     <script type="text/javascript">
         document.addEventListener("DOMContentLoaded", function() {
             document.querySelector('.buy-now').addEventListener('click', function() {
                 <?php if (!isset($_SESSION['user_id'])) : ?>
+                    const productId = <?= json_encode($product_id) ?>;
+                    document.getElementById('login-form').querySelector('form').action += `?pid=${productId}`;
                     document.getElementById('login-form').showModal();
                 <?php else : ?>
                     const selectedSizeButton = document.querySelector('.size-button.selected');

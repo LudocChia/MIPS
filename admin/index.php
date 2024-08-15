@@ -238,6 +238,24 @@ $currentPage = basename($_SERVER['PHP_SELF']);
         </main>
     </div>
     <script src="../javascript/admin.js"></script>
+    <script>
+        $(document).ready(function() {
+            $.ajax({
+                url: 'ajax.php?action=get_pending_count',
+                type: 'GET',
+                success: function(response) {
+                    if (parseInt(response) > 0) {
+                        $('#pending-order-count').text(response);
+                    } else {
+                        $('#pending-order-count').hide();
+                    }
+                },
+                error: function() {
+                    $('#pending-order-count').hide();
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>

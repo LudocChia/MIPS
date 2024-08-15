@@ -1,7 +1,9 @@
 <?php
-include './components/db_connect.php';
 
 session_start();
+
+include './components/db_connect.php';
+include "./components/customer_login.php";
 
 ?>
 

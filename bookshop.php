@@ -3,6 +3,7 @@
 session_start();
 
 include "./components/db_connect.php";
+include "./components/customer_login.php";
 
 // Fetch products from the database
 $sql = "SELECT p.product_id, p.product_name, p.product_description, p.product_price, p.stock_quantity, p.color, p.gender, 
@@ -14,6 +15,7 @@ $sql = "SELECT p.product_id, p.product_name, p.product_description, p.product_pr
 $stmt = $pdo->prepare($sql);
 $stmt->execute();
 $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
 ?>
 
 <!DOCTYPE html>
@@ -38,7 +40,6 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 <body>
     <?php include "./components/customer_header.php"; ?>
-    <?php include "./components/customer_login.php"; ?>
     <section class="bookshop">
         <div class="container">
             <div class="products">
