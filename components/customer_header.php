@@ -62,7 +62,7 @@
                 } else {
                 ?>
                     <button class="btn login" id="login-btn">Login</button>
-                    <button class="btn btn-outline" id="signup-btn">Sign Up</button>
+                    <button class="btn btn-outline-primary" id="signup-btn">Sign Up</button>
                 <?php
                 }
                 ?>

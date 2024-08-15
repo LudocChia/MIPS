@@ -28,6 +28,10 @@
     --box-shadow: 0 0 10px rgb(0 0 0/15%);
 }
 
+.wrapper {
+    border: 1px solid var(--color-gray-super-light);
+}
+
 dialog {
     position: absolute;
     top: 50%;
@@ -141,10 +145,56 @@ dialog form textarea {
     /* Darker shade for hover */
 }
 
-.btn-outline {
+.btn-outline-primary {
     background-color: #fff7f5;
-    color: #90582f;
-    border: 1px solid #90582f;
+    color: var(--color-primary);
+    border: 1px solid var(--color-primary);
+}
+
+.btn-outline-gray {
+    background-color: #f0f0f0;
+    color: #555555;
+    border: 1px solid #555555;
+}
+
+.btn-outline-warning {
+    background-color: var(--color-danger);
+    border: 1px solid var(--color-danger);
+}
+
+
+.controls button {
+    /* background: var(--color-gray-light); */
+    /* color: white; */
+    /* font-size: 18px; */
+    /* border-radius: 5px; */
+    /* border: 1px solid var(--color-gray-light); */
+    padding: auto 50px;
+}
+
+.controls .deactivate {
+    margin-left: 20px;
+    background: var(--color-danger);
+    border: 1px solid var(--color-danger);
+}
+
+.controls .cancel:hover {
+    transition: .5s;
+    background: #8c8c8c;
+}
+
+.controls .deactivate:hover {
+    transition: .5s;
+    background: #e60000;
+}
+
+.controls {
+    text-align: center;
+}
+
+.controls .btn {
+    display: inline-block;
+    margin: 0 10px;
 }
 
 /* LOGIN */
@@ -435,32 +485,6 @@ header .profile-area i {
     margin: 40px 0 0 0;
 }
 
-.controls .cancel,
-.controls .deactivate {
-    background: var(--color-gray-light);
-    color: white;
-    font-size: 18px;
-    border-radius: 5px;
-    border: 1px solid var(--color-gray-light);
-    padding: 10px 13px;
-}
-
-.controls .deactivate {
-    margin-left: 20px;
-    background: var(--color-danger);
-    border: 1px solid var(--color-danger);
-}
-
-.controls .cancel:hover {
-    transition: .5s;
-    background: #8c8c8c;
-}
-
-.controls .deactivate:hover {
-    transition: .5s;
-    background: #e60000;
-}
-
 .breadcrumbs {
     padding: 10px 25px;
     width: fit-content;
@@ -496,6 +520,62 @@ header .profile-area i {
     color: var(--color-primary);
     border: none;
     pointer-events: none;
+}
+
+/* Category Box */
+.category .box-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, 180px);
+    border-color: #24262b;
+    justify-content: center;
+    padding-bottom: 2%;
+    margin: 0 40px;
+}
+
+
+.category .box-container .box {
+    position: relative;
+    background-color: #f4f4f4;
+    border: 1px solid #dfe1e5;
+    /* border-radius: 5px; */
+    margin: 0.5rem;
+    min-height: 10vh;
+    transition: transform 0.3s ease;
+}
+
+.category .box-container .box:hover {
+    border: 1px solid var(--color-primary);
+}
+
+.category .box-container .box .image-container {
+    position: relative;
+    padding: 20px;
+    height: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.category .box-container .image-container img {
+    object-fit: contain;
+    width: auto;
+    height: 100%;
+}
+
+.category .txt {
+    padding: 10px;
+    text-align: center;
+}
+
+.category .txt h4 {
+    font-size: 18px;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.category .txt p {
+    font-size: 16px;
+    color: #666;
 }
 
 @media screen and (max-width: 1200px) {

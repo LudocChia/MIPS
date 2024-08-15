@@ -49,11 +49,7 @@ function isActive($pageName, $currentPage)
             </li>
             <li>
                 <a href="grade.php" class="<?= isActive('grade.php', $currentPage); ?>">
-                    <svg width="20px" data-name="Layer 2" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
-                        <path fill="none" stroke="#86848c" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M29.917 38H1V8h46v30" class="stroke-353535"></path>
-                        <circle cx="38" cy="30" fill="none" r="5" stroke="#86848c" stroke-miterlimit="10" stroke-width="2" class="stroke-353535"></circle>
-                        <path fill="none" stroke="#86848c" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M35 34.25V41l3-1.5 3 1.5v-6.75M6 14h4M38 14h4M6 20h24v6H6zM6 32h8" class="stroke-353535"></path>
-                    </svg>
+                    <i class="bi bi-mortarboard-fill"></i>
                     <h4>Grade</h4>
                 </a>
             </li>
@@ -95,7 +91,7 @@ function isActive($pageName, $currentPage)
                         </a>
                     </li>
                     <li>
-                        <a href="student.php" class="<?= isActive('student.php', $currentPage); ?>"><i class="bi bi-mortarboard-fill"></i>
+                        <a href="student.php" class="<?= isActive('student.php', $currentPage); ?>"><span class="material-symbols-outlined icon-adjust">local_library</span>
                             <h4>All Student</h4>
                         </a>
                     </li>
@@ -127,10 +123,10 @@ function isActive($pageName, $currentPage)
             url: 'ajax.php?action=get_pending_count',
             type: 'GET',
             success: function(response) {
-                if (parseInt(response) > 0) {
-                    $('#pending-order-count').text(response);
-                } else {
+                if (parseInt(response) == 0) {
                     $('#pending-order-count').hide();
+                } else {
+                    $('#pending-order-count').text(response);
                 }
             },
             error: function() {

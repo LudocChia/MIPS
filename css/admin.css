@@ -245,26 +245,6 @@ header .profile-area i {
     font-weight: 600;
 }
 
-.category .box-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, 180px);
-    border-color: #24262b;
-    justify-content: center;
-    padding-bottom: 2%;
-    margin: 0 40px;
-}
-
-
-.category .box-container .box {
-    position: relative;
-    background-color: #f4f4f4;
-    border: 1px solid #dfe1e5;
-    /* border-radius: 5px; */
-    margin: 0.5rem;
-    min-height: 10vh;
-    transition: transform 0.3s ease;
-}
-
 ul.user-show,
 ul.bookshop-show {
     display: none;
@@ -333,8 +313,11 @@ aside .sidebar ul li span {
     border-radius: 5px;
 }
 
+/* #pending-order-count {
+    display: none;
+} */
+
 aside .sidebar a i,
-aside .sidebar a span,
 aside .sidebar a svg {
     font-size: 1.7rem;
     margin-left: 3rem;

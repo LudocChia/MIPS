@@ -49,7 +49,6 @@ if (isset($_POST["submit"])) {
         $newImageName = handleFileUpload($_FILES['image']);
 
         if ($subcategoryId) {
-            // Edit existing subcategory
             $sql = "UPDATE Product_Category SET category_name = :name, parent_id = :parentId";
 
             if ($newImageName) {
@@ -74,7 +73,6 @@ if (isset($_POST["submit"])) {
                 echo "<script>alert('Database error: " . $e->getMessage() . "');</script>";
             }
         } else {
-            // Add new subcategory
             if ($newImageName) {
                 $sql = "INSERT INTO Product_Category (category_name, category_icon, parent_id, is_deleted) VALUES (:name, :icon, :parentId, 0)";
                 $stmt = $pdo->prepare($sql);
@@ -107,7 +105,6 @@ if (isset($_POST['delete'])) {
     }
 }
 
-// Function to get subcategories
 function getSubcategories($pdo)
 {
     $sql = "SELECT * FROM Product_Category WHERE parent_id IS NOT NULL AND is_deleted = 0";
@@ -116,7 +113,6 @@ function getSubcategories($pdo)
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
-// Function to get main categories for the dropdown
 function getMainCategories($pdo)
 {
     $sql = "SELECT * FROM Product_Category WHERE parent_id IS NULL AND is_deleted = 0";
@@ -150,7 +146,6 @@ $all_main_categories = getMainCategories($pdo);
     <?php include "../components/admin_header.php"; ?>
     <div class="container">
         <?php include "../components/admin_sidebar.php"; ?>
-        <!-- END OF ASIDE -->
         <main class="category">
             <div class="wrapper">
                 <div class="title">
@@ -164,7 +159,6 @@ $all_main_categories = getMainCategories($pdo);
                 <div class="box-container">
                     <?php foreach ($all_subcategories as $subcategory) : ?>
                         <div class="box" data-subcategory-id="<?= htmlspecialchars($subcategory['category_id']); ?>">
-                            <h3><?php echo htmlspecialchars($subcategory['category_name']); ?></h3>
                             <div class="image-container">
                                 <img src="../uploads/category/<?php echo htmlspecialchars($subcategory['category_icon']); ?>" alt="Icon for <?php echo htmlspecialchars($subcategory['category_name']); ?>">
                             </div>
@@ -175,6 +169,9 @@ $all_main_categories = getMainCategories($pdo);
                                     <button type="submit" class="delete-subcategory-btn"><i class="bi bi-x-square-fill"></i></button>
                                 </form>
                                 <button type="button" class="edit-subcategory-btn" data-subcategory-id="<?= htmlspecialchars($subcategory['category_id']); ?>"><i class="bi bi-pencil-square"></i></button>
+                            </div>
+                            <div class="txt">
+                                <h3><?php echo htmlspecialchars($subcategory['category_name']); ?></h3>
                             </div>
                         </div>
                     <?php endforeach; ?>
@@ -193,26 +190,32 @@ $all_main_categories = getMainCategories($pdo);
         </div>
         <form action="" method="post" enctype="multipart/form-data">
             <input type="hidden" name="subcategory_id" value="">
-            <div class="input-field">
-                <h2>Subcategory Name<sup>*</sup></h2>
-                <input type="text" name="name" value="<?php echo isset($_POST['name']) ? htmlspecialchars($_POST['name']) : ''; ?>">
+            <div class="input-container">
+                <div class="input-field">
+                    <h2>Subcategory Name<sup>*</sup></h2>
+                    <input type="text" name="name" value="<?php echo isset($_POST['name']) ? htmlspecialchars($_POST['name']) : ''; ?>">
+                </div>
                 <p>Please enter the subcategory name.</p>
             </div>
-            <div class="input-field">
-                <h2>Subcategory Icon<sup>*</sup></h2>
-                <input type="file" name="image" id="image" accept=".jpg, .jpeg, .png">
+            <div class="input-container">
+                <div class="input-field">
+                    <h2>Subcategory Icon<sup>*</sup></h2>
+                    <input type="file" name="image" id="image" accept=".jpg, .jpeg, .png">
+                </div>
                 <p>Please upload an image for the subcategory.</p>
             </div>
-            <div class="input-field">
+            <div class="input-container">
+                <div class="input-field">
+                    <select name="parent_category" id="parent_category" required>
+                        <option value="">Select a main category</option>
+                        <?php foreach ($all_main_categories as $mainCategory) : ?>
+                            <option value="<?php echo $mainCategory['category_id']; ?>">
+                                <?php echo htmlspecialchars($mainCategory['category_name']); ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
                 <h2>Parent Category<sup>*</sup></h2>
-                <select name="parent_category" id="parent_category" required>
-                    <option value="">Select a main category</option>
-                    <?php foreach ($all_main_categories as $mainCategory) : ?>
-                        <option value="<?php echo $mainCategory['category_id']; ?>">
-                            <?php echo htmlspecialchars($mainCategory['category_name']); ?>
-                        </option>
-                    <?php endforeach; ?>
-                </select>
                 <p>Select the main category for this subcategory.</p>
             </div>
             <div class="controls">

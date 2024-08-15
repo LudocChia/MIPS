@@ -40,7 +40,6 @@ body {
 
 .wrapper {
     border-radius: var(--card-border-radius);
-    border: 1px solid var(--color-light);
 }
 
 #login-form {

@@ -157,7 +157,6 @@ $all_main_categories = getMainCategories($pdo);
                 <div class="box-container">
                     <?php foreach ($all_main_categories as $category) : ?>
                         <div class="box" data-category-id="<?= htmlspecialchars($category['category_id']); ?>">
-                            <h3><?php echo htmlspecialchars($category['category_name']); ?></h3>
                             <div class="image-container">
                                 <img src="../uploads/category/<?php echo htmlspecialchars($category['category_icon']); ?>" alt="Icon for <?php echo htmlspecialchars($category['category_name']); ?>">
                             </div>
@@ -168,6 +167,9 @@ $all_main_categories = getMainCategories($pdo);
                                     <button type="submit" class="delete-category-btn"><i class="bi bi-x-square-fill"></i></button>
                                 </form>
                                 <button type="button" class="edit-category-btn" data-category-id="<?= htmlspecialchars($category['category_id']); ?>"><i class="bi bi-pencil-square"></i></button>
+                            </div>
+                            <div class="txt">
+                                <h3><?php echo htmlspecialchars($category['category_name']); ?></h3>
                             </div>
                         </div>
                     <?php endforeach; ?>

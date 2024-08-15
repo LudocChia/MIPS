@@ -232,7 +232,7 @@ if (isset($_POST['submit'])) {
                             <h2>Quantity</h2>
                             <div class="product-actions">
                                 <input type="number" id="qty" name="qty" min="1" max="<?php echo $stockQuantity; ?>" value="1">
-                                <button type="button" class="add-to-cart btn btn-outline" onclick="addToCart(<?php echo $product['product_id']; ?>)">Add to Cart</button>
+                                <button type="button" class="add-to-cart btn btn-outline-primary" onclick="addToCart(<?php echo $product['product_id']; ?>)">Add to Cart</button>
                                 <button type="button" class="buy-now btn btn-full">Buy Now</button>
                             </div>
                         </div>

@@ -71,8 +71,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <a href="#">Forgot password?</a>
         </div>
         <div class="input-container controls">
-            <button type="button" class="cancel">Cancel</button>
-            <button type="submit" class="btn">Login</button>
+            <button type="button" class="btn btn-outline-gray cancel">Cancel</button>
+            <button type="submit" class="btn ">Login</button>
         </div>
     </form>
 </dialog>
