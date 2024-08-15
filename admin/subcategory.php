@@ -11,38 +11,8 @@ if (!isset($_SESSION['admin_id'])) {
 
 $currentPage = basename($_SERVER['PHP_SELF']);
 
-function getAllStudents($pdo)
+function handleFileUpload($file)
 {
-    $sql = "
-        SELECT s.*, c.class_name 
-        FROM Student s
-        LEFT JOIN Class c ON s.class_id = c.class_id
-        WHERE s.is_deleted = 0
-    ";
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute();
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
-}
-
-function getAllClasses($pdo)
-{
-    $sql = "SELECT * FROM Class WHERE is_deleted = 0";
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute();
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
-}
-
-$all_students = getAllStudents($pdo);
-$all_classes = getAllClasses($pdo);
-
-function handleFileUpload($file, $studentId)
-{
-    $uploadDir = '../uploads/student/';
-
-    if (!is_dir($uploadDir)) {
-        mkdir($uploadDir, 0777, true);
-    }
-
     if ($file['error'] === UPLOAD_ERR_NO_FILE) {
         return null;
     }
@@ -53,8 +23,8 @@ function handleFileUpload($file, $studentId)
     $fileExtension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
 
     if (in_array($fileExtension, $allowedfileExtensions)) {
-        $newFileName = $studentId . '_' . uniqid() . '.' . $fileExtension;
-        $dest_path = $uploadDir . $newFileName;
+        $newFileName = uniqid() . '.' . $fileExtension;
+        $dest_path = '../uploads/category/' . $newFileName;
 
         if (move_uploaded_file($fileTmpPath, $dest_path)) {
             return $newFileName;
@@ -68,57 +38,95 @@ function handleFileUpload($file, $studentId)
     }
 }
 
-// Handle adding or updating a student
 if (isset($_POST["submit"])) {
-    $studentId = $_POST["student_id"];
     $name = $_POST["name"];
-    $classId = $_POST["class_id"];
-    $existingStudentId = isset($_POST['existing_student_id']) ? $_POST['existing_student_id'] : null;
+    $parentId = !empty($_POST["parent_category"]) ? $_POST["parent_category"] : null;
+    $subcategoryId = isset($_POST['subcategory_id']) ? $_POST['subcategory_id'] : null;
 
-    try {
-        $studentImage = handleFileUpload($_FILES['student_image'], $studentId);
+    if ($_FILES["image"]["error"] === 4 && !$subcategoryId) {
+        echo "<script> alert('Image Does Not Exist'); </script>";
+    } else {
+        $newImageName = handleFileUpload($_FILES['image']);
 
-        if ($existingStudentId) {
-            // Update existing student
-            $sql = "UPDATE Student SET student_id = :studentId, student_name = :name, class_id = :classId, student_image = :student_image WHERE student_id = :existing_student_id";
+        if ($subcategoryId) {
+            // Edit existing subcategory
+            $sql = "UPDATE Product_Category SET category_name = :name, parent_id = :parentId";
+
+            if ($newImageName) {
+                $sql .= ", category_icon = :icon";
+            }
+
+            $sql .= " WHERE category_id = :subcategory_id";
+
             $stmt = $pdo->prepare($sql);
-            $stmt->bindParam(':existing_student_id', $existingStudentId);
+            $stmt->bindParam(':name', $name);
+            $stmt->bindParam(':parentId', $parentId);
+            $stmt->bindParam(':subcategory_id', $subcategoryId);
+
+            if ($newImageName) {
+                $stmt->bindParam(':icon', $newImageName);
+            }
+
+            try {
+                $stmt->execute();
+                echo "<script>alert('Successfully Updated');document.location.href ='subcategory.php';</script>";
+            } catch (PDOException $e) {
+                echo "<script>alert('Database error: " . $e->getMessage() . "');</script>";
+            }
         } else {
-            // Add new student
-            $sql = "INSERT INTO Student (student_id, student_name, class_id, student_image, is_deleted) VALUES (:studentId, :name, :classId, :student_image, 0)";
-            $stmt = $pdo->prepare($sql);
+            // Add new subcategory
+            if ($newImageName) {
+                $sql = "INSERT INTO Product_Category (category_name, category_icon, parent_id, is_deleted) VALUES (:name, :icon, :parentId, 0)";
+                $stmt = $pdo->prepare($sql);
+                $stmt->bindParam(':name', $name);
+                $stmt->bindParam(':icon', $newImageName);
+                $stmt->bindParam(':parentId', $parentId);
+                try {
+                    $stmt->execute();
+                    echo "<script>alert('Successfully Added');document.location.href ='subcategory.php';</script>";
+                } catch (PDOException $e) {
+                    echo "<script>alert('Database error: " . $e->getMessage() . "');</script>";
+                }
+            }
         }
-
-        $stmt->bindParam(':studentId', $studentId);
-        $stmt->bindParam(':name', $name);
-        $stmt->bindParam(':classId', $classId);
-        $stmt->bindParam(':student_image', $studentImage);
-        $stmt->execute();
-
-        header('Location: student.php');
-        exit();
-    } catch (PDOException $e) {
-        echo "<script>alert('Database error: " . $e->getMessage() . "');</script>";
     }
 }
 
-// Handle deleting a student
 if (isset($_POST['delete'])) {
-    $studentId = $_POST['student_id'];
+    $subcategoryId = $_POST['subcategory_id'];
+
+    $sql = "UPDATE Product_Category SET is_deleted = 1 WHERE category_id = :subcategory_id";
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(':subcategory_id', $subcategoryId);
 
     try {
-        $sql = "UPDATE Student SET is_deleted = 1 WHERE student_id = :student_id";
-        $stmt = $pdo->prepare($sql);
-        $stmt->bindParam(':student_id', $studentId);
         $stmt->execute();
-
-        header('Location: student.php');
-        exit();
+        echo "<script>alert('Subcategory successfully deleted');document.location.href ='subcategory.php';</script>";
     } catch (PDOException $e) {
         echo "<script>alert('Database error: " . $e->getMessage() . "');</script>";
     }
 }
 
+// Function to get subcategories
+function getSubcategories($pdo)
+{
+    $sql = "SELECT * FROM Product_Category WHERE parent_id IS NOT NULL AND is_deleted = 0";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+// Function to get main categories for the dropdown
+function getMainCategories($pdo)
+{
+    $sql = "SELECT * FROM Product_Category WHERE parent_id IS NULL AND is_deleted = 0";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+$all_subcategories = getSubcategories($pdo);
+$all_main_categories = getMainCategories($pdo);
 ?>
 
 <!DOCTYPE html>
@@ -127,8 +135,8 @@ if (isset($_POST['delete'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>All Students - MIPS</title>
-    <link rel="icon" type="image/x-icon" href="../images/Mahans_IPS_icon.png">
+    <title>Bookshop Subcategory - MIPS</title>
+    <link rel="icon" type="image/x-icon" href="../images/Mahans_internation_primary_school_logo.png">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -142,33 +150,31 @@ if (isset($_POST['delete'])) {
     <?php include "../components/admin_header.php"; ?>
     <div class="container">
         <?php include "../components/admin_sidebar.php"; ?>
+        <!-- END OF ASIDE -->
         <main class="category">
             <div class="wrapper">
                 <div class="title">
                     <div class="left">
-                        <h1>Mahans Students</h1>
+                        <h1>Bookshop Subcategory</h1>
                     </div>
                     <div class="right">
-                        <button id="open-popup" class="btn btn-outline"><i class="bi bi-person-fill-add"></i>Add New Student</button>
+                        <button id="open-popup" class="btn btn-outline"><i class="bi bi-plus-circle"></i>Add Subcategory</button>
                     </div>
                 </div>
                 <div class="box-container">
-                    <?php foreach ($all_students as $student) : ?>
-                        <div class="box">
-                            <h3><?php echo htmlspecialchars($student['student_name']); ?></h3>
-                            <p>Class: <?php echo htmlspecialchars($student['class_name']); ?></p>
-                            <a href="#">
-                                <div class="image-container">
-                                    <img src="../uploads/student/<?php echo htmlspecialchars($student['student_image']); ?>" alt="Image for <?php echo htmlspecialchars($student['student_name']); ?>">
-                                </div>
-                            </a>
+                    <?php foreach ($all_subcategories as $subcategory) : ?>
+                        <div class="box" data-subcategory-id="<?= htmlspecialchars($subcategory['category_id']); ?>">
+                            <h3><?php echo htmlspecialchars($subcategory['category_name']); ?></h3>
+                            <div class="image-container">
+                                <img src="../uploads/category/<?php echo htmlspecialchars($subcategory['category_icon']); ?>" alt="Icon for <?php echo htmlspecialchars($subcategory['category_name']); ?>">
+                            </div>
                             <div class="actions">
-                                <button type="button" class="edit-student-btn" data-student-id="<?= htmlspecialchars($student['student_id']); ?>"><i class="bi bi-pencil-square"></i></button>
-                                <form action="" method="POST" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this student?');">
-                                    <input type="hidden" name="student_id" value="<?= htmlspecialchars($student['student_id']); ?>">
+                                <form action="" method="POST" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this subcategory?');">
+                                    <input type="hidden" name="subcategory_id" value="<?= htmlspecialchars($subcategory['category_id']); ?>">
                                     <input type="hidden" name="delete" value="true">
-                                    <button type="submit" class="delete-student-btn"><i class="bi bi-x-square-fill"></i></button>
+                                    <button type="submit" class="delete-subcategory-btn"><i class="bi bi-x-square-fill"></i></button>
                                 </form>
+                                <button type="button" class="edit-subcategory-btn" data-subcategory-id="<?= htmlspecialchars($subcategory['category_id']); ?>"><i class="bi bi-pencil-square"></i></button>
                             </div>
                         </div>
                     <?php endforeach; ?>
@@ -177,35 +183,39 @@ if (isset($_POST['delete'])) {
         </main>
     </div>
     <dialog id="add-edit-data">
-        <h1>Add New Student</h1>
+        <div class="title">
+            <div class="left">
+                <h1>Add Subcategory</h1>
+            </div>
+            <div class="right">
+                <button class="cancel"><i class="bi bi-x-circle"></i></button>
+            </div>
+        </div>
         <form action="" method="post" enctype="multipart/form-data">
-            <input type="hidden" name="existing_student_id" value="">
-            <div class="input-container">
-                <h2>Student ID<sup>*</sup></h2>
-                <input type="text" name="student_id" value="" required>
-                <p>Please enter the student's ID.</p>
+            <input type="hidden" name="subcategory_id" value="">
+            <div class="input-field">
+                <h2>Subcategory Name<sup>*</sup></h2>
+                <input type="text" name="name" value="<?php echo isset($_POST['name']) ? htmlspecialchars($_POST['name']) : ''; ?>">
+                <p>Please enter the subcategory name.</p>
             </div>
-            <div class="input-container">
-                <h2>Student Name<sup>*</sup></h2>
-                <input type="text" name="name" value="" required>
-                <p>Please enter the student's full name.</p>
+            <div class="input-field">
+                <h2>Subcategory Icon<sup>*</sup></h2>
+                <input type="file" name="image" id="image" accept=".jpg, .jpeg, .png">
+                <p>Please upload an image for the subcategory.</p>
             </div>
-            <div class="input-container">
-                <h2>Class<sup>*</sup></h2>
-                <select name="class_id" required>
-                    <option value="">Select Class</option>
-                    <?php foreach ($all_classes as $class) : ?>
-                        <option value="<?= htmlspecialchars($class['class_id']) ?>"><?= htmlspecialchars($class['class_name']) ?></option>
+            <div class="input-field">
+                <h2>Parent Category<sup>*</sup></h2>
+                <select name="parent_category" id="parent_category" required>
+                    <option value="">Select a main category</option>
+                    <?php foreach ($all_main_categories as $mainCategory) : ?>
+                        <option value="<?php echo $mainCategory['category_id']; ?>">
+                            <?php echo htmlspecialchars($mainCategory['category_name']); ?>
+                        </option>
                     <?php endforeach; ?>
                 </select>
-                <p>Please select the student's class.</p>
+                <p>Select the main category for this subcategory.</p>
             </div>
-            <div class="input-container">
-                <h2>Student Image<sup>*</sup></h2>
-                <input type="file" name="student_image" id="student_image" accept=".jpg, .jpeg, .png" required>
-                <p>Please upload an image for the student.</p>
-            </div>
-            <div class="input-container controls">
+            <div class="controls">
                 <button type="button" class="cancel">Cancel</button>
                 <button type="reset">Clear</button>
                 <button type="submit" name="submit">Publish</button>
@@ -214,26 +224,25 @@ if (isset($_POST['delete'])) {
     </dialog>
     <script src="../javascript/admin.js"></script>
     <script>
-        document.querySelectorAll('.edit-student-btn').forEach(button => {
+        document.querySelectorAll('.edit-subcategory-btn').forEach(button => {
             button.addEventListener('click', function() {
-                const studentId = this.dataset.studentId;
-                fetch(`ajax.php?action=get_student&student_id=${studentId}`)
+                const subcategoryId = this.dataset.subcategoryId;
+                fetch(`ajax.php?action=get_subcategory&subcategory_id=${subcategoryId}`)
                     .then(response => response.json())
-                    .then(student => {
-                        if (student.error) {
-                            alert(student.error);
+                    .then(subcategory => {
+                        if (subcategory.error) {
+                            alert(subcategory.error);
                         } else {
-                            document.querySelector('#add-edit-data [name="existing_student_id"]').value = student.student_id;
-                            document.querySelector('#add-edit-data [name="student_id"]').value = student.student_id;
-                            document.querySelector('#add-edit-data [name="name"]').value = student.student_name;
-                            document.querySelector('#add-edit-data [name="class_id"]').value = student.class_id;
-                            document.querySelector('#add-edit-data h1').textContent = "Edit Student";
+                            document.querySelector('#add-edit-data [name="subcategory_id"]').value = subcategory.category_id;
+                            document.querySelector('#add-edit-data [name="name"]').value = subcategory.category_name;
+                            document.querySelector('#add-edit-data [name="parent_category"]').value = subcategory.parent_id;
+                            document.querySelector('#add-edit-data h1').textContent = "Edit Subcategory";
                             document.getElementById('add-edit-data').showModal();
                         }
                     })
                     .catch(error => {
-                        console.error('Error fetching student data:', error);
-                        alert('Failed to load student data.');
+                        console.error('Error fetching subcategory data:', error);
+                        alert('Failed to load subcategory data.');
                     });
             });
         });
