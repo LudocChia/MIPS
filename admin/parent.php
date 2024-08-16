@@ -189,7 +189,7 @@ if (isset($_POST['deactivate'])) {
                                     <td><?= htmlspecialchars($parent['parent_email']); ?></td>
                                     <td><?= htmlspecialchars($parent['register_datetime']); ?></td>
                                     <td>
-                                        <form action="" method="POST" style="display:inline;">
+                                        <form action="" method="POST" style="display:inline;" onsubmit="return showDeactivateConfirmDialog(event);">
                                             <input type="hidden" name="parent_id" value="<?= htmlspecialchars($parent['parent_id']); ?>">
                                             <input type="hidden" name="deactivate" value="true">
                                             <button type="submit" class="delete-parent-btn"><i class="bi bi-x-square-fill"></i></button>
@@ -268,16 +268,7 @@ if (isset($_POST['deactivate'])) {
             </div>
         </form>
     </dialog>
-    <dialog id="delete-confirm-dialog">
-        <form method="dialog">
-            <h1>Parent will be Deactivated!</h1>
-            <label>Are you sure to proceed?</label>
-            <div class="controls">
-                <button value="cancel" class="cancel">Cancel</button>
-                <button value="confirm" class="deactivate">Deactivate</button>
-            </div>
-        </form>
-    </dialog>
+    <?php include "../components/deactivate_confirm_dialog.php"; ?>
     <script src="../javascript/admin.js"></script>
     <script>
         document.getElementById('add-child-btn').addEventListener('click', function() {

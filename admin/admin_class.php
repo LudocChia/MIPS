@@ -93,6 +93,30 @@ class Action
         }
     }
 
+    public function get_order_details($order_id)
+    {
+        $sql = "SELECT o.order_id, o.order_datetime, o.order_price, p.parent_name, pm.payment_status, pm.payment_image
+                FROM Orders o
+                JOIN Parent_Student ps ON o.parent_student_id = ps.parent_student_id
+                JOIN Parent p ON ps.parent_id = p.parent_id
+                JOIN Payment pm ON o.order_id = pm.order_id
+                WHERE o.order_id = ?";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([$order_id]);
+        $order = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($order) {
+            $stmtItems = $this->db->prepare("SELECT oi.product_id, p.product_name, oi.product_quantity AS quantity, oi.order_subtotal AS subtotal
+                                             FROM Order_Item oi JOIN Product p ON oi.product_id = p.product_id WHERE oi.order_id = ?");
+            $stmtItems->execute([$order_id]);
+            $order_items = $stmtItems->fetchAll(PDO::FETCH_ASSOC);
+
+            return json_encode(['order' => $order, 'order_items' => $order_items]);
+        } else {
+            return json_encode(['error' => 'Order not found']);
+        }
+    }
+
     public function update_order_status($order_id, $order_status)
     {
         $sql = "UPDATE Orders o

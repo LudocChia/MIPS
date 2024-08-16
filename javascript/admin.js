@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const profileMenu = document.querySelector(".profile-menu");
     // const dialog = document.querySelector('dialog');
     // const themeToggler = document.querySelector(".theme-toggler");
-    const deleteConfirmDialog = document.querySelector('#delete-confirm-dialog');
+    const deactivateConfirmDialog = document.querySelector('#deactivate-confirm-dialog');
 
     // Show Sidebar
     menuBtn.addEventListener("click", () => {
@@ -76,13 +76,14 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             }
         });
-    }); window.showDeleteConfirmDialog = function (event) {
+
+    }); window.showDeactivateConfirmDialog = function (event) {
         event.preventDefault();
         deleteForm = event.target;
-        deleteConfirmDialog.showModal();
+        deactivateConfirmDialog.showModal();
     }
 
-    deleteConfirmDialog.addEventListener('close', function () {
+    deactivateConfirmDialog.addEventListener('close', function () {
         if (deleteConfirmDialog.returnValue === 'confirm') {
             deleteForm.submit();
         }

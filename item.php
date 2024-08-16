@@ -2,7 +2,7 @@
 
 session_start();
 
-include './components/db_connect.php';
+include "./components/db_connect.php";
 include "./components/customer_login.php";
 
 $product_id = $_GET['pid'] ?? null;
@@ -194,7 +194,7 @@ if (isset($_POST['submit'])) {
             </li>
         </ul>
     </div>
-    <div class="product-detail">
+    <section class="product-detail">
         <div class="container">
             <div class="wrapper">
                 <div class="title">
@@ -206,8 +206,8 @@ if (isset($_POST['submit'])) {
                         <p><?php echo $stockQuantity; ?> pieces available</p>
                     </div>
                 </div>
-                <section class="product-details">
-                    <section class="product-container">
+                <div class="product-details">
+                    <div class="product-container">
                         <div class="picture-div">
                             <div class="product-image">
                                 <?php if (!empty($images)) : ?>
@@ -215,19 +215,18 @@ if (isset($_POST['submit'])) {
                             </div>
                             <div class="thumbnails">
                                 <?php foreach ($images as $image) : ?>
-                                    <img class="thumbnail" src="uploads/product/<?php echo htmlspecialchars($image['image_url']); ?>" style="width: 80px;">
+                                    <img class="thumbnail" src="uploads/product/<?php echo htmlspecialchars($image['image_url']); ?>" data-src="uploads/product/<?php echo htmlspecialchars($image['image_url']); ?>" style="width: 80px;">
                                 <?php endforeach; ?>
                             </div>
                         <?php else : ?>
                             <p>No images available.</p>
                         <?php endif; ?>
                         </div>
-                        <div class="productInfo">
+                        <div class="product-info">
                             <h2>Product Description</h2>
                             <p><?php echo nl2br(htmlspecialchars($product['product_description'])); ?></p>
-
-                            <h2>Size</h2>
-                            <div class="product-sizes">
+                            <div class="product-details-container">
+                                <h2>Size</h2>
                                 <?php if (!empty($sizes)) : ?>
                                     <?php foreach ($sizes as $size) : ?>
                                         <button type="button" class="size-button" data-size-id="<?php echo htmlspecialchars($size['product_size_id']); ?>">
@@ -238,22 +237,24 @@ if (isset($_POST['submit'])) {
                                     <p>No sizes available.</p>
                                 <?php endif; ?>
                             </div>
-
-                            <h2>Price</h2>
-                            <p>MYR <?php echo number_format($product['product_price'], 2); ?></p>
-
-                            <h2>Quantity</h2>
-                            <div class="product-actions">
-                                <input type="number" id="qty" name="qty" min="1" max="<?php echo $stockQuantity; ?>" value="1">
-                                <button type="button" class="add-to-cart btn btn-outline-primary" onclick="addToCart(<?php echo $product['product_id']; ?>)">Add to Cart</button>
-                                <button type="button" class="buy-now btn btn-full">Buy Now</button>
+                            <div class="product-details-container">
+                                <h2>Price</h2>
+                                <p>MYR <?php echo number_format($product['product_price'], 2); ?></p>
+                            </div>
+                            <div class="product-details-container">
+                                <h2>Quantity</h2>
+                                <div class="product-actions">
+                                    <input type="number" id="qty" name="qty" min="1" max="<?php echo $stockQuantity; ?>" value="1">
+                                    <button type="button" class="add-to-cart btn btn-outline-primary" onclick="addToCart(<?php echo $product['product_id']; ?>)">Add to Cart</button>
+                                    <button type="button" class="buy-now btn btn-full">Buy Now</button>
+                                </div>
                             </div>
                         </div>
-                    </section>
-                </section>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
+    </section>
     <section class="size-chart">
         <div class="container">
             <div class="wrapper">
@@ -297,9 +298,15 @@ if (isset($_POST['submit'])) {
             </div>
         </div>
     </section>
-
-    <dialog id="buy-now-dialog">
-        <h1>Purchase Product</h1>
+    <dialog id="add-edit-data">
+        <div class="title">
+            <div class="right">
+                <h1>Purchase Product</h1>
+            </div>
+            <div class="left">
+                <button class="cancel"><i class="bi bi-x-circle"></i>
+            </div>
+        </div>
         <form action="" method="post" enctype="multipart/form-data">
             <input type="hidden" name="product_id" id="product-id" value="">
             <input type="hidden" name="size_id" id="size-id" value="">
@@ -333,19 +340,43 @@ if (isset($_POST['submit'])) {
                 <p>Please select which child you are buying for.</p>
             </div>
             <div class="input-container">
+                <h2>Payment Method</h2>
+                <h3>Kindly make payment via online banking. Bank details are as follows:</h3>
+                <table class="two-column">
+                    <tr>
+                        <td style="width: 40%"><strong>Beneficiary :</strong></td>
+                        <td style="width: 60%">Mahans International Sdn Bhd</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 40%"><strong>Name of Bank :</strong></td>
+                        <td style="width: 60%">Public Islamic Bank</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 40%"><strong>Bank Address :</strong></td>
+                        <td style="width: 60%">39, 40 & 41 Lorong Setia Satu, Ayer Keroh Heights, 75450 Melaka.</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 40%"><strong>Account Number :</strong></td>
+                        <td style="width: 60%">3818938926</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 40%"><strong>Swift CODE :</strong></td>
+                        <td style="width: 60%">PBBEMYKL</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="input-container">
                 <h2>Upload Transfer Receipt<sup>*</sup></h2>
                 <input type="file" name="payment_image" accept=".jpg, .jpeg, .png" required>
                 <p>Please upload the transfer receipt.</p>
             </div>
             <div class="controls">
-                <button type="button" class="cancel" onclick="document.getElementById('buy-now-dialog').close()">Cancel</button>
+                <button value="cancel" class="cancel">Cancel</button>
                 <button type="reset">Clear</button>
                 <button type="submit" name="submit">Purchase</button>
             </div>
         </form>
     </dialog>
-
-
     <?php include 'components/customer_footer.php'; ?>
     <script src="javascript/common.js"></script>
     <script src="javascript/customer.js"></script>
@@ -375,11 +406,37 @@ if (isset($_POST['submit'])) {
                     document.getElementById('selected-size-display').value = selectedSizeButton.textContent;
                     document.getElementById('product-price-display').value = 'MYR ' + productPrice;
 
-                    const dialog = document.getElementById('buy-now-dialog');
+                    const dialog = document.getElementById('add-edit-data');
                     dialog.showModal();
                 <?php endif; ?>
             });
         });
+
+        document.addEventListener("DOMContentLoaded", function() {
+            const thumbnails = document.querySelectorAll('.thumbnail');
+            const mainImage = document.querySelector('.product-image img');
+
+            if (thumbnails.length > 0) {
+                thumbnails[0].classList.add('active');
+                const firstImageSrc = thumbnails[0].getAttribute('data-src');
+                mainImage.setAttribute('src', firstImageSrc);
+                mainImage.setAttribute('alt', firstImageSrc);
+            }
+
+            thumbnails.forEach(thumbnail => {
+                thumbnail.addEventListener('click', function() {
+                    thumbnails.forEach(thumb => thumb.classList.remove('active'));
+
+                    this.classList.add('active');
+
+                    const newSrc = this.getAttribute('data-src');
+                    mainImage.setAttribute('src', newSrc);
+                    mainImage.setAttribute('alt', newSrc);
+                });
+            });
+        });
+
+
 
         document.querySelectorAll('.size-button').forEach(button => {
             button.addEventListener('click', function() {

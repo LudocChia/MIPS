@@ -163,7 +163,7 @@ $all_main_categories = getMainCategories($pdo);
                                 <img src="../uploads/category/<?php echo htmlspecialchars($subcategory['category_icon']); ?>" alt="Icon for <?php echo htmlspecialchars($subcategory['category_name']); ?>">
                             </div>
                             <div class="actions">
-                                <form action="" method="POST" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this subcategory?');">
+                                <form action="" method="POST" style="display:inline;" onsubmit="return showDeactivateConfirmDialog(event);">
                                     <input type="hidden" name="subcategory_id" value="<?= htmlspecialchars($subcategory['category_id']); ?>">
                                     <input type="hidden" name="delete" value="true">
                                     <button type="submit" class="delete-subcategory-btn"><i class="bi bi-x-square-fill"></i></button>
@@ -225,6 +225,7 @@ $all_main_categories = getMainCategories($pdo);
             </div>
         </form>
     </dialog>
+    <?php include "../components/deactivate_confirm_dialog.php"; ?>
     <script src="../javascript/admin.js"></script>
     <script>
         document.querySelectorAll('.edit-subcategory-btn').forEach(button => {

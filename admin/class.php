@@ -118,7 +118,7 @@ $all_classes = getClasses($pdo);
                                     <td><?php echo htmlspecialchars($class['grade_name']); ?></td>
                                     <td><?php echo htmlspecialchars($class['student_count']); ?></td>
                                     <td>
-                                        <form action="" method="POST" style="display:inline;" onsubmit="return confirm('Are you sure you want to deactivate this class?');">
+                                        <form action="" method="POST" style="display:inline;" onsubmit="return showDeactivateConfirmDialog(event);">
                                             <input type="hidden" name="class_id" value="<?= htmlspecialchars($class['class_id']); ?>">
                                             <input type="hidden" name="deactivate" value="true">
                                             <button type="submit" class="delete-class-btn"><i class="bi bi-x-square-fill"></i></button>
@@ -166,41 +166,33 @@ $all_classes = getClasses($pdo);
         </form>
     </dialog>
     <dialog id="delete-confirm-dialog">
-        <form method="dialog">
-            <h1>Your Class will be Deactivated!</h1>
-            <label>Are you sure to proceed?</label>
-            <div class="btns">
-                <button value="cancel" class="btn1">Cancel Process</button>
-                <button value="confirm" class="btn2">Deactivate Class</button>
-            </div>
-        </form>
-    </dialog>
-    <script src="../javascript/admin.js"></script>
-    <script>
-        document.querySelectorAll('.edit-class-btn').forEach(button => {
-            button.addEventListener('click', function() {
-                const classId = this.dataset.classId;
+        <?php include "../components/deactivate_confirm_dialog.php"; ?>
+        <script src="../javascript/admin.js"></script>
+        <script>
+            document.querySelectorAll('.edit-class-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const classId = this.dataset.classId;
 
-                fetch(`ajax.php?action=get_class&class_id=${classId}`)
-                    .then(response => response.json())
-                    .then(classData => {
-                        if (classData.error) {
-                            alert(classData.error);
-                        } else {
-                            document.querySelector('#add-edit-data [name="class_name"]').value = classData.class_name;
-                            document.querySelector('#add-edit-data [name="grade_id"]').value = classData.grade_id;
+                    fetch(`ajax.php?action=get_class&class_id=${classId}`)
+                        .then(response => response.json())
+                        .then(classData => {
+                            if (classData.error) {
+                                alert(classData.error);
+                            } else {
+                                document.querySelector('#add-edit-data [name="class_name"]').value = classData.class_name;
+                                document.querySelector('#add-edit-data [name="grade_id"]').value = classData.grade_id;
 
-                            document.querySelector('#add-edit-data h1').textContent = "Edit Class";
-                            document.getElementById('add-edit-data').showModal();
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error fetching class data:', error);
-                        alert('Failed to load class data.');
-                    });
+                                document.querySelector('#add-edit-data h1').textContent = "Edit Class";
+                                document.getElementById('add-edit-data').showModal();
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error fetching class data:', error);
+                            alert('Failed to load class data.');
+                        });
+                });
             });
-        });
-    </script>
+        </script>
 </body>
 
 </html>

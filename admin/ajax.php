@@ -80,6 +80,13 @@ switch ($action) {
             echo json_encode(['error' => 'Subcategory ID not provided']);
         }
         break;
+    case 'get_order_details':
+        if (isset($_POST['order_id'])) {
+            echo $crud->get_order_details($_POST['order_id']);
+        } else {
+            echo json_encode(['error' => 'Order ID not provided']);
+        }
+        break;
     case 'update_order_status':
         if (isset($_POST['order_id']) && isset($_POST['order_status'])) {
             echo $crud->update_order_status($_POST['order_id'], $_POST['order_status']);

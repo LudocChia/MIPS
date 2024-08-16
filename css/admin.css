@@ -302,7 +302,7 @@ aside .sidebar ul li a {
 
 }
 
-aside .sidebar ul li span {
+aside .sidebar ul li .count {
     color: var(--color-white);
     background-color: var(--color-primary);
     padding: 5px 10px;
@@ -315,6 +315,7 @@ aside .sidebar ul li span {
 } */
 
 aside .sidebar a i,
+aside .sidebar a span,
 aside .sidebar a svg {
     font-size: 1.7rem;
     margin-left: 3rem;
@@ -812,11 +813,12 @@ main .recent-orders a {
         margin: 0;
     }
 
+    /* 
     .right {
         width: 94%;
         margin: 0 auto 4rem;
-    }
-
+    } */
+    /* 
     .right .top {
         position: fixed;
         top: 0;
@@ -829,13 +831,13 @@ main .recent-orders a {
         margin: 0;
         z-index: 2;
         box-shadow: 0 1rem 1rem var(--color-light);
-    }
+    } */
 
-    .right .profile .info {
+    .container .right .profile .info {
         display: none;
     }
 
-    .right .top button {
+    .container .right .top button {
         display: inline-block;
         background: transparent;
         cursor: pointer;
@@ -844,7 +846,7 @@ main .recent-orders a {
         left: 1rem;
     }
 
-    .right .top button i {
+    .container .right .top button i {
         font-size: 2rem;
     }
 }

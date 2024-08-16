@@ -105,14 +105,15 @@ $recentOrders = getRecentOrders($pdo, 5);
         <main>
             <section class="middle">
                 <div class="insights">
-                    <div class="sales">
-                        <i class="bi bi-person-plus"></i>
-                        <div class="middle">
-                            <div class="left">
-                                <h3>Total Registered Parents and Students</h3>
-                                <h1><?php echo $totalParentsAndStudents; ?></h1>
-                            </div>
-                            <!-- <div class="progress">
+                    <div class="wrapper">
+                        <div class="sales">
+                            <i class="bi bi-person-plus"></i>
+                            <div class="middle">
+                                <div class="left">
+                                    <h3>Total Registered Parents and Students</h3>
+                                    <h1><?php echo $totalParentsAndStudents; ?></h1>
+                                </div>
+                                <!-- <div class="progress">
                                 <svg>
                                     <circle cx="38" cy="38" r="36"></circle>
                                 </svg>
@@ -120,18 +121,20 @@ $recentOrders = getRecentOrders($pdo, 5);
                                     <p>81%</p>
                                 </div>
                             </div> -->
+                            </div>
+                            <small class="text-muted">Last 12 Months</small>
                         </div>
-                        <small class="text-muted">Last 12 Months</small>
                     </div>
                     <!-- END OF SALES -->
-                    <div class="sales">
-                        <i class="bi bi-person-gear"></i>
-                        <div class="middle">
-                            <div class="left">
-                                <h3>Total Registered Admin and Staff</h3>
-                                <h1><?php echo $totalAdmins; ?></h1>
-                            </div>
-                            <!-- <div class="progress">
+                    <div class="wrapper">
+                        <div class="sales">
+                            <i class="bi bi-person-gear"></i>
+                            <div class="middle">
+                                <div class="left">
+                                    <h3>Total Registered Admin and Staff</h3>
+                                    <h1><?php echo $totalAdmins; ?></h1>
+                                </div>
+                                <!-- <div class="progress">
                                 <svg>
                                     <circle cx="38" cy="38" r="36"></circle>
                                 </svg>
@@ -139,18 +142,20 @@ $recentOrders = getRecentOrders($pdo, 5);
                                     <p>81%</p>
                                 </div>
                             </div> -->
+                            </div>
+                            <small class="text-muted">Last 12 Months</small>
                         </div>
-                        <small class="text-muted">Last 12 Months</small>
                     </div>
                     <!-- END OF EXPENSE -->
-                    <div class="sales">
-                        <i class="bi bi-credit-card"></i>
-                        <div class="middle">
-                            <div class="left">
-                                <h3>Total Cash in Amount</h3>
-                                <h1>MYR <?php echo number_format($totalCashIn, 2); ?></h1>
-                            </div>
-                            <!-- <div class="progress">
+                    <div class="wrapper">
+                        <div class="sales">
+                            <i class="bi bi-credit-card"></i>
+                            <div class="middle">
+                                <div class="left">
+                                    <h3>Total Cash in Amount</h3>
+                                    <h1>MYR <?php echo number_format($totalCashIn, 2); ?></h1>
+                                </div>
+                                <!-- <div class="progress">
                                 <svg>
                                     <circle cx="38" cy="38" r="36"></circle>
                                 </svg>
@@ -158,8 +163,9 @@ $recentOrders = getRecentOrders($pdo, 5);
                                     <p>81%</p>
                                 </div>
                             </div> -->
+                            </div>
+                            <small class="text-muted">Last 12 Months</small>
                         </div>
-                        <small class="text-muted">Last 12 Months</small>
                     </div>
                     <!-- END OF SALES -->
                 </div>
@@ -172,7 +178,7 @@ $recentOrders = getRecentOrders($pdo, 5);
                                 <h2>Recent Orders</h2>
                             </div>
                             <div class="right">
-                                <!-- <a href="./order.php" class="more">View All<i class="bi bi-chevron-right"></i></a> -->
+                                <a href="./order.php" class="more">View All<i class="bi bi-chevron-right"></i></a>
                             </div>
                         </div>
                         <div class="table-body">
@@ -209,7 +215,7 @@ $recentOrders = getRecentOrders($pdo, 5);
                                 <h2>Recent Updates</h2>
                             </div>
                             <div class="right">
-
+                                <a href="#" class="more">View All<i class="bi bi-chevron-right"></i></a>
                             </div>
                         </div>
                         </title>

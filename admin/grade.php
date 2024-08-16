@@ -91,7 +91,7 @@ $all_grades = getGrades($pdo);
                                     <td></td>
                                     <td></td>
                                     <td>
-                                        <form action="" method="POST" style="display:inline;" onsubmit="return showDeleteConfirmDialog(event);">
+                                        <form action="" method="POST" style="display:inline;" onsubmit="return showDeactivateConfirmDialog(event);">
                                             <input type="hidden" name="grade_id" value="<?= htmlspecialchars($grade['grade_id']); ?>">
                                             <input type="hidden" name="deactivate" value="true">
                                             <button type="submit" class="delete-grade-btn"><i class="bi bi-x-square-fill"></i></button>
@@ -133,16 +133,7 @@ $all_grades = getGrades($pdo);
             </div>
         </form>
     </dialog>
-    <dialog id="delete-confirm-dialog">
-        <form method="dialog">
-            <h1>Your Grade will be Deactivated!</h1>
-            <label>Are you sure to proceed?</label>
-            <div class="btns">
-                <button value="cancel" class="btn1">Cancel Process</button>
-                <button value="confirm" class="btn2">Deactivate Grade</button>
-            </div>
-        </form>
-    </dialog>
+    <?php include "../components/deactivate_confirm_dialog.php"; ?>
     <script src="../javascript/admin.js"></script>
     <script>
         document.querySelectorAll('.edit-grade-btn').forEach(button => {
