@@ -47,7 +47,7 @@ $all_grades = getGrades($pdo);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Grade Management - MIPS</title>
-    <link rel="icon" type="image/x-icon" href="../images/Mahans_internation_primary_school_logo.png">
+    <link rel="icon" type="image/x-icon" href="../images/Mahans_IPS_icon.png">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -69,20 +69,7 @@ $all_grades = getGrades($pdo);
                         <h1>Grade Management</h1>
                     </div>
                     <div class="right">
-                        <?php
-                        try {
-                            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-                            $countQuery = "SELECT COUNT(*) FROM Grade WHERE is_deleted = 0";
-                            $stmt = $pdo->prepare($countQuery);
-                            $stmt->execute();
-                            $count = $stmt->fetchColumn();
-
-                            echo "<p>Total $count Grades</p>";
-                        } catch (PDOException $e) {
-                            echo "<script>alert('Database error: " . $e->getMessage() . "');</script>";
-                        }
-                        ?>
-                        <button id="open-popup" class="btn btn-outline"><i class="bi bi-plus-circle"></i>Add New Grade</button>
+                        <button id="open-popup" class="btn btn-outline-primary"><i class="bi bi-plus-circle"></i>Add New Grade</button>
                     </div>
                 </div>
                 <div class="table-body">
@@ -91,6 +78,8 @@ $all_grades = getGrades($pdo);
                             <tr>
                                 <th>Grade Name</th>
                                 <th>Grade Level</th>
+                                <th>Total Classes</th>
+                                <th>Total Students</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -99,8 +88,10 @@ $all_grades = getGrades($pdo);
                                 <tr>
                                     <td><?php echo htmlspecialchars($grade['grade_name']); ?></td>
                                     <td><?php echo htmlspecialchars($grade['grade_level']); ?></td>
+                                    <td></td>
+                                    <td></td>
                                     <td>
-                                        <form action="" method="POST" style="display:inline;" onsubmit="return confirm('Are you sure you want to deactivate this grade?');">
+                                        <form action="" method="POST" style="display:inline;" onsubmit="return showDeleteConfirmDialog(event);">
                                             <input type="hidden" name="grade_id" value="<?= htmlspecialchars($grade['grade_id']); ?>">
                                             <input type="hidden" name="deactivate" value="true">
                                             <button type="submit" class="delete-grade-btn"><i class="bi bi-x-square-fill"></i></button>

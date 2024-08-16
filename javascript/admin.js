@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const profileMenu = document.querySelector(".profile-menu");
     // const dialog = document.querySelector('dialog');
     // const themeToggler = document.querySelector(".theme-toggler");
+    const deleteConfirmDialog = document.querySelector('#delete-confirm-dialog');
 
     // Show Sidebar
     menuBtn.addEventListener("click", () => {
@@ -19,10 +20,12 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     // Show Profile Menu
-    userBtn.addEventListener('click', function (event) {
-        event.stopPropagation();
-        profileMenu.classList.toggle('active');
-    });
+    if (userBtn && profileMenu) {
+        userBtn.addEventListener('click', function (event) {
+            event.stopPropagation();
+            profileMenu.classList.toggle('active');
+        });
+    }
 
     document.addEventListener('click', function (event) {
         if (!profileMenu.contains(event.target) && !userBtn.contains(event.target)) {

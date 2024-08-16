@@ -44,17 +44,18 @@ function isActive($pageName, $currentPage)
                 <a href="order.php" class="<?= isActive('order.php', $currentPage); ?>">
                     <i class="bi bi-receipt"></i>
                     <h4>Order</h4>
+                    <span id="pending-order-count"></span>
                 </a>
             </li>
             <li>
                 <a href="grade.php" class="<?= isActive('grade.php', $currentPage); ?>">
-                    <i class="bi bi-people-fill"></i>
+                    <i class="bi bi-mortarboard-fill"></i>
                     <h4>Grade</h4>
                 </a>
             </li>
             <li>
                 <a href="class.php" class="<?= isActive('class.php', $currentPage); ?>">
-                    <i class="bi bi-people-fill"></i>
+                    <i class="bi bi-easel2-fill"></i>
                     <h4>Class</h4>
                 </a>
             </li>
@@ -75,7 +76,12 @@ function isActive($pageName, $currentPage)
                             <h4>All Admin</h4>
                         </a>
                     </li>
-                    <li><a href="teacher.php" class="<?= isActive('teacher.php', $currentPage); ?>"><i class="bi bi-mortarboard-fill"></i>
+                    <li><a href="teacher.php" class="<?= isActive('teacher.php', $currentPage); ?>"><svg width="20px" data-name="Layer 1" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12.5 11.5H15a1.5 1.5 0 0 0 1.5-1.5h0A1.5 1.5 0 0 0 15 8.5H4.5a3 3 0 0 0-3 3v2a3 3 0 0 0 1.456 2.573" fill="none" stroke="#86848c" stroke-linecap="round" stroke-linejoin="round" class="stroke-000000"></path>
+                                <path d="M7.5 16.5v6H9a1.5 1.5 0 0 0 1.5-1.5v-9.5M7.5 22.5H6A1.5 1.5 0 0 1 4.5 21v-9.5" fill="none" stroke="#86848c" stroke-linecap="round" stroke-linejoin="round" class="stroke-000000"></path>
+                                <circle cx="7.5" cy="4.5" r="2.5" fill="none" stroke="#86848c" stroke-linecap="round" stroke-linejoin="round" class="stroke-000000"></circle>
+                                <path d="M12 3.5h10.5v12h-10" fill="none" stroke="#86848c" stroke-linecap="round" stroke-linejoin="round" class="stroke-000000"></path>
+                            </svg>
                             <h4>All Teacher</h4>
                         </a>
                     </li>
@@ -85,7 +91,7 @@ function isActive($pageName, $currentPage)
                         </a>
                     </li>
                     <li>
-                        <a href="student.php" class="<?= isActive('student.php', $currentPage); ?>"><i class="bi bi-people-fill"></i>
+                        <a href="student.php" class="<?= isActive('student.php', $currentPage); ?>"><span class="material-symbols-outlined icon-adjust">local_library</span>
                             <h4>All Student</h4>
                         </a>
                     </li>
@@ -111,3 +117,21 @@ function isActive($pageName, $currentPage)
         </ul>
     </div>
 </aside>
+<Script>
+    $(document).ready(function() {
+        $.ajax({
+            url: 'ajax.php?action=get_pending_count',
+            type: 'GET',
+            success: function(response) {
+                if (parseInt(response) == 0) {
+                    $('#pending-order-count').hide();
+                } else {
+                    $('#pending-order-count').text(response);
+                }
+            },
+            error: function() {
+                $('#pending-order-count').hide();
+            }
+        });
+    });
+</Script>

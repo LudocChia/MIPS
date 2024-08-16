@@ -1,4 +1,5 @@
 <?php
+
 session_start();
 
 include "../components/db_connect.php";
@@ -10,45 +11,104 @@ if (!isset($_SESSION['admin_id'])) {
 
 $currentPage = basename($_SERVER['PHP_SELF']);
 
-$msg = [];
+if (isset($_POST['delete'])) {
+    $category_id = $_POST['category_id'];
+
+    $sql = "UPDATE Product_Category SET is_deleted = 1 WHERE category_id = :category_id";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute(['category_id' => $category_id]);
+    header('Location: ' . $currentPage);
+    exit();
+}
+
+function handleFileUpload($file)
+{
+    if ($file['error'] === UPLOAD_ERR_NO_FILE) {
+        return null;
+    }
+
+    $allowedfileExtensions = ['jpg', 'jpeg', 'png'];
+    $fileName = $file['name'];
+    $fileTmpPath = $file['tmp_name'];
+    $fileExtension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+
+    if (in_array($fileExtension, $allowedfileExtensions)) {
+        $newFileName = uniqid() . '.' . $fileExtension;
+        $dest_path = '../uploads/category/' . $newFileName;
+
+        if (move_uploaded_file($fileTmpPath, $dest_path)) {
+            return $newFileName;
+        } else {
+            echo "<script>alert('There was an error moving the uploaded file: $fileName');</script>";
+            return null;
+        }
+    } else {
+        echo "<script>alert('Upload failed. Allowed file types: " . implode(',', $allowedfileExtensions) . "');</script>";
+        return null;
+    }
+}
+
 if (isset($_POST["submit"])) {
     $name = $_POST["name"];
-    $parentId = !empty($_POST["parent_id"]) ? $_POST["parent_id"] : null;
+    $categoryId = isset($_POST['category_id']) ? $_POST['category_id'] : null;
 
-
-    if ($_FILES["image"]["error"] === 4) {
+    if ($_FILES["image"]["error"] === 4 && !$categoryId) {
         echo "<script> alert('Image Does Not Exist'); </script>";
     } else {
-        $fileName = $_FILES["image"]["name"];
-        $fileSize = $_FILES["image"]["size"];
-        $tmpName = $_FILES["image"]["tmp_name"];
+        $newImageName = handleFileUpload($_FILES['image']);
 
-        $validImageExtension = ['jpg', 'jpeg', 'png'];
-        $imageExtension = explode('.', $fileName);
-        $imageExtension = strtolower(end($imageExtension));
-        if (!in_array($imageExtension, $validImageExtension)) {
-            echo "<script> alert('Invalid Image Extension'); </script>";
-        } else if ($fileSize > 1000000) {
-            echo "<script> alert('Image Size Is Too Large'); </script>";
+        if ($categoryId) {
+            $sql = "UPDATE Product_Category SET category_name = :name";
+
+            if ($newImageName) {
+                $sql .= ", category_icon = :icon";
+            }
+
+            $sql .= " WHERE category_id = :category_id";
+
+            $stmt = $pdo->prepare($sql);
+            $stmt->bindParam(':name', $name);
+            $stmt->bindParam(':category_id', $categoryId);
+
+            if ($newImageName) {
+                $stmt->bindParam(':icon', $newImageName);
+            }
+
+            try {
+                $stmt->execute();
+                echo "<script>alert('Successfully Updated');document.location.href ='mainCategory.php';</script>";
+            } catch (PDOException $e) {
+                echo "<script>alert('Database error: " . $e->getMessage() . "');</script>";
+            }
         } else {
-            $newImageName = uniqid() . '.' . $imageExtension;
-            if (move_uploaded_file($tmpName, '../uploads/' . $newImageName)) {
-                $sql = "INSERT INTO Product_Category (category_name, category_icon, parent_id, is_deleted) VALUES (:name, :icon, :parentId, 0)";
+            if ($newImageName) {
+                $sql = "INSERT INTO Product_Category (category_name, category_icon, parent_id, is_deleted) VALUES (:name, :icon, NULL, 0)";
                 $stmt = $pdo->prepare($sql);
                 $stmt->bindParam(':name', $name);
                 $stmt->bindParam(':icon', $newImageName);
-                $stmt->bindParam(':parentId', $parentId);
                 try {
                     $stmt->execute();
-                    header('Location: mainCategory.php');
-                    exit();
+                    echo "<script>alert('Successfully Added');document.location.href ='mainCategory.php';</script>";
                 } catch (PDOException $e) {
                     echo "<script>alert('Database error: " . $e->getMessage() . "');</script>";
                 }
-            } else {
-                echo "<script>alert('Failed to move uploaded file.');</script>";
             }
         }
+    }
+}
+
+if (isset($_POST['delete'])) {
+    $categoryId = $_POST['category_id'];
+
+    $sql = "UPDATE Product_Category SET is_deleted = 1 WHERE category_id = :category_id";
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(':category_id', $categoryId);
+
+    try {
+        $stmt->execute();
+        echo "<script>alert('Category successfully deleted');document.location.href ='mainCategory.php';</script>";
+    } catch (PDOException $e) {
+        echo "<script>alert('Database error: " . $e->getMessage() . "');</script>";
     }
 }
 
@@ -70,7 +130,7 @@ $all_main_categories = getMainCategories($pdo);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bookshop Main Category - MIPS</title>
-    <link rel="icon" type="image/x-icon" href="../images/Mahans_internation_primary_school_logo.png">
+    <link rel="icon" type="image/x-icon" href="../images/Mahans_IPS_icon.png">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -84,39 +144,33 @@ $all_main_categories = getMainCategories($pdo);
     <?php include "../components/admin_header.php"; ?>
     <div class="container">
         <?php include "../components/admin_sidebar.php"; ?>
-        <!-- END OF ASIDE -->
         <main class="category">
             <div class="wrapper">
                 <div class="title">
                     <div class="left">
                         <h1>Bookshop Main Category</h1>
-                        <?php
-                        try {
-                            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-                            $countQuery = "SELECT COUNT(*) FROM Product_Category WHERE parent_id IS NULL AND is_deleted = 0";
-                            $stmt = $pdo->prepare($countQuery);
-                            $stmt->execute();
-                            $count = $stmt->fetchColumn();
-
-                            echo "<p>Total $count Main Categories</p>";
-                        } catch (PDOException $e) {
-                            echo "<script>alert('Database error: " . $e->getMessage() . "');</script>";
-                        }
-                        ?>
                     </div>
                     <div class="right">
-                        <button id="open-popup" class="btn btn-outline"><i class="bi bi-plus-circle"></i>Add Main Category</button>
+                        <button id="open-popup" class="btn btn-outline-primary"><i class="bi bi-plus-circle"></i>Add Main Category</button>
                     </div>
                 </div>
                 <div class="box-container">
                     <?php foreach ($all_main_categories as $category) : ?>
-                        <div class="box">
-                            <h3><?php echo htmlspecialchars($category['category_name']); ?></h3>
-                            <a href="#">
-                                <div class="image-container">
-                                    <img src="../uploads/<?php echo htmlspecialchars($category['category_icon']); ?>" alt="Icon for <?php echo htmlspecialchars($category['category_name']); ?>">
-                                </div>
-                            </a>
+                        <div class="box" data-category-id="<?= htmlspecialchars($category['category_id']); ?>">
+                            <div class="image-container">
+                                <img src="../uploads/category/<?php echo htmlspecialchars($category['category_icon']); ?>" alt="Icon for <?php echo htmlspecialchars($category['category_name']); ?>">
+                            </div>
+                            <div class="actions">
+                                <form action="" method="POST" style="display:inline;" onsubmit="return showDeleteConfirmDialog(event);">
+                                    <input type="hidden" name="category_id" value="<?= htmlspecialchars($category['category_id']); ?>">
+                                    <input type="hidden" name="delete" value="true">
+                                    <button type="submit" class="delete-category-btn"><i class="bi bi-x-square-fill"></i></button>
+                                </form>
+                                <button type="button" class="edit-category-btn" data-category-id="<?= htmlspecialchars($category['category_id']); ?>"><i class="bi bi-pencil-square"></i></button>
+                            </div>
+                            <div class="txt">
+                                <h3><?php echo htmlspecialchars($category['category_name']); ?></h3>
+                            </div>
                         </div>
                     <?php endforeach; ?>
                 </div>
@@ -133,17 +187,22 @@ $all_main_categories = getMainCategories($pdo);
             </div>
         </div>
         <form action="" method="post" enctype="multipart/form-data">
-            <div class="input-field">
-                <h2>Category Name<sup>*</sup></h2>
-                <input type="text" name="name" value="<?php echo isset($_POST['name']) ? htmlspecialchars($_POST['name']) : ''; ?>">
-                <p>Please enter full name as per IC or Passport.</p>
+            <input type="hidden" name="category_id" value="">
+            <div class="input-container">
+                <div class="input-field">
+                    <h2>Category Name<sup>*</sup></h2>
+                    <input type="text" name="name" value="<?php echo isset($_POST['name']) ? htmlspecialchars($_POST['name']) : ''; ?>" required>
+                </div>
+                <p>Please enter the category name.</p>
             </div>
-            <div class="input-field">
-                <h2>Category Icon<sup>*</sup></h2>
-                <input type="file" name="image" id="image" accept=".jpg, .jpeg, .png" value="">
-                <p>Please enter full name as per IC or Passport.</p>
+            <div class="input-container">
+                <div class="input-field">
+                    <h2>Category Icon<sup>*</sup></h2>
+                    <input type="file" name="image" id="image" accept=".jpg, .jpeg, .png" required>
+                </div>
+                <p>Please upload an image for the category.</p>
             </div>
-            <div class="controls">
+            <div class="input-container controls">
                 <button type="button" class="cancel">Cancel</button>
                 <button type="reset">Clear</button>
                 <button type="submit" name="submit">Publish</button>
@@ -152,15 +211,42 @@ $all_main_categories = getMainCategories($pdo);
     </dialog>
     <dialog id="delete-confirm-dialog">
         <form method="dialog">
-            <h1>Your Main Category will be Deactivated!</h1>
+            <h1>This Category will be Deactivated!</h1>
             <label>Are you sure to proceed?</label>
-            <div class="btns">
-                <button value="cancel" class="btn1">Cancel Process</button>
-                <button value="confirm" class="btn2">Deactivate Product</button>
+            <div class="controls">
+                <button value="cancel" class="cancel">Cancel</button>
+                <button value="confirm" class="deactivate">Deactivate</button>
             </div>
         </form>
     </dialog>
     <script src="../javascript/admin.js"></script>
+    <script>
+        document.querySelectorAll('.edit-category-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const categoryId = this.dataset.categoryId;
+                fetch(`ajax.php?action=get_category&category_id=${categoryId}`)
+                    .then(response => response.json())
+                    .then(category => {
+                        if (category.error) {
+                            alert(category.error);
+                        } else {
+                            document.querySelector('#add-edit-data [name="category_id"]').value = category.category_id;
+                            document.querySelector('#add-edit-data [name="name"]').value = category.category_name;
+                            document.querySelector('#add-edit-data h1').textContent = "Edit Main Category";
+                            document.getElementById('add-edit-data').showModal();
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching category data:', error);
+                        alert('Failed to load category data.');
+                    });
+            });
+        });
+
+        document.querySelector('.cancel').addEventListener('click', function() {
+            document.getElementById('add-edit-data').close();
+        });
+    </script>
 </body>
 
 </html>

@@ -3,6 +3,7 @@
 session_start();
 
 include "./components/db_connect.php";
+include "./components/customer_login.php";
 
 // Fetch products from the database
 $sql = "SELECT p.product_id, p.product_name, p.product_description, p.product_price, p.stock_quantity, p.color, p.gender, 
@@ -14,6 +15,7 @@ $sql = "SELECT p.product_id, p.product_name, p.product_description, p.product_pr
 $stmt = $pdo->prepare($sql);
 $stmt->execute();
 $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
 ?>
 
 <!DOCTYPE html>
@@ -23,7 +25,7 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bookshop - MIPS</title>
-    <link rel="icon" type="image/x-icon" href="./images/Mahans_internation_primary_school_logo.png">
+    <link rel="icon" type="image/x-icon" href="./images/Mahans_IPS_icon.png">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -38,7 +40,6 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 <body>
     <?php include "./components/customer_header.php"; ?>
-    <?php include "./components/customer_login.php"; ?>
     <section class="bookshop">
         <div class="container">
             <div class="products">
@@ -57,7 +58,7 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 <div class="box">
                                     <div class="image-container">
                                         <a href="item.php?pid=<?= htmlspecialchars($product['product_id']); ?>">
-                                            <img src="<?= htmlspecialchars(!empty($product['primary_image']) ? "uploads/" . $product['primary_image'] : 'images/defaultproductimage.png'); ?>" alt="Product Image" class="primary-image">
+                                            <img src="<?= htmlspecialchars(!empty($product['primary_image']) ? "uploads/product/" . $product['primary_image'] : 'images/defaultproductimage.png'); ?>" alt="Product Image" class="primary-image">
                                         </a>
                                     </div>
                                     <div class="name"><?= htmlspecialchars($product['product_name']); ?></div>

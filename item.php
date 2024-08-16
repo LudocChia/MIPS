@@ -2,7 +2,8 @@
 
 session_start();
 
-include 'components/db_connect.php';
+include './components/db_connect.php';
+include "./components/customer_login.php";
 
 $product_id = $_GET['pid'] ?? null;
 if (!$product_id) {
@@ -26,10 +27,23 @@ function getProductDetail($pdo, $product_id)
 
 $product = getProductDetail($pdo, $product_id);
 
-if (!$product) {
-    header('Location: error.php');
-    exit();
+function getApparelSizes($pdo, $product_id)
+{
+    $stmt = $pdo->prepare("
+        SELECT s.size_name, s.shoulder_width, s.bust, s.waist, s.length, ps.size_id
+        FROM Sizes s
+        JOIN Product_Size ps ON s.size_id = ps.size_id
+        JOIN Product p ON ps.product_id = p.product_id
+        WHERE p.product_id = :product_id
+        AND p.is_deleted = 0
+        ORDER BY s.size_name ASC
+    ");
+    $stmt->bindParam(':product_id', $product_id, PDO::PARAM_INT);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
+
+$get_apparel_sizes = getApparelSizes($pdo, $product_id);
 
 function getProductSizes($pdo, $product_id)
 {
@@ -143,7 +157,7 @@ if (isset($_POST['submit'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo htmlspecialchars($product['product_name']); ?> - MIPS</title>
-    <link rel="icon" type="image/x-icon" href="./images/Mahans_internation_primary_school_logo.png">
+    <link rel="icon" type="image/x-icon" href="./images/Mahans_IPS_icon.png">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -155,7 +169,6 @@ if (isset($_POST['submit'])) {
 
 <body>
     <?php include 'components/customer_header.php'; ?>
-    <?php include 'components/customer_login.php'; ?>
     <div class="breadcrumbs">
         <ul>
             <li>
@@ -198,11 +211,11 @@ if (isset($_POST['submit'])) {
                         <div class="picture-div">
                             <div class="product-image">
                                 <?php if (!empty($images)) : ?>
-                                    <img id="picture" alt="<?php echo htmlspecialchars($images[0]['image_url']); ?>" src="uploads/<?php echo htmlspecialchars($images[0]['image_url']); ?>">
+                                    <img id="picture" alt="<?php echo htmlspecialchars($images[0]['image_url']); ?>" src="uploads/product/<?php echo htmlspecialchars($images[0]['image_url']); ?>">
                             </div>
                             <div class="thumbnails">
                                 <?php foreach ($images as $image) : ?>
-                                    <img class="thumbnail" src="uploads/<?php echo htmlspecialchars($image['image_url']); ?>" style="width: 80px;">
+                                    <img class="thumbnail" src="uploads/product/<?php echo htmlspecialchars($image['image_url']); ?>" style="width: 80px;">
                                 <?php endforeach; ?>
                             </div>
                         <?php else : ?>
@@ -232,7 +245,7 @@ if (isset($_POST['submit'])) {
                             <h2>Quantity</h2>
                             <div class="product-actions">
                                 <input type="number" id="qty" name="qty" min="1" max="<?php echo $stockQuantity; ?>" value="1">
-                                <button type="button" class="add-to-cart btn btn-outline" onclick="addToCart(<?php echo $product['product_id']; ?>)">Add to Cart</button>
+                                <button type="button" class="add-to-cart btn btn-outline-primary" onclick="addToCart(<?php echo $product['product_id']; ?>)">Add to Cart</button>
                                 <button type="button" class="buy-now btn btn-full">Buy Now</button>
                             </div>
                         </div>
@@ -241,6 +254,49 @@ if (isset($_POST['submit'])) {
             </div>
         </div>
     </div>
+    <section class="size-chart">
+        <div class="container">
+            <div class="wrapper">
+                <div class="title">
+                    <div class="left">
+                        <h1>Apparel Size</h1>
+                    </div>
+                    <div class="right">
+                    </div>
+                </div>
+                <div class="table-body">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Apparel Size Name</th>
+                                <th>Shoulder Width</th>
+                                <th>Bust</th>
+                                <th>Waist</th>
+                                <th>Length</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php if (!empty($get_apparel_sizes)) : ?>
+                                <?php foreach ($get_apparel_sizes as $size) : ?>
+                                    <tr>
+                                        <td><?= htmlspecialchars($size['size_name']); ?></td>
+                                        <td><?= htmlspecialchars($size['shoulder_width']); ?></td>
+                                        <td><?= htmlspecialchars($size['bust']); ?></td>
+                                        <td><?= htmlspecialchars($size['waist']); ?></td>
+                                        <td><?= htmlspecialchars($size['length']); ?></td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            <?php else : ?>
+                                <tr>
+                                    <td colspan="6">No apparel sizes available.</td>
+                                </tr>
+                            <?php endif; ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <dialog id="buy-now-dialog">
         <h1>Purchase Product</h1>
@@ -291,13 +347,14 @@ if (isset($_POST['submit'])) {
 
 
     <?php include 'components/customer_footer.php'; ?>
-    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script src="javascript/common.js"></script>
+    <script src="javascript/customer.js"></script>
     <script type="text/javascript">
         document.addEventListener("DOMContentLoaded", function() {
             document.querySelector('.buy-now').addEventListener('click', function() {
                 <?php if (!isset($_SESSION['user_id'])) : ?>
+                    const productId = <?= json_encode($product_id) ?>;
+                    document.getElementById('login-form').querySelector('form').action += `?pid=${productId}`;
                     document.getElementById('login-form').showModal();
                 <?php else : ?>
                     const selectedSizeButton = document.querySelector('.size-button.selected');

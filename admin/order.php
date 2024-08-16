@@ -99,7 +99,7 @@ if (isset($_POST["submit"])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bookshop Order - MIPS</title>
-    <link rel="icon" type="image/x-icon" href="../images/Mahans_internation_primary_school_logo.png">
+    <link rel="icon" type="image/x-icon" href="../images/Mahans_IPS_icon.png">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -121,20 +121,7 @@ if (isset($_POST["submit"])) {
                         <h1>Bookshop Order</h1>
                     </div>
                     <div class="right">
-                        <button class="btn btn-outline" id="open-popup"><i class="bi bi-plus-circle"></i></i>Add New Order</button>
-                        <?php
-                        try {
-                            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-                            $countQuery = "SELECT COUNT(*) FROM Payment WHERE payment_status = 0";
-                            $stmt = $pdo->prepare($countQuery);
-                            $stmt->execute();
-                            $count = $stmt->fetchColumn();
-
-                            echo "<p>Total $count Pending Order(s)</p>";
-                        } catch (PDOException $e) {
-                            echo "<script>alert('Database error: " . $e->getMessage() . "');</script>";
-                        }
-                        ?>
+                        <button class="btn btn-outline-primary" id="open-popup"><i class="bi bi-plus-circle"></i></i>Add New Order</button>
                     </div>
                 </div>
                 <div class="table-body">
@@ -173,8 +160,10 @@ if (isset($_POST["submit"])) {
                                             <input type="hidden" name="order_id" value="<?= htmlspecialchars($order['order_id']); ?>">
                                             <select name="order_status" class="status-select">
                                                 <option value="pending" <?= $order['payment_status'] == 'pending' ? 'selected' : ''; ?>>Pending</option>
+                                                <option value="failed" <?= $order['payment_status'] == 'received' ? 'selected' : ''; ?>>Received</option>
                                                 <option value="completed" <?= $order['payment_status'] == 'completed' ? 'selected' : ''; ?>>Completed</option>
-                                                <option value="failed" <?= $order['payment_status'] == 'failed' ? 'selected' : ''; ?>>Failed</option>
+                                                <option value="cancelled" <?= $order['payment_status'] == 'cancelled' ? 'selected' : ''; ?>>Cancelled</option>
+
                                             </select>
                                         </form>
                                     </td>
@@ -214,8 +203,9 @@ if (isset($_POST["submit"])) {
                 <h2>Order Status<sup>*</sup></h2>
                 <select name="order_status" required>
                     <option value="pending">Pending</option>
+                    <option value="received">Received</option>
                     <option value="completed">Completed</option>
-                    <option value="failed">Failed</option>
+                    <option value="cancelled">cancelled</option>
                 </select>
                 <p>Please select the order status.</p>
             </div>
@@ -272,23 +262,6 @@ if (isset($_POST["submit"])) {
             inputs.forEach(input => input.value = '');
 
             document.getElementById('product-list').appendChild(productInfo);
-        });
-
-        $(document).ready(function() {
-            $.ajax({
-                url: 'ajax.php?action=get_pending_count',
-                type: 'GET',
-                success: function(response) {
-                    if (parseInt(response) > 0) {
-                        $('#pending-order-count').text(response);
-                    } else {
-                        $('#pending-order-count').hide();
-                    }
-                },
-                error: function() {
-                    $('#pending-order-count').hide();
-                }
-            });
         });
 
         document.addEventListener('DOMContentLoaded', function() {

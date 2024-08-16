@@ -5,11 +5,78 @@ session_start();
 include "../components/db_connect.php";
 
 if (!isset($_SESSION['admin_id'])) {
-    header('Location: login.php');
+    header('Location: ./login.php');
     exit();
 }
 
 $currentPage = basename($_SERVER['PHP_SELF']);
+
+function getTotalParentsAndStudents($pdo)
+{
+    $sqlParents = "SELECT COUNT(*) as total_parents FROM Parent WHERE is_deleted = 0";
+    $stmtParents = $pdo->query($sqlParents);
+    $totalParents = $stmtParents->fetch(PDO::FETCH_ASSOC)['total_parents'];
+
+    $sqlStudents = "SELECT COUNT(*) as total_students FROM Student WHERE is_deleted = 0";
+    $stmtStudents = $pdo->query($sqlStudents);
+    $totalStudents = $stmtStudents->fetch(PDO::FETCH_ASSOC)['total_students'];
+
+    return $totalParents + $totalStudents;
+}
+
+$totalParentsAndStudents = getTotalParentsAndStudents($pdo);
+
+function getTotalAdmins($pdo)
+{
+    $sqlAdmins = "SELECT COUNT(*) as total_admins FROM Admin WHERE is_deleted = 0";
+    $stmtAdmins = $pdo->query($sqlAdmins);
+    return $stmtAdmins->fetch(PDO::FETCH_ASSOC)['total_admins'];
+}
+
+$totalAdmins = getTotalAdmins($pdo);
+
+function getTotalCashInAmount($pdo)
+{
+    $sqlCashIn = "SELECT SUM(payment_amount) as total_cash_in FROM Payment WHERE payment_status = 'completed'";
+    $stmtCashIn = $pdo->query($sqlCashIn);
+    return $stmtCashIn->fetch(PDO::FETCH_ASSOC)['total_cash_in'];
+}
+
+$totalCashIn = getTotalCashInAmount($pdo);
+
+function getRecentOrders($pdo, $limit = 5)
+{
+    $sqlRecentOrders = "
+        SELECT 
+            o.order_id, 
+            p.product_name, 
+            ps.student_id, 
+            s.student_name, 
+            oi.order_subtotal, 
+            py.payment_status
+        FROM 
+            Orders o
+        JOIN 
+            Order_Item oi ON o.order_id = oi.order_id
+        JOIN 
+            Product p ON oi.product_id = p.product_id
+        JOIN 
+            Parent_Student ps ON o.parent_student_id = ps.parent_student_id
+        JOIN 
+            Student s ON ps.student_id = s.student_id
+        JOIN 
+            Payment py ON o.order_id = py.order_id
+        ORDER BY 
+            o.order_datetime DESC
+        LIMIT :limit
+    ";
+    $stmtRecentOrders = $pdo->prepare($sqlRecentOrders);
+    $stmtRecentOrders->bindValue(':limit', (int)$limit, PDO::PARAM_INT);
+    $stmtRecentOrders->execute();
+    return $stmtRecentOrders->fetchAll(PDO::FETCH_ASSOC);
+}
+
+$recentOrders = getRecentOrders($pdo, 5);
 
 ?>
 
@@ -21,7 +88,7 @@ $currentPage = basename($_SERVER['PHP_SELF']);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - MIPS</title>
-    <link rel="icon" type="image/x-icon" href="../images/Mahans_internation_primary_school_logo.png">
+    <link rel="icon" type="image/x-icon" href="../images/Mahans_IPS_icon.png">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -35,7 +102,6 @@ $currentPage = basename($_SERVER['PHP_SELF']);
     <?php include "../components/admin_header.php"; ?>
     <div class="container">
         <?php include "../components/admin_sidebar.php"; ?>
-        <!-- END OF ASIDE -->
         <main>
             <section class="middle">
                 <div class="insights">
@@ -44,7 +110,7 @@ $currentPage = basename($_SERVER['PHP_SELF']);
                         <div class="middle">
                             <div class="left">
                                 <h3>Total Registered Parents and Students</h3>
-                                <h1>100+</h1>
+                                <h1><?php echo $totalParentsAndStudents; ?></h1>
                             </div>
                             <!-- <div class="progress">
                                 <svg>
@@ -63,7 +129,7 @@ $currentPage = basename($_SERVER['PHP_SELF']);
                         <div class="middle">
                             <div class="left">
                                 <h3>Total Registered Admin and Staff</h3>
-                                <h1>10000+</h1>
+                                <h1><?php echo $totalAdmins; ?></h1>
                             </div>
                             <!-- <div class="progress">
                                 <svg>
@@ -82,7 +148,7 @@ $currentPage = basename($_SERVER['PHP_SELF']);
                         <div class="middle">
                             <div class="left">
                                 <h3>Total Cash in Amount</h3>
-                                <h1>MYR 100</h1>
+                                <h1>MYR <?php echo number_format($totalCashIn, 2); ?></h1>
                             </div>
                             <!-- <div class="progress">
                                 <svg>
@@ -106,7 +172,7 @@ $currentPage = basename($_SERVER['PHP_SELF']);
                                 <h2>Recent Orders</h2>
                             </div>
                             <div class="right">
-                                <a href="./order.php" class="more">View All<i class="bi bi-chevron-right"></i></a>
+                                <!-- <a href="./order.php" class="more">View All<i class="bi bi-chevron-right"></i></a> -->
                             </div>
                         </div>
                         <div class="table-body">
@@ -120,36 +186,15 @@ $currentPage = basename($_SERVER['PHP_SELF']);
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>iPhone 14</td>
-                                        <td>John Doe</td>
-                                        <td>$1200</td>
-                                        <td><span class="success">Paid</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>iPhone 14</td>
-                                        <td>John Doe</td>
-                                        <td>$1200</td>
-                                        <td><span class="success">Paid</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>iPhone 14</td>
-                                        <td>John Doe</td>
-                                        <td>$1200</td>
-                                        <td><span class="success">Paid</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>iPhone 14</td>
-                                        <td>John Doe</td>
-                                        <td>$1200</td>
-                                        <td><span class="success">Paid</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>iPhone 14</td>
-                                        <td>John Doe</td>
-                                        <td>$1200</td>
-                                        <td><span class="success">Paid</span></td>
-                                    </tr>
+                                    <?php foreach ($recentOrders as $order) { ?>
+                                        <tr>
+                                            <td><?php echo htmlspecialchars($order['product_name']); ?></td>
+                                            <td><?php echo htmlspecialchars($order['student_name']); ?></td>
+                                            <td>MYR <?php echo number_format($order['order_subtotal'], 2); ?></td>
+                                            <td><span class="<?php echo $order['payment_status'] == 'completed' ? 'success' : 'pending'; ?>">
+                                                    <?php echo ucfirst($order['payment_status']); ?></span></td>
+                                        </tr>
+                                    <?php } ?>
                                 </tbody>
                             </table>
                         </div>
@@ -215,8 +260,8 @@ $currentPage = basename($_SERVER['PHP_SELF']);
                                     <h3>Page Views</h3>
                                     <small class="text-muted">Last 24 Hours</small>
                                 </div>
-                                <h5 class="success">+39%</h5>
-                                <h3>3849</h3>
+                                <h5 class="success">+1%</h5>
+                                <h3>1</h3>
                             </div>
                         </div>
                         <div class="item">
@@ -228,8 +273,8 @@ $currentPage = basename($_SERVER['PHP_SELF']);
                                     <h3>Unique Visitors</h3>
                                     <small class="text-muted">Last 24 Hours</small>
                                 </div>
-                                <h5 class="danger">-17%</h5>
-                                <h3>3849</h3>
+                                <h5 class="danger">0%</h5>
+                                <h3>1</h3>
                             </div>
                         </div>
                     </div>
@@ -238,6 +283,24 @@ $currentPage = basename($_SERVER['PHP_SELF']);
         </main>
     </div>
     <script src="../javascript/admin.js"></script>
+    <script>
+        $(document).ready(function() {
+            $.ajax({
+                url: 'ajax.php?action=get_pending_count',
+                type: 'GET',
+                success: function(response) {
+                    if (parseInt(response) > 0) {
+                        $('#pending-order-count').text(response);
+                    } else {
+                        $('#pending-order-count').hide();
+                    }
+                },
+                error: function() {
+                    $('#pending-order-count').hide();
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>
