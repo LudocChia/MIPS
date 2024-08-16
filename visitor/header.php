@@ -1,6 +1,6 @@
 <nav>
     <div class="wrapper">
-        <img src="../images/Mahans_IPS_logo.png" class="logo" alt="Mahans Internation Primary School logo">
+        <img src="../images/Mahans_logo.png" class="logo" alt="Mahans Internation Primary School logo">
         <div class="profile-area">
             <button id="menu-btn">
                 <i class="bi bi-list"></i>
@@ -9,7 +9,7 @@
                 <!-- <div class="profile-photo">
                     <img src="../uploads/wangbingbing(1).png" alt="王冰冰">
                 </div> -->
-                <img src="../uploads/wangbingbing(1).png" alt="王冰冰" alt="" class="user-img" id="user-btn">
+                <img src="../images/mojave(3).png" alt="王冰冰" alt="" class="user-img" id="user-btn">
                 <div class="profile-menu">
                     <div class="user-info">
                         <img src="<?= $user_image_path; ?>" alt="">

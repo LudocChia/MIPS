@@ -1,5 +1,4 @@
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,11 +6,40 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Visitor Form - Mahans School</title>
     <link rel="stylesheet" href="../visitor/visitor.css" >
-    <link rel="icon" type="image/x-icon" href="../images/Mahans_internation_primary_school_logo.png">
+    <link rel="icon" type="image/x-icon" href="../images/Mahans_icon.png">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script> 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <style>
+    .Place{
+        float: right;
+        position: absolute;
+        margin-left: 600px;
+        margin-top: -105px;
+    }
+    #place{
+        margin-top: 10px;
+        text-align: center;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        border-radius: 10px;
+        width: 150%;
+        font-size: 25px;
+        color: #767676;
+    }
+    .Meals{
+        float: right;
+        position: absolute;
+        margin-left: 900px;
+        margin-top: -100px;
+    }
+    /* .form-check input["type=checkbox"]{
+        height: 20px;
+        width: 20px;
+    } */
+    </style>
 </head>
 <body>
     <?php include "../visitor/header.php"; ?>
@@ -52,12 +80,16 @@
             </div>
             <div class="Place">
                 <h2>Place :</h2>
-                <select name="place" id="place" required>
-                    <option value="js" >Jing Shun</option>
-                    <option value="sv" >Studio Virtue</option>
+                <select name="place"  id="place" required>
+                    <option value="js" required>Jing Shun</option>
+                    <option value="sv" required>Studio Virtue</option>
                 </select>
             </div>
-
+            <div class="Meals">
+                <h2>Meals :</h2>
+                <input type="checkbox" class="form-check-input" id="check1" name="option1" value="yes" required>
+                <label class="form-check-label" for="check1"></label>
+            </div>
             <div class="Purpose">
                 <h2>Purpose :</h2>
                 <textarea id="purpose" name="Purpose" rows="4" cols="5" required></textarea>

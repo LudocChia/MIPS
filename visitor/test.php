@@ -26,7 +26,7 @@ try {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User List</title>
     <link rel="stylesheet" href="../visitor/test.css" >
-    <link rel="icon" type="image/x-icon" href="../images/Mahans_internation_primary_school_logo.png">
+    <link rel="icon" type="image/x-icon" href="../images/Mahans_icon.png">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -34,12 +34,29 @@ try {
 </head>
 <body>
     <?php include "../visitor/header.php"; ?>
-    <h1>Today's Visitor</h1>
+    <h1>Visitor History</h1>
+    <div class="tHead">
+        <p id="i1">No.</p>
+        <p id="i2">Name</p>
+        <p id="i3">Phone</p>
+        <p id="i4">Email</p>
+        <p id="i5">Purpose</p>
+        <p id="i6">Plate</p>
+        <p id="i7">Time</p>
+        <p id="i8">Date</p>
+        <p id="i9">People</p>
+    </div>
     <?php foreach ($visitors as $visitor): ?>
     <div class="row">
-        <p id="info">No: <?= htmlspecialchars($visitor['No']) ?></p>
-        <p id="info">Name: <?= htmlspecialchars($visitor['name']) ?></p>
-        <p id="info">Phone number: <?= htmlspecialchars($visitor['phone_num']) ?></p>
+        <p id="info1"><?= htmlspecialchars($visitor['No']) ?></p>
+        <p id="info2"><?= htmlspecialchars($visitor['name']) ?></p>
+        <p id="info3"><?= htmlspecialchars($visitor['phone_num']) ?></p>
+        <p id="info4"><?= htmlspecialchars($visitor['email']) ?></p>
+        <p id="info5"><?= htmlspecialchars($visitor['purpose']) ?></p>
+        <p id="info6"><?= htmlspecialchars($visitor['plate_num']) ?></p>
+        <p id="info7"><?= htmlspecialchars($visitor['time']) ?></p>
+        <p id="info8"><?= htmlspecialchars($visitor['date']) ?></p>
+        <p id="info9"><?= htmlspecialchars($visitor['people']) ?></p>
     </div>
     <?php endforeach; ?>
 </body>
