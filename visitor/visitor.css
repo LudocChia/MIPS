@@ -5,7 +5,7 @@
     --color-gray-light: #86848c;
     --color-gray-dark: #56555e;
     --color-dark: #27282f;
-    --color-primary: rgb(144, 88, 47);
+    --color-primary: rgb(174, 75, 91);
     --color-success: rgb(34, 202, 75);
     --color-danger: rgb(255, 67, 54);
     --color-warning: rgb(234, 181, 7);
@@ -31,7 +31,7 @@
     margin: 0;
     padding: 0;
     outline: 0;
-    appearance: none;
+    /* appearance: none; */
     border: 0;
     text-decoration: none;
     list-style: none;
@@ -338,7 +338,7 @@ form textarea {
     padding-left: 100px;
     padding-top: 30px;
     padding-bottom: 30px;
-    background: rgba(144, 87, 47, 0.175);
+    background: rgba(174, 75, 91, 0.201);
     border-radius: 5px;
     color: rgb(156, 67, 82);
     box-shadow: rgba(179, 172, 168, 0.55) 0px 0px 15px -4px;
@@ -516,7 +516,7 @@ form textarea {
     padding-left: 100px;
     border-radius: 20px;
     font-size: 30px;
-    background-color: rgb(144, 88, 47);
+    background-color: rgba(174, 75, 91, 0.805);
     color: whitesmoke;
 }
 #btn:hover{
@@ -542,22 +542,6 @@ form textarea {
 }
 #btn1:active{
     opacity: 90%;
-}
-.Place{
-    float: right;
-    position: absolute;
-    margin-left: 600px;
-    margin-top: -105px;
-}
-#place{
-    margin-top: 10px;
-    text-align: center;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    border-radius: 10px;
-    width: 150%;
-    font-size: 25px;
-    color: #767676;
 }
 
 @media screen and (max-width: 1200px){
