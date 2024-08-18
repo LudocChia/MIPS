@@ -84,6 +84,33 @@ $children = getParentChildren($pdo, $_SESSION['user_id'] ?? null);
 
 $stockQuantity = $product['stock_quantity'] ?? 0;
 
+function handleFileUpload($file)
+{
+    if ($file['error'] === UPLOAD_ERR_NO_FILE) {
+        return null;
+    }
+
+    $allowedfileExtensions = ['jpg', 'jpeg', 'png'];
+    $fileName = $file['name'];
+    $fileTmpPath = $file['tmp_name'];
+    $fileExtension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+
+    if (in_array($fileExtension, $allowedfileExtensions)) {
+        $newFileName = uniqid() . '.' . $fileExtension;
+        $dest_path = 'uploads/receipts/' . $newFileName;
+
+        if (move_uploaded_file($fileTmpPath, $dest_path)) {
+            return $newFileName;
+        } else {
+            echo "<script>alert('There was an error moving the uploaded file: $fileName');</script>";
+            return null;
+        }
+    } else {
+        echo "<script>alert('Upload failed. Allowed file types: " . implode(',', $allowedfileExtensions) . "');</script>";
+        return null;
+    }
+}
+
 if (isset($_POST['submit'])) {
     $productId = $_POST['product_id'];
     $sizeId = $_POST['size_id'];
@@ -91,12 +118,9 @@ if (isset($_POST['submit'])) {
     $selectedChildren = $_POST['child'] ?? [];
     $parentId = $_SESSION['user_id'];
 
-    $targetDir = "uploads/receipts/";
-    $fileName = basename($_FILES["payment_image"]["name"]);
-    $targetFilePath = $targetDir . $fileName;
-    $fileType = pathinfo($targetFilePath, PATHINFO_EXTENSION);
+    $fileName = handleFileUpload($_FILES['payment_image']);
 
-    if (move_uploaded_file($_FILES["payment_image"]["tmp_name"], $targetFilePath)) {
+    if ($fileName) {
         try {
             $pdo->beginTransaction();
 
@@ -122,7 +146,6 @@ if (isset($_POST['submit'])) {
                 $orderItemStmt->bindParam(':order_subtotal', $productPrice);
                 $orderItemStmt->execute();
 
-                // Insert into Payment table
                 $paymentQuery = "INSERT INTO Payment (payment_id, parent_student_id, order_id, payment_amount, payment_status, payment_image) 
                                  VALUES (:payment_id, (SELECT parent_student_id FROM Parent_Student WHERE parent_id = :parent_id AND student_id = :student_id), :order_id, :payment_amount, 'pending', :payment_image)";
                 $paymentStmt = $pdo->prepare($paymentQuery);
@@ -132,13 +155,13 @@ if (isset($_POST['submit'])) {
                 $paymentStmt->bindParam(':student_id', $childId);
                 $paymentStmt->bindParam(':order_id', $orderId);
                 $paymentStmt->bindParam(':payment_amount', $productPrice);
-                $paymentStmt->bindParam(':payment_image', $targetFilePath);
+                $paymentStmt->bindParam(':payment_image', $fileName);
                 $paymentStmt->execute();
             }
 
             $pdo->commit();
 
-            echo "<script>alert('Purchase successful!'); window.location.href='order_history.php';</script>";
+            echo "<script>alert('Purchase successful!');</script>";
         } catch (PDOException $e) {
             $pdo->rollBack();
             echo "<script>alert('Purchase failed: " . $e->getMessage() . "');</script>";

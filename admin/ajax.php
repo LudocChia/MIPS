@@ -25,8 +25,8 @@ switch ($action) {
         echo $crud->get_pending_count();
         break;
     case 'get_order':
-        if (isset($_GET['order_id'])) {
-            echo $crud->get_order($_GET['order_id']);
+        if (isset($_POST['order_id'])) {
+            echo $crud->get_order($_POST['order_id']);
         } else {
             echo json_encode(['error' => 'Order ID not provided']);
         }
@@ -78,13 +78,6 @@ switch ($action) {
             echo $crud->get_subcategory($_GET['subcategory_id']);
         } else {
             echo json_encode(['error' => 'Subcategory ID not provided']);
-        }
-        break;
-    case 'get_order_details':
-        if (isset($_POST['order_id'])) {
-            echo $crud->get_order_details($_POST['order_id']);
-        } else {
-            echo json_encode(['error' => 'Order ID not provided']);
         }
         break;
     case 'update_order_status':

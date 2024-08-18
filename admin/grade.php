@@ -31,7 +31,18 @@ if (isset($_POST["submit"])) {
 
 function getGrades($pdo)
 {
-    $sql = "SELECT * FROM Grade WHERE is_deleted = 0";
+    $sql = "
+        SELECT 
+            g.grade_id, 
+            g.grade_name, 
+            g.grade_level, 
+            (SELECT COUNT(*) FROM Class c WHERE c.grade_id = g.grade_id AND c.is_deleted = 0) AS total_classes,
+            (SELECT COUNT(*) FROM Student s JOIN Class c ON s.class_id = c.class_id WHERE c.grade_id = g.grade_id AND s.is_deleted = 0) AS total_students
+        FROM 
+            Grade g 
+        WHERE 
+            g.is_deleted = 0
+    ";
     $stmt = $pdo->prepare($sql);
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -88,8 +99,8 @@ $all_grades = getGrades($pdo);
                                 <tr>
                                     <td><?php echo htmlspecialchars($grade['grade_name']); ?></td>
                                     <td><?php echo htmlspecialchars($grade['grade_level']); ?></td>
-                                    <td></td>
-                                    <td></td>
+                                    <td><?php echo htmlspecialchars($grade['total_classes']); ?></td>
+                                    <td><?php echo htmlspecialchars($grade['total_students']); ?></td>
                                     <td>
                                         <form action="" method="POST" style="display:inline;" onsubmit="return showDeactivateConfirmDialog(event);">
                                             <input type="hidden" name="grade_id" value="<?= htmlspecialchars($grade['grade_id']); ?>">
@@ -116,20 +127,26 @@ $all_grades = getGrades($pdo);
             </div>
         </div>
         <form action="" method="post" enctype="multipart/form-data">
-            <div class="input-field">
-                <h2>Grade Name<sup>*</sup></h2>
-                <input type="text" name="grade_name" value="<?php echo isset($_POST['grade_name']) ? htmlspecialchars($_POST['grade_name']) : ''; ?>" required>
+            <div class="input-container">
+                <div class="input-field">
+                    <h2>Grade Name<sup>*</sup></h2>
+                    <input type="text" name="grade_name" value="<?php echo isset($_POST['grade_name']) ? htmlspecialchars($_POST['grade_name']) : ''; ?>" required>
+                </div>
                 <p>Please enter the name of the grade.</p>
             </div>
-            <div class="input-field">
-                <h2>Grade Level<sup>*</sup></h2>
-                <input type="number" name="grade_level" value="<?php echo isset($_POST['grade_level']) ? htmlspecialchars($_POST['grade_level']) : ''; ?>" required>
+            <div class="input-container">
+                <div class="input-field">
+                    <h2>Grade Level<sup>*</sup></h2>
+                    <input type="number" name="grade_level" value="<?php echo isset($_POST['grade_level']) ? htmlspecialchars($_POST['grade_level']) : ''; ?>" required>
+                </div>
                 <p>Please enter the level of the grade.</p>
             </div>
-            <div class="controls">
-                <button type="button" class="cancel">Cancel</button>
-                <button type="reset">Clear</button>
-                <button type="submit" name="submit">Publish</button>
+            <div class="input-container">
+                <div class="controls">
+                    <button type="button" class="cancel">Cancel</button>
+                    <button type="reset">Clear</button>
+                    <button type="submit" name="submit">Publish</button>
+                </div>
             </div>
         </form>
     </dialog>

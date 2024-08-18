@@ -33,9 +33,12 @@ $all_students = getAllStudents($pdo);
 
 function generateParentId()
 {
-    $prefix = "PR";
-    $randomString = bin2hex(random_bytes(4));
-    return $prefix . $randomString;
+    return uniqid('PAR');
+}
+
+function generateParentCartID()
+{
+    return uniqid('CART');
 }
 
 if (isset($_POST["submit"])) {
@@ -46,6 +49,7 @@ if (isset($_POST["submit"])) {
     $confirmPassword = $_POST["confirm_password"];
     $studentIds = $_POST["student_ids"] ?? [];
     $relationships = $_POST["relationships"] ?? [];
+    $cartId = generateParentCartID();
 
     if (empty($name) || empty($email) || empty($password) || empty($confirmPassword)) {
         echo "<script>alert('Please fill in all required fields.');</script>";
@@ -78,6 +82,12 @@ if (isset($_POST["submit"])) {
                 $stmt->bindParam(':name', $name);
                 $stmt->bindParam(':email', $email);
                 $stmt->bindParam(':password', $hashedPassword);
+                $stmt->execute();
+
+                $sql = "INSERT INTO Cart (cart_id, parent_id) VALUES (:cartId, :parentId)";
+                $stmt = $pdo->prepare($sql);
+                $stmt->bindParam(':cartId', $cartId);
+                $stmt->bindParam(':parentId', $parentId);
                 $stmt->execute();
 
                 $sql = "DELETE FROM Parent_Student WHERE parent_id = :parentId";

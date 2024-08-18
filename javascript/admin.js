@@ -66,7 +66,7 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('add-edit-data').showModal();
     });
 
-    document.querySelectorAll('#add-edit-data .cancel, #delete-confirm-dialog .cancel').forEach(button => {
+    document.querySelectorAll('#add-edit-data .cancel, #delete-confirm-dialog .cancel, #detail-dialog .cancel').forEach(button => {
         button.addEventListener('click', function () {
             const dialog = this.closest('dialog');
             if (dialog) {
@@ -84,7 +84,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     deactivateConfirmDialog.addEventListener('close', function () {
-        if (deleteConfirmDialog.returnValue === 'confirm') {
+        if (deactivateConfirmDialog.returnValue === 'confirm') {
             deleteForm.submit();
         }
     });
