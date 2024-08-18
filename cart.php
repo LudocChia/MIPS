@@ -29,6 +29,7 @@ include "./components/customer_login.php";
     <?php include './components/customer_header.php'; ?>
     <section class="shopping-cart">
         <div class="container">
+            <input type="hidden" id="user-id" value="<?php echo htmlspecialchars($_SESSION['user_id']); ?>">
             <div class="wrapper">
                 <div class="title">
                     <div class="left">

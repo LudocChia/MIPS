@@ -14,6 +14,51 @@ switch ($action) {
             echo json_encode(['error' => 'Invalid or missing input data']);
         }
         break;
+    case 'update_cart_item':
+        if (isset($_POST['cart_item_id'], $_POST['quantity'])) {
+            echo $crud->update_cart_item($_POST['cart_item_id'], $_POST['quantity']);
+        } else {
+            echo json_encode(['error' => 'Invalid or missing input data']);
+        }
+        break;
+
+    case 'delete_cart_item':
+        if (isset($_POST['cart_item_id'])) {
+            echo $crud->delete_cart_item($_POST['cart_item_id']);
+        } else {
+            echo json_encode(['error' => 'Invalid or missing input data']);
+        }
+        break;
+
+    case 'get_cart_items':
+        if (isset($_POST['parent_id'])) {
+            echo $crud->get_cart_items($_POST['parent_id']);
+        } else {
+            echo json_encode(['error' => 'Parent ID is required']);
+        }
+        break;
+    case 'delete_selected':
+        if (isset($_POST['cart_item_ids'])) {
+            echo $crud->delete_selected($_POST['cart_item_ids']);
+        } else {
+            echo json_encode(['error' => 'No items selected for deletion']);
+        }
+        break;
+    case 'clear_cart':
+        if (isset($_POST['parent_id'])) {
+            echo $crud->clear_cart($_POST['parent_id']);
+        } else {
+            echo json_encode(['error' => 'Parent ID is required']);
+        }
+        break;
+
+    case 'checkout':
+        if (isset($_POST['selected_item_ids'])) {
+            echo $crud->checkout($_POST['selected_item_ids']);
+        } else {
+            echo json_encode(['error' => 'No items selected for checkout']);
+        }
+        break;
     default:
         echo json_encode(['error' => 'Invalid action']);
         break;

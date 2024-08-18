@@ -5,21 +5,42 @@ window.addEventListener('load', function () {
     let delall = document.querySelector('.del-all');
     let totalPrice = document.querySelector('.total-price');
     let totalCount = document.querySelector('#totalCount');
+    let parentId = document.querySelector('#user-id').value; // 假设页面中有隐藏字段存储 parent_id
 
-    let data = cartData.map(item => ({
-        ...item,
-        state: false
-    }));
+    function get_cart_items() {
+        return new Promise((resolve, reject) => {
+            $.post('ajax.php?action=get_cart_items', { parent_id: parentId }, function (response) {
+                const result = JSON.parse(response);
+                if (result.error) {
+                    console.error(result.error);
+                    alert('Failed to load cart items.');
+                    reject(result.error);
+                } else {
+                    resolve(result);
+                }
+            });
+        });
+    }
+
+    let data = [];
+
+    get_cart_items().then(cartItems => {
+        data = cartItems.map(item => ({
+            ...item,
+            state: false // 添加默认状态
+        }));
+        init(); // 调用初始化函数
+    }).catch(error => {
+        console.error('Error loading cart items:', error);
+    });
 
     function init() {
         let strHtml = '';
         let count = 0;
         let num = 0;
-        let activeItemCount = 0; // Add a variable to count active items
+        let activeItemCount = 0;
         data.forEach(function (item, index) {
-            const discountPrice = item.actual_price * 1;
-            const totalPriceItem = item.actual_price * item.product_quantity;
-
+            const totalPriceItem = (item.product_price * item.product_quantity);
             const isDeleted = item.is_deleted === 1;
 
             strHtml += `<tr>
@@ -27,14 +48,14 @@ window.addEventListener('load', function () {
                             <td>${!isDeleted ? `<input type="checkbox" class="ckh" id="ckh-${index}" ${item.state ? "checked" : ""}/>` : ''}</td>
                             <td class="product-image ${isDeleted ? 'deleted-product-image' : ''}">
                                 <div class="image-container">
-                                    <img src="uploads/${item.image_url}" alt="" />
+                                    <img src="uploads/product/${item.image_url}" alt="" />
                                     ${isDeleted ? '<div class="discontinued-text"><div>This product has</div><div>been discontinued</div></div>' : ''}
                                 </div>
                             </td>
                             <td class="product-name">${item.product_name}</td>
                             <td class="product-price">
-                                MYR ${discountPrice.toFixed(2)}
-                                ${item.product_price !== item.actual_price && item.product_price > item.actual_price ? `<br><small>Discount MYR ${(item.product_price - item.actual_price).toFixed(2)}</small>` : ""}
+                                MYR 
+                                ${item.product_price}
                             </td>
                             <td class="product-quantity">
                                     <button class="add" id="add-${index}">+</button>
@@ -54,17 +75,15 @@ window.addEventListener('load', function () {
             }
 
             if (!isDeleted) {
-                activeItemCount++; // Increment the active item count
+                activeItemCount++;
             }
         });
         tbody.innerHTML = strHtml;
-        all.checked = activeItemCount > 0 && count === activeItemCount; // Compare count with active item count
+        all.checked = activeItemCount > 0 && count === activeItemCount;
         selectAll.checked = all.checked;
         totalCount.innerHTML = count;
         totalPrice.innerHTML = num.toFixed(2);
     }
-
-    init();
 
     function updateSelection() {
         let isChecked = this.checked;
@@ -106,7 +125,7 @@ window.addEventListener('load', function () {
     }
 
     function updateCartItem(cartItemId, quantity) {
-        $.post('ajax.php', { update_quantity: true, cart_item_id: cartItemId, quantity: quantity }, function (response) {
+        $.post('ajax.php?action=update_cart_item', { cart_item_id: cartItemId, quantity: quantity }, function (response) {
             const result = JSON.parse(response);
             if (result.error) {
                 console.error(result.error);
@@ -116,7 +135,7 @@ window.addEventListener('load', function () {
     }
 
     function deleteCartItem(cartItemId, index) {
-        $.post('ajax.php', { delete_item: true, cart_item_id: cartItemId }, function (response) {
+        $.post('ajax.php?action=delete_cart_item', { cart_item_id: cartItemId }, function (response) {
             const result = JSON.parse(response);
             if (result.success) {
                 data.splice(index, 1);
@@ -131,7 +150,7 @@ window.addEventListener('load', function () {
     delall.addEventListener('click', function () {
         let selectedIds = data.filter(item => item.state).map(item => item.cart_item_id);
         if (selectedIds.length > 0) {
-            $.post('ajax.php', { delete_selected: true, cart_item_ids: selectedIds }, function (response) {
+            $.post('ajax.php?action=delete_selected', { cart_item_ids: selectedIds }, function (response) {
                 const result = JSON.parse(response);
                 if (result.success) {
                     data = data.filter(item => !item.state);
@@ -146,7 +165,7 @@ window.addEventListener('load', function () {
     });
 
     document.querySelector('.clear').addEventListener('click', function () {
-        $.post('ajax.php', { clear_cart: true }, function (response) {
+        $.post('ajax.php?action=clear_cart', { parent_id: parentId }, function (response) {
             const result = JSON.parse(response);
             if (result.success) {
                 data = [];
@@ -172,7 +191,7 @@ window.addEventListener('load', function () {
             return;
         }
 
-        $.post('ajax.php', { checkout: true, selected_item_ids: selectedIds }, function (response) {
+        $.post('ajax.php?action=checkout', { selected_item_ids: selectedIds }, function (response) {
             const result = JSON.parse(response);
             if (result.success) {
                 var orderId = result.orderId;

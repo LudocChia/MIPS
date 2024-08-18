@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', function () {
         parentA.querySelector('i.bi.bi-chevron-down').classList.add('rotate');
     }
 
-    document.querySelectorAll('.bookshop-btn, .user-btn').forEach(button => {
+    document.querySelectorAll('.bookshop-btn, .user-btn, .deactivate-btn').forEach(button => {
         button.addEventListener('click', function () {
             const sublist = this.nextElementSibling;
             const icon = this.querySelector('i.bi.bi-chevron-down');
