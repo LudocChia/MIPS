@@ -268,7 +268,7 @@ if (isset($_POST['submit'])) {
                                 <h2>Quantity</h2>
                                 <div class="product-actions">
                                     <input type="number" id="qty" name="qty" min="1" max="<?php echo $stockQuantity; ?>" value="1">
-                                    <button type="button" class="add-to-cart btn btn-outline-primary" onclick="addToCart(<?php echo $product['product_id']; ?>)">Add to Cart</button>
+                                    <button type="button" class="add-to-cart-btn btn btn-outline-primary" data-product-id="<?php echo $product['product_id']; ?>">Add to Cart</button>
                                     <button type="button" class="buy-now btn btn-full">Buy Now</button>
                                 </div>
                             </div>
@@ -459,8 +459,6 @@ if (isset($_POST['submit'])) {
             });
         });
 
-
-
         document.querySelectorAll('.size-button').forEach(button => {
             button.addEventListener('click', function() {
                 document.querySelectorAll('.size-button').forEach(btn => btn.classList.remove('selected'));
@@ -468,28 +466,47 @@ if (isset($_POST['submit'])) {
             });
         });
 
-        function addToCart(product_id) {
-            var qty = document.getElementById('qty').value;
-            $.ajax({
-                url: 'item.php',
-                type: 'POST',
-                data: {
-                    action: 'add_to_cart',
-                    product_id: product_id,
-                    qty: qty
-                },
-                success: function(response) {
-                    var data = JSON.parse(response);
-                    if (data.success) {
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Added to Cart',
-                            text: data.message,
-                        });
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.add-to-cart-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const selectedSizeButton = document.querySelector('.size-button.selected');
+                    if (!selectedSizeButton) {
+                        alert('Please select a size.');
+                        return;
                     }
-                }
+                    const productId = button.dataset.productId;
+                    const sizeId = selectedSizeButton.dataset.sizeId;
+                    const qty = document.getElementById('qty').value;
+
+
+                    fetch('ajax.php?action=add_to_cart', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/x-www-form-urlencoded'
+                            },
+                            body: new URLSearchParams({
+                                product_id: productId,
+                                qty: qty,
+                                customer_id: '<?php echo $_SESSION['user_id']; ?>',
+                                product_size_id: sizeId
+                            })
+                        })
+                        .then(response => response.json())
+                        .then(result => {
+                            if (result.success) {
+                                alert('Product added to cart successfully!');
+                            } else if (result.error) {
+                                alert('Error: ' + result.error);
+                            } else {
+                                alert('Unexpected error occurred.');
+                            }
+                        })
+                        .catch(() => {
+                            alert('Failed to add product to cart. Please try again.');
+                        });
+                });
             });
-        }
+        })
     </script>
 </body>
 
