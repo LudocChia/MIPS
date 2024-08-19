@@ -43,6 +43,7 @@ html {
 }
 
 body {
+    min-width: 1500px;
     background: var(--color-light);
     background-repeat: no-repeat;
     background-attachment: fixed;
@@ -341,6 +342,8 @@ form textarea {
     color: rgb(156, 67, 82);
     background: rgba(144, 87, 47, 0.619);
     display: flex;
+    word-wrap: break-word;
+    word-break: break-all;
 }
 .tHead p{
     color: whitesmoke;
@@ -363,6 +366,8 @@ form textarea {
     margin: 10px;
     padding: 5px;
     font-size: 20px;
+    background-color: #fff;
+    max-width: 200px;
 }
 #i2{
     margin-right: 80px;
@@ -380,5 +385,7 @@ form textarea {
     margin-right: 40px;
 }
 #info1{
-    
+    margin-right: 20px;
+    word-wrap: break-word;
+    word-break: break-all;
 }

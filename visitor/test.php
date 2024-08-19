@@ -35,28 +35,23 @@ try {
 <body>
     <?php include "../visitor/header.php"; ?>
     <h1>Visitor History</h1>
+
     <div class="tHead">
         <p id="i1">No.</p>
         <p id="i2">Name</p>
-        <p id="i3">Phone</p>
-        <p id="i4">Email</p>
-        <p id="i5">Purpose</p>
-        <p id="i6">Plate</p>
-        <p id="i7">Time</p>
-        <p id="i8">Date</p>
-        <p id="i9">People</p>
+        <p id="i3">Plate</p>
+        <p id="i4">Time</p>
+        <p id="i5">People</p>
+        <p id="i6">Phone</p>
     </div>
     <?php foreach ($visitors as $visitor): ?>
     <div class="row">
         <p id="info1"><?= htmlspecialchars($visitor['No']) ?></p>
         <p id="info2"><?= htmlspecialchars($visitor['name']) ?></p>
-        <p id="info3"><?= htmlspecialchars($visitor['phone_num']) ?></p>
-        <p id="info4"><?= htmlspecialchars($visitor['email']) ?></p>
-        <p id="info5"><?= htmlspecialchars($visitor['purpose']) ?></p>
-        <p id="info6"><?= htmlspecialchars($visitor['plate_num']) ?></p>
-        <p id="info7"><?= htmlspecialchars($visitor['time']) ?></p>
-        <p id="info8"><?= htmlspecialchars($visitor['date']) ?></p>
-        <p id="info9"><?= htmlspecialchars($visitor['people']) ?></p>
+        <p id="info3"><?= htmlspecialchars($visitor['plate_num']) ?></p>
+        <p id="info4"><?= htmlspecialchars($visitor['time']) ?></p>
+        <p id="info5"><?= htmlspecialchars($visitor['people']) ?></p>
+        <p id="info6"><?= htmlspecialchars($visitor['phone_num']) ?></p>
     </div>
     <?php endforeach; ?>
 </body>
