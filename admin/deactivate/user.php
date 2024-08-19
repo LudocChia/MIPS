@@ -2,7 +2,7 @@
 
 session_start();
 
-include "../../components/db_connect.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/db_connect.php";
 
 if (!isset($_SESSION['admin_id'])) {
     header('Location: login.php');
@@ -137,27 +137,13 @@ if (isset($_POST['deactivate'])) {
 }
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Parents - MIPS</title>
-    <link rel="icon" type="image/x-icon" href="../../images/Mahans_IPS_icon.png">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <link rel="stylesheet" href="../../css/base.css">
-    <link rel="stylesheet" href="../../css/common.css">
-    <link rel="stylesheet" href="../../css/admin.css">
-</head>
+<?php $pageTitle = "Deactivated Users - MIPS";
+include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/admin_head.php"; ?>
 
 <body>
-    <?php include "../../components/admin_header.php"; ?>
+    <?php include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/admin_header.php"; ?>
     <div class="container">
-        <?php include "../../components/admin_sidebar.php"; ?>
+        <?php include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/admin_sidebar.php"; ?>
         <main class="parent">
             <div class="wrapper">
                 <div class="title">
@@ -165,25 +151,14 @@ if (isset($_POST['deactivate'])) {
                         <h1>Student Parents</h1>
                     </div>
                     <div class="right">
-                        <button class="btn btn-outline-primary" id="open-popup"><i class="bi bi-person-fill-add"></i>Add New Parent</button>
-                        <?php
-                        try {
-                            $countQuery = "SELECT COUNT(*) FROM Parent WHERE is_deleted = 0";
-                            $stmt = $pdo->prepare($countQuery);
-                            $stmt->execute();
-                            $count = $stmt->fetchColumn();
 
-                            echo "<p>Total $count Parent(s)</p>";
-                        } catch (PDOException $e) {
-                            echo "<script>alert('Database error: " . $e->getMessage() . "');</script>";
-                        }
-                        ?>
                     </div>
                 </div>
                 <div class="table-body">
                     <table>
                         <thead>
                             <tr>
+                                <th><input type="checkbox"></th>
                                 <th>Parent ID</th>
                                 <th>Parent Name</th>
                                 <th>Parent Email</th>
@@ -215,72 +190,8 @@ if (isset($_POST['deactivate'])) {
             </div>
         </main>
     </div>
-    <dialog id="add-edit-data">
-        <h1>Add/Edit Parent</h1>
-        <form action="" method="post">
-            <input type="hidden" name="parent_id" value="">
-            <div class="input-container">
-                <div class="input-field">
-                    <h2>Parent Name<sup>*</sup></h2>
-                    <input type="text" name="name" value="" required>
-                </div>
-                <p>Please enter the parent's full name.</p>
-            </div>
-            <div class="input-container">
-                <div class="input-field">
-                    <h2>Parent Email<sup>*</sup></h2>
-                    <input type="email" name="email" value="" required>
-                </div>
-                <p>Please enter the parent's email address.</p>
-            </div>
-            <div class="input-container">
-                <div class="input-field">
-                    <h2>Password<sup>*</sup></h2>
-                    <input type="password" name="password" required>
-                </div>
-                <p>Please enter a secure password.</p>
-            </div>
-            <div class="input-field">
-                <h2>Confirm Password<sup>*</sup></h2>
-                <input type="password" name="confirm_password" required>
-                <p>Please confirm the password.</p>
-            </div>
-            <div class="input-container">
-                <h2>Children Information</h2>
-                <div id="children-info">
-                    <div class="child-info">
-                        <label>Student:</label>
-                        <select name="student_ids[]" required>
-                            <option value="">Select a Student</option>
-                            <?php foreach ($all_students as $student) : ?>
-                                <option value="<?= htmlspecialchars($student['student_id']); ?>">
-                                    <?= htmlspecialchars($student['student_name']); ?>
-                                </option>
-                            <?php endforeach; ?>
-                        </select>
-                        <label>Relationship:</label>
-                        <select name="relationships[]" required>
-                            <option value="father">Father</option>
-                            <option value="mother">Mother</option>
-                            <option value="brother">Brother</option>
-                            <option value="sister">Sister</option>
-                            <option value="grandparent">Grandparent</option>
-                            <option value="relative">Relative</option>
-                            <option value="guardian">Guardian</option>
-                        </select>
-                    </div>
-                    <button type="button" id="add-child-btn">Add Another Child</button>
-                </div>
-            </div>
-            <div class="controls">
-                <button type="button" class="cancel">Cancel</button>
-                <button type="reset">Clear</button>
-                <button type="submit" name="submit">Publish</button>
-            </div>
-        </form>
-    </dialog>
-    <?php include "../../components/deactivate_confirm_dialog.php"; ?>
-    <script src="../../javascript/admin.js"></script>
+    <?php include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/deactivate_confirm_dialog.php"; ?>
+    <script src="/mahans/javascript/admin.js"></script>
     <script>
         document.getElementById('add-child-btn').addEventListener('click', function() {
             const childInfoDiv = document.createElement('div');

@@ -82,7 +82,6 @@ if (isset($_POST["submit"])) {
             $stmt = $pdo->prepare($sql);
             $stmt->bindParam(':existing_student_id', $existingStudentId);
         } else {
-            // Add new student
             $sql = "INSERT INTO Student (student_id, student_name, class_id, student_image, is_deleted) VALUES (:studentId, :name, :classId, :student_image, 0)";
             $stmt = $pdo->prepare($sql);
         }
@@ -100,7 +99,6 @@ if (isset($_POST["submit"])) {
     }
 }
 
-// Handle deleting a student
 if (isset($_POST['delete'])) {
     $studentId = $_POST['student_id'];
 
@@ -119,13 +117,12 @@ if (isset($_POST['delete'])) {
 
 ?>
 
-<?php include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/head.php"; ?>
+<?php include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/admin_head.php"; ?>
 
 <body>
     <?php include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/admin_header.php"; ?>
     <div class="container">
         <?php include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/admin_sidebar.php"; ?>
-        <!-- END OF ASIDE -->
         <main class="category">
             <div class="wrapper">
                 <div class="title">
@@ -173,28 +170,36 @@ if (isset($_POST['delete'])) {
         <form action="" method="post" enctype="multipart/form-data">
             <input type="hidden" name="existing_student_id" value="">
             <div class="input-container">
-                <h2>Student ID<sup>*</sup></h2>
-                <input type="text" name="student_id" value="" required>
+                <div class="input-field">
+                    <h2>Student ID<sup>*</sup></h2>
+                    <input type="text" name="student_id" value="" required>
+                </div>
                 <p>Please enter the student's ID.</p>
             </div>
             <div class="input-container">
-                <h2>Student Name<sup>*</sup></h2>
-                <input type="text" name="name" value="" required>
+                <div class="input-field">
+                    <h2>Student Name<sup>*</sup></h2>
+                    <input type="text" name="name" value="" required>
+                </div>
                 <p>Please enter the student's full name.</p>
             </div>
             <div class="input-container">
-                <h2>Class<sup>*</sup></h2>
-                <select name="class_id" required>
-                    <option value="">Select Class</option>
-                    <?php foreach ($all_classes as $class) : ?>
-                        <option value="<?= htmlspecialchars($class['class_id']) ?>"><?= htmlspecialchars($class['class_name']) ?></option>
-                    <?php endforeach; ?>
-                </select>
+                <div class="input-field">
+                    <h2>Class<sup>*</sup></h2>
+                    <select name="class_id" required>
+                        <option value="">Select Class</option>
+                        <?php foreach ($all_classes as $class) : ?>
+                            <option value="<?= htmlspecialchars($class['class_id']) ?>"><?= htmlspecialchars($class['class_name']) ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
                 <p>Please select the student's class.</p>
             </div>
             <div class="input-container">
-                <h2>Student Image<sup>*</sup></h2>
-                <input type="file" name="student_image" id="student_image" accept=".jpg, .jpeg, .png">
+                <div class="input-field">
+                    <h2>Student Image<sup>*</sup></h2>
+                    <input type="file" name="student_image" id="student_image" accept=".jpg, .jpeg, .png">
+                </div>
                 <p>Please upload an image for the student.</p>
             </div>
             <div class="input-container controls">
@@ -204,8 +209,8 @@ if (isset($_POST['delete'])) {
             </div>
         </form>
     </dialog>
-    <?php include "../components/deactivate_confirm_dialog.php"; ?>
-    <script src="../javascript/admin.js"></script>
+    <?php include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/deactivate_confirm_dialog.php"; ?>
+    <script src="/mahans/javascript/admin.js"></script>
     <script>
         document.querySelectorAll('.edit-student-btn').forEach(button => {
             button.addEventListener('click', function() {

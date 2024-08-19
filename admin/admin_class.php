@@ -300,7 +300,7 @@ class Action
 
             $product['sizes'] = $sizes;
 
-            error_log(json_encode($product));  // Add this line to log the response data
+            error_log(json_encode($product));
             return json_encode($product);
         } else {
             return json_encode(['error' => 'Product not found']);

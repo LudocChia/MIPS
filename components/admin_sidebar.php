@@ -22,45 +22,45 @@ function isActive($pageName, $currentPage)
                     <i class="bi bi-chevron-down <?= strpos($currentPage, 'mainCategory') !== false || strpos($currentPage, 'subcategory') !== false || strpos($currentPage, 'size') !== false || strpos($currentPage, 'product') !== false ? 'rotate' : ''; ?>"></i>
                 </a>
                 <ul class="bookshop-show" style="display: <?= strpos($currentPage, 'mainCategory') !== false || strpos($currentPage, 'subcategory') !== false || strpos($currentPage, 'size') !== false || strpos($currentPage, 'product') !== false ? 'block' : 'none'; ?>">
-                    <li><a href="mainCategory.php" class="<?= isActive('mainCategory.php', $currentPage); ?>"><i class="bi bi-tags-fill"></i>
+                    <li><a href="/mahans/admin/bookshop/mainCategory.php" class="<?= isActive('mainCategory.php', $currentPage); ?>"><i class="bi bi-tags-fill"></i>
                             <h4>Main Category</h4>
                         </a>
                     </li>
-                    <li><a href="subcategory.php" class="<?= isActive('subcategory.php', $currentPage); ?>"><i class="bi bi-tag-fill"></i>
+                    <li><a href="/mahans/admin/bookshop/subcategory.php" class="<?= isActive('subcategory.php', $currentPage); ?>"><i class="bi bi-tag-fill"></i>
                             <h4>Subcategory</h4>
                         </a>
                     </li>
-                    <li><a href="size.php" class="<?= isActive('size.php', $currentPage); ?>"><i class="bi bi-aspect-ratio-fill"></i>
+                    <li><a href="/mahans/admin/bookshop/size.php" class="<?= isActive('size.php', $currentPage); ?>"><i class="bi bi-aspect-ratio-fill"></i>
                             <h4>Product Size</h4>
                         </a>
                     </li>
-                    <li><a href="product.php" class="<?= isActive('product.php', $currentPage); ?>"><i class="bi bi-box-seam-fill"></i>
+                    <li><a href="/mahans/admin/bookshop/product.php" class="<?= isActive('product.php', $currentPage); ?>"><i class="bi bi-box-seam-fill"></i>
                             <h4>All Product</h4>
                         </a>
                     </li>
                 </ul>
             </li>
             <li>
-                <a href="order.php" class="<?= isActive('order.php', $currentPage); ?>">
+                <a href="/mahans/admin/order.php" class="<?= isActive('order.php', $currentPage); ?>">
                     <i class="bi bi-receipt"></i>
                     <h4>Order</h4>
                     <span class="count" id="pending-order-count"></span>
                 </a>
             </li>
             <li>
-                <a href="grade.php" class="<?= isActive('grade.php', $currentPage); ?>">
+                <a href="/mahans/admin/grade.php" class="<?= isActive('grade.php', $currentPage); ?>">
                     <i class="bi bi-mortarboard-fill"></i>
                     <h4>Grade</h4>
                 </a>
             </li>
             <li>
-                <a href="class.php" class="<?= isActive('class.php', $currentPage); ?>">
+                <a href="/mahans/admin/class.php" class="<?= isActive('class.php', $currentPage); ?>">
                     <i class="bi bi-easel2-fill"></i>
                     <h4>Class</h4>
                 </a>
             </li>
             <li>
-                <a href="announment.php" class="<?= isActive('announment.php', $currentPage); ?>">
+                <a href="/mahans/admin/announment.php" class="<?= isActive('announment.php', $currentPage); ?>">
                     <i class="bi bi-megaphone-fill"></i>
                     <h4>Announment</h4>
                 </a>

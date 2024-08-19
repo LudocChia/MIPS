@@ -2,7 +2,7 @@
 
 session_start();
 
-include "../components/db_connect.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/db_connect.php";
 
 if (!isset($_SESSION['admin_id'])) {
     header('Location: login.php');
@@ -11,13 +11,6 @@ if (!isset($_SESSION['admin_id'])) {
 
 $currentPage = basename($_SERVER['PHP_SELF']);
 
-// Function to handle file uploads
-function handleFileUpload($file)
-{
-    // Your file upload logic here if needed
-}
-
-// Add or edit size
 if (isset($_POST['submit'])) {
     $name = $_POST['name'];
     $shoulder_width = $_POST['shoulder_width'];
@@ -28,12 +21,10 @@ if (isset($_POST['submit'])) {
 
     if (!empty($name)) {
         if ($sizeId) {
-            // Update existing size
             $sql = "UPDATE Sizes SET size_name = :name, shoulder_width = :shoulder_width, bust = :bust, waist = :waist, length = :length WHERE size_id = :size_id";
             $stmt = $pdo->prepare($sql);
             $stmt->bindParam(':size_id', $sizeId);
         } else {
-            // Insert new size
             $sql = "INSERT INTO Sizes (size_name, shoulder_width, bust, waist, length) VALUES (:name, :shoulder_width, :bust, :waist, :length)";
             $stmt = $pdo->prepare($sql);
         }
@@ -56,7 +47,6 @@ if (isset($_POST['submit'])) {
     }
 }
 
-// Delete size
 if (isset($_POST['delete'])) {
     $sizeId = $_POST['product_size_id'];
 
@@ -84,28 +74,12 @@ function getSizes($pdo)
 $all_product_sizes = getSizes($pdo);
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bookshop Apparel Size - MIPS</title>
-    <link rel="icon" type="image/x-icon" href="../images/Mahans_IPS_icon.png">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <link rel="stylesheet" href="../css/base.css">
-    <link rel="stylesheet" href="../css/common.css">
-    <link rel="stylesheet" href="../css/admin.css">
-</head>
+<?php include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/admin_head.php"; ?>
 
 <body>
-    <?php include "../components/admin_header.php"; ?>
+    <?php include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/admin_header.php"; ?>
     <div class="container">
-        <?php include "../components/admin_sidebar.php"; ?>
-        <!-- END OF ASIDE -->
+        <?php include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/admin_sidebar.php"; ?>
         <main class="product-size">
             <div class="wrapper">
                 <div class="title">
@@ -184,8 +158,10 @@ $all_product_sizes = getSizes($pdo);
             </div>
         </form>
     </dialog>
-    <?php include "../components/deactivate_confirm_dialog.php"; ?>
-    <script src="../javascript/admin.js"></script>
+
+    <?php include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/deactivate_confirm_dialog.php"; ?>
+
+    <script src="mahans/javascript/admin.js"></script>
     <script>
         document.querySelectorAll('.edit-size-btn').forEach(button => {
             button.addEventListener('click', function() {
