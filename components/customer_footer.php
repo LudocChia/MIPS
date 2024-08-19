@@ -25,7 +25,7 @@
                 <ul>
                     <li><a href="mailto:admin.mips@mahansschool.edu.my"><i class="bi bi-envelope"></i></i>admin.mips@mahansschool.edu.my</a></li>
                     <li><a href="tel:6062347792"><i class="bi bi-telephone-inbound"></i>606-234 7792 | 7793</a></li>
-                    <li><a href="request.php"><i class="bi bi-pencil-square"></i>Write a request with us</a></li>
+                    <li><a href="https://wa.me/60162121737" target="_blank"><i class="bi bi-whatsapp"></i>Contact us on WhatsApp</a></li>
                 </ul>
             </div>
             <div class="footer-col">

@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const profileMenu = document.querySelector(".profile-menu");
     // const dialog = document.querySelector('dialog');
     // const themeToggler = document.querySelector(".theme-toggler");
-    const deleteConfirmDialog = document.querySelector('#delete-confirm-dialog');
+    const deactivateConfirmDialog = document.querySelector('#deactivate-confirm-dialog');
 
     // Show Sidebar
     menuBtn.addEventListener("click", () => {
@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', function () {
         parentA.querySelector('i.bi.bi-chevron-down').classList.add('rotate');
     }
 
-    document.querySelectorAll('.bookshop-btn, .user-btn').forEach(button => {
+    document.querySelectorAll('.bookshop-btn, .user-btn, .deactivate-btn').forEach(button => {
         button.addEventListener('click', function () {
             const sublist = this.nextElementSibling;
             const icon = this.querySelector('i.bi.bi-chevron-down');
@@ -66,7 +66,7 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('add-edit-data').showModal();
     });
 
-    document.querySelectorAll('#add-edit-data .cancel, #delete-confirm-dialog .cancel').forEach(button => {
+    document.querySelectorAll('#add-edit-data .cancel, #delete-confirm-dialog .cancel, #detail-dialog .cancel').forEach(button => {
         button.addEventListener('click', function () {
             const dialog = this.closest('dialog');
             if (dialog) {
@@ -76,14 +76,15 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             }
         });
-    }); window.showDeleteConfirmDialog = function (event) {
+
+    }); window.showDeactivateConfirmDialog = function (event) {
         event.preventDefault();
         deleteForm = event.target;
-        deleteConfirmDialog.showModal();
+        deactivateConfirmDialog.showModal();
     }
 
-    deleteConfirmDialog.addEventListener('close', function () {
-        if (deleteConfirmDialog.returnValue === 'confirm') {
+    deactivateConfirmDialog.addEventListener('close', function () {
+        if (deactivateConfirmDialog.returnValue === 'confirm') {
             deleteForm.submit();
         }
     });

@@ -2,7 +2,7 @@
 
 session_start();
 
-include './components/db_connect.php';
+include "./components/db_connect.php";
 include "./components/customer_login.php";
 
 $product_id = $_GET['pid'] ?? null;
@@ -84,6 +84,33 @@ $children = getParentChildren($pdo, $_SESSION['user_id'] ?? null);
 
 $stockQuantity = $product['stock_quantity'] ?? 0;
 
+function handleFileUpload($file)
+{
+    if ($file['error'] === UPLOAD_ERR_NO_FILE) {
+        return null;
+    }
+
+    $allowedfileExtensions = ['jpg', 'jpeg', 'png'];
+    $fileName = $file['name'];
+    $fileTmpPath = $file['tmp_name'];
+    $fileExtension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+
+    if (in_array($fileExtension, $allowedfileExtensions)) {
+        $newFileName = uniqid() . '.' . $fileExtension;
+        $dest_path = 'uploads/receipts/' . $newFileName;
+
+        if (move_uploaded_file($fileTmpPath, $dest_path)) {
+            return $newFileName;
+        } else {
+            echo "<script>alert('There was an error moving the uploaded file: $fileName');</script>";
+            return null;
+        }
+    } else {
+        echo "<script>alert('Upload failed. Allowed file types: " . implode(',', $allowedfileExtensions) . "');</script>";
+        return null;
+    }
+}
+
 if (isset($_POST['submit'])) {
     $productId = $_POST['product_id'];
     $sizeId = $_POST['size_id'];
@@ -91,12 +118,9 @@ if (isset($_POST['submit'])) {
     $selectedChildren = $_POST['child'] ?? [];
     $parentId = $_SESSION['user_id'];
 
-    $targetDir = "uploads/receipts/";
-    $fileName = basename($_FILES["payment_image"]["name"]);
-    $targetFilePath = $targetDir . $fileName;
-    $fileType = pathinfo($targetFilePath, PATHINFO_EXTENSION);
+    $fileName = handleFileUpload($_FILES['payment_image']);
 
-    if (move_uploaded_file($_FILES["payment_image"]["tmp_name"], $targetFilePath)) {
+    if ($fileName) {
         try {
             $pdo->beginTransaction();
 
@@ -122,7 +146,6 @@ if (isset($_POST['submit'])) {
                 $orderItemStmt->bindParam(':order_subtotal', $productPrice);
                 $orderItemStmt->execute();
 
-                // Insert into Payment table
                 $paymentQuery = "INSERT INTO Payment (payment_id, parent_student_id, order_id, payment_amount, payment_status, payment_image) 
                                  VALUES (:payment_id, (SELECT parent_student_id FROM Parent_Student WHERE parent_id = :parent_id AND student_id = :student_id), :order_id, :payment_amount, 'pending', :payment_image)";
                 $paymentStmt = $pdo->prepare($paymentQuery);
@@ -132,13 +155,13 @@ if (isset($_POST['submit'])) {
                 $paymentStmt->bindParam(':student_id', $childId);
                 $paymentStmt->bindParam(':order_id', $orderId);
                 $paymentStmt->bindParam(':payment_amount', $productPrice);
-                $paymentStmt->bindParam(':payment_image', $targetFilePath);
+                $paymentStmt->bindParam(':payment_image', $fileName);
                 $paymentStmt->execute();
             }
 
             $pdo->commit();
 
-            echo "<script>alert('Purchase successful!'); window.location.href='order_history.php';</script>";
+            echo "<script>alert('Purchase successful!');</script>";
         } catch (PDOException $e) {
             $pdo->rollBack();
             echo "<script>alert('Purchase failed: " . $e->getMessage() . "');</script>";
@@ -194,7 +217,7 @@ if (isset($_POST['submit'])) {
             </li>
         </ul>
     </div>
-    <div class="product-detail">
+    <section class="product-detail">
         <div class="container">
             <div class="wrapper">
                 <div class="title">
@@ -206,8 +229,8 @@ if (isset($_POST['submit'])) {
                         <p><?php echo $stockQuantity; ?> pieces available</p>
                     </div>
                 </div>
-                <section class="product-details">
-                    <section class="product-container">
+                <div class="product-details">
+                    <div class="product-container">
                         <div class="picture-div">
                             <div class="product-image">
                                 <?php if (!empty($images)) : ?>
@@ -215,19 +238,18 @@ if (isset($_POST['submit'])) {
                             </div>
                             <div class="thumbnails">
                                 <?php foreach ($images as $image) : ?>
-                                    <img class="thumbnail" src="uploads/product/<?php echo htmlspecialchars($image['image_url']); ?>" style="width: 80px;">
+                                    <img class="thumbnail" src="uploads/product/<?php echo htmlspecialchars($image['image_url']); ?>" data-src="uploads/product/<?php echo htmlspecialchars($image['image_url']); ?>" style="width: 80px;">
                                 <?php endforeach; ?>
                             </div>
                         <?php else : ?>
                             <p>No images available.</p>
                         <?php endif; ?>
                         </div>
-                        <div class="productInfo">
+                        <div class="product-info">
                             <h2>Product Description</h2>
                             <p><?php echo nl2br(htmlspecialchars($product['product_description'])); ?></p>
-
-                            <h2>Size</h2>
-                            <div class="product-sizes">
+                            <div class="product-details-container">
+                                <h2>Size</h2>
                                 <?php if (!empty($sizes)) : ?>
                                     <?php foreach ($sizes as $size) : ?>
                                         <button type="button" class="size-button" data-size-id="<?php echo htmlspecialchars($size['product_size_id']); ?>">
@@ -238,22 +260,24 @@ if (isset($_POST['submit'])) {
                                     <p>No sizes available.</p>
                                 <?php endif; ?>
                             </div>
-
-                            <h2>Price</h2>
-                            <p>MYR <?php echo number_format($product['product_price'], 2); ?></p>
-
-                            <h2>Quantity</h2>
-                            <div class="product-actions">
-                                <input type="number" id="qty" name="qty" min="1" max="<?php echo $stockQuantity; ?>" value="1">
-                                <button type="button" class="add-to-cart btn btn-outline-primary" onclick="addToCart(<?php echo $product['product_id']; ?>)">Add to Cart</button>
-                                <button type="button" class="buy-now btn btn-full">Buy Now</button>
+                            <div class="product-details-container">
+                                <h2>Price</h2>
+                                <p>MYR <?php echo number_format($product['product_price'], 2); ?></p>
+                            </div>
+                            <div class="product-details-container">
+                                <h2>Quantity</h2>
+                                <div class="product-actions">
+                                    <input type="number" id="qty" name="qty" min="1" max="<?php echo $stockQuantity; ?>" value="1">
+                                    <button type="button" class="add-to-cart-btn btn btn-outline-primary" data-product-id="<?php echo $product['product_id']; ?>">Add to Cart</button>
+                                    <button type="button" class="buy-now btn btn-full">Buy Now</button>
+                                </div>
                             </div>
                         </div>
-                    </section>
-                </section>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
+    </section>
     <section class="size-chart">
         <div class="container">
             <div class="wrapper">
@@ -297,9 +321,15 @@ if (isset($_POST['submit'])) {
             </div>
         </div>
     </section>
-
-    <dialog id="buy-now-dialog">
-        <h1>Purchase Product</h1>
+    <dialog id="add-edit-data">
+        <div class="title">
+            <div class="right">
+                <h1>Purchase Product</h1>
+            </div>
+            <div class="left">
+                <button class="cancel"><i class="bi bi-x-circle"></i>
+            </div>
+        </div>
         <form action="" method="post" enctype="multipart/form-data">
             <input type="hidden" name="product_id" id="product-id" value="">
             <input type="hidden" name="size_id" id="size-id" value="">
@@ -333,19 +363,43 @@ if (isset($_POST['submit'])) {
                 <p>Please select which child you are buying for.</p>
             </div>
             <div class="input-container">
+                <h2>Payment Method</h2>
+                <h3>Kindly make payment via online banking. Bank details are as follows:</h3>
+                <table class="two-column">
+                    <tr>
+                        <td style="width: 40%"><strong>Beneficiary :</strong></td>
+                        <td style="width: 60%">Mahans International Sdn Bhd</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 40%"><strong>Name of Bank :</strong></td>
+                        <td style="width: 60%">Public Islamic Bank</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 40%"><strong>Bank Address :</strong></td>
+                        <td style="width: 60%">39, 40 & 41 Lorong Setia Satu, Ayer Keroh Heights, 75450 Melaka.</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 40%"><strong>Account Number :</strong></td>
+                        <td style="width: 60%">3818938926</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 40%"><strong>Swift CODE :</strong></td>
+                        <td style="width: 60%">PBBEMYKL</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="input-container">
                 <h2>Upload Transfer Receipt<sup>*</sup></h2>
                 <input type="file" name="payment_image" accept=".jpg, .jpeg, .png" required>
                 <p>Please upload the transfer receipt.</p>
             </div>
             <div class="controls">
-                <button type="button" class="cancel" onclick="document.getElementById('buy-now-dialog').close()">Cancel</button>
+                <button value="cancel" class="cancel">Cancel</button>
                 <button type="reset">Clear</button>
                 <button type="submit" name="submit">Purchase</button>
             </div>
         </form>
     </dialog>
-
-
     <?php include 'components/customer_footer.php'; ?>
     <script src="javascript/common.js"></script>
     <script src="javascript/customer.js"></script>
@@ -375,9 +429,33 @@ if (isset($_POST['submit'])) {
                     document.getElementById('selected-size-display').value = selectedSizeButton.textContent;
                     document.getElementById('product-price-display').value = 'MYR ' + productPrice;
 
-                    const dialog = document.getElementById('buy-now-dialog');
+                    const dialog = document.getElementById('add-edit-data');
                     dialog.showModal();
                 <?php endif; ?>
+            });
+        });
+
+        document.addEventListener("DOMContentLoaded", function() {
+            const thumbnails = document.querySelectorAll('.thumbnail');
+            const mainImage = document.querySelector('.product-image img');
+
+            if (thumbnails.length > 0) {
+                thumbnails[0].classList.add('active');
+                const firstImageSrc = thumbnails[0].getAttribute('data-src');
+                mainImage.setAttribute('src', firstImageSrc);
+                mainImage.setAttribute('alt', firstImageSrc);
+            }
+
+            thumbnails.forEach(thumbnail => {
+                thumbnail.addEventListener('click', function() {
+                    thumbnails.forEach(thumb => thumb.classList.remove('active'));
+
+                    this.classList.add('active');
+
+                    const newSrc = this.getAttribute('data-src');
+                    mainImage.setAttribute('src', newSrc);
+                    mainImage.setAttribute('alt', newSrc);
+                });
             });
         });
 
@@ -388,28 +466,47 @@ if (isset($_POST['submit'])) {
             });
         });
 
-        function addToCart(product_id) {
-            var qty = document.getElementById('qty').value;
-            $.ajax({
-                url: 'item.php',
-                type: 'POST',
-                data: {
-                    action: 'add_to_cart',
-                    product_id: product_id,
-                    qty: qty
-                },
-                success: function(response) {
-                    var data = JSON.parse(response);
-                    if (data.success) {
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Added to Cart',
-                            text: data.message,
-                        });
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.add-to-cart-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const selectedSizeButton = document.querySelector('.size-button.selected');
+                    if (!selectedSizeButton) {
+                        alert('Please select a size.');
+                        return;
                     }
-                }
+                    const productId = button.dataset.productId;
+                    const sizeId = selectedSizeButton.dataset.sizeId;
+                    const qty = document.getElementById('qty').value;
+
+
+                    fetch('ajax.php?action=add_to_cart', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/x-www-form-urlencoded'
+                            },
+                            body: new URLSearchParams({
+                                product_id: productId,
+                                qty: qty,
+                                customer_id: '<?php echo $_SESSION['user_id']; ?>',
+                                product_size_id: sizeId
+                            })
+                        })
+                        .then(response => response.json())
+                        .then(result => {
+                            if (result.success) {
+                                alert('Product added to cart successfully!');
+                            } else if (result.error) {
+                                alert('Error: ' + result.error);
+                            } else {
+                                alert('Unexpected error occurred.');
+                            }
+                        })
+                        .catch(() => {
+                            alert('Failed to add product to cart. Please try again.');
+                        });
+                });
             });
-        }
+        })
     </script>
 </body>
 

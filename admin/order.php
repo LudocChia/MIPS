@@ -24,7 +24,6 @@ function getAllOrders($pdo)
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
-
 $all_orders = getAllOrders($pdo);
 
 function generateOrderId()
@@ -89,7 +88,6 @@ if (isset($_POST["submit"])) {
     }
 }
 
-
 ?>
 
 <!DOCTYPE html>
@@ -113,7 +111,6 @@ if (isset($_POST["submit"])) {
     <?php include "../components/admin_header.php"; ?>
     <div class="container">
         <?php include "../components/admin_sidebar.php"; ?>
-        <!-- END OF ASIDE -->
         <main class="admin">
             <div class="wrapper">
                 <div class="title">
@@ -121,7 +118,7 @@ if (isset($_POST["submit"])) {
                         <h1>Bookshop Order</h1>
                     </div>
                     <div class="right">
-                        <button class="btn btn-outline-primary" id="open-popup"><i class="bi bi-plus-circle"></i></i>Add New Order</button>
+                        <button class="btn btn-outline-primary" id="open-popup"><i class="bi bi-plus-circle"></i>Add New Order</button>
                     </div>
                 </div>
                 <div class="table-body">
@@ -158,22 +155,21 @@ if (isset($_POST["submit"])) {
                                     <td>
                                         <form action="" method="POST" style="display:inline;">
                                             <input type="hidden" name="order_id" value="<?= htmlspecialchars($order['order_id']); ?>">
-                                            <select name="order_status" class="status-select">
+                                            <select name="order_status" class="status-select" data-order-id="<?= htmlspecialchars($order['order_id']); ?>">
                                                 <option value="pending" <?= $order['payment_status'] == 'pending' ? 'selected' : ''; ?>>Pending</option>
-                                                <option value="failed" <?= $order['payment_status'] == 'received' ? 'selected' : ''; ?>>Received</option>
+                                                <option value="received" <?= $order['payment_status'] == 'received' ? 'selected' : ''; ?>>Received</option>
                                                 <option value="completed" <?= $order['payment_status'] == 'completed' ? 'selected' : ''; ?>>Completed</option>
                                                 <option value="cancelled" <?= $order['payment_status'] == 'cancelled' ? 'selected' : ''; ?>>Cancelled</option>
-
                                             </select>
                                         </form>
                                     </td>
                                     <td>
-                                        <form action="" method="POST" style="display:inline;">
+                                        <form action="" method="POST" style="display:inline;" onsubmit="return showDeactivateConfirmDialog(event);">
                                             <input type="hidden" name="order_id" value="<?= htmlspecialchars($order['order_id']); ?>">
                                             <input type="hidden" name="delete" value="true">
                                             <button type="submit" class="delete-order-btn"><i class="bi bi-x-square-fill"></i></button>
                                         </form>
-                                        <button type="button" class=""><i class="bi bi-info-circle-fill"></i></button>
+                                        <button type="button" class="view-order-detail-btn" data-order-id="<?= htmlspecialchars($order['order_id']); ?>"><i class="bi bi-info-circle-fill"></i></button>
                                         <button type="button" class="edit-order-btn" data-order-id="<?= htmlspecialchars($order['order_id']); ?>"><i class="bi bi-pencil-square"></i></button>
                                     </td>
                                 </tr>
@@ -190,7 +186,6 @@ if (isset($_POST["submit"])) {
             <div class="input-container">
                 <h2>Parent ID<sup>*</sup></h2>
                 <select name="parent_student_id" required>
-                    <!-- Populate with parent options -->
                 </select>
                 <p>Please select the parent.</p>
             </div>
@@ -205,14 +200,13 @@ if (isset($_POST["submit"])) {
                     <option value="pending">Pending</option>
                     <option value="received">Received</option>
                     <option value="completed">Completed</option>
-                    <option value="cancelled">cancelled</option>
+                    <option value="cancelled">Cancelled</option>
                 </select>
                 <p>Please select the order status.</p>
             </div>
             <div class="input-container">
                 <h2>Order Item Details</h2>
                 <div id="product-list">
-                    <!-- Initial product input field -->
                     <div class="product-info">
                         <div class="input-container">
                             <div class="input-field">
@@ -243,24 +237,87 @@ if (isset($_POST["submit"])) {
             </div>
         </form>
     </dialog>
-    <dialog id="delete-confirm-dialog">
-        <form method="dialog">
-            <h1>Order will be Deactivated!</h1>
-            <label>Are you sure to proceed?</label>
-            <div class="controls">
-                <button value="cancel" class="cancel">Cancel</button>
-                <button value="confirm" class="deactivate">Deactivate</button>
+    <dialog id="detail-dialog">
+        <div class="title">
+            <div class="right">
+                <h1>Order Details</h1>
             </div>
-        </form>
+            <div class="left">
+                <button class="cancel"><i class="bi bi-x-circle"></i></button>
+            </div>
+        </div>
+        <div class="order-details-content">
+            <table class="two-column">
+                <tr>
+                    <td style="width: 40%">
+                        <h2>Order ID :<h2>
+                    </td>
+                    <td style="width: 60%;">
+                        <h3 id="order-id"></h3>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <h2>Parent Name :<h2>
+                    </td>
+                    <td>
+                        <h3 id="parent-name"></h3>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <h2>Order Date :<h2>
+                    </td>
+                    <td>
+                        <h3 id="order-date"></h3>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <h2>Order Amount :<h2>
+                    </td>
+                    <td>
+                        <h3 id="order-amount"></h3>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <h2>Order Status :<h2>
+                    </td>
+                    <td>
+                        <h3 id="order-status"></h3>
+                    </td>
+                </tr>
+            </table>
+            <h2>Payment Receipt:</h2>
+            <img id="payment-image" src="" alt="Payment Image">
+            <div class="order-items">
+                <h2>Ordered Items:</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Product ID</th>
+                            <th>Product Name</th>
+                            <th>Quantity</th>
+                            <th>Subtotal</th>
+                        </tr>
+                    </thead>
+                    <tbody id="order-items-list">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="controls">
+            <button type="button" class="cancel">Close</button>
+        </div>
     </dialog>
+    <?php include "../components/deactivate_confirm_dialog.php"; ?>
     <script src="../javascript/admin.js"></script>
     <script>
         document.getElementById('add-product-btn').addEventListener('click', function() {
             const productInfo = document.querySelector('.product-info').cloneNode(true);
-
             const inputs = productInfo.querySelectorAll('input');
             inputs.forEach(input => input.value = '');
-
             document.getElementById('product-list').appendChild(productInfo);
         });
 
@@ -298,7 +355,6 @@ if (isset($_POST["submit"])) {
                                         console.error('Error fetching pending order count:', error);
                                         alert('Failed to update pending order count.');
                                     });
-
                             } else {
                                 alert('Failed to update order status: ' + data.error);
                             }
@@ -306,6 +362,55 @@ if (isset($_POST["submit"])) {
                         .catch(error => {
                             console.error('Error updating order status:', error);
                             alert('Failed to update order status.');
+                        });
+                });
+            });
+
+            document.querySelectorAll('.view-order-detail-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const orderId = this.dataset.orderId;
+
+                    fetch('ajax.php?action=get_order', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/x-www-form-urlencoded'
+                            },
+                            body: new URLSearchParams({
+                                order_id: orderId
+                            })
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data && data.order_id) {
+                                document.getElementById('order-id').textContent = data.order_id;
+                                document.getElementById('parent-name').textContent = data.parent_name;
+                                document.getElementById('order-date').textContent = data.order_datetime;
+                                document.getElementById('order-amount').textContent = `MYR ${data.order_price}`;
+                                document.getElementById('order-status').textContent = data.payment_status;
+                                document.getElementById('payment-image').src = '../uploads/receipts/' + data.payment_image || '../images/default_image_path.png';
+
+                                const itemsList = document.getElementById('order-items-list');
+                                itemsList.innerHTML = '';
+
+                                data.items.forEach(item => {
+                                    const row = document.createElement('tr');
+                                    row.innerHTML = `
+                                        <td>${item.product_id}</td>
+                                        <td>${item.product_name}</td>
+                                        <td>${item.product_quantity}</td>
+                                        <td>MYR ${item.order_subtotal}</td>
+                                        `;
+                                    itemsList.appendChild(row);
+                                });
+
+                                document.getElementById('detail-dialog').showModal();
+                            } else {
+                                alert('Failed to fetch order details: No data found.');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error fetching order details:', error);
+                            alert('Failed to fetch order details.');
                         });
                 });
             });

@@ -93,6 +93,30 @@ class Action
         }
     }
 
+    public function get_order_details($order_id)
+    {
+        $sql = "SELECT o.order_id, o.order_datetime, o.order_price, p.parent_name, pm.payment_status, pm.payment_image
+                FROM Orders o
+                JOIN Parent_Student ps ON o.parent_student_id = ps.parent_student_id
+                JOIN Parent p ON ps.parent_id = p.parent_id
+                JOIN Payment pm ON o.order_id = pm.order_id
+                WHERE o.order_id = ?";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([$order_id]);
+        $order = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($order) {
+            $stmtItems = $this->db->prepare("SELECT oi.product_id, p.product_name, oi.product_quantity AS quantity, oi.order_subtotal AS subtotal
+                                             FROM Order_Item oi JOIN Product p ON oi.product_id = p.product_id WHERE oi.order_id = ?");
+            $stmtItems->execute([$order_id]);
+            $order_items = $stmtItems->fetchAll(PDO::FETCH_ASSOC);
+
+            return json_encode(['order' => $order, 'order_items' => $order_items]);
+        } else {
+            return json_encode(['error' => 'Order not found']);
+        }
+    }
+
     public function update_order_status($order_id, $order_status)
     {
         $sql = "UPDATE Orders o
@@ -173,27 +197,42 @@ class Action
     public function get_order($order_id)
     {
         $sql = "
-            SELECT o.order_id, o.order_price, p.payment_status, p.payment_image, 
-                   oi.product_id, oi.product_quantity, prod.product_name, prod_img.image_url as product_image
+            SELECT o.order_id, o.order_price, o.order_datetime, p.payment_status, p.payment_image,
+                   parent.parent_name
             FROM Orders o
             LEFT JOIN Payment p ON o.order_id = p.order_id
-            LEFT JOIN Order_Item oi ON o.order_id = oi.order_id
-            LEFT JOIN Product prod ON oi.product_id = prod.product_id
-            LEFT JOIN Product_Image prod_img ON prod.product_id = prod_img.product_id AND prod_img.sort_order = 1
+            LEFT JOIN Parent_Student ps ON o.parent_student_id = ps.parent_student_id
+            LEFT JOIN Parent parent ON ps.parent_id = parent.parent_id
             WHERE o.order_id = :order_id AND o.is_deleted = 0
         ";
 
         $stmt = $this->db->prepare($sql);
         $stmt->bindParam(':order_id', $order_id);
         $stmt->execute();
-        $orderDetails = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $order = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        if ($orderDetails) {
-            return json_encode($orderDetails);
+        $sqlItems = "
+            SELECT oi.product_id, oi.product_quantity, oi.order_subtotal, 
+                   prod.product_name, prod_img.image_url AS product_image
+            FROM Order_Item oi
+            LEFT JOIN Product prod ON oi.product_id = prod.product_id
+            LEFT JOIN Product_Image prod_img ON prod.product_id = prod_img.product_id AND prod_img.sort_order = 1
+            WHERE oi.order_id = :order_id AND oi.is_deleted = 0
+        ";
+
+        $stmtItems = $this->db->prepare($sqlItems);
+        $stmtItems->bindParam(':order_id', $order_id);
+        $stmtItems->execute();
+        $orderItems = $stmtItems->fetchAll(PDO::FETCH_ASSOC);
+
+        if ($order) {
+            $order['items'] = $orderItems;
+            return json_encode($order);
         } else {
             return json_encode(['error' => 'Order not found']);
         }
     }
+
 
     public function get_parent($parent_id)
     {

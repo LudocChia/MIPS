@@ -1,4 +1,4 @@
-if (document.getElementById('login-form')) {
+if (document.querySelector("#login-btn")) {
     document.querySelector("#login-btn").addEventListener("click", function () {
         scrollPosition = window.pageYOffset;
         const productId = new URLSearchParams(window.location.search).get('pid');
@@ -27,4 +27,22 @@ if (document.getElementById('login-form')) {
 
         window.scrollTo(0, scrollPosition);
     });
+}
+
+// document.querySelector("#open-popup").addEventListener("click", function () {
+//     document.getElementById('add-edit-data').showModal();
+// });
+
+if (document.getElementById('add-edit-data')) {
+    document.querySelectorAll('#add-edit-data .cancel, #delete-confirm-dialog .cancel').forEach(button => {
+        button.addEventListener('click', function () {
+            const dialog = this.closest('dialog');
+            if (dialog) {
+                dialog.close();
+                if (dialog.id === 'add-edit-data') {
+                    dialog.querySelector('form').reset();
+                }
+            }
+        });
+    })
 }

@@ -16,7 +16,7 @@ function isActive($pageName, $currentPage)
                 </a>
             </li>
             <li>
-                <a href="#" class="bookshop-btn">
+                <a href="javascript:void(0);" class="bookshop-btn">
                     <i class="bi bi-shop-window"></i>
                     <h4>Bookshop</h4>
                     <i class="bi bi-chevron-down <?= strpos($currentPage, 'mainCategory') !== false || strpos($currentPage, 'subcategory') !== false || strpos($currentPage, 'size') !== false || strpos($currentPage, 'product') !== false ? 'rotate' : ''; ?>"></i>
@@ -44,7 +44,7 @@ function isActive($pageName, $currentPage)
                 <a href="order.php" class="<?= isActive('order.php', $currentPage); ?>">
                     <i class="bi bi-receipt"></i>
                     <h4>Order</h4>
-                    <span id="pending-order-count"></span>
+                    <span class="count" id="pending-order-count"></span>
                 </a>
             </li>
             <li>
@@ -66,13 +66,14 @@ function isActive($pageName, $currentPage)
                 </a>
             </li>
             <li>
-                <a href="#" class="user-btn">
+                <a href="javascript:void(0);" class="user-btn">
                     <i class="bi bi-person-fill"></i>
                     <h4>User Type</h4>
                     <i class="bi bi-chevron-down second <?= strpos($currentPage, 'admin') !== false || strpos($currentPage, 'teacher') !== false || strpos($currentPage, 'parent') !== false ? 'rotate' : ''; ?>"></i>
                 </a>
                 <ul class="user-show" style="display: <?= strpos($currentPage, 'admin') !== false || strpos($currentPage, 'teacher') !== false || strpos($currentPage, 'parent') !== false ? 'block' : 'none'; ?>">
-                    <li><a href="admin.php" class="<?= isActive('admin.php', $currentPage); ?>"><i class="bi bi-person-fill-gear"></i>
+                    <li>
+                        <a href="admin.php" class="<?= isActive('admin.php', $currentPage); ?>"><i class="bi bi-person-fill-gear"></i>
                             <h4>All Admin</h4>
                         </a>
                     </li>
@@ -91,27 +92,51 @@ function isActive($pageName, $currentPage)
                         </a>
                     </li>
                     <li>
-                        <a href="student.php" class="<?= isActive('student.php', $currentPage); ?>"><span class="material-symbols-outlined icon-adjust">local_library</span>
+                        <a href="student.php" class="<?= isActive('student.php', $currentPage); ?>"><span class="material-symbols-outlined">local_library</span>
                             <h4>All Student</h4>
                         </a>
                     </li>
                 </ul>
             </li>
             <li>
-                <a href="deactivate.php" class="<?= isActive('deactivate.php', $currentPage); ?>">
+                <a href="javascript:void(0);" class="deactivate-btn">
                     <i class="bi bi-trash2-fill"></i>
                     <h4>Deactivate List</h4>
+                    <i class="bi bi-chevron-down <?= strpos($currentPage, 'deactivate') !== false || strpos($currentPage, '') !== false || strpos($currentPage, '') !== false || strpos($currentPage, '') !== false ? 'rotate' : ''; ?>"></i>
                 </a>
+                <ul>
+                    <li>
+                        <a href="deactivate.php" class="<?= isActive('deactivate_user.php', $currentPage); ?>"><i class="bi bi-person-fill-slash"></i>
+                            <h4>Deactivated User</h4>
+                        </a>
+
+                    </li>
+                    <li>
+                        <a href="deactivate_teacher.php" class="<?= isActive('deactivate_product.php', $currentPage); ?>"><i class="bi bi-person-fill-slash"></i>
+                            <h4>Deactivated Product</h4>
+                        </a>
+
+                    </li>
+                    <li>
+                        <a href="deactivate_parent.php" class="<?= isActive('deactivate_class.php', $currentPage); ?>"><i class="bi bi-person-fill-slash"></i>
+                            <h4>Deactivated Class</h4>
+                        </a>
+
+                    </li>
+                    <li>
+                        <a href="deactivate_student.php" class="<?= isActive('deactivate_announment.php', $currentPage); ?>"><i class="bi bi-person-fill-slash"></i>
+                            <h4>Deactivated Announment</h4>
+                        </a>
+
+                    </li>
+                </ul>
             </li>
-            <li><a href="#">
+            <li><a href="javascript:void(0);">
                     <i class="bi bi-file-text-fill"></i>
                     <h4>Report</h4>
                     <i class="bi bi-chevron-down first"></i>
                 </a>
                 <ul>
-                    <li>
-
-                    </li>
                 </ul>
             </li>
         </ul>

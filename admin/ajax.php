@@ -1,6 +1,6 @@
 <?php
 ob_start();
-date_default_timezone_set("Asia/Manila");
+date_default_timezone_set("Asia/Kuala_Lumpur");
 
 $action = $_GET['action'];
 include 'admin_class.php';
@@ -25,8 +25,8 @@ switch ($action) {
         echo $crud->get_pending_count();
         break;
     case 'get_order':
-        if (isset($_GET['order_id'])) {
-            echo $crud->get_order($_GET['order_id']);
+        if (isset($_POST['order_id'])) {
+            echo $crud->get_order($_POST['order_id']);
         } else {
             echo json_encode(['error' => 'Order ID not provided']);
         }

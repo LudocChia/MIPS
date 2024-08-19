@@ -13,7 +13,7 @@ $currentPage = basename($_SERVER['PHP_SELF']);
 
 function getAllParents($pdo)
 {
-    $sql = "SELECT * FROM Parent WHERE is_deleted = 0";
+    $sql = "SELECT * FROM Parent WHERE is_deleted = 1";
     $stmt = $pdo->prepare($sql);
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);

@@ -244,7 +244,7 @@ if (isset($_POST['delete'])) {
                                     <img src="<?= htmlspecialchars("../uploads/product/" . $product['image_url']) ?>" alt="Product Image">
                                 </a>
                                 <div class="actions">
-                                    <form action="" method="POST" style="display:inline;" onsubmit="return showDeleteConfirmDialog(event);">
+                                    <form action="" method="POST" style="display:inline;" onsubmit="return showDeactivateConfirmDialog(event);">
                                         <input type="hidden" name="product_id" value="<?= htmlspecialchars($product['product_id']); ?>">
                                         <input type="hidden" name="delete" value="true">
                                         <button type="submit" class="delete-product-btn"><i class="bi bi-x-square-fill"></i></button>
@@ -343,16 +343,7 @@ if (isset($_POST['delete'])) {
             </div>
         </form>
     </dialog>
-    <dialog id="delete-confirm-dialog">
-        <form method="dialog">
-            <h1>This Product will be Deactivated!</h1>
-            <label>Are you sure to proceed?</label>
-            <div class="controls">
-                <button value="cancel" class="cancel">Cancel</button>
-                <button value="confirm" class="deactivate">Deactivate</button>
-            </div>
-        </form>
-    </dialog>
+    <?php include "../components/deactivate_confirm_dialog.php"; ?>
     <script src="../javascript/admin.js"></script>
     <script>
         document.querySelector('form').addEventListener('submit', function(event) {
