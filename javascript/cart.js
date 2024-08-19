@@ -44,7 +44,6 @@ window.addEventListener('load', function () {
             const isDeleted = item.is_deleted === 1;
 
             strHtml += `<tr>
-                            <td></td>
                             <td>${!isDeleted ? `<input type="checkbox" class="ckh" id="ckh-${index}" ${item.state ? "checked" : ""}/>` : ''}</td>
                             <td class="product-image ${isDeleted ? 'deleted-product-image' : ''}">
                                 <div class="image-container">
@@ -63,10 +62,10 @@ window.addEventListener('load', function () {
                                     <button class="reduce" id="reduce-${index}">-</button>
                             </td>
                             <td class="product-total">RM ${totalPriceItem.toFixed(2)}</td>
+                            <td></td>
                             <td class="product-action">
                             <button class="delete" data-cart-item-id="${item.cart_item_id}"><i class="bi bi-trash3-fill"></i> Delete</button>
                             </td>
-                            <td></td>
                         </tr>`;
 
             if (item.state) {

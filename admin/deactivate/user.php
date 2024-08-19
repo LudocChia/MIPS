@@ -2,7 +2,7 @@
 
 session_start();
 
-include "../components/db_connect.php";
+include "../../components/db_connect.php";
 
 if (!isset($_SESSION['admin_id'])) {
     header('Location: login.php');
@@ -11,15 +11,15 @@ if (!isset($_SESSION['admin_id'])) {
 
 $currentPage = basename($_SERVER['PHP_SELF']);
 
-function getAllParents($pdo)
+function getDeactivatedParents($pdo)
 {
-    $sql = "SELECT * FROM Parent WHERE is_deleted = 0";
+    $sql = "SELECT * FROM Parent WHERE is_deleted = 1";
     $stmt = $pdo->prepare($sql);
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
-$all_parents = getAllParents($pdo);
+$deactivated_parents = getDeactivatedParents($pdo);
 
 function getAllStudents($pdo)
 {
@@ -143,26 +143,26 @@ if (isset($_POST['deactivate'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mahans Parents - MIPS</title>
-    <link rel="icon" type="image/x-icon" href="../images/Mahans_IPS_icon.png">
+    <title>Student Parents - MIPS</title>
+    <link rel="icon" type="image/x-icon" href="../../images/Mahans_IPS_icon.png">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <link rel="stylesheet" href="../css/base.css">
-    <link rel="stylesheet" href="../css/common.css">
-    <link rel="stylesheet" href="../css/admin.css">
+    <link rel="stylesheet" href="../../css/base.css">
+    <link rel="stylesheet" href="../../css/common.css">
+    <link rel="stylesheet" href="../../css/admin.css">
 </head>
 
 <body>
-    <?php include "../components/admin_header.php"; ?>
+    <?php include "../../components/admin_header.php"; ?>
     <div class="container">
-        <?php include "../components/admin_sidebar.php"; ?>
+        <?php include "../../components/admin_sidebar.php"; ?>
         <main class="parent">
             <div class="wrapper">
                 <div class="title">
                     <div class="left">
-                        <h1>Mahans Parents</h1>
+                        <h1>Student Parents</h1>
                     </div>
                     <div class="right">
                         <button class="btn btn-outline-primary" id="open-popup"><i class="bi bi-person-fill-add"></i>Add New Parent</button>
@@ -192,23 +192,24 @@ if (isset($_POST['deactivate'])) {
                             </tr>
                         </thead>
                         <tbody>
-                            <?php foreach ($all_parents as $parent) : ?>
+                            <?php foreach ($deactivated_parents as $parent) : ?>
                                 <tr>
+                                    <td><input type="checkbox" class="parent-checkbox" value="<?= htmlspecialchars($parent['parent_id']); ?>"></td>
                                     <td><?= htmlspecialchars($parent['parent_id']); ?></td>
                                     <td><?= htmlspecialchars($parent['parent_name']); ?></td>
                                     <td><?= htmlspecialchars($parent['parent_email']); ?></td>
                                     <td><?= htmlspecialchars($parent['register_datetime']); ?></td>
                                     <td>
-                                        <form action="" method="POST" style="display:inline;" onsubmit="return showDeactivateConfirmDialog(event);">
+                                        <form action="" method="POST" style="display:inline;" onsubmit="return showRecoverConfirmDialog(event);">
                                             <input type="hidden" name="parent_id" value="<?= htmlspecialchars($parent['parent_id']); ?>">
-                                            <input type="hidden" name="deactivate" value="true">
-                                            <button type="submit" class="delete-parent-btn"><i class="bi bi-x-square-fill"></i></button>
+                                            <input type="hidden" name="recover" value="true">
+                                            <button type="submit" class="recover-parent-btn"><i class="bi bi-arrow-clockwise"></i> Recover</button>
                                         </form>
-                                        <button type="button" class="edit-parent-btn" data-parent-id="<?= htmlspecialchars($parent['parent_id']); ?>"><i class="bi bi-pencil-square"></i></button>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>
                         </tbody>
+
                     </table>
                 </div>
             </div>
@@ -278,8 +279,8 @@ if (isset($_POST['deactivate'])) {
             </div>
         </form>
     </dialog>
-    <?php include "../components/deactivate_confirm_dialog.php"; ?>
-    <script src="../javascript/admin.js"></script>
+    <?php include "../../components/deactivate_confirm_dialog.php"; ?>
+    <script src="../../javascript/admin.js"></script>
     <script>
         document.getElementById('add-child-btn').addEventListener('click', function() {
             const childInfoDiv = document.createElement('div');

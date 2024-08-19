@@ -16,7 +16,6 @@ html {
 body {
     background: #faf4f5;
     font-family: poppins, sans-serif;
-    min-height: 100vh;
     color: var(--color-dark);
 }
 

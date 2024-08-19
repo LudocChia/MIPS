@@ -7,7 +7,7 @@ $product_id = $_GET['pid'] ?? null;
 $errorMsg = '';
 $email = '';
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+if (isset($_POST["login"])) {
     $email = trim($_POST['email']);
     $password = trim($_POST['password']);
 
@@ -72,7 +72,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </div>
         <div class="input-container controls">
             <button type="button" class="btn btn-outline-gray cancel">Cancel</button>
-            <button type="submit" class="btn ">Login</button>
+            <button type="submit" name="login" class="btn">Login</button>
         </div>
     </form>
 </dialog>

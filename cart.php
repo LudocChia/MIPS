@@ -51,15 +51,14 @@ include "./components/customer_login.php";
                     <table>
                         <thead>
                             <tr>
-                                <th></th>
                                 <th><input type="checkbox" id="all" /></th>
                                 <th>image</th>
                                 <th>name</th>
                                 <th>price</th>
                                 <th>quantity</th>
                                 <th>total price</th>
+                                <th>Child</th>
                                 <th>action</th>
-                                <th></th>
                             </tr>
                         </thead>
                         <tbody id="order-items">

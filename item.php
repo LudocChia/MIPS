@@ -160,8 +160,6 @@ if (isset($_POST['submit'])) {
             }
 
             $pdo->commit();
-
-            echo "<script>alert('Purchase successful!');</script>";
         } catch (PDOException $e) {
             $pdo->rollBack();
             echo "<script>alert('Purchase failed: " . $e->getMessage() . "');</script>";
