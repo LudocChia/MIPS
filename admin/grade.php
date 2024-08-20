@@ -55,9 +55,9 @@ $all_grades = getGrades($pdo);
 include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/admin_head.php"; ?>
 
 <body>
-    <?php include "../components/admin_header.php"; ?>
+    <?php include  $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/admin_header.php"; ?>
     <div class="container">
-        <?php include "../components/admin_sidebar.php"; ?>
+        <?php include  $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/admin_sidebar.php"; ?>
         <!-- END OF ASIDE -->
         <main class="grade">
             <div class="wrapper">
@@ -136,8 +136,8 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/admin_head.php"; ?>
             </div>
         </form>
     </dialog>
-    <?php include "../components/deactivate_confirm_dialog.php"; ?>
-    <script src="../javascript/admin.js"></script>
+    <?php include  $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/confirm_dialog.php"; ?>
+    <script src="/mahans/javascript/admin.js"></script>
     <script>
         document.querySelectorAll('.edit-grade-btn').forEach(button => {
             button.addEventListener('click', function() {

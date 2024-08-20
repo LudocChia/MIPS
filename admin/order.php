@@ -94,9 +94,9 @@ if (isset($_POST["submit"])) {
 include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/admin_head.php"; ?>
 
 <body>
-    <?php include "../components/admin_header.php"; ?>
+    <?php include  $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/admin_header.php"; ?>
     <div class="container">
-        <?php include "../components/admin_sidebar.php"; ?>
+        <?php include  $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/admin_sidebar.php"; ?>
         <main class="admin">
             <div class="wrapper">
                 <div class="title">
@@ -297,8 +297,8 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/admin_head.php"; ?>
             <button type="button" class="cancel">Close</button>
         </div>
     </dialog>
-    <?php include "../components/deactivate_confirm_dialog.php"; ?>
-    <script src="../javascript/admin.js"></script>
+    <?php include  $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/confirm_dialog.php"; ?>
+    <script src="/mahans/javascript/admin.js"></script>
     <script>
         document.getElementById('add-product-btn').addEventListener('click', function() {
             const productInfo = document.querySelector('.product-info').cloneNode(true);
@@ -313,7 +313,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/admin_head.php"; ?>
                     const orderId = this.closest('form').querySelector('input[name="order_id"]').value;
                     const orderStatus = this.value;
 
-                    fetch('ajax.php?action=update_order_status', {
+                    fetch('/mahans/admin/ajax.php?action=update_order_status', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/x-www-form-urlencoded'
@@ -331,7 +331,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/admin_head.php"; ?>
                                     .then(count => {
                                         const pendingOrderCountElement = document.getElementById('pending-order-count');
                                         if (parseInt(count) > 0) {
-                                            pendingOrderCountElement.textContent = `(${count})`;
+                                            pendingOrderCountElement.textContent = `${count}`;
                                             pendingOrderCountElement.style.display = 'inline';
                                         } else {
                                             pendingOrderCountElement.style.display = 'none';
@@ -356,7 +356,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/admin_head.php"; ?>
                 button.addEventListener('click', function() {
                     const orderId = this.dataset.orderId;
 
-                    fetch('ajax.php?action=get_order', {
+                    fetch('/mahans/admin/ajax.php?action=get_order', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/x-www-form-urlencoded'
@@ -373,7 +373,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/admin_head.php"; ?>
                                 document.getElementById('order-date').textContent = data.order_datetime;
                                 document.getElementById('order-amount').textContent = `MYR ${data.order_price}`;
                                 document.getElementById('order-status').textContent = data.payment_status;
-                                document.getElementById('payment-image').src = '../uploads/receipts/' + data.payment_image || '../images/default_image_path.png';
+                                document.getElementById('payment-image').src = '/mahans/uploads/receipts/' + data.payment_image || '/mahans/images/default_image_path.png';
 
                                 const itemsList = document.getElementById('order-items-list');
                                 itemsList.innerHTML = '';

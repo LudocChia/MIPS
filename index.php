@@ -49,7 +49,6 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/customer_head.php";
     <?php include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/customer_footer.php"; ?>
     <script src="/mahans/javascript/home.js"></script>
     <script src="/mahans/javascript/customer.js"></script>
-    <script src="/mahans/javascript/index.js"></script>
 </body>
 
 </html>

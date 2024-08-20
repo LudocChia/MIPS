@@ -37,7 +37,7 @@ $all_classes = getAllClasses($pdo);
 
 function handleFileUpload($file, $studentId)
 {
-    $uploadDir = '../uploads/student/';
+    $uploadDir = '/mahans/uploads/student/';
 
     if (!is_dir($uploadDir)) {
         mkdir($uploadDir, 0777, true);
@@ -115,9 +115,8 @@ if (isset($_POST['delete'])) {
     }
 }
 
-?>
-
-<?php include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/admin_head.php"; ?>
+$pageTitle = "Student Management - MIPS";
+include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/admin_head.php"; ?>
 
 <body>
     <?php include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/admin_header.php"; ?>
@@ -127,7 +126,7 @@ if (isset($_POST['delete'])) {
             <div class="wrapper">
                 <div class="title">
                     <div class="left">
-                        <h1>MIPS Students</h1>
+                        <h1>Student Management</h1>
                     </div>
                     <div class="right">
                         <button id="open-popup" class="btn btn-outline-primary"><i class="bi bi-person-fill-add"></i>Add New Student</button>
@@ -209,7 +208,7 @@ if (isset($_POST['delete'])) {
             </div>
         </form>
     </dialog>
-    <?php include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/deactivate_confirm_dialog.php"; ?>
+    <?php include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/confirm_dialog.php"; ?>
     <script src="/mahans/javascript/admin.js"></script>
     <script>
         document.querySelectorAll('.edit-student-btn').forEach(button => {

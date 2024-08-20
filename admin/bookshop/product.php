@@ -201,9 +201,8 @@ if (isset($_POST['delete'])) {
         echo "<script>alert('Database error: " . $e->getMessage() . "');</script>";
     }
 }
-?>
-
-<?php include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/admin_head.php"; ?>
+$pageTitle = "Bookshop Products - MIPS";
+include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/admin_head.php"; ?>
 
 <body>
     <?php include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/admin_header.php"; ?>
@@ -231,7 +230,7 @@ if (isset($_POST['delete'])) {
                                     <form action="" method="POST" style="display:inline;" onsubmit="return showDeactivateConfirmDialog(event);">
                                         <input type="hidden" name="product_id" value="<?= htmlspecialchars($product['product_id']); ?>">
                                         <input type="hidden" name="delete" value="true">
-                                        <button type="submit" class="delete-product-btn"><i class="bi bi-x-square-fill"></i></button>
+                                        <button type="submit" class="delete-product-btn"><i class="bi bi-x-circle"></i></button>
                                     </form>
                                     <button type="button" class="edit-product-btn" data-product-id="<?= htmlspecialchars($product['product_id']); ?>"><i class="bi bi-pencil-square"></i></button>
                                 </div>
@@ -257,77 +256,95 @@ if (isset($_POST['delete'])) {
         </div>
         <form action="" method="post" enctype="multipart/form-data">
             <input type="hidden" name="product_id" value="">
-            <div class="input-field">
-                <h2>Product Name<sup>*</sup></h2>
-                <input type="text" name="name" value="<?php echo isset($_POST['name']) ? htmlspecialchars($_POST['name']) : ''; ?>" required>
+            <div class="input-container">
+                <div class="input-field">
+                    <h2>Product Name<sup>*</sup></h2>
+                    <input type="text" name="name" value="<?php echo isset($_POST['name']) ? htmlspecialchars($_POST['name']) : ''; ?>" required>
+                </div>
                 <p>Please enter the product name.</p>
             </div>
-            <div class="input-field">
-                <h2>Product Category</h2>
-                <select name="subcategory" id="subcategory" required>
-                    <option value="">Select a category</option>
-                    <?php foreach ($all_subcategories as $subcategory) { ?>
-                        <option value="<?= $subcategory['category_id'] ?>"><?= $subcategory['category_name'] ?></option>
-                    <?php } ?>
-                </select>
+            <div class="input-container">
+                <div class="input-field">
+                    <h2>Product Category</h2>
+                    <select name="subcategory" id="subcategory" required>
+                        <option value="">Select a category</option>
+                        <?php foreach ($all_subcategories as $subcategory) { ?>
+                            <option value="<?= $subcategory['category_id'] ?>"><?= $subcategory['category_name'] ?></option>
+                        <?php } ?>
+                    </select>
+                </div>
                 <p>Please select a product category.</p>
             </div>
             <div class="input-container">
-                <h2>Product Images<sup>*</sup></h2>
-                <input type="file" name="images[]" id="images" accept=".jpg, .jpeg, .png" multiple>
+                <div>
+                    <h2>Product Images<sup>*</sup></h2>
+                    <input type="file" name="images[]" id="images" accept=".jpg, .jpeg, .png" multiple>
+                </div>
                 <p>Please upload images for the product.</p>
             </div>
             <div class="input-container">
-                <h2>Product Description<sup>*</sup></h2>
-                <textarea name="description" id="description" cols="30" rows="10" required><?php echo isset($_POST['description']) ? htmlspecialchars($_POST['description']) : ''; ?></textarea>
+                <div class="input-field">
+                    <h2>Product Description<sup>*</sup></h2>
+                    <textarea name="description" id="description" cols="30" rows="10" required><?php echo isset($_POST['description']) ? htmlspecialchars($_POST['description']) : ''; ?></textarea>
+                </div>
                 <p>Please enter the product description.</p>
             </div>
             <div class="input-container">
-                <h2>Product Price (RM)<sup>*</sup></h2>
-                <input type="number" step="0.01" name="price" value="<?php echo isset($_POST['price']) ? htmlspecialchars($_POST['price']) : ''; ?>" required>
+                <div class="input-field">
+                    <h2>Product Price (RM)<sup>*</sup></h2>
+                    <input type="number" step="0.01" name="price" value="<?php echo isset($_POST['price']) ? htmlspecialchars($_POST['price']) : ''; ?>" required>
+                </div>
                 <p>Please enter the product price.</p>
             </div>
             <div class="input-container">
-                <h2>Product Sizes<sup>*</sup></h2>
-                <div id="sizes">
-                    <?php foreach ($all_sizes as $size) { ?>
-                        <label>
-                            <input type="checkbox" name="sizes[]" value="<?= htmlspecialchars($size['size_id']) ?>"
-                                <?php if (in_array($size['size_id'], $_POST['sizes'] ?? [])) echo 'checked'; ?>>
-                            <?= htmlspecialchars($size['size_name']) ?> (Shoulder: <?= htmlspecialchars($size['shoulder_width']) ?>, Bust: <?= htmlspecialchars($size['bust']) ?>, Waist: <?= htmlspecialchars($size['waist']) ?>, Length: <?= htmlspecialchars($size['length']) ?>)
-                        </label><br>
-                    <?php } ?>
+                <div class="input-field">
+                    <h2>Product Sizes<sup>*</sup></h2>
+                    <div id="sizes">
+                        <?php foreach ($all_sizes as $size) { ?>
+                            <label>
+                                <input type="checkbox" name="sizes[]" value="<?= htmlspecialchars($size['size_id']) ?>"
+                                    <?php if (in_array($size['size_id'], $_POST['sizes'] ?? [])) echo 'checked'; ?>>
+                                <?= htmlspecialchars($size['size_name']) ?> (Shoulder: <?= htmlspecialchars($size['shoulder_width']) ?>, Bust: <?= htmlspecialchars($size['bust']) ?>, Waist: <?= htmlspecialchars($size['waist']) ?>, Length: <?= htmlspecialchars($size['length']) ?>)
+                            </label><br>
+                        <?php } ?>
+                    </div>
                 </div>
                 <p>Please select one or more sizes for the product.</p>
             </div>
             <div class="input-container">
-                <h2>Stock Quantity<sup>*</sup></h2>
-                <input type="number" name="stock_quantity" value="<?php echo isset($_POST['stock_quantity']) ? htmlspecialchars($_POST['stock_quantity']) : ''; ?>" required>
+                <div class="input-field">
+                    <h2>Stock Quantity<sup>*</sup></h2>
+                    <input type="number" name="stock_quantity" value="<?php echo isset($_POST['stock_quantity']) ? htmlspecialchars($_POST['stock_quantity']) : ''; ?>" required>
+                </div>
                 <p>Please enter the stock quantity available.</p>
             </div>
             <div class="input-container">
-                <h2>Color<sup>*</sup></h2>
-                <input type="text" name="color" value="<?php echo isset($_POST['color']) ? htmlspecialchars($_POST['color']) : ''; ?>" required>
+                <div class="input-field">
+                    <h2>Color<sup>*</sup></h2>
+                    <input type="text" name="color" value="<?php echo isset($_POST['color']) ? htmlspecialchars($_POST['color']) : ''; ?>" required>
+                </div>
                 <p>Please enter the color of the product.</p>
             </div>
             <div class="input-container">
-                <h2>Gender<sup>*</sup></h2>
-                <select name="gender" id="gender" required>
-                    <option value="">Select gender</option>
-                    <option value="Boy" <?= isset($_POST['gender']) && $_POST['gender'] == 'Boy' ? 'selected' : '' ?>>Boy</option>
-                    <option value="Girl" <?= isset($_POST['gender']) && $_POST['gender'] == 'Girl' ? 'selected' : '' ?>>Girl</option>
-                    <option value="Unisex" <?= isset($_POST['gender']) && $_POST['gender'] == 'Unisex' ? 'selected' : '' ?>>Unisex</option>
-                </select>
+                <div class="input-field">
+                    <h2>Gender<sup>*</sup></h2>
+                    <select name="gender" id="gender" required>
+                        <option value="">Select gender</option>
+                        <option value="Boy" <?= isset($_POST['gender']) && $_POST['gender'] == 'Boy' ? 'selected' : '' ?>>Boy</option>
+                        <option value="Girl" <?= isset($_POST['gender']) && $_POST['gender'] == 'Girl' ? 'selected' : '' ?>>Girl</option>
+                        <option value="Unisex" <?= isset($_POST['gender']) && $_POST['gender'] == 'Unisex' ? 'selected' : '' ?>>Unisex</option>
+                    </select>
+                </div>
                 <p>Please select the gender for the product.</p>
             </div>
-            <div class="controls">
+            <div class="input-container controls">
                 <button type="button" class="cancel">Cancel</button>
                 <button type="reset">Clear</button>
                 <button type="submit" name="submit">Publish</button>
             </div>
         </form>
     </dialog>
-    <?php include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/deactivate_confirm_dialog.php"; ?>
+    <?php include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/confirm_dialog.php"; ?>
     <script src="/mahans/javascript/admin.js"></script>
     <script>
         document.querySelector('form').addEventListener('submit', function(event) {

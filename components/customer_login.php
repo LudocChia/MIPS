@@ -1,6 +1,6 @@
 <?php
 
-include "./components/db_connect.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/db_connect.php";
 
 $product_id = $_GET['pid'] ?? null;
 
@@ -45,7 +45,7 @@ if (isset($_POST["login"])) {
 
 <dialog id="login-form">
     <div class="title">
-        <img src="./images/Mahans_IPS_icon.png" alt="Mahans_ISP_Logo">
+        <img src="/mahans/images/Mahans_IPS_icon.png" alt="Mahans_ISP_Logo">
     </div>
     <?php if (!empty($errorMsg)) : ?>
         <div class="alert alert-danger">

@@ -92,7 +92,7 @@ function isActive($pageName, $currentPage)
                         </a>
                     </li>
                     <li>
-                        <a href="/mahans/admin/user/student.php" class="<?= isActive('student.php', $currentPage); ?>"><span class="material-symbols-outlined">local_library</span>
+                        <a href="/mahans/admin/user/student.php" class="<?= isActive('student.php', $currentPage); ?>"><span class="material-symbols-outlined">local_library </span>
                             <h4>All Student</h4>
                         </a>
                     </li>

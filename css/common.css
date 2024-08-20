@@ -48,7 +48,7 @@ dialog {
 
 dialog form {
     text-align: left;
-    margin-left: 10%;
+    /* margin-left: 10%; */
     position: relative;
 }
 

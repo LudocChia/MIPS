@@ -1,6 +1,7 @@
 <?php
 
 session_start();
+$_SESSION['user_id'] = $_SESSION['user_id'] ?? null;
 
 include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/db_connect.php";
 include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/customer_login.php";
@@ -335,13 +336,15 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/customer_head.php";
                 </div>
             </div>
             <div class="input-container">
-                <h2>Select Child<sup>*</sup></h2>
-                <?php foreach ($children as $child) : ?>
-                    <label>
-                        <input type="checkbox" name="child[]" value="<?= htmlspecialchars($child['student_id']) ?>">
-                        <?= htmlspecialchars($child['student_name']) ?>
-                    </label><br>
-                <?php endforeach; ?>
+                <div class="input-field">
+                    <h2>Select Child<sup>*</sup></h2>
+                    <?php foreach ($children as $child) : ?>
+                        <label>
+                            <input type="checkbox" name="child[]" value="<?= htmlspecialchars($child['student_id']) ?>">
+                            <?= htmlspecialchars($child['student_name']) ?>
+                        </label><br>
+                    <?php endforeach; ?>
+                </div>
                 <p>Please select which child you are buying for.</p>
             </div>
             <div class="input-container">
@@ -371,11 +374,13 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/customer_head.php";
                 </table>
             </div>
             <div class="input-container">
-                <h2>Upload Transfer Receipt<sup>*</sup></h2>
-                <input type="file" name="payment_image" accept=".jpg, .jpeg, .png" required>
+                <div class="input-field">
+                    <h2>Upload Transfer Receipt<sup>*</sup></h2>
+                    <input type="file" name="payment_image" accept=".jpg, .jpeg, .png" required>
+                </div>
                 <p>Please upload the transfer receipt.</p>
             </div>
-            <div class="controls">
+            <div class="input-container controls">
                 <button value="cancel" class="cancel">Cancel</button>
                 <button type="reset">Clear</button>
                 <button type="submit" name="submit">Purchase</button>
@@ -383,8 +388,8 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/customer_head.php";
         </form>
     </dialog>
     <?php include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/customer_footer.php"; ?>
-    <script src="mahans/javascript/common.js"></script>
-    <script src="mahans/javascript/customer.js"></script>
+    <script src="/mahans/javascript/common.js"></script>
+    <script src="/mahans/javascript/customer.js"></script>
     <script type="text/javascript">
         document.addEventListener("DOMContentLoaded", function() {
             document.querySelector('.buy-now').addEventListener('click', function() {
@@ -461,7 +466,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/customer_head.php";
                     const qty = document.getElementById('qty').value;
 
 
-                    fetch('ajax.php?action=add_to_cart', {
+                    fetch('/mahans/ajax.php?action=add_to_cart', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/x-www-form-urlencoded'

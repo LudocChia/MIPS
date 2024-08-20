@@ -9,6 +9,20 @@ class Action
         $this->db = $pdo;
     }
 
+    public function recover_parent($parent_id)
+    {
+        $sql = "UPDATE Parent SET is_deleted = 0 WHERE parent_id = :parent_id";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':parent_id', $parent_id);
+
+        try {
+            $stmt->execute();
+            return json_encode(['success' => true]);
+        } catch (PDOException $e) {
+            return json_encode(['error' => 'Database error: ' . $e->getMessage()]);
+        }
+    }
+
     public function get_category($category_id)
     {
         $sql = "

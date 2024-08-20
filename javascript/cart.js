@@ -27,9 +27,9 @@ window.addEventListener('load', function () {
     get_cart_items().then(cartItems => {
         data = cartItems.map(item => ({
             ...item,
-            state: false // 添加默认状态
+            state: false
         }));
-        init(); // 调用初始化函数
+        init();
     }).catch(error => {
         console.error('Error loading cart items:', error);
     });

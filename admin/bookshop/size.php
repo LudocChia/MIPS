@@ -72,9 +72,9 @@ function getSizes($pdo)
 }
 
 $all_product_sizes = getSizes($pdo);
-?>
 
-<?php include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/admin_head.php"; ?>
+$pageTitle = "Apparel Size - MIPS";
+include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/admin_head.php"; ?>
 
 <body>
     <?php include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/admin_header.php"; ?>
@@ -114,7 +114,7 @@ $all_product_sizes = getSizes($pdo);
                                         <form action="" method="POST" style="display:inline;" onsubmit="return showDeactivateConfirmDialog(event);">
                                             <input type="hidden" name="product_size_id" value="<?= htmlspecialchars($size['size_id']); ?>">
                                             <input type="hidden" name="delete" value="true">
-                                            <button type="submit" class="delete-category-btn"><i class="bi bi-x-square-fill"></i></button>
+                                            <button type="submit" class="delete-category-btn"><i class="bi bi-x-circle"></i></button>
                                         </form>
                                         <button type="button" class="edit-size-btn" data-size-id="<?= htmlspecialchars($size['size_id']); ?>"><i class="bi bi-pencil-square"></i></button>
                                     </td>
@@ -159,14 +159,14 @@ $all_product_sizes = getSizes($pdo);
         </form>
     </dialog>
 
-    <?php include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/deactivate_confirm_dialog.php"; ?>
+    <?php include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/confirm_dialog.php"; ?>
 
     <script src="mahans/javascript/admin.js"></script>
     <script>
         document.querySelectorAll('.edit-size-btn').forEach(button => {
             button.addEventListener('click', function() {
                 const sizeId = this.dataset.sizeId;
-                fetch(`ajax.php?action=get_size&size_id=${sizeId}`)
+                fetch(`mahans/admin/ajax.php?action=get_size&size_id=${sizeId}`)
                     .then(response => response.json())
                     .then(size => {
                         if (size.error) {

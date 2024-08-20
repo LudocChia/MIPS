@@ -2,7 +2,7 @@
 
 session_start();
 
-include "./components/db_connect.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/db_connect.php";
 include "./components/customer_login.php";
 
 $sql = "SELECT p.product_id, p.product_name, p.product_description, p.product_price, p.stock_quantity, p.color, p.gender, 
@@ -20,7 +20,7 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <?php include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/customer_head.php"; ?>
 
 <body>
-    <?php include "./components/customer_header.php"; ?>
+    <?php include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/customer_header.php"; ?>
     <section class="bookshop">
         <div class="container">
             <div class="products">
@@ -67,9 +67,9 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <a href="#" class="back-to-top">
         <span class="material-symbols-outlined">arrow_upward</span>
     </a>
-    <?php include './components/customer_footer.php'; ?>
-    <script src="./js/common.js"></script>
-    <script src="./javascript/customer.js"></script>
+    <?php include $_SERVER['DOCUMENT_ROOT'] . '/mahans/components/customer_footer.php'; ?>
+    <script src="/mahans/javascript/common.js"></script>
+    <script src="/mahans/javascript/customer.js"></script>
 </body>
 
 </html>

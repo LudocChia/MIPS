@@ -13,7 +13,7 @@ $currentPage = basename($_SERVER['PHP_SELF']);
 
 function getAllParents($pdo)
 {
-    $sql = "SELECT * FROM Parent WHERE is_deleted = 1";
+    $sql = "SELECT * FROM Parent WHERE is_deleted = 0";
     $stmt = $pdo->prepare($sql);
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -135,8 +135,8 @@ if (isset($_POST['deactivate'])) {
         echo "<script>alert('Database error: " . $e->getMessage() . "');</script>";
     }
 }
-?>
-<?php include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/admin_head.php"; ?>
+$pageTitle = "Parent Management - MIPS";
+include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/admin_head.php"; ?>
 
 <body>
     <?php include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/admin_header.php"; ?>
@@ -146,7 +146,7 @@ if (isset($_POST['deactivate'])) {
             <div class="wrapper">
                 <div class="title">
                     <div class="left">
-                        <h1>MIPS Deactivated Parent</h1>
+                        <h1>Students Parent</h1>
                     </div>
                     <div class="right">
                         <button class="btn btn-outline-primary" id="open-popup"><i class="bi bi-person-fill-add"></i>Add New Parent</button>
@@ -262,7 +262,7 @@ if (isset($_POST['deactivate'])) {
             </div>
         </form>
     </dialog>
-    <?php include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/deactivate_confirm_dialog.php"; ?>
+    <?php include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/confirm_dialog.php"; ?>
     <script src="/mahans/javascript/admin.js"></script>
     <script>
         document.getElementById('add-child-btn').addEventListener('click', function() {

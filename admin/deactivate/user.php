@@ -5,7 +5,7 @@ session_start();
 include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/db_connect.php";
 
 if (!isset($_SESSION['admin_id'])) {
-    header('Location: login.php');
+    header('Location: /mahans/admin/login.php');
     exit();
 }
 
@@ -72,11 +72,12 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/admin_head.php"; ?>
                                     <td><?= htmlspecialchars($parent['register_datetime']); ?></td>
                                     <td>
                                         <button type="button" class="view-order-detail-btn" data-order-id="<?= htmlspecialchars($order['order_id']); ?>"><i class="bi bi-info-circle-fill"></i></button>
-                                        <form action="" method="POST" style="display:inline;" onsubmit="return showRecoverConfirmDialog(event);">
+                                        <form action="" method="POST" style="display:inline;" onsubmit="showRecoverConfirmDialog(event);">
                                             <input type="hidden" name="parent_id" value="<?= htmlspecialchars($parent['parent_id']); ?>">
                                             <input type="hidden" name="recover" value="true">
                                             <button type="submit" class="recover-parent-btn"><i class="bi bi-arrow-clockwise"></i></button>
                                         </form>
+
                                     </td>
                                 </tr>
                             <?php endforeach; ?>

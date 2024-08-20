@@ -121,9 +121,8 @@ function getMainCategories($pdo)
 }
 
 $all_main_categories = getMainCategories($pdo);
-?>
 
-<?php $pageTitle = "Bookshop Main Category - MIPS";
+$pageTitle = "Bookshop Main Category - MIPS";
 include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/admin_head.php"; ?>
 
 <body>
@@ -150,7 +149,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/admin_head.php"; ?>
                                 <form action="" method="POST" style="display:inline;" onsubmit="return showDeactivateConfirmDialog(event);">
                                     <input type="hidden" name="category_id" value="<?= htmlspecialchars($category['category_id']); ?>">
                                     <input type="hidden" name="delete" value="true">
-                                    <button type="submit" class="delete-category-btn"><i class="bi bi-x-square-fill"></i></button>
+                                    <button type="submit" class="delete-category-btn"><i class="bi bi-x-circle"></i></button>
                                 </form>
                                 <button type="button" class="edit-category-btn" data-category-id="<?= htmlspecialchars($category['category_id']); ?>"><i class="bi bi-pencil-square"></i></button>
                             </div>
@@ -195,13 +194,13 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/admin_head.php"; ?>
             </div>
         </form>
     </dialog>
-    <?php include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/deactivate_confirm_dialog.php";; ?>
+    <?php include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/confirm_dialog.php";; ?>
     <script src="/mahans/javascript/admin.js"></script>
     <script>
         document.querySelectorAll('.edit-category-btn').forEach(button => {
             button.addEventListener('click', function() {
                 const categoryId = this.dataset.categoryId;
-                fetch(`ajax.php?action=get_category&category_id=${categoryId}`)
+                fetch(`/mahans/admin/ajax.php?action=get_category&category_id=${categoryId}`)
                     .then(response => response.json())
                     .then(category => {
                         if (category.error) {

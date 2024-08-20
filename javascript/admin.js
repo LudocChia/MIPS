@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const userBtn = document.querySelector("#user-btn");
     const profileMenu = document.querySelector(".profile-menu");
     const ConfirmDialog = document.querySelector('#confirm-dialog');
-    // let currentForm = null;
+    let currentForm = null;
     // const themeToggler = document.querySelector(".theme-toggler");
 
     // Show Sidebar
@@ -125,24 +125,43 @@ document.addEventListener('DOMContentLoaded', function () {
 
     window.showRecoverConfirmDialog = function (event) {
         event.preventDefault();
-        const recoverForm = event.target;
-        const ConfirmDialog = document.querySelector('#confirm-dialog');
+        currentForm = event.target;
 
-        if (recoverForm && ConfirmDialog) {
+        if (currentForm && ConfirmDialog) {
             document.querySelector('#confirm-dialog h1').textContent = "This data will be recovered!";
-            document.querySelector('.confirm').textContent = "Recovery";
+            document.querySelector('.confirm').textContent = "Recover";
             ConfirmDialog.showModal();
         }
-    }
+    };
 
     if (ConfirmDialog) {
         ConfirmDialog.addEventListener('close', function () {
-            if (ConfirmDialog.returnValue === 'confirm' && recoverForm) {
-                recoverForm.submit();
+            if (ConfirmDialog.returnValue === 'confirm' && currentForm) {
+                const parentId = currentForm.querySelector('input[name="parent_id"]').value;
+
+                fetch(`/mahans/admin/ajax.php?action=recover_parent`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: `parent_id=${parentId}`
+                })
+                    .then(response => response.json())
+                    .then(result => {
+                        if (result.success) {
+                            alert('Parent successfully recovered.');
+                            location.reload();
+                        } else {
+                            alert('Error recovering parent: ' + result.error);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('An error occurred while recovering the parent.');
+                    });
             }
         });
     }
-
     window.showDeactivateConfirmDialog = function (event) {
         event.preventDefault();
         currentForm = event.target;

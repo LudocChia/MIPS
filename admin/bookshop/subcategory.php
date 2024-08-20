@@ -123,9 +123,8 @@ function getMainCategories($pdo)
 
 $all_subcategories = getSubcategories($pdo);
 $all_main_categories = getMainCategories($pdo);
-?>
 
-<?php $pageTitle = "Bookshop Subcategory - MIPS";
+$pageTitle = "Bookshop Subcategory - MIPS";
 include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/admin_head.php"; ?>
 
 <body>
@@ -139,7 +138,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/admin_head.php"; ?>
                         <h1>Bookshop Subcategory</h1>
                     </div>
                     <div class="right">
-                        <button id="open-popup" class="btn btn-outline"><i class="bi bi-plus-circle"></i>Add Subcategory</button>
+                        <button id="open-popup" class="btn btn-outline-primary"><i class="bi bi-plus-circle"></i>Add New Subcategory</button>
                     </div>
                 </div>
                 <div class="box-container">
@@ -152,7 +151,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/admin_head.php"; ?>
                                 <form action="" method="POST" style="display:inline;" onsubmit="return showDeactivateConfirmDialog(event);">
                                     <input type="hidden" name="subcategory_id" value="<?= htmlspecialchars($subcategory['category_id']); ?>">
                                     <input type="hidden" name="delete" value="true">
-                                    <button type="submit" class="delete-subcategory-btn"><i class="bi bi-x-square-fill"></i></button>
+                                    <button type="submit" class="delete-subcategory-btn"><i class="bi bi-x-circle"></i></button>
                                 </form>
                                 <button type="button" class="edit-subcategory-btn" data-subcategory-id="<?= htmlspecialchars($subcategory['category_id']); ?>"><i class="bi bi-pencil-square"></i></button>
                             </div>
@@ -204,21 +203,21 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/admin_head.php"; ?>
                 <h2>Parent Category<sup>*</sup></h2>
                 <p>Select the main category for this subcategory.</p>
             </div>
-            <div class="controls">
+            <div class="input-container controls">
                 <button type="button" class="cancel">Cancel</button>
                 <button type="reset">Clear</button>
                 <button type="submit" name="submit">Publish</button>
             </div>
         </form>
     </dialog>
-    <?php include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/deactivate_confirm_dialog.php"; ?>
+    <?php include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/confirm_dialog.php"; ?>
 
     <script src="/mahans/javascript/admin.js"></script>
     <script>
         document.querySelectorAll('.edit-subcategory-btn').forEach(button => {
             button.addEventListener('click', function() {
                 const subcategoryId = this.dataset.subcategoryId;
-                fetch(`ajax.php?action=get_subcategory&subcategory_id=${subcategoryId}`)
+                fetch(`/mahans/admin/ajax.php?action=get_subcategory&subcategory_id=${subcategoryId}`)
                     .then(response => response.json())
                     .then(subcategory => {
                         if (subcategory.error) {
