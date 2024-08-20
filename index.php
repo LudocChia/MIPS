@@ -2,15 +2,14 @@
 
 session_start();
 
-include "./components/db_connect.php";
-include "./components/customer_login.php"
-
+include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/db_connect.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/customer_login.php";
+$pageTitle = "Home - MIPS";
+include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/customer_head.php";
 ?>
 
-<?php include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/customer_head.php"; ?>
-
 <body>
-    <?php include './components/customer_header.php'; ?>
+    <?php include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/customer_header.php"; ?>
     <section class="banner">
         <div class="container">
             <div class="wrapper">
@@ -47,10 +46,10 @@ include "./components/customer_login.php"
             </div>
         </div>
     </section>
-    <?php include "./components/customer_footer.php"; ?>
-    <script src="./javascript/home.js"></script>
-    <script src="./javascript/customer.js"></script>
-    <script src="../javascript/index.js"></script>
+    <?php include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/customer_footer.php"; ?>
+    <script src="/mahans/javascript/home.js"></script>
+    <script src="/mahans/javascript/customer.js"></script>
+    <script src="/mahans/javascript/index.js"></script>
 </body>
 
 </html>

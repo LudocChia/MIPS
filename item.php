@@ -2,8 +2,8 @@
 
 session_start();
 
-include "./components/db_connect.php";
-include "./components/customer_login.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/db_connect.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/customer_login.php";
 
 $product_id = $_GET['pid'] ?? null;
 if (!$product_id) {
@@ -169,12 +169,11 @@ if (isset($_POST['submit'])) {
     }
 }
 
+include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/customer_head.php";
 ?>
 
-<?php include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/customer_head.php"; ?>
-
 <body>
-    <?php include 'components/customer_header.php'; ?>
+    <?php include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/customer_header.php"; ?>
     <div class="breadcrumbs">
         <ul>
             <li>
@@ -383,9 +382,9 @@ if (isset($_POST['submit'])) {
             </div>
         </form>
     </dialog>
-    <?php include 'components/customer_footer.php'; ?>
-    <script src="javascript/common.js"></script>
-    <script src="javascript/customer.js"></script>
+    <?php include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/customer_footer.php"; ?>
+    <script src="mahans/javascript/common.js"></script>
+    <script src="mahans/javascript/customer.js"></script>
     <script type="text/javascript">
         document.addEventListener("DOMContentLoaded", function() {
             document.querySelector('.buy-now').addEventListener('click', function() {

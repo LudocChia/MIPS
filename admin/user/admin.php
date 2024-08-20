@@ -63,35 +63,21 @@ if (isset($_POST["submit"])) {
     }
 }
 
-?>
-
-<?php include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/admin_head.php"; ?>
+$pageTitle = "Admin Management - MIPS";
+include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/admin_head.php"; ?>
 
 <body>
-    <?php include "../../components/admin_header.php"; ?>
+    <?php include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/admin_header.php"; ?>
     <div class="container">
-        <?php include "../../components/admin_sidebar.php"; ?>
+        <?php include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/admin_sidebar.php"; ?>
         <main class="admin">
             <div class="wrapper">
                 <div class="title">
                     <div class="left">
-                        <h1>MIPS Admin</h1>
+                        <h1>Admin Management</h1>
                     </div>
                     <div class="right">
                         <button class="btn btn-outline-primary" id="open-popup"><i class="bi bi-person-fill-add"></i>Add New Admin</button>
-                        <?php
-                        try {
-                            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-                            $countQuery = "SELECT COUNT(*) FROM Admin WHERE is_deleted = 0";
-                            $stmt = $pdo->prepare($countQuery);
-                            $stmt->execute();
-                            $count = $stmt->fetchColumn();
-
-                            echo "<p>Total $count Admin(s)</p>";
-                        } catch (PDOException $e) {
-                            echo "<script>alert('Database error: " . $e->getMessage() . "');</script>";
-                        }
-                        ?>
                     </div>
                 </div>
                 <div class="table-body">
@@ -123,7 +109,7 @@ if (isset($_POST["submit"])) {
                                     <td><?php echo htmlspecialchars($admin['admin_email']); ?></td>
                                     <td><?php echo htmlspecialchars($admin['register_date']); ?></td>
                                     <td>
-                                        <form action="" method="POST" style="display:inline;">
+                                        <form action="" method="POST" style="display:inline;" onsubmit="return showDeactivateConfirmDialog(event);">
                                             <input type="hidden" name="admin_id" value="<?= htmlspecialchars($admin['admin_id']); ?>">
                                             <input type="hidden" name="delete" value="true">
                                             <button type="submit" class="delete-admin-btn"><i class="bi bi-x-square-fill"></i></button>
@@ -139,52 +125,58 @@ if (isset($_POST["submit"])) {
         </main>
     </div>
     <dialog id="add-edit-data">
-        <h1>Add New Admin</h1>
+        <div class="title">
+            <div class="left">
+                <h1>Add New Admin</h1>
+            </div>
+            <div class="right">
+                <button class="cancel"><i class="bi bi-x-lg"></i></button>
+            </div>
+        </div>
         <form action="" method="post" enctype="multipart/form-data">
-            <div class="input-field">
-                <h2>Admin Name<sup>*</sup></h2>
-                <input type="text" name="name" value="<?php echo isset($_POST['name']) ? htmlspecialchars($_POST['name']) : ''; ?>" required>
+            <div class="input-container">
+                <div class="input-field">
+                    <h2>Admin Name<sup>*</sup></h2>
+                    <input type="text" name="name" value="<?php echo isset($_POST['name']) ? htmlspecialchars($_POST['name']) : ''; ?>" required>
+                </div>
                 <p>Please enter the admin's full name.</p>
             </div>
-            <div class="input-field">
-                <h2>Admin Email<sup>*</sup></h2>
-                <input type="email" name="email" value="<?php echo isset($_POST['email']) ? htmlspecialchars($_POST['email']) : ''; ?>" required>
+            <div class="input-container">
+                <div class="input-field">
+                    <h2>Admin Email<sup>*</sup></h2>
+                    <input type="email" name="email" value="<?php echo isset($_POST['email']) ? htmlspecialchars($_POST['email']) : ''; ?>" required>
+                </div>
                 <p>Please enter the admin's email address.</p>
             </div>
-            <div class="input-field">
-                <h2>Password<sup>*</sup></h2>
-                <input type="password" name="password" required>
+            <div class="input-container">
+                <div class="input-field">
+                    <h2>Password<sup>*</sup></h2>
+                    <input type="password" name="password" required>
+                </div>
                 <p>Please enter a secure password.</p>
             </div>
-            <div class="input-field">
-                <h2>Confirm Password<sup>*</sup></h2>
-                <input type="password" name="confirm_password" required>
+            <div class="input-container">
+                <div class="input-field">
+                    <h2>Confirm Password<sup>*</sup></h2>
+                    <input type="password" name="confirm_password" required>
+                </div>
                 <p>Please confirm the password.</p>
             </div>
-            <div class="controls">
+            <div class="input-container controls">
                 <button type="button" class="cancel">Cancel</button>
                 <button type="reset">Clear</button>
                 <button type="submit" name="submit">Publish</button>
             </div>
         </form>
     </dialog>
-    <dialog id="delete-confirm-dialog">
-        <form method="dialog">
-            <h1>Admin will be Deactivated!</h1>
-            <label>Are you sure to proceed?</label>
-            <div class="controls">
-                <button value="cancel" class="cancel">Cancel</button>
-                <button value="confirm" class="deactivate">Deactivate</button>
-            </div>
-        </form>
-    </dialog>
-    <script src="../../javascript/admin.js"></script>
+    <?php include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/confirm_dialog.php"; ?>
+    <script src="/mahans/javascript/admin.js"></script>
     <script>
         document.querySelectorAll('.edit-admin-btn').forEach(button => {
             button.addEventListener('click', function() {
                 const adminId = this.dataset.adminId;
 
-                fetch(`../ajax.php?action=get_admin&admin_id=${adminId}`)
+                fetch(`/mahans/admin/ajax.php?action=get_admin&admin_id=${adminId}`)
                     .then(response => response.json())
                     .then(admin => {
                         if (admin.error) {

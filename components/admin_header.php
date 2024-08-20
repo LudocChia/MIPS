@@ -1,21 +1,7 @@
-<?php
-$default_logo_path = "../images/Mahans_IPS_logo.png";
-$logo_path = "../../images/Mahans_IPS_logo.png";
-
-$deafault_admin_profile_path = "../uploads/admin/";
-$admin_profile_path = "../../uploads/admin/";
-
-if (file_exists($logo_path) && !empty($logo_path)) {
-    $src = $logo_path;
-} else {
-    $src = $default_logo_path;
-}
-?>
-
 <header>
     <div class="wrapper">
         <a href="index.php">
-            <img src="<?= $src ?>" class="logo" alt="Mahans International Primary School logo">
+            <img src="/mahans/images/Mahans_IPS_logo.png" class="logo" alt="Mahans International Primary School logo">
         </a>
         <div class="profile-area">
             <button id="menu-btn">

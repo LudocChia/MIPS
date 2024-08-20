@@ -30,7 +30,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['admin_name'] = $admin['admin_name'];
             $_SESSION['admin_type'] = $admin['admin_type'];
             $_SESSION['admin_email'] = $admin['admin_email'];
-            $_SESSION['admin_image'] = !empty($admin['admin_image']) ? $admin['admin_image'] : '../images/default_profile.png';
+            $_SESSION['admin_image'] = !empty($admin['admin_image']) ? $admin['admin_image'] : '/mahans/images/default_profile.png';
 
 
             header("Location: /mahans/admin");
@@ -53,7 +53,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/admin_head.php"; ?>
         <div class="container">
             <div class="wrapper">
                 <div class="title">
-                    <img src="../images/Mahans_IPS_logo.png" alt="Mahans_ISP_Logo">
+                    <img src="/mahans/images/Mahans_IPS_logo.png" alt="Mahans_ISP_Logo">
                 </div>
                 <?php if (!empty($errorMsg)) : ?>
                     <div class="alert alert-danger">

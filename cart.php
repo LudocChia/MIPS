@@ -2,15 +2,14 @@
 
 session_start();
 
-include './components/db_connect.php';
-include "./components/customer_login.php";
-
+include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/db_connect.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/customer_login.php";
+$pageTitle = "Shopping Cart - MIPS";
+include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/customer_head.php";
 ?>
 
-<?php include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/customer_head.php"; ?>
-
 <body>
-    <?php include './components/customer_header.php'; ?>
+    <?php include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/customer_header.php"; ?>
     <section class="shopping-cart">
         <div class="container">
             <input type="hidden" id="user-id" value="<?php echo htmlspecialchars($_SESSION['user_id']); ?>">
@@ -65,7 +64,7 @@ include "./components/customer_login.php";
     <!-- <a href="#" class="backToTop">
         <span class="material-symbols-outlined">arrow_upward</span>
     </a> -->
-    <?php include "./components/customer_footer.php"; ?>
+    <?php include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/customer_footer.php"; ?>
     <script src="./javascript/common.js"></script>
     <script src="./javascript/customer.js"></script>
     <script src="./javascript/cart.js"></script>

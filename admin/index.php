@@ -2,7 +2,7 @@
 
 session_start();
 
-include "../components/db_connect.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/db_connect.php";
 
 if (!isset($_SESSION['admin_id'])) {
     header('Location: ./login.php');
@@ -78,10 +78,9 @@ function getRecentOrders($pdo, $limit = 5)
 
 $recentOrders = getRecentOrders($pdo, 5);
 
+$pageTitle = "Dashboard - MIPS";
+include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/admin_head.php";
 ?>
-
-<?php $pageTitle = "Dashboard - MIPS";
-include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/admin_head.php"; ?>
 
 <body>
     <?php include "../components/admin_header.php"; ?>

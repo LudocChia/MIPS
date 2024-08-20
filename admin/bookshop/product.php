@@ -154,7 +154,6 @@ if (isset($_POST['submit'])) {
 
             $productId = $pdo->lastInsertId();
 
-            // Handle image uploads
             if (!empty($_FILES['images']['name'][0])) {
                 $uploadedImages = handleFileUpload($_FILES['images']);
 
@@ -347,7 +346,7 @@ if (isset($_POST['delete'])) {
         document.querySelectorAll('.edit-product-btn').forEach(button => {
             button.addEventListener('click', function() {
                 const productId = this.dataset.productId;
-                fetch(`ajax.php?action=get_product&product_id=${productId}`)
+                fetch(`/mahans/admin/ajax.php?action=get_product&product_id=${productId}`)
                     .then(response => response.json())
                     .then(product => {
                         if (product.error) {

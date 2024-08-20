@@ -106,25 +106,25 @@ function isActive($pageName, $currentPage)
                 </a>
                 <ul>
                     <li>
-                        <a href="/mahans/admin/deactivate/user.php" class="<?= isActive('deactivate_user.php', $currentPage); ?>"><i class="bi bi-person-fill-slash"></i>
+                        <a href="/mahans/admin/deactivate/user.php" class="<?= isActive('user.php', $currentPage); ?>"><i class="bi bi-person-fill-slash"></i>
                             <h4>User</h4>
                         </a>
 
                     </li>
                     <li>
-                        <a href="/mahans/admin/deactivate/bookshop.php" class="<?= isActive('deactivate_product.php', $currentPage); ?>"><i class="bi bi-person-fill-slash"></i>
+                        <a href="/mahans/admin/deactivate/bookshop.php" class="<?= isActive('bookshop.php', $currentPage); ?>"><i class="bi bi-person-fill-slash"></i>
                             <h4>Bookshop</h4>
                         </a>
 
                     </li>
                     <li>
-                        <a href="/mahans/admin/deactivate/gradeclass.php" class="<?= isActive('deactivate_class.php', $currentPage); ?>"><i class="bi bi-person-fill-slash"></i>
+                        <a href="/mahans/admin/deactivate/gradeclass.php" class="<?= isActive('gradeclass.php', $currentPage); ?>"><i class="bi bi-person-fill-slash"></i>
                             <h4>Grade and Class</h4>
                         </a>
 
                     </li>
                     <li>
-                        <a href="/mahans/admin/deactivate/announment.php" class="<?= isActive('deactivate_announment.php', $currentPage); ?>"><i class="bi bi-person-fill-slash"></i>
+                        <a href="/mahans/admin/deactivate/announment.php" class="<?= isActive('announment.php', $currentPage); ?>"><i class="bi bi-person-fill-slash"></i>
                             <h4>Announment</h4>
                         </a>
 
@@ -145,7 +145,7 @@ function isActive($pageName, $currentPage)
 <Script>
     $(document).ready(function() {
         $.ajax({
-            url: 'ajax.php?action=get_pending_count',
+            url: '/mahans/admin/ajax.php?action=get_pending_count',
             type: 'GET',
             success: function(response) {
                 if (parseInt(response) == 0) {

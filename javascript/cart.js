@@ -58,7 +58,7 @@ window.addEventListener('load', function () {
                             </td>
                             <td class="product-quantity">
                                     <button class="add" id="add-${index}">+</button>
-                                    <input type="text" style="width:40px" value="${item.product_quantity}" data-cart-item-id="${item.cart_item_id}"/>
+                                    <input type="text" style="width:40px" value="${item.product_quantity}" data-cart-item-id="${item.cart_item_id}"/>;
                                     <button class="reduce" id="reduce-${index}">-</button>
                             </td>
                             <td class="product-total">RM ${totalPriceItem.toFixed(2)}</td>
@@ -67,7 +67,6 @@ window.addEventListener('load', function () {
                             <button class="delete" data-cart-item-id="${item.cart_item_id}"><i class="bi bi-trash3-fill"></i> Delete</button>
                             </td>
                         </tr>`;
-
             if (item.state) {
                 count++;
                 num += item.actual_price * item.product_quantity;
