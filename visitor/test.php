@@ -52,6 +52,8 @@ try {
         <p id="info4"><?= htmlspecialchars($visitor['time']) ?></p>
         <p id="info5"><?= htmlspecialchars($visitor['people']) ?></p>
         <p id="info6"><?= htmlspecialchars($visitor['phone_num']) ?></p>
+        <button id="Nbutton">No</button>
+        <button id="Ybutton">Yes</button>
     </div>
     <?php endforeach; ?>
 </body>

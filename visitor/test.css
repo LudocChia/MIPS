@@ -58,8 +58,8 @@ img {
 }
 
 h1 {
-    margin-top: 10px;
-    margin-left: 50px;
+    margin-top: 30px;
+    margin-left: 200px;
     color: rgb(156, 67, 82);
     font-size: 3rem;
 }
@@ -336,8 +336,8 @@ form textarea {
     border: 1px solid black;
     border-radius: 10px;
     padding: 5px;
-    margin-left: 50px;
-    margin-right: 50px;
+    margin-left: 200px;
+    margin-right: 200px;
     margin-bottom: 5px;
     color: rgb(156, 67, 82);
     background: rgba(144, 87, 47, 0.619);
@@ -355,8 +355,8 @@ form textarea {
     border: 1px solid black;
     border-radius: 10px;
     padding: 10px;
-    margin-left: 50px;
-    margin-right: 50px;
+    margin-left: 200px;
+    margin-right: 200px;
     margin-bottom: 5px;
     color: rgb(156, 67, 82);
     background: rgba(144, 87, 47, 0.175);
@@ -364,19 +364,26 @@ form textarea {
 }
 .row p{
     margin: 10px;
+    margin-left: 18px;
     padding: 5px;
     font-size: 20px;
     background-color: #fff;
     max-width: 200px;
 }
+#i1{
+    margin-right: 40px;
+}
 #i2{
-    margin-right: 80px;
+    margin-right: 95px;
 }
 #i3{
-    margin-right: 100px;
+    margin-right: 40px;
 }
 #i4{
-    margin-right: 80px;
+    margin-right: 40px;
+}
+#i5{
+    margin-right: 50px;
 }
 #i6{
     margin-right: 30px;
@@ -385,7 +392,49 @@ form textarea {
     margin-right: 40px;
 }
 #info1{
-    margin-right: 20px;
     word-wrap: break-word;
     word-break: break-all;
+}
+#info2{
+    text-align: center;
+    min-width: 200px;
+    word-wrap: break-word;
+    word-break: break-all;
+}
+#info3{
+    text-align: center;
+    min-width: 100px;
+    max-width: 110px;
+    word-wrap: break-word;
+    word-break: break-all;
+}
+#info4{
+    text-align: center;
+    min-width: 100px;
+    max-width: 110px;
+    word-wrap: break-word;
+    word-break: break-all;
+    margin-right: 30px;
+}
+#info5{
+    text-align: center;
+    min-width: 60px;
+    max-width: 60px;
+    word-wrap: break-word;
+    word-break: break-all;
+    margin-right: 50px;
+}
+#info6{
+    text-align: center;
+    min-width: 100px;
+    max-width: 150px;
+    word-wrap: break-word;
+    word-break: break-all;
+    margin-right: 50px;
+}
+#Nbutton{
+    margin-right:  50px; ;
+}
+#Ybutton{
+
 }
