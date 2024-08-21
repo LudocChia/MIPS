@@ -37,7 +37,6 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/customer_head.php";
                                 <th><input type="checkbox" id="all" /></th>
                                 <th>image</th>
                                 <th>name</th>
-                                <th>price</th>
                                 <th>quantity</th>
                                 <th>total price</th>
                                 <th>Child</th>

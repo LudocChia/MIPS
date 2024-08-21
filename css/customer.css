@@ -144,21 +144,29 @@ header .wrapper {
     width: 90%;
 }
 
+header .mobile-wrapper {
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+
 header img.logo {
     width: 35rem;
 }
 
-.navbar {
-    position: relative;
+.navbar,
+.mobile-navbar {
     display: flex;
     width: auto;
 }
 
-.navbar ul {
+.navbar ul,
+.mobile-navbar ul {
     width: 100%;
 }
 
-.navbar ul li {
+.navbar ul li,
+.mobile-navbar ul li {
     display: inline-block;
     transition: all 0.5s ease;
     cursor: pointer;
@@ -172,7 +180,9 @@ header img.logo {
     margin-right: 1rem;
 }
 
-.navbar ul li a {
+
+.navbar ul li a,
+.mobile-navbar ul li a {
     color: var(--color-white);
     text-decoration: none;
     font-size: 1.5rem;
@@ -601,7 +611,7 @@ header img.logo {
 .shopping-cart .add,
 .shopping-cart .reduce {
     width: 22px;
-    border: 1px solid var(--deep-blue);
+    border: 1px solid var(--color-primary);
     background: white;
     cursor: pointer;
 }
@@ -617,7 +627,7 @@ header img.logo {
 
 .shopping-cart input[type="text"] {
     text-align: center;
-    border: 1px solid var(--deep-blue);
+    border: 1px solid var(--color-primary);
     border-left: none;
     border-right: none;
 }
@@ -651,7 +661,6 @@ header img.logo {
 .shopping-cart .controls label,
 .shopping-cart .controls a {
     font-weight: bold;
-    color: var(--deep-blue);
 }
 
 .shopping-cart .controls p,
@@ -663,7 +672,7 @@ header img.logo {
     position: absolute;
     right: -1px;
     padding: 17.5px 20px;
-    background: var(--deep-blue);
+    background: var(--color-primary);
     color: #fff;
     font-weight: bold;
     border-top-right-radius: 10px;
@@ -679,6 +688,14 @@ header img.logo {
 @media screen and (max-width: 1200px) {
     header img.logo {
         width: 30rem;
+    }
+
+    .container {
+        max-width: 90%;
+    }
+
+    .slider {
+        height: 400px;
     }
 
     .navbar {
@@ -741,10 +758,22 @@ header img.logo {
 }
 
 @media screen and (max-width: 768px) {
-    /* 
+    header .wrapper {
+        width: 95%;
+    }
+
     .slider {
-        height: 200px;
-    } */
+        height: 300px;
+    }
+
+    .container {
+        max-width: 90%;
+        margin: 2rem auto;
+    }
+
+    .footer .wrapper {
+        width: 95%;
+    }
 
     header img.logo {
         width: 25rem;
@@ -757,4 +786,47 @@ header img.logo {
     }
 }
 
-@media(max-width: 574px) {}
+@media(max-width: 574px) {
+    .container {
+        max-width: 95%;
+        margin: 1rem auto;
+    }
+
+    #menuIcon {
+        display: none;
+    }
+
+    header .mobile-wrapper {
+        display: flex;
+    }
+
+    /* Header */
+    header img.logo {
+        width: 22rem;
+    }
+
+    header .wrapper .profile-area .btn {
+        display: none;
+    }
+
+    /* Slider */
+    .slider {
+        height: 250px;
+        border-radius: 5px;
+    }
+
+    .slider .buttons button {
+        width: 25px;
+        height: 25px;
+    }
+
+    /* Bookshop Product */
+    .products .box-container {
+        grid-template-columns: repeat(auto-fit, 165px);
+    }
+
+    .products .box-container .box .image-container {
+        margin: -5px;
+    }
+
+}

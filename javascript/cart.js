@@ -5,7 +5,7 @@ window.addEventListener('load', function () {
     let delall = document.querySelector('.del-all');
     let totalPrice = document.querySelector('.total-price');
     let totalCount = document.querySelector('#totalCount');
-    let parentId = document.querySelector('#user-id').value; // 假设页面中有隐藏字段存储 parent_id
+    let parentId = document.querySelector('#user-id').value;
 
     function get_cart_items() {
         return new Promise((resolve, reject) => {
@@ -39,9 +39,23 @@ window.addEventListener('load', function () {
         let count = 0;
         let num = 0;
         let activeItemCount = 0;
+
         data.forEach(function (item, index) {
             const totalPriceItem = (item.product_price * item.product_quantity);
             const isDeleted = item.is_deleted === 1;
+
+            let childrenHtml = '';
+            if (item.children) {
+                const children = item.children.split(',').map(child => {
+                    const [id, name] = child.split(':');
+                    return `
+                        <div class="child-checkbox">
+                            <input type="checkbox" id="child-${id}" name="child[]" value="${id}">
+                            <label for="child-${id}">${name}</label>
+                        </div>`;
+                }).join('');
+                childrenHtml = children;
+            }
 
             strHtml += `<tr>
                             <td>${!isDeleted ? `<input type="checkbox" class="ckh" id="ckh-${index}" ${item.state ? "checked" : ""}/>` : ''}</td>
@@ -52,21 +66,17 @@ window.addEventListener('load', function () {
                                 </div>
                             </td>
                             <td class="product-name">${item.product_name}</td>
-                            <td class="product-price">
-                                MYR 
-                                ${item.product_price}
-                            </td>
                             <td class="product-quantity">
                                     <button class="add" id="add-${index}">+</button>
-                                    <input type="text" style="width:40px" value="${item.product_quantity}" data-cart-item-id="${item.cart_item_id}"/>;
+                                    <input type="text" style="width:40px" value="${item.product_quantity}" data-cart-item-id="${item.cart_item_id}"/>
                                     <button class="reduce" id="reduce-${index}">-</button>
                             </td>
                             <td class="product-total">RM ${totalPriceItem.toFixed(2)}</td>
-                            <td></td>
+                            <td class="child-selection">${childrenHtml}</td>
                             <td class="product-action">
                             <button class="delete" data-cart-item-id="${item.cart_item_id}"><i class="bi bi-trash3-fill"></i> Delete</button>
                             </td>
-                        </tr>`;
+                        </tr>`
             if (item.state) {
                 count++;
                 num += item.actual_price * item.product_quantity;

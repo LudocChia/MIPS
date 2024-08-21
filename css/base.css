@@ -32,11 +32,13 @@ h2 {
 }
 
 h3 {
+    font-weight: normal;
     font-size: 1.2rem;
 }
 
 h4 {
-    font-size: 1rem;
+    font-weight: normal;
+    font-size: 1.2rem;
 }
 
 h5 {
@@ -102,4 +104,30 @@ a {
     font-size: 2.3rem;
     top: 7px;
     left: 7px;
+}
+
+@media screen and (max-width: 574px) {
+    h1 {
+        font-size: 1.5rem;
+    }
+
+    h2 {
+        font-size: 1.2rem;
+    }
+
+    h3 {
+        font-size: 1rem;
+    }
+
+    h4 {
+        font-size: 0.86rem;
+    }
+
+    h5 {
+        font-size: 0.75rem;
+    }
+
+    h6 {
+        font-size: 0.60rem;
+    }
 }
