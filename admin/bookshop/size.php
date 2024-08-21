@@ -47,22 +47,6 @@ if (isset($_POST['submit'])) {
     }
 }
 
-if (isset($_POST['delete'])) {
-    $sizeId = $_POST['product_size_id'];
-
-    $sql = "DELETE FROM Sizes WHERE size_id = :size_id";
-    $stmt = $pdo->prepare($sql);
-    $stmt->bindParam(':size_id', $sizeId);
-
-    try {
-        $stmt->execute();
-        header('Location: size.php');
-        exit();
-    } catch (PDOException $e) {
-        echo "<script>alert('Database error: " . $e->getMessage() . "');</script>";
-    }
-}
-
 function getSizes($pdo)
 {
     $sql = "SELECT * FROM Sizes";
@@ -113,7 +97,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                                     <td>
                                         <form action="" method="POST" style="display:inline;" onsubmit="return showDeactivateConfirmDialog(event);">
                                             <input type="hidden" name="product_size_id" value="<?= htmlspecialchars($size['size_id']); ?>">
-                                            <input type="hidden" name="delete" value="true">
+                                            <input type="hidden" name="action" value="true">
                                             <button type="submit" class="delete-category-btn"><i class="bi bi-x-square"></i></button>
                                         </form>
                                         <button type="button" class="edit-size-btn" data-size-id="<?= htmlspecialchars($size['size_id']); ?>"><i class="bi bi-pencil-square"></i></button>
@@ -127,31 +111,48 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
         </main>
     </div>
     <dialog id="add-edit-data">
-        <h2>Add Apparel Size</h2>
+        <div class="title">
+            <div class="left">
+                <h1>Add Apparel Size</h1>
+            </div>
+            <div class="right">
+                <button class="cancel"><i class="bi bi-x-circle"></i></button>
+            </div>
+        </div>
         <form action="" method="post" enctype="multipart/form-data">
             <input type="hidden" name="product_size_id" value="">
-            <div class="input-field">
+            <div class="input-container">
                 <h2>Product Size Name<sup>*</sup></h2>
-                <input type="text" name="name" required>
+                <div class="input-field">
+                    <input type="text" name="name" required>
+                </div>
                 <p>Please enter the size name (e.g., 100, 110, 120).</p>
             </div>
-            <div class="input-field">
+            <div class="input-container">
                 <h2>Shoulder Width (cm)</h2>
-                <input type="number" step="0.01" name="shoulder_width">
+                <div class="input-field">
+                    <input type="number" step="0.01" name="shoulder_width">
+                </div>
             </div>
-            <div class="input-field">
+            <div class="input-container">
                 <h2>Bust (cm)</h2>
-                <input type="number" step="0.01" name="bust">
+                <div class="input-field">
+                    <input type="number" step="0.01" name="bust">
+                </div>
             </div>
-            <div class="input-field">
+            <div class="input-container">
                 <h2>Waist (cm)</h2>
-                <input type="number" step="0.01" name="waist">
+                <div class="input-field">
+                    <input type="number" step="0.01" name="waist">
+                </div>
             </div>
-            <div class="input-field">
+            <div class="input-container">
                 <h2>Length (cm)</h2>
-                <input type="number" step="0.01" name="length">
+                <div class="input-field">
+                    <input type="number" step="0.01" name="length">
+                </div>
             </div>
-            <div class="controls">
+            <div class="input-container controls">
                 <button type="button" class="cancel">Cancel</button>
                 <button type="reset">Clear</button>
                 <button type="submit" name="submit">Publish</button>
@@ -161,12 +162,12 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
 
     <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/confirm_dialog.php"; ?>
 
-    <script src="mips/javascript/admin.js"></script>
+    <script src="/mips/javascript/admin.js"></script>
     <script>
         document.querySelectorAll('.edit-size-btn').forEach(button => {
             button.addEventListener('click', function() {
                 const sizeId = this.dataset.sizeId;
-                fetch(`mips/admin/ajax.php?action=get_size&size_id=${sizeId}`)
+                fetch(`/mips/admin/ajax.php?action=get_size&size_id=${sizeId}`)
                     .then(response => response.json())
                     .then(size => {
                         if (size.error) {
@@ -178,7 +179,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                             document.querySelector('#add-edit-data [name="bust"]').value = size.bust;
                             document.querySelector('#add-edit-data [name="waist"]').value = size.waist;
                             document.querySelector('#add-edit-data [name="length"]').value = size.length;
-                            document.querySelector('#add-edit-data h2').textContent = "Edit Apparel Size";
+                            document.querySelector('#add-edit-data h1').textContent = "Edit Apparel Size";
                             document.getElementById('add-edit-data').showModal();
                         }
                     })
@@ -187,10 +188,6 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                         alert('Failed to load size data.');
                     });
             });
-        });
-
-        document.querySelector('.cancel').addEventListener('click', function() {
-            document.getElementById('add-edit-data').close();
         });
     </script>
 </body>

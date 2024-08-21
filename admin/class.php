@@ -54,16 +54,13 @@ function getClasses($pdo)
 }
 
 $all_classes = getClasses($pdo);
-?>
-
-<?php $pageTitle = "Class Management - MIPS";
+$pageTitle = "Class Management - MIPS";
 include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
 
 <body>
     <?php include "../components/admin_header.php"; ?>
     <div class="container">
         <?php include "../components/admin_sidebar.php"; ?>
-        <!-- END OF ASIDE -->
         <main class="class">
             <div class="wrapper">
                 <div class="title">
@@ -71,19 +68,6 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                         <h1>Class Management</h1>
                     </div>
                     <div class="right">
-                        <?php
-                        try {
-                            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-                            $countQuery = "SELECT COUNT(*) FROM Class WHERE is_deleted = 0";
-                            $stmt = $pdo->prepare($countQuery);
-                            $stmt->execute();
-                            $count = $stmt->fetchColumn();
-
-                            echo "<p>Total $count Classes</p>";
-                        } catch (PDOException $e) {
-                            echo "<script>alert('Database error: " . $e->getMessage() . "');</script>";
-                        }
-                        ?>
                         <button id="open-popup" class="btn btn-outline-primary"><i class="bi bi-plus-circle"></i>Add New Class</button>
                     </div>
                 </div>
@@ -106,8 +90,8 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                                     <td>
                                         <form action="" method="POST" style="display:inline;" onsubmit="return showDeactivateConfirmDialog(event);">
                                             <input type="hidden" name="class_id" value="<?= htmlspecialchars($class['class_id']); ?>">
-                                            <input type="hidden" name="deactivate" value="true">
-                                            <button type="submit" class="delete-class-btn"><i class="bi bi-x-square-fill"></i></button>
+                                            <input type="hidden" name="action" value="deactivate_class">
+                                            <button type="submit" class="delete-class-btn"><i class="bi bi-x-square"></i></button>
                                         </form>
                                         <button type="button" class="edit-class-btn" data-class-id="<?= htmlspecialchars($class['class_id']); ?>"><i class="bi bi-pencil-square"></i></button>
                                     </td>
@@ -129,16 +113,17 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
             </div>
         </div>
         <form action="" method="post">
+            <input type="hidden" name="class_id" value="">
             <div class="input-container">
+                <h2>Class Name<sup>*</sup></h2>
                 <div class="input-field">
-                    <h2>Class Name<sup>*</sup></h2>
                     <input type="text" name="class_name" value="<?php echo isset($_POST['class_name']) ? htmlspecialchars($_POST['class_name']) : ''; ?>" required>
                 </div>
                 <p>Please enter the name of the class.</p>
             </div>
             <div class="input-container">
+                <h2>Grade<sup>*</sup></h2>
                 <div class="input-field">
-                    <h2>Grade<sup>*</sup></h2>
                     <select name="grade_id" required>
                         <option value="">Select Grade</option>
                         <?php foreach ($all_grades as $grade) : ?>
@@ -155,34 +140,33 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
             </div>
         </form>
     </dialog>
-    <dialog id="delete-confirm-dialog">
-        <?php include "../components/deactivate_confirm_dialog.php"; ?>
-        <script src="/mips/javascript/admin.js"></script>
-        <script>
-            document.querySelectorAll('.edit-class-btn').forEach(button => {
-                button.addEventListener('click', function() {
-                    const classId = this.dataset.classId;
+    <?php include "../components/confirm_dialog.php"; ?>
+    <script src="/mips/javascript/admin.js"></script>
+    <script>
+        document.querySelectorAll('.edit-class-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const classId = this.dataset.classId;
 
-                    fetch(`ajax.php?action=get_class&class_id=${classId}`)
-                        .then(response => response.json())
-                        .then(classData => {
-                            if (classData.error) {
-                                alert(classData.error);
-                            } else {
-                                document.querySelector('#add-edit-data [name="class_name"]').value = classData.class_name;
-                                document.querySelector('#add-edit-data [name="grade_id"]').value = classData.grade_id;
+                fetch(`ajax.php?action=get_class&class_id=${classId}`)
+                    .then(response => response.json())
+                    .then(classData => {
+                        if (classData.error) {
+                            alert(classData.error);
+                        } else {
+                            document.querySelector('#add-edit-data [name="class_name"]').value = classData.class_name;
+                            document.querySelector('#add-edit-data [name="grade_id"]').value = classData.grade_id;
 
-                                document.querySelector('#add-edit-data h1').textContent = "Edit Class";
-                                document.getElementById('add-edit-data').showModal();
-                            }
-                        })
-                        .catch(error => {
-                            console.error('Error fetching class data:', error);
-                            alert('Failed to load class data.');
-                        });
-                });
+                            document.querySelector('#add-edit-data h1').textContent = "Edit Class";
+                            document.getElementById('add-edit-data').showModal();
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching class data:', error);
+                        alert('Failed to load class data.');
+                    });
             });
-        </script>
+        });
+    </script>
 </body>
 
 </html>

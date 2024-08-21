@@ -176,20 +176,21 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
         <form action="" method="post" enctype="multipart/form-data">
             <input type="hidden" name="subcategory_id" value="">
             <div class="input-container">
+                <h2>Subcategory Name<sup>*</sup></h2>
                 <div class="input-field">
-                    <h2>Subcategory Name<sup>*</sup></h2>
                     <input type="text" name="name" value="<?php echo isset($_POST['name']) ? htmlspecialchars($_POST['name']) : ''; ?>">
                 </div>
                 <p>Please enter the subcategory name.</p>
             </div>
             <div class="input-container">
+                <h2>Subcategory Icon<sup>*</sup></h2>
                 <div class="input-field">
-                    <h2>Subcategory Icon<sup>*</sup></h2>
                     <input type="file" name="image" id="image" accept=".jpg, .jpeg, .png">
                 </div>
                 <p>Please upload an image for the subcategory.</p>
             </div>
             <div class="input-container">
+                <h2>Parent Category<sup>*</sup></h2>
                 <div class="input-field">
                     <select name="parent_category" id="parent_category" required>
                         <option value="">Select a main category</option>
@@ -199,9 +200,8 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                             </option>
                         <?php endforeach; ?>
                     </select>
+                    <p>Select the main category for this subcategory.</p>
                 </div>
-                <h2>Parent Category<sup>*</sup></h2>
-                <p>Select the main category for this subcategory.</p>
             </div>
             <div class="input-container controls">
                 <button type="button" class="cancel">Cancel</button>
@@ -235,10 +235,6 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                         alert('Failed to load subcategory data.');
                     });
             });
-        });
-
-        document.querySelector('.cancel').addEventListener('click', function() {
-            document.getElementById('add-edit-data').close();
         });
     </script>
 </body>

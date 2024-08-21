@@ -47,7 +47,7 @@ function getAllSizes($pdo)
 
 $all_sizes = getAllSizes($pdo);
 
-function handleFileUpload($files)
+function handleFileUpload($files, $existingImagePaths = [])
 {
     $uploadedImages = [];
     $allowedfileExtensions = ['jpg', 'jpeg', 'png'];
@@ -62,9 +62,12 @@ function handleFileUpload($files)
 
         if (in_array($fileExtension, $allowedfileExtensions)) {
             $newFileName = uniqid() . '.' . $fileExtension;
-            $dest_path = '/mips/uploads/product/' . $newFileName;
+            $dest_path = $_SERVER['DOCUMENT_ROOT'] . '/mips/uploads/product/' . $newFileName;
 
             if (move_uploaded_file($tmpName, $dest_path)) {
+                if (isset($existingImagePaths[$index]) && file_exists($_SERVER['DOCUMENT_ROOT'] . '/mips/uploads/product/' . $existingImagePaths[$index])) {
+                    unlink($_SERVER['DOCUMENT_ROOT'] . '/mips/uploads/product/' . $existingImagePaths[$index]);
+                }
                 $uploadedImages[] = $newFileName;
             } else {
                 echo "<script>alert('There was an error moving the uploaded file: $fileName');</script>";
@@ -89,6 +92,14 @@ if (isset($_POST['submit'])) {
 
     if (!empty($name) && !empty($subcategoryId) && !empty($price) && !empty($stockQuantity) && !empty($gender)) {
         if ($productId) {
+            $sql = "SELECT image_url FROM Product_Image WHERE product_id = :product_id ORDER BY sort_order ASC";
+            $stmt = $pdo->prepare($sql);
+            $stmt->bindParam(':product_id', $productId);
+            $stmt->execute();
+            $existingImages = $stmt->fetchAll(PDO::FETCH_COLUMN);
+
+            $uploadedImages = handleFileUpload($_FILES['images'], $existingImages);
+
             $sql = "UPDATE Product SET product_name = :name, category_id = :subcategory, product_description = :description, 
                     product_price = :price, stock_quantity = :stock_quantity, 
                     color = :color, gender = :gender WHERE product_id = :product_id";
@@ -104,24 +115,19 @@ if (isset($_POST['submit'])) {
             $stmt->bindParam(':product_id', $productId);
             $stmt->execute();
 
-            if (!empty($_FILES['images']['name'][0])) {
-                $uploadedImages = handleFileUpload($_FILES['images']);
+            $stmtDeleteImages = $pdo->prepare("DELETE FROM Product_Image WHERE product_id = :product_id");
+            $stmtDeleteImages->bindParam(':product_id', $productId);
+            $stmtDeleteImages->execute();
 
-                $deleteImagesSql = "DELETE FROM Product_Image WHERE product_id = :product_id";
-                $stmtDeleteImages = $pdo->prepare($deleteImagesSql);
-                $stmtDeleteImages->bindParam(':product_id', $productId);
-                $stmtDeleteImages->execute();
-
-                $sortOrder = 1;
-                foreach ($uploadedImages as $image) {
-                    $sqlImage = "INSERT INTO Product_Image (product_id, image_url, sort_order) VALUES (:product_id, :image_url, :sort_order)";
-                    $stmtImage = $pdo->prepare($sqlImage);
-                    $stmtImage->bindParam(':product_id', $productId);
-                    $stmtImage->bindParam(':image_url', $image);
-                    $stmtImage->bindParam(':sort_order', $sortOrder);
-                    $stmtImage->execute();
-                    $sortOrder++;
-                }
+            $sortOrder = 1;
+            foreach ($uploadedImages as $image) {
+                $sqlImage = "INSERT INTO Product_Image (product_id, image_url, sort_order) VALUES (:product_id, :image_url, :sort_order)";
+                $stmtImage = $pdo->prepare($sqlImage);
+                $stmtImage->bindParam(':product_id', $productId);
+                $stmtImage->bindParam(':image_url', $image);
+                $stmtImage->bindParam(':sort_order', $sortOrder);
+                $stmtImage->execute();
+                $sortOrder++;
             }
 
             $stmtDeleteSizes = $pdo->prepare("DELETE FROM Product_Size WHERE product_id = :product_id");
@@ -140,6 +146,8 @@ if (isset($_POST['submit'])) {
             header('Location: product.php');
             exit();
         } else {
+            $uploadedImages = handleFileUpload($_FILES['images']);
+
             $sql = "INSERT INTO Product (product_name, category_id, product_description, product_price, stock_quantity, color, gender) 
                     VALUES (:name, :subcategory, :description, :price, :stock_quantity, :color, :gender)";
             $stmt = $pdo->prepare($sql);
@@ -154,19 +162,15 @@ if (isset($_POST['submit'])) {
 
             $productId = $pdo->lastInsertId();
 
-            if (!empty($_FILES['images']['name'][0])) {
-                $uploadedImages = handleFileUpload($_FILES['images']);
-
-                $sortOrder = 1;
-                foreach ($uploadedImages as $image) {
-                    $sqlImage = "INSERT INTO Product_Image (product_id, image_url, sort_order) VALUES (:product_id, :image_url, :sort_order)";
-                    $stmtImage = $pdo->prepare($sqlImage);
-                    $stmtImage->bindParam(':product_id', $productId);
-                    $stmtImage->bindParam(':image_url', $image);
-                    $stmtImage->bindParam(':sort_order', $sortOrder);
-                    $stmtImage->execute();
-                    $sortOrder++;
-                }
+            $sortOrder = 1;
+            foreach ($uploadedImages as $image) {
+                $sqlImage = "INSERT INTO Product_Image (product_id, image_url, sort_order) VALUES (:product_id, :image_url, :sort_order)";
+                $stmtImage = $pdo->prepare($sqlImage);
+                $stmtImage->bindParam(':product_id', $productId);
+                $stmtImage->bindParam(':image_url', $image);
+                $stmtImage->bindParam(':sort_order', $sortOrder);
+                $stmtImage->execute();
+                $sortOrder++;
             }
 
             if (!empty($_POST['sizes'])) {
@@ -186,21 +190,6 @@ if (isset($_POST['submit'])) {
     }
 }
 
-if (isset($_POST['delete'])) {
-    $productId = $_POST['product_id'];
-
-    $sql = "UPDATE Product SET is_deleted = 1 WHERE product_id = :product_id";
-    $stmt = $pdo->prepare($sql);
-    $stmt->bindParam(':product_id', $productId);
-
-    try {
-        $stmt->execute();
-        header('Location: product.php');
-        exit();
-    } catch (PDOException $e) {
-        echo "<script>alert('Database error: " . $e->getMessage() . "');</script>";
-    }
-}
 $pageTitle = "Bookshop Products - MIPS";
 include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
 
@@ -229,7 +218,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                                 <div class="actions">
                                     <form action="" method="POST" style="display:inline;" onsubmit="return showDeactivateConfirmDialog(event);">
                                         <input type="hidden" name="product_id" value="<?= htmlspecialchars($product['product_id']); ?>">
-                                        <input type="hidden" name="delete" value="true">
+                                        <input type="hidden" name="action" value="deactivate_product">
                                         <button type="submit" class="delete-product-btn"><i class="bi bi-x-square"></i></button>
                                     </form>
                                     <button type="button" class="edit-product-btn" data-product-id="<?= htmlspecialchars($product['product_id']); ?>"><i class="bi bi-pencil-square"></i></button>

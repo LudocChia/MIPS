@@ -7,6 +7,16 @@ include 'admin_class.php';
 $crud = new Action();
 
 switch ($action) {
+        // Admin Functions
+    case 'get_admin':
+        if (isset($_GET['admin_id'])) {
+            echo $crud->get_admin($_GET['admin_id']);
+        } else {
+            echo json_encode(['error' => 'Admin ID not provided']);
+        }
+        break;
+
+        // Parent Functions
     case 'deactivate_parent':
         if (isset($_POST['parent_id'])) {
             echo $crud->deactivate_parent($_POST['parent_id']);
@@ -23,6 +33,24 @@ switch ($action) {
         }
         break;
 
+    case 'get_parent':
+        if (isset($_GET['parent_id'])) {
+            echo $crud->get_parent($_GET['parent_id']);
+        } else {
+            echo json_encode(['error' => 'Parent ID not provided']);
+        }
+        break;
+
+        // Student Functions
+    case 'get_student':
+        if (isset($_GET['student_id'])) {
+            echo $crud->get_student($_GET['student_id']);
+        } else {
+            echo json_encode(['error' => 'Student ID not provided']);
+        }
+        break;
+
+        // Order Functions
     case 'deactivate_order':
         if (isset($_POST['order_id'])) {
             echo $crud->deactivate_order($_POST['order_id']);
@@ -39,6 +67,49 @@ switch ($action) {
         }
         break;
 
+    case 'get_order':
+        if (isset($_POST['order_id'])) {
+            echo $crud->get_order($_POST['order_id']);
+        } else {
+            echo json_encode(['error' => 'Order ID not provided']);
+        }
+        break;
+
+    case 'update_order_status':
+        if (isset($_POST['order_id']) && isset($_POST['order_status'])) {
+            echo $crud->update_order_status($_POST['order_id'], $_POST['order_status']);
+        } else {
+            echo json_encode(['error' => 'Order ID or order status not provided']);
+        }
+        break;
+
+
+        // Product_Size Functions
+    case 'deactivate_product_size':
+        if (isset($_POST['product_size_id'])) {
+            echo $crud->deactivate_product_size($_POST['product_size_id']);
+        } else {
+            echo json_encode(['error' => 'Product Size ID not provided']);
+        }
+        break;
+
+    case 'recover_product_size':
+        if (isset($_POST['product_size_id'])) {
+            echo $crud->recover_product_size($_POST['product_size_id']);
+        } else {
+            echo json_encode(['error' => 'Product Size ID not provided']);
+        }
+        break;
+
+    case 'get_size':
+        if (isset($_GET['size_id'])) {
+            echo $crud->get_size($_GET['size_id']);
+        } else {
+            echo json_encode(['error' => 'Size ID not provided']);
+        }
+        break;
+
+        // Product Category Functions
     case 'deactivate_product_category':
         if (isset($_POST['category_id'])) {
             echo $crud->deactivate_product_category($_POST['category_id']);
@@ -63,47 +134,28 @@ switch ($action) {
         }
         break;
 
-    case 'get_size':
-        if (isset($_GET['size_id'])) {
-            echo $crud->get_size($_GET['size_id']);
+    case 'get_subcategory':
+        if (isset($_GET['subcategory_id'])) {
+            echo $crud->get_subcategory($_GET['subcategory_id']);
         } else {
-            echo json_encode(['error' => 'Size ID not provided']);
+            echo json_encode(['error' => 'Subcategory ID not provided']);
         }
         break;
 
-    case 'get_pending_count':
-        echo $crud->get_pending_count();
-        break;
-
-    case 'get_order':
-        if (isset($_POST['order_id'])) {
-            echo $crud->get_order($_POST['order_id']);
+        // Product Functions
+    case 'deactivate_product':
+        if (isset($_POST['product_id'])) {
+            echo $crud->deactivate_product($_POST['product_id']);
         } else {
-            echo json_encode(['error' => 'Order ID not provided']);
+            echo json_encode(['error' => 'Product ID not provided']);
         }
         break;
 
-    case 'get_parent':
-        if (isset($_GET['parent_id'])) {
-            echo $crud->get_parent($_GET['parent_id']);
+    case 'recover_product':
+        if (isset($_POST['product_id'])) {
+            echo $crud->recover_product($_POST['product_id']);
         } else {
-            echo json_encode(['error' => 'Parent ID not provided']);
-        }
-        break;
-
-    case 'get_admin':
-        if (isset($_GET['admin_id'])) {
-            echo $crud->get_admin($_GET['admin_id']);
-        } else {
-            echo json_encode(['error' => 'Admin ID not provided']);
-        }
-        break;
-
-    case 'get_student':
-        if (isset($_GET['student_id'])) {
-            echo $crud->get_student($_GET['student_id']);
-        } else {
-            echo json_encode(['error' => 'Student ID not provided']);
+            echo json_encode(['error' => 'Product ID not provided']);
         }
         break;
 
@@ -112,6 +164,44 @@ switch ($action) {
             echo $crud->get_product($_GET['product_id']);
         } else {
             echo json_encode(['error' => 'Product ID not provided']);
+        }
+        break;
+
+        // Count Functions
+    case 'get_pending_count':
+        echo $crud->get_pending_count();
+        break;
+
+        // Grade and Class Functions
+    case 'deactivate_class':
+        if (isset($_POST['class_id'])) {
+            echo $crud->deactivate_class($_POST['class_id']);
+        } else {
+            echo json_encode(['error' => 'Class ID not provided']);
+        }
+        break;
+
+    case 'recover_class':
+        if (isset($_POST['class_id'])) {
+            echo $crud->recover_class($_POST['class_id']);
+        } else {
+            echo json_encode(['error' => 'Class ID not provided']);
+        }
+        break;
+
+    case 'deactivate_grade':
+        if (isset($_POST['grade_id'])) {
+            echo $crud->deactivate_grade($_POST['grade_id']);
+        } else {
+            echo json_encode(['error' => 'Grade ID not provided']);
+        }
+        break;
+
+    case 'recover_grade':
+        if (isset($_POST['grade_id'])) {
+            echo $crud->recover_grade($_POST['grade_id']);
+        } else {
+            echo json_encode(['error' => 'Grade ID not provided']);
         }
         break;
 
@@ -128,22 +218,6 @@ switch ($action) {
             echo $crud->get_grade($_GET['grade_id']);
         } else {
             echo json_encode(['error' => 'Grade ID not provided']);
-        }
-        break;
-
-    case 'get_subcategory':
-        if (isset($_GET['subcategory_id'])) {
-            echo $crud->get_subcategory($_GET['subcategory_id']);
-        } else {
-            echo json_encode(['error' => 'Subcategory ID not provided']);
-        }
-        break;
-
-    case 'update_order_status':
-        if (isset($_POST['order_id']) && isset($_POST['order_status'])) {
-            echo $crud->update_order_status($_POST['order_id'], $_POST['order_status']);
-        } else {
-            echo json_encode(['error' => 'Order ID or order status not provided']);
         }
         break;
 

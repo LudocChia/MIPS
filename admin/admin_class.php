@@ -70,6 +70,23 @@ class Action
         return $this->execute_statement($stmt);
     }
 
+    // Product Size Functions
+    public function deactivate_product_size($product_size_id)
+    {
+        $sql = "UPDATE Product_Size SET is_deleted = 1 WHERE product_size_id = :product_size_id";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':product_size_id', $product_size_id);
+        return $this->execute_statement($stmt);
+    }
+
+    public function recover_product_size($product_size_id)
+    {
+        $sql = "UPDATE Product_Size SET is_deleted = 0 WHERE product_size_id = :product_size_id";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':product_size_id', $product_size_id);
+        return $this->execute_statement($stmt);
+    }
+
     // Order Functions
     public function deactivate_order($order_id)
     {
@@ -147,7 +164,6 @@ class Action
         return $size ? json_encode($size) : json_encode(['error' => 'Size not found']);
     }
 
-    // Retrieve order details
     public function get_order_details($order_id)
     {
         $sql = "SELECT o.order_id, o.order_datetime, o.order_price, p.parent_name, pm.payment_status, pm.payment_image
@@ -308,7 +324,23 @@ class Action
         return $admin ? json_encode($admin) : json_encode(['error' => 'Admin not found']);
     }
 
-    // Retrieve product data
+    // Product Functions
+    public function deactivate_product($product_id)
+    {
+        $sql = "UPDATE Product SET is_deleted = 1 WHERE product_id = :product_id";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':product_id', $product_id);
+        return $this->execute_statement($stmt);
+    }
+
+    public function recover_product($product_id)
+    {
+        $sql = "UPDATE Product SET is_deleted = 0 WHERE product_id = :product_id";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':product_id', $product_id);
+        return $this->execute_statement($stmt);
+    }
+
     public function get_product($product_id)
     {
         $sql = "
@@ -340,5 +372,38 @@ class Action
         } else {
             return json_encode(['error' => 'Product not found']);
         }
+    }
+
+    // Grade and Class Functions
+    public function deactivate_class($class_id)
+    {
+        $sql = "UPDATE Class SET is_deleted = 1 WHERE class_id = :class_id";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':class_id', $class_id);
+        return $this->execute_statement($stmt);
+    }
+
+    public function recover_class($class_id)
+    {
+        $sql = "UPDATE Class SET is_deleted = 0 WHERE class_id = :class_id";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':class_id', $class_id);
+        return $this->execute_statement($stmt);
+    }
+
+    public function deactivate_grade($grade_id)
+    {
+        $sql = "UPDATE Grade SET is_deleted = 1 WHERE grade_id = :grade_id";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':grade_id', $grade_id);
+        return $this->execute_statement($stmt);
+    }
+
+    public function recover_grade($grade_id)
+    {
+        $sql = "UPDATE Grade SET is_deleted = 0 WHERE grade_id = :grade_id";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':grade_id', $grade_id);
+        return $this->execute_statement($stmt);
     }
 }

@@ -165,15 +165,15 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
         <form action="" method="post" enctype="multipart/form-data">
             <input type="hidden" name="category_id" value="">
             <div class="input-container">
+                <h2>Category Name<sup>*</sup></h2>
                 <div class="input-field">
-                    <h2>Category Name<sup>*</sup></h2>
                     <input type="text" name="name" value="<?php echo isset($_POST['name']) ? htmlspecialchars($_POST['name']) : ''; ?>">
                 </div>
                 <p>Please enter the category name.</p>
             </div>
             <div class="input-container">
+                <h2>Category Icon<sup>*</sup></h2>
                 <div class="input-field">
-                    <h2>Category Icon<sup>*</sup></h2>
                     <input type="file" name="image" id="image" accept=".jpg, .jpeg, .png">
                 </div>
                 <p>Please upload an image for the category.</p>

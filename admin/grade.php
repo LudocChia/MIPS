@@ -5,29 +5,11 @@ session_start();
 include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/db_connect.php";
 
 if (!isset($_SESSION['admin_id'])) {
-    header('Location: login.php');
+    header('Location: /mips/admin/login.php');
     exit();
 }
 
 $currentPage = basename($_SERVER['PHP_SELF']);
-
-$msg = [];
-if (isset($_POST["submit"])) {
-    $gradeName = $_POST["grade_name"];
-    $gradeLevel = $_POST["grade_level"];
-
-    $sql = "INSERT INTO Grade (grade_name, grade_level, is_deleted) VALUES (:gradeName, :gradeLevel, 0)";
-    $stmt = $pdo->prepare($sql);
-    $stmt->bindParam(':gradeName', $gradeName);
-    $stmt->bindParam(':gradeLevel', $gradeLevel);
-    try {
-        $stmt->execute();
-        header('Location: grade.php');
-        exit();
-    } catch (PDOException $e) {
-        echo "<script>alert('Database error: " . $e->getMessage() . "');</script>";
-    }
-}
 
 function getGrades($pdo)
 {
@@ -49,9 +31,37 @@ function getGrades($pdo)
 }
 
 $all_grades = getGrades($pdo);
-?>
 
-<?php $pageTitle = "Grade Management - MIPS";
+$msg = [];
+if (isset($_POST["submit"])) {
+    $gradeName = $_POST["grade_name"];
+    $gradeLevel = $_POST["grade_level"];
+    $gradeId = isset($_POST["grade_id"]) ? $_POST["grade_id"] : null;
+
+    if ($gradeId) {
+        $sql = "UPDATE Grade SET grade_name = :gradeName, grade_level = :gradeLevel WHERE grade_id = :gradeId";
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindParam(':gradeName', $gradeName);
+        $stmt->bindParam(':gradeLevel', $gradeLevel);
+        $stmt->bindParam(':gradeId', $gradeId);
+    } else {
+        $sql = "INSERT INTO Grade (grade_name, grade_level, is_deleted) VALUES (:gradeName, :gradeLevel, 0)";
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindParam(':gradeName', $gradeName);
+        $stmt->bindParam(':gradeLevel', $gradeLevel);
+    }
+
+    try {
+        $stmt->execute();
+        header('Location: grade.php');
+        exit();
+    } catch (PDOException $e) {
+        echo "<script>alert('Database error: " . $e->getMessage() . "');</script>";
+    }
+}
+
+
+$pageTitle = "Grade Management - MIPS";
 include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
 
 <body>
@@ -90,7 +100,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                                     <td>
                                         <form action="" method="POST" style="display:inline;" onsubmit="return showDeactivateConfirmDialog(event);">
                                             <input type="hidden" name="grade_id" value="<?= htmlspecialchars($grade['grade_id']); ?>">
-                                            <input type="hidden" name="deactivate" value="true">
+                                            <input type="hidden" name="action" value="deactivate_grade">
                                             <button type="submit" class="delete-grade-btn"><i class="bi bi-x-square"></i></button>
                                         </form>
                                         <button type="button" class="edit-grade-btn" data-grade-id="<?= htmlspecialchars($grade['grade_id']); ?>"><i class="bi bi-pencil-square"></i></button>
@@ -113,26 +123,25 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
             </div>
         </div>
         <form action="" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="grade_id" value="">
             <div class="input-container">
+                <h2>Grade Name<sup>*</sup></h2>
                 <div class="input-field">
-                    <h2>Grade Name<sup>*</sup></h2>
                     <input type="text" name="grade_name" value="<?php echo isset($_POST['grade_name']) ? htmlspecialchars($_POST['grade_name']) : ''; ?>" required>
                 </div>
                 <p>Please enter the name of the grade.</p>
             </div>
             <div class="input-container">
+                <h2>Grade Level<sup>*</sup></h2>
                 <div class="input-field">
-                    <h2>Grade Level<sup>*</sup></h2>
                     <input type="number" name="grade_level" value="<?php echo isset($_POST['grade_level']) ? htmlspecialchars($_POST['grade_level']) : ''; ?>" required>
                 </div>
                 <p>Please enter the level of the grade.</p>
             </div>
-            <div class="input-container">
-                <div class="controls">
-                    <button type="button" class="cancel">Cancel</button>
-                    <button type="reset">Clear</button>
-                    <button type="submit" name="submit">Publish</button>
-                </div>
+            <div class="input-container controls">
+                <button type="button" class="cancel">Cancel</button>
+                <button type="reset">Clear</button>
+                <button type="submit" name="submit">Publish</button>
             </div>
         </form>
     </dialog>
@@ -142,16 +151,15 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
         document.querySelectorAll('.edit-grade-btn').forEach(button => {
             button.addEventListener('click', function() {
                 const gradeId = this.dataset.gradeId;
-
                 fetch(`/mips/admin/ajax.php?action=get_grade&grade_id=${gradeId}`)
                     .then(response => response.json())
                     .then(grade => {
                         if (grade.error) {
                             alert(grade.error);
                         } else {
+                            document.querySelector('#add-edit-data [name="grade_id"]').value = grade.grade_id;
                             document.querySelector('#add-edit-data [name="grade_name"]').value = grade.grade_name;
                             document.querySelector('#add-edit-data [name="grade_level"]').value = grade.grade_level;
-
                             document.querySelector('#add-edit-data h1').textContent = "Edit Grade";
                             document.getElementById('add-edit-data').showModal();
                         }

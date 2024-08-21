@@ -26,9 +26,7 @@ function getAllDeactivatedOrders($pdo)
 
 $all_orders = getAllDeactivatedOrders($pdo);
 
-?>
-
-<?php $pageTitle = "Deactivated Orders - MIPS";
+$pageTitle = "Deactivated Orders - MIPS";
 include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
 
 <body>
