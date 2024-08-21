@@ -7,6 +7,13 @@ include 'admin_class.php';
 $crud = new Action();
 
 switch ($action) {
+    case 'recover_parent':
+        if (isset($_POST['parent_id'])) {
+            echo $crud->recover_parent($_POST['parent_id']);
+        } else {
+            echo json_encode(['error' => 'Parent ID not provided']);
+        }
+        break;
     case 'get_category':
         if (isset($_GET['category_id'])) {
             echo $crud->get_category($_GET['category_id']);

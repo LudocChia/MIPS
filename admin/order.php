@@ -2,7 +2,7 @@
 
 session_start();
 
-include "../components/db_connect.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/db_connect.php";
 
 if (!isset($_SESSION['admin_id'])) {
     header('Location: login.php');
@@ -90,27 +90,13 @@ if (isset($_POST["submit"])) {
 
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bookshop Order - MIPS</title>
-    <link rel="icon" type="image/x-icon" href="../images/Mahans_IPS_icon.png">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <link rel="stylesheet" href="../css/base.css">
-    <link rel="stylesheet" href="../css/common.css">
-    <link rel="stylesheet" href="../css/admin.css">
-</head>
+<?php $pageTitle = "Bookshop Order - MIPS";
+include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/admin_head.php"; ?>
 
 <body>
-    <?php include "../components/admin_header.php"; ?>
+    <?php include  $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/admin_header.php"; ?>
     <div class="container">
-        <?php include "../components/admin_sidebar.php"; ?>
+        <?php include  $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/admin_sidebar.php"; ?>
         <main class="admin">
             <div class="wrapper">
                 <div class="title">
@@ -164,13 +150,13 @@ if (isset($_POST["submit"])) {
                                         </form>
                                     </td>
                                     <td>
+                                        <button type="button" class="view-order-detail-btn" data-order-id="<?= htmlspecialchars($order['order_id']); ?>"><i class="bi bi-info-circle-fill"></i></button>
+                                        <button type="button" class="edit-order-btn" data-order-id="<?= htmlspecialchars($order['order_id']); ?>"><i class="bi bi-pencil-square"></i></button>
                                         <form action="" method="POST" style="display:inline;" onsubmit="return showDeactivateConfirmDialog(event);">
                                             <input type="hidden" name="order_id" value="<?= htmlspecialchars($order['order_id']); ?>">
                                             <input type="hidden" name="delete" value="true">
                                             <button type="submit" class="delete-order-btn"><i class="bi bi-x-square-fill"></i></button>
                                         </form>
-                                        <button type="button" class="view-order-detail-btn" data-order-id="<?= htmlspecialchars($order['order_id']); ?>"><i class="bi bi-info-circle-fill"></i></button>
-                                        <button type="button" class="edit-order-btn" data-order-id="<?= htmlspecialchars($order['order_id']); ?>"><i class="bi bi-pencil-square"></i></button>
                                     </td>
                                 </tr>
                             <?php } ?>
@@ -311,8 +297,8 @@ if (isset($_POST["submit"])) {
             <button type="button" class="cancel">Close</button>
         </div>
     </dialog>
-    <?php include "../components/deactivate_confirm_dialog.php"; ?>
-    <script src="../javascript/admin.js"></script>
+    <?php include  $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/confirm_dialog.php"; ?>
+    <script src="/mahans/javascript/admin.js"></script>
     <script>
         document.getElementById('add-product-btn').addEventListener('click', function() {
             const productInfo = document.querySelector('.product-info').cloneNode(true);
@@ -327,7 +313,7 @@ if (isset($_POST["submit"])) {
                     const orderId = this.closest('form').querySelector('input[name="order_id"]').value;
                     const orderStatus = this.value;
 
-                    fetch('ajax.php?action=update_order_status', {
+                    fetch('/mahans/admin/ajax.php?action=update_order_status', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/x-www-form-urlencoded'
@@ -345,7 +331,7 @@ if (isset($_POST["submit"])) {
                                     .then(count => {
                                         const pendingOrderCountElement = document.getElementById('pending-order-count');
                                         if (parseInt(count) > 0) {
-                                            pendingOrderCountElement.textContent = `(${count})`;
+                                            pendingOrderCountElement.textContent = `${count}`;
                                             pendingOrderCountElement.style.display = 'inline';
                                         } else {
                                             pendingOrderCountElement.style.display = 'none';
@@ -370,7 +356,7 @@ if (isset($_POST["submit"])) {
                 button.addEventListener('click', function() {
                     const orderId = this.dataset.orderId;
 
-                    fetch('ajax.php?action=get_order', {
+                    fetch('/mahans/admin/ajax.php?action=get_order', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/x-www-form-urlencoded'
@@ -387,7 +373,7 @@ if (isset($_POST["submit"])) {
                                 document.getElementById('order-date').textContent = data.order_datetime;
                                 document.getElementById('order-amount').textContent = `MYR ${data.order_price}`;
                                 document.getElementById('order-status').textContent = data.payment_status;
-                                document.getElementById('payment-image').src = '../uploads/receipts/' + data.payment_image || '../images/default_image_path.png';
+                                document.getElementById('payment-image').src = '/mahans/uploads/receipts/' + data.payment_image || '/mahans/images/default_image_path.png';
 
                                 const itemsList = document.getElementById('order-items-list');
                                 itemsList.innerHTML = '';

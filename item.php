@@ -1,9 +1,10 @@
 <?php
 
 session_start();
+$_SESSION['user_id'] = $_SESSION['user_id'] ?? null;
 
-include "./components/db_connect.php";
-include "./components/customer_login.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/db_connect.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/customer_login.php";
 
 $product_id = $_GET['pid'] ?? null;
 if (!$product_id) {
@@ -160,8 +161,6 @@ if (isset($_POST['submit'])) {
             }
 
             $pdo->commit();
-
-            echo "<script>alert('Purchase successful!');</script>";
         } catch (PDOException $e) {
             $pdo->rollBack();
             echo "<script>alert('Purchase failed: " . $e->getMessage() . "');</script>";
@@ -171,27 +170,11 @@ if (isset($_POST['submit'])) {
     }
 }
 
+include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/customer_head.php";
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo htmlspecialchars($product['product_name']); ?> - MIPS</title>
-    <link rel="icon" type="image/x-icon" href="./images/Mahans_IPS_icon.png">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <link rel="stylesheet" href="./css/base.css">
-    <link rel="stylesheet" href="./css/common.css">
-    <link rel="stylesheet" href="./css/customer.css">
-</head>
-
 <body>
-    <?php include 'components/customer_header.php'; ?>
+    <?php include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/customer_header.php"; ?>
     <div class="breadcrumbs">
         <ul>
             <li>
@@ -353,13 +336,15 @@ if (isset($_POST['submit'])) {
                 </div>
             </div>
             <div class="input-container">
-                <h2>Select Child<sup>*</sup></h2>
-                <?php foreach ($children as $child) : ?>
-                    <label>
-                        <input type="checkbox" name="child[]" value="<?= htmlspecialchars($child['student_id']) ?>">
-                        <?= htmlspecialchars($child['student_name']) ?>
-                    </label><br>
-                <?php endforeach; ?>
+                <div class="input-field">
+                    <h2>Select Child<sup>*</sup></h2>
+                    <?php foreach ($children as $child) : ?>
+                        <label>
+                            <input type="checkbox" name="child[]" value="<?= htmlspecialchars($child['student_id']) ?>">
+                            <?= htmlspecialchars($child['student_name']) ?>
+                        </label><br>
+                    <?php endforeach; ?>
+                </div>
                 <p>Please select which child you are buying for.</p>
             </div>
             <div class="input-container">
@@ -389,20 +374,22 @@ if (isset($_POST['submit'])) {
                 </table>
             </div>
             <div class="input-container">
-                <h2>Upload Transfer Receipt<sup>*</sup></h2>
-                <input type="file" name="payment_image" accept=".jpg, .jpeg, .png" required>
+                <div class="input-field">
+                    <h2>Upload Transfer Receipt<sup>*</sup></h2>
+                    <input type="file" name="payment_image" accept=".jpg, .jpeg, .png" required>
+                </div>
                 <p>Please upload the transfer receipt.</p>
             </div>
-            <div class="controls">
+            <div class="input-container controls">
                 <button value="cancel" class="cancel">Cancel</button>
                 <button type="reset">Clear</button>
                 <button type="submit" name="submit">Purchase</button>
             </div>
         </form>
     </dialog>
-    <?php include 'components/customer_footer.php'; ?>
-    <script src="javascript/common.js"></script>
-    <script src="javascript/customer.js"></script>
+    <?php include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/customer_footer.php"; ?>
+    <script src="/mahans/javascript/common.js"></script>
+    <script src="/mahans/javascript/customer.js"></script>
     <script type="text/javascript">
         document.addEventListener("DOMContentLoaded", function() {
             document.querySelector('.buy-now').addEventListener('click', function() {
@@ -479,7 +466,7 @@ if (isset($_POST['submit'])) {
                     const qty = document.getElementById('qty').value;
 
 
-                    fetch('ajax.php?action=add_to_cart', {
+                    fetch('/mahans/ajax.php?action=add_to_cart', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/x-www-form-urlencoded'

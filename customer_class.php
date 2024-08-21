@@ -77,6 +77,91 @@ class Action
         }
     }
 
+    public function purchase($productId, $sizeId, $productPrice, $selectedChildren, $parentId, $paymentImage)
+    {
+        $fileName = $this->handleFileUpload($paymentImage);
+        if (!$fileName) {
+            return json_encode(['error' => 'Failed to upload receipt']);
+        }
+
+        try {
+            $this->db->beginTransaction();
+
+            foreach ($selectedChildren as $childId) {
+                $orderQuery = "
+                INSERT INTO Orders (order_id, parent_student_id, order_price) 
+                VALUES (:order_id, (SELECT parent_student_id FROM Parent_Student WHERE parent_id = :parent_id AND student_id = :student_id), :order_price)
+            ";
+                $orderStmt = $this->db->prepare($orderQuery);
+                $orderId = uniqid('ORD');
+                $orderStmt->bindParam(':order_id', $orderId);
+                $orderStmt->bindParam(':parent_id', $parentId);
+                $orderStmt->bindParam(':student_id', $childId);
+                $orderStmt->bindParam(':order_price', $productPrice);
+                $orderStmt->execute();
+
+                $orderItemQuery = "
+                INSERT INTO Order_Item (order_item_id, order_id, product_id, product_size_id, product_quantity, order_subtotal) 
+                VALUES (:order_item_id, :order_id, :product_id, :product_size_id, 1, :order_subtotal)
+            ";
+                $orderItemStmt = $this->db->prepare($orderItemQuery);
+                $orderItemId = uniqid('OI');
+                $orderItemStmt->bindParam(':order_item_id', $orderItemId);
+                $orderItemStmt->bindParam(':order_id', $orderId);
+                $orderItemStmt->bindParam(':product_id', $productId);
+                $orderItemStmt->bindParam(':product_size_id', $sizeId);
+                $orderItemStmt->bindParam(':order_subtotal', $productPrice);
+                $orderItemStmt->execute();
+
+                $paymentQuery = "
+                INSERT INTO Payment (payment_id, parent_student_id, order_id, payment_amount, payment_status, payment_image) 
+                VALUES (:payment_id, (SELECT parent_student_id FROM Parent_Student WHERE parent_id = :parent_id AND student_id = :student_id), :order_id, :payment_amount, 'pending', :payment_image)
+            ";
+                $paymentStmt = $this->db->prepare($paymentQuery);
+                $paymentId = uniqid('PAY');
+                $paymentStmt->bindParam(':payment_id', $paymentId);
+                $paymentStmt->bindParam(':parent_id', $parentId);
+                $paymentStmt->bindParam(':student_id', $childId);
+                $paymentStmt->bindParam(':order_id', $orderId);
+                $paymentStmt->bindParam(':payment_amount', $productPrice);
+                $paymentStmt->bindParam(':payment_image', $fileName);
+                $paymentStmt->execute();
+            }
+
+            $this->db->commit();
+            return json_encode(['success' => true, 'message' => 'Purchase successful']);
+        } catch (PDOException $e) {
+            $this->db->rollBack();
+            return json_encode(['error' => 'Purchase failed: ' . $e->getMessage()]);
+        }
+    }
+
+    private function handleFileUpload($file)
+    {
+        if ($file['error'] === UPLOAD_ERR_NO_FILE) {
+            return null;
+        }
+
+        $allowedfileExtensions = ['jpg', 'jpeg', 'png'];
+        $fileName = $file['name'];
+        $fileTmpPath = $file['tmp_name'];
+        $fileExtension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+
+        if (in_array($fileExtension, $allowedfileExtensions)) {
+            $newFileName = uniqid() . '.' . $fileExtension;
+            $dest_path = 'uploads/receipts/' . $newFileName;
+
+            if (move_uploaded_file($fileTmpPath, $dest_path)) {
+                return $newFileName;
+            } else {
+                return null;
+            }
+        } else {
+            return null;
+        }
+    }
+
+
     public function update_cart_item($cart_item_id, $quantity)
     {
         try {

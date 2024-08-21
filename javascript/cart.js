@@ -27,9 +27,9 @@ window.addEventListener('load', function () {
     get_cart_items().then(cartItems => {
         data = cartItems.map(item => ({
             ...item,
-            state: false // 添加默认状态
+            state: false
         }));
-        init(); // 调用初始化函数
+        init();
     }).catch(error => {
         console.error('Error loading cart items:', error);
     });
@@ -44,7 +44,6 @@ window.addEventListener('load', function () {
             const isDeleted = item.is_deleted === 1;
 
             strHtml += `<tr>
-                            <td></td>
                             <td>${!isDeleted ? `<input type="checkbox" class="ckh" id="ckh-${index}" ${item.state ? "checked" : ""}/>` : ''}</td>
                             <td class="product-image ${isDeleted ? 'deleted-product-image' : ''}">
                                 <div class="image-container">
@@ -59,16 +58,15 @@ window.addEventListener('load', function () {
                             </td>
                             <td class="product-quantity">
                                     <button class="add" id="add-${index}">+</button>
-                                    <input type="text" style="width:40px" value="${item.product_quantity}" data-cart-item-id="${item.cart_item_id}"/>
+                                    <input type="text" style="width:40px" value="${item.product_quantity}" data-cart-item-id="${item.cart_item_id}"/>;
                                     <button class="reduce" id="reduce-${index}">-</button>
                             </td>
                             <td class="product-total">RM ${totalPriceItem.toFixed(2)}</td>
+                            <td></td>
                             <td class="product-action">
                             <button class="delete" data-cart-item-id="${item.cart_item_id}"><i class="bi bi-trash3-fill"></i> Delete</button>
                             </td>
-                            <td></td>
                         </tr>`;
-
             if (item.state) {
                 count++;
                 num += item.actual_price * item.product_quantity;
