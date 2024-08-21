@@ -7,7 +7,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/db_connect.php";
 $currentPage = basename($_SERVER['PHP_SELF']);
 
 if (!isset($_SESSION['admin_id'])) {
-    header('Location: login.php');
+    header('Location: /misp/admin/login.php');
     exit();
 }
 
@@ -23,9 +23,7 @@ $all_admins = getAllAdmins($pdo);
 
 function generateAdminId()
 {
-    $prefix = "AD";
-    $randomString = bin2hex(random_bytes(4));
-    return $prefix . $randomString;
+    return uniqid("AD");
 }
 
 if (isset($_POST["submit"])) {
@@ -56,6 +54,8 @@ if (isset($_POST["submit"])) {
                 $stmt->bindParam(':password', $hashedPassword);
                 $stmt->bindParam(':adminType', $adminType);
                 $stmt->execute();
+                header('Location:' . $_SERVER['PHP_SELF']);
+                exit();
             } catch (PDOException $e) {
                 echo "<script>alert('Database error: " . $e->getMessage() . "');</script>";
             }
@@ -111,7 +111,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                                     <td>
                                         <form action="" method="POST" style="display:inline;" onsubmit="return showDeactivateConfirmDialog(event);">
                                             <input type="hidden" name="admin_id" value="<?= htmlspecialchars($admin['admin_id']); ?>">
-                                            <input type="hidden" name="delete" value="true">
+                                            <input type="hidden" name="action" value="deactivate_admin">
                                             <button type="submit" class="delete-admin-btn"><i class="bi bi-x-square"></i></button>
                                         </form>
                                         <button type="button" class="edit-admin-btn" data-admin-id="<?= htmlspecialchars($admin['admin_id']); ?>"><i class="bi bi-pencil-square"></i></button>
@@ -133,31 +133,32 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                 <button class="cancel"><i class="bi bi-x-lg"></i></button>
             </div>
         </div>
-        <form action="" method="post" enctype="multipart/form-data">
+        <form action="" method="post">
+            <input type="hidden" name="admin_id" value="">
             <div class="input-container">
+                <h2>Admin Name<sup>*</sup></h2>
                 <div class="input-field">
-                    <h2>Admin Name<sup>*</sup></h2>
                     <input type="text" name="name" value="<?php echo isset($_POST['name']) ? htmlspecialchars($_POST['name']) : ''; ?>" required>
                 </div>
                 <p>Please enter the admin's full name.</p>
             </div>
             <div class="input-container">
+                <h2>Admin Email<sup>*</sup></h2>
                 <div class="input-field">
-                    <h2>Admin Email<sup>*</sup></h2>
                     <input type="email" name="email" value="<?php echo isset($_POST['email']) ? htmlspecialchars($_POST['email']) : ''; ?>" required>
                 </div>
                 <p>Please enter the admin's email address.</p>
             </div>
             <div class="input-container">
+                <h2>Password<sup>*</sup></h2>
                 <div class="input-field">
-                    <h2>Password<sup>*</sup></h2>
                     <input type="password" name="password" required>
                 </div>
                 <p>Please enter a secure password.</p>
             </div>
             <div class="input-container">
+                <h2>Confirm Password<sup>*</sup></h2>
                 <div class="input-field">
-                    <h2>Confirm Password<sup>*</sup></h2>
                     <input type="password" name="confirm_password" required>
                 </div>
                 <p>Please confirm the password.</p>
@@ -175,8 +176,13 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
         document.querySelectorAll('.edit-admin-btn').forEach(button => {
             button.addEventListener('click', function() {
                 const adminId = this.dataset.adminId;
-
-                fetch(`/mips/admin/ajax.php?action=get_admin&admin_id=${adminId}`)
+                fetch(`/mips/admin/ajax.php?action=get_admin`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded'
+                        },
+                        body: `admin_id=${encodeURIComponent(adminId)}`
+                    })
                     .then(response => response.json())
                     .then(admin => {
                         if (admin.error) {
@@ -184,6 +190,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                         } else {
                             document.querySelector('#add-edit-data [name="name"]').value = admin.admin_name;
                             document.querySelector('#add-edit-data [name="email"]').value = admin.admin_email;
+                            document.querySelector('#add-edit-data [name="admin_id"]').value = admin.admin_id;
 
                             document.querySelector('#add-edit-data h1').textContent = "Edit Admin";
                             document.getElementById('add-edit-data').showModal();

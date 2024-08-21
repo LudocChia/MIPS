@@ -2,17 +2,17 @@
 
 session_start();
 
-include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/db_connect.php";
-include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/customer_login.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/db_connect.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/customer_login.php";
 $pageTitle = "Shopping Cart - MIPS";
-include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/customer_head.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/customer_head.php";
 ?>
 
 <body>
-    <?php include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/customer_header.php"; ?>
+    <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/customer_header.php"; ?>
     <section class="shopping-cart">
+        <input type="hidden" id="user-id" value="<?php echo htmlspecialchars($_SESSION['user_id']); ?>">
         <div class="container">
-            <input type="hidden" id="user-id" value="<?php echo htmlspecialchars($_SESSION['user_id']); ?>">
             <div class="wrapper">
                 <div class="title">
                     <div class="left">
@@ -64,7 +64,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/customer_head.php";
     <!-- <a href="#" class="backToTop">
         <span class="material-symbols-outlined">arrow_upward</span>
     </a> -->
-    <?php include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/customer_footer.php"; ?>
+    <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/customer_footer.php"; ?>
     <script src="./javascript/common.js"></script>
     <script src="./javascript/customer.js"></script>
     <script src="./javascript/cart.js"></script>

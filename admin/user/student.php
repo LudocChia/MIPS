@@ -99,22 +99,6 @@ if (isset($_POST["submit"])) {
     }
 }
 
-if (isset($_POST['delete'])) {
-    $studentId = $_POST['student_id'];
-
-    try {
-        $sql = "UPDATE Student SET is_deleted = 1 WHERE student_id = :student_id";
-        $stmt = $pdo->prepare($sql);
-        $stmt->bindParam(':student_id', $studentId);
-        $stmt->execute();
-
-        header('Location: student.php');
-        exit();
-    } catch (PDOException $e) {
-        echo "<script>alert('Database error: " . $e->getMessage() . "');</script>";
-    }
-}
-
 $pageTitle = "Student Management - MIPS";
 include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
 
@@ -151,7 +135,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                                     <td>
                                         <form action="" method="POST" style="display:inline;" onsubmit="return showDeactivateConfirmDialog(event);">
                                             <input type="hidden" name="student_id" value="<?= htmlspecialchars($student['student_id']); ?>">
-                                            <input type="hidden" name="delete" value="true">
+                                            <input type="hidden" name="action" value="deactivate_student">
                                             <button type="submit" class="delete-student-btn"><i class="bi bi-x-square"></i></button>
                                         </form>
                                         <button type="button" class="edit-student-btn" data-student-id="<?= htmlspecialchars($student['student_id']); ?>"><i class="bi bi-pencil-square"></i></button>
@@ -165,26 +149,33 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
         </main>
     </div>
     <dialog id="add-edit-data">
-        <h1>Add New Student</h1>
+        <div class="title">
+            <div class="left">
+                <h1>Add New Student</h1>
+            </div>
+            <div class="right">
+                <button id="cancel"><i class="bi bi-x-square"></i></button>
+            </div>
+        </div>
         <form action="" method="post" enctype="multipart/form-data">
-            <input type="hidden" name="existing_student_id" value="">
+            <input type="hidden" name="student_id" value="">
             <div class="input-container">
+                <h2>Student ID<sup>*</sup></h2>
                 <div class="input-field">
-                    <h2>Student ID<sup>*</sup></h2>
                     <input type="text" name="student_id" value="" required>
                 </div>
                 <p>Please enter the student's ID.</p>
             </div>
             <div class="input-container">
+                <h2>Student Name<sup>*</sup></h2>
                 <div class="input-field">
-                    <h2>Student Name<sup>*</sup></h2>
                     <input type="text" name="name" value="" required>
                 </div>
                 <p>Please enter the student's full name.</p>
             </div>
             <div class="input-container">
+                <h2>Class<sup>*</sup></h2>
                 <div class="input-field">
-                    <h2>Class<sup>*</sup></h2>
                     <select name="class_id" required>
                         <option value="">Select Class</option>
                         <?php foreach ($all_classes as $class) : ?>
@@ -195,8 +186,8 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                 <p>Please select the student's class.</p>
             </div>
             <div class="input-container">
+                <h2>Student Image<sup>*</sup></h2>
                 <div class="input-field">
-                    <h2>Student Image<sup>*</sup></h2>
                     <input type="file" name="student_image" id="student_image" accept=".jpg, .jpeg, .png">
                 </div>
                 <p>Please upload an image for the student.</p>
@@ -214,13 +205,18 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
         document.querySelectorAll('.edit-student-btn').forEach(button => {
             button.addEventListener('click', function() {
                 const studentId = this.dataset.studentId;
-                fetch(`ajax.php?action=get_student&student_id=${studentId}`)
+                fetch(`/mips/admin/ajax.php?action=get_student`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded'
+                        },
+                        body: `student_id=${encodeURIComponent(studentId)}`
+                    })
                     .then(response => response.json())
                     .then(student => {
                         if (student.error) {
                             alert(student.error);
                         } else {
-                            document.querySelector('#add-edit-data [name="existing_student_id"]').value = student.student_id;
                             document.querySelector('#add-edit-data [name="student_id"]').value = student.student_id;
                             document.querySelector('#add-edit-data [name="name"]').value = student.student_name;
                             document.querySelector('#add-edit-data [name="class_id"]').value = student.class_id;
@@ -233,10 +229,6 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                         alert('Failed to load student data.');
                     });
             });
-        });
-
-        document.querySelector('.cancel').addEventListener('click', function() {
-            document.getElementById('add-edit-data').close();
         });
     </script>
 </body>

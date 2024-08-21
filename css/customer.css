@@ -540,6 +540,141 @@ header img.logo {
     background-color: var(--color-white);
 }
 
+/* Shopping Cart */
+.shopping-cart .wrapper {
+    background-color: var(--color-white);
+}
+
+/* .shopping-cart table {
+    width: 100%;
+} */
+
+.shopping-cart table img {
+    width: 150px;
+}
+
+.shopping-cart table .deleted-product-image {
+    opacity: 0.7;
+    width: 150px;
+}
+
+.shopping-cart .image-container {
+    position: relative;
+}
+
+.shopping-cart .discontinued-text {
+    position: absolute;
+    top: 40px;
+    left: 10px;
+    color: black;
+    font-size: 14px;
+    text-align: center;
+}
+
+/* .shopping-cart thead th {
+    padding: 1rem;
+    font-size: 1rem;
+    background-color: var(--deep-blue);
+    color: white;
+    text-transform: capitalize;
+} */
+
+/* .shopping-cart td {
+    font-size: 1rem;
+    color: black;
+    border-bottom: 1px solid #ccc;
+    text-align: center;
+} */
+
+.shopping-cart .product-name {
+    text-align: left;
+    padding-left: 10px;
+}
+
+.shopping-cart .add,
+.shopping-cart .reduce,
+.shopping-cart input[type="text"] {
+    height: 40px;
+    float: left;
+}
+
+.shopping-cart .add,
+.shopping-cart .reduce {
+    width: 22px;
+    border: 1px solid var(--deep-blue);
+    background: white;
+    cursor: pointer;
+}
+
+.shopping-cart .add {
+    border-radius: 10% 0 0 10%;
+    margin-left: 15%;
+}
+
+.shopping-cart .reduce {
+    border-radius: 0 10% 10% 0;
+}
+
+.shopping-cart input[type="text"] {
+    text-align: center;
+    border: 1px solid var(--deep-blue);
+    border-left: none;
+    border-right: none;
+}
+
+.shopping-cart input[type="checkbox"] {
+    height: 16px;
+    width: 16px;
+}
+
+.shopping-cart .controls {
+    position: relative;
+    display: flex;
+    margin: 30px auto;
+    padding: 0 20px;
+    line-height: 50px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    align-items: center;
+    width: 90%;
+}
+
+.shopping-cart .controls input[type="checkbox"] {
+    margin-left: 4%;
+}
+
+.shopping-cart .controls label {
+    margin-left: 10px;
+    cursor: pointer;
+}
+
+.shopping-cart .controls label,
+.shopping-cart .controls a {
+    font-weight: bold;
+    color: var(--deep-blue);
+}
+
+.shopping-cart .controls p,
+.shopping-cart .controls a {
+    margin-left: 5%;
+}
+
+.shopping-cart .controls .pay {
+    position: absolute;
+    right: -1px;
+    padding: 17.5px 20px;
+    background: var(--deep-blue);
+    color: #fff;
+    font-weight: bold;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+.shopping-cart .controls .total-price {
+    font-weight: bold;
+}
+
+
 /* Media */
 @media screen and (max-width: 1200px) {
     header img.logo {

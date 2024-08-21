@@ -9,8 +9,24 @@ $crud = new Action();
 switch ($action) {
         // Admin Functions
     case 'get_admin':
-        if (isset($_GET['admin_id'])) {
-            echo $crud->get_admin($_GET['admin_id']);
+        if (isset($_POST['admin_id'])) {
+            echo $crud->get_admin($_POST['admin_id']);
+        } else {
+            echo json_encode(['error' => 'Admin ID not provided']);
+        }
+        break;
+
+    case 'deactivate_admin':
+        if (isset($_POST['admin_id'])) {
+            echo $crud->deactivate_admin($_POST['admin_id']);
+        } else {
+            echo json_encode(['error' => 'Admin ID not provided']);
+        }
+        break;
+
+    case 'recover_admin':
+        if (isset($_POST['admin_id'])) {
+            echo $crud->recover_admin($_POST['admin_id']);
         } else {
             echo json_encode(['error' => 'Admin ID not provided']);
         }
@@ -34,7 +50,7 @@ switch ($action) {
         break;
 
     case 'get_parent':
-        if (isset($_GET['parent_id'])) {
+        if (isset($_POST['parent_id'])) {
             echo $crud->get_parent($_GET['parent_id']);
         } else {
             echo json_encode(['error' => 'Parent ID not provided']);
@@ -42,9 +58,16 @@ switch ($action) {
         break;
 
         // Student Functions
+    case 'deactivate_student':
+        if (isset($_POST['student_id'])) {
+            echo $crud->deactivate_student($_POST['student_id']);
+        } else {
+            echo json_encode(['error' => 'Student ID not provided']);
+        }
+        break;
     case 'get_student':
-        if (isset($_GET['student_id'])) {
-            echo $crud->get_student($_GET['student_id']);
+        if (isset($_POST['student_id'])) {
+            echo $crud->get_student($_POST['student_id']);
         } else {
             echo json_encode(['error' => 'Student ID not provided']);
         }
@@ -82,7 +105,6 @@ switch ($action) {
             echo json_encode(['error' => 'Order ID or order status not provided']);
         }
         break;
-
 
         // Product_Size Functions
     case 'deactivate_product_size':
