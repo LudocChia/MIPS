@@ -1,16 +1,16 @@
 <header>
     <div class="wrapper">
         <div class="logo">
-            <a href="/mahans">
-                <img src="/mahans/images/Mahans_IPS_logo.png" class="logo" alt="Mahans International Primary School logo">
+            <a href="/mips">
+                <img src="/mips/images/mips_IPS_logo.png" class="logo" alt="Mahans International Primary School logo">
             </a>
         </div>
         <span class="fas fa-bars" id="menuIcon" onclick="toggle()"></span>
         <div class="navbar" id="nav">
             <ul>
-                <!-- <li>
-                    <a href="index.php"><span class="material-symbols-outlined icon-adjust">local_library</span></i>Student Performance</a>
-                </li> -->
+                <li>
+                    <a href="index.php"><span class="material-symbols-outlined icon-adjust">local_library</span></i>Meal Donation</a>
+                </li>
                 <li>
                     <a href="meal.php"><span class="material-symbols-outlined icon-adjust">food_bank</span>Student Meal Plan</a>
                 </li>

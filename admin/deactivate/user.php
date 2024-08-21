@@ -2,10 +2,10 @@
 
 session_start();
 
-include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/db_connect.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/db_connect.php";
 
 if (!isset($_SESSION['admin_id'])) {
-    header('Location: /mahans/admin/login.php');
+    header('Location: /mips/admin/login.php');
     exit();
 }
 
@@ -34,12 +34,12 @@ $all_students = getAllStudents($pdo);
 ?>
 
 <?php $pageTitle = "Deactivated Users - MIPS";
-include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/admin_head.php"; ?>
+include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
 
 <body>
-    <?php include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/admin_header.php"; ?>
+    <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_header.php"; ?>
     <div class="container">
-        <?php include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/admin_sidebar.php"; ?>
+        <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_sidebar.php"; ?>
         <main class="parent">
             <div class="wrapper">
                 <div class="title">
@@ -88,8 +88,8 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/admin_head.php"; ?>
             </div>
         </main>
     </div>
-    <?php include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/confirm_dialog.php"; ?>
-    <script src="/mahans/javascript/admin.js"></script>
+    <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/confirm_dialog.php"; ?>
+    <script src="/mips/javascript/admin.js"></script>
 </body>
 
 </html>

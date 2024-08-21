@@ -2,7 +2,7 @@
 
 session_start();
 
-include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/db_connect.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/db_connect.php";
 
 if (isset($_SESSION['admin_id'])) {
     header('Location: ./login.php');
@@ -30,10 +30,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['admin_name'] = $admin['admin_name'];
             $_SESSION['admin_type'] = $admin['admin_type'];
             $_SESSION['admin_email'] = $admin['admin_email'];
-            $_SESSION['admin_image'] = !empty($admin['admin_image']) ? $admin['admin_image'] : '/mahans/images/default_profile.png';
+            $_SESSION['admin_image'] = !empty($admin['admin_image']) ? $admin['admin_image'] : '/mips/images/default_profile.png';
 
 
-            header("Location: /mahans/admin");
+            header("Location: /mips/admin");
             exit;
         } else {
             $errorMsg = "Invalid email or password.";
@@ -46,14 +46,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 ?>
 
 <?php $pageTitle = "Admin Login Page - MIPS";
-include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/admin_head.php"; ?>
+include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
 
 <body>
     <main id="login-form">
         <div class="container">
             <div class="wrapper">
                 <div class="title">
-                    <img src="/mahans/images/Mahans_IPS_logo.png" alt="Mahans_ISP_Logo">
+                    <img src="/mips/images/mips_IPS_logo.png" alt="mips_ISP_Logo">
                 </div>
                 <?php if (!empty($errorMsg)) : ?>
                     <div class="alert alert-danger">

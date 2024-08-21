@@ -2,7 +2,7 @@
 
 session_start();
 
-include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/db_connect.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/db_connect.php";
 
 if (!isset($_SESSION['admin_id'])) {
     header('Location: login.php');
@@ -57,7 +57,7 @@ $all_classes = getClasses($pdo);
 ?>
 
 <?php $pageTitle = "Class Management - MIPS";
-include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/admin_head.php"; ?>
+include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
 
 <body>
     <?php include "../components/admin_header.php"; ?>
@@ -129,22 +129,26 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/admin_head.php"; ?>
             </div>
         </div>
         <form action="" method="post">
-            <div class="input-field">
-                <h2>Class Name<sup>*</sup></h2>
-                <input type="text" name="class_name" value="<?php echo isset($_POST['class_name']) ? htmlspecialchars($_POST['class_name']) : ''; ?>" required>
+            <div class="input-container">
+                <div class="input-field">
+                    <h2>Class Name<sup>*</sup></h2>
+                    <input type="text" name="class_name" value="<?php echo isset($_POST['class_name']) ? htmlspecialchars($_POST['class_name']) : ''; ?>" required>
+                </div>
                 <p>Please enter the name of the class.</p>
             </div>
-            <div class="input-field">
-                <h2>Grade<sup>*</sup></h2>
-                <select name="grade_id" required>
-                    <option value="">Select Grade</option>
-                    <?php foreach ($all_grades as $grade) : ?>
-                        <option value="<?= htmlspecialchars($grade['grade_id']) ?>"><?= htmlspecialchars($grade['grade_name']) ?></option>
-                    <?php endforeach; ?>
-                </select>
+            <div class="input-container">
+                <div class="input-field">
+                    <h2>Grade<sup>*</sup></h2>
+                    <select name="grade_id" required>
+                        <option value="">Select Grade</option>
+                        <?php foreach ($all_grades as $grade) : ?>
+                            <option value="<?= htmlspecialchars($grade['grade_id']) ?>"><?= htmlspecialchars($grade['grade_name']) ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
                 <p>Please select the grade.</p>
             </div>
-            <div class="controls">
+            <div class="input-container controls">
                 <button type="button" class="cancel">Cancel</button>
                 <button type="reset">Clear</button>
                 <button type="submit" name="submit">Publish</button>
@@ -153,7 +157,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/admin_head.php"; ?>
     </dialog>
     <dialog id="delete-confirm-dialog">
         <?php include "../components/deactivate_confirm_dialog.php"; ?>
-        <script src="../javascript/admin.js"></script>
+        <script src="/mips/javascript/admin.js"></script>
         <script>
             document.querySelectorAll('.edit-class-btn').forEach(button => {
                 button.addEventListener('click', function() {

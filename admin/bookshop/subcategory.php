@@ -2,7 +2,7 @@
 
 session_start();
 
-include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/db_connect.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/db_connect.php";
 
 if (!isset($_SESSION['admin_id'])) {
     header('Location: login.php');
@@ -125,12 +125,12 @@ $all_subcategories = getSubcategories($pdo);
 $all_main_categories = getMainCategories($pdo);
 
 $pageTitle = "Bookshop Subcategory - MIPS";
-include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/admin_head.php"; ?>
+include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
 
 <body>
-    <?php include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/admin_header.php"; ?>
+    <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_header.php"; ?>
     <div class="container">
-        <?php include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/admin_sidebar.php"; ?>
+        <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_sidebar.php"; ?>
         <main class="category">
             <div class="wrapper">
                 <div class="title">
@@ -145,7 +145,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/admin_head.php"; ?>
                     <?php foreach ($all_subcategories as $subcategory) : ?>
                         <div class="box" data-subcategory-id="<?= htmlspecialchars($subcategory['category_id']); ?>">
                             <div class="image-container">
-                                <img src="/mahans/uploads/category/<?php echo htmlspecialchars($subcategory['category_icon']); ?>" alt="Icon for <?php echo htmlspecialchars($subcategory['category_name']); ?>">
+                                <img src="/mips/uploads/category/<?php echo htmlspecialchars($subcategory['category_icon']); ?>" alt="Icon for <?php echo htmlspecialchars($subcategory['category_name']); ?>">
                             </div>
                             <div class="actions">
                                 <form action="" method="POST" style="display:inline;" onsubmit="return showDeactivateConfirmDialog(event);">
@@ -210,14 +210,14 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/admin_head.php"; ?>
             </div>
         </form>
     </dialog>
-    <?php include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/confirm_dialog.php"; ?>
+    <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/confirm_dialog.php"; ?>
 
-    <script src="/mahans/javascript/admin.js"></script>
+    <script src="/mips/javascript/admin.js"></script>
     <script>
         document.querySelectorAll('.edit-subcategory-btn').forEach(button => {
             button.addEventListener('click', function() {
                 const subcategoryId = this.dataset.subcategoryId;
-                fetch(`/mahans/admin/ajax.php?action=get_subcategory&subcategory_id=${subcategoryId}`)
+                fetch(`/mips/admin/ajax.php?action=get_subcategory&subcategory_id=${subcategoryId}`)
                     .then(response => response.json())
                     .then(subcategory => {
                         if (subcategory.error) {

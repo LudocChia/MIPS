@@ -3,8 +3,8 @@
 session_start();
 $_SESSION['user_id'] = $_SESSION['user_id'] ?? null;
 
-include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/db_connect.php";
-include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/customer_login.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/db_connect.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/customer_login.php";
 
 $product_id = $_GET['pid'] ?? null;
 if (!$product_id) {
@@ -98,7 +98,7 @@ function handleFileUpload($file)
 
     if (in_array($fileExtension, $allowedfileExtensions)) {
         $newFileName = uniqid() . '.' . $fileExtension;
-        $dest_path = 'uploads/receipts/' . $newFileName;
+        $dest_path = '/mips/uploads/receipts/' . $newFileName;
 
         if (move_uploaded_file($fileTmpPath, $dest_path)) {
             return $newFileName;
@@ -170,15 +170,16 @@ if (isset($_POST['submit'])) {
     }
 }
 
-include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/customer_head.php";
+$pageTitle = $product['product_name'] . " - MIPS";
+include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/customer_head.php";
 ?>
 
 <body>
-    <?php include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/customer_header.php"; ?>
+    <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/customer_header.php"; ?>
     <div class="breadcrumbs">
         <ul>
             <li>
-                <a href="/mahans">
+                <a href="/mips">
                     <h3>Home</h3>
                 </a>
             </li>
@@ -353,7 +354,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/customer_head.php";
                 <table class="two-column">
                     <tr>
                         <td style="width: 40%"><strong>Beneficiary :</strong></td>
-                        <td style="width: 60%">Mahans International Sdn Bhd</td>
+                        <td style="width: 60%">mips International Sdn Bhd</td>
                     </tr>
                     <tr>
                         <td style="width: 40%"><strong>Name of Bank :</strong></td>
@@ -387,9 +388,9 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/customer_head.php";
             </div>
         </form>
     </dialog>
-    <?php include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/customer_footer.php"; ?>
-    <script src="/mahans/javascript/common.js"></script>
-    <script src="/mahans/javascript/customer.js"></script>
+    <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/customer_footer.php"; ?>
+    <script src="/mips/javascript/common.js"></script>
+    <script src="/mips/javascript/customer.js"></script>
     <script type="text/javascript">
         document.addEventListener("DOMContentLoaded", function() {
             document.querySelector('.buy-now').addEventListener('click', function() {
@@ -466,7 +467,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/customer_head.php";
                     const qty = document.getElementById('qty').value;
 
 
-                    fetch('/mahans/ajax.php?action=add_to_cart', {
+                    fetch('/mips/ajax.php?action=add_to_cart', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/x-www-form-urlencoded'

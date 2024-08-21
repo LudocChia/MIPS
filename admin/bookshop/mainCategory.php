@@ -2,7 +2,7 @@
 
 session_start();
 
-include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/db_connect.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/db_connect.php";
 
 if (!isset($_SESSION['admin_id'])) {
     header('Location: login.php');
@@ -34,7 +34,7 @@ function handleFileUpload($file)
 
     if (in_array($fileExtension, $allowedfileExtensions)) {
         $newFileName = uniqid() . '.' . $fileExtension;
-        $dest_path = '../uploads/category/' . $newFileName;
+        $dest_path = '/mips/uploads/category/' . $newFileName;
 
         if (move_uploaded_file($fileTmpPath, $dest_path)) {
             return $newFileName;
@@ -123,12 +123,12 @@ function getMainCategories($pdo)
 $all_main_categories = getMainCategories($pdo);
 
 $pageTitle = "Bookshop Main Category - MIPS";
-include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/admin_head.php"; ?>
+include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
 
 <body>
-    <?php include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/admin_header.php"; ?>
+    <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_header.php"; ?>
     <div class="container">
-        <?php include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/admin_sidebar.php"; ?>
+        <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_sidebar.php"; ?>
         <main class="category">
             <div class="wrapper">
                 <div class="title">
@@ -143,13 +143,13 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/admin_head.php"; ?>
                     <?php foreach ($all_main_categories as $category) : ?>
                         <div class="box" data-category-id="<?= htmlspecialchars($category['category_id']); ?>">
                             <div class="image-container">
-                                <img src="/mahans/uploads/category/<?php echo htmlspecialchars($category['category_icon']); ?>" alt="Icon for <?php echo htmlspecialchars($category['category_name']); ?>">
+                                <img src="/mips/uploads/category/<?php echo htmlspecialchars($category['category_icon']); ?>" alt="Icon for <?php echo htmlspecialchars($category['category_name']); ?>">
                             </div>
                             <div class="actions">
                                 <form action="" method="POST" style="display:inline;" onsubmit="return showDeactivateConfirmDialog(event);">
                                     <input type="hidden" name="category_id" value="<?= htmlspecialchars($category['category_id']); ?>">
                                     <input type="hidden" name="delete" value="true">
-                                    <button type="submit" class="delete-category-btn"><i class="bi bi-x-circle"></i></button>
+                                    <button type="submit" class="delete-category-btn"><i class="bi bi-x-square"></i></button>
                                 </form>
                                 <button type="button" class="edit-category-btn" data-category-id="<?= htmlspecialchars($category['category_id']); ?>"><i class="bi bi-pencil-square"></i></button>
                             </div>
@@ -194,13 +194,13 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/admin_head.php"; ?>
             </div>
         </form>
     </dialog>
-    <?php include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/confirm_dialog.php";; ?>
-    <script src="/mahans/javascript/admin.js"></script>
+    <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/confirm_dialog.php";; ?>
+    <script src="/mips/javascript/admin.js"></script>
     <script>
         document.querySelectorAll('.edit-category-btn').forEach(button => {
             button.addEventListener('click', function() {
                 const categoryId = this.dataset.categoryId;
-                fetch(`/mahans/admin/ajax.php?action=get_category&category_id=${categoryId}`)
+                fetch(`/mips/admin/ajax.php?action=get_category&category_id=${categoryId}`)
                     .then(response => response.json())
                     .then(category => {
                         if (category.error) {

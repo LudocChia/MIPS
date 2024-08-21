@@ -2,14 +2,14 @@
 
 session_start();
 
-include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/db_connect.php";
-include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/customer_login.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/db_connect.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/customer_login.php";
 $pageTitle = "Home - MIPS";
-include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/customer_head.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/customer_head.php";
 ?>
 
 <body>
-    <?php include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/customer_header.php"; ?>
+    <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/customer_header.php"; ?>
     <section class="banner">
         <div class="container">
             <div class="wrapper">
@@ -46,9 +46,9 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/customer_head.php";
             </div>
         </div>
     </section>
-    <?php include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/customer_footer.php"; ?>
-    <script src="/mahans/javascript/home.js"></script>
-    <script src="/mahans/javascript/customer.js"></script>
+    <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/customer_footer.php"; ?>
+    <script src="/mips/javascript/home.js"></script>
+    <script src="/mips/javascript/customer.js"></script>
 </body>
 
 </html>

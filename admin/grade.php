@@ -2,7 +2,7 @@
 
 session_start();
 
-include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/db_connect.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/db_connect.php";
 
 if (!isset($_SESSION['admin_id'])) {
     header('Location: login.php');
@@ -52,12 +52,12 @@ $all_grades = getGrades($pdo);
 ?>
 
 <?php $pageTitle = "Grade Management - MIPS";
-include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/admin_head.php"; ?>
+include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
 
 <body>
-    <?php include  $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/admin_header.php"; ?>
+    <?php include  $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_header.php"; ?>
     <div class="container">
-        <?php include  $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/admin_sidebar.php"; ?>
+        <?php include  $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_sidebar.php"; ?>
         <!-- END OF ASIDE -->
         <main class="grade">
             <div class="wrapper">
@@ -91,7 +91,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/admin_head.php"; ?>
                                         <form action="" method="POST" style="display:inline;" onsubmit="return showDeactivateConfirmDialog(event);">
                                             <input type="hidden" name="grade_id" value="<?= htmlspecialchars($grade['grade_id']); ?>">
                                             <input type="hidden" name="deactivate" value="true">
-                                            <button type="submit" class="delete-grade-btn"><i class="bi bi-x-square-fill"></i></button>
+                                            <button type="submit" class="delete-grade-btn"><i class="bi bi-x-square"></i></button>
                                         </form>
                                         <button type="button" class="edit-grade-btn" data-grade-id="<?= htmlspecialchars($grade['grade_id']); ?>"><i class="bi bi-pencil-square"></i></button>
                                     </td>
@@ -136,14 +136,14 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/admin_head.php"; ?>
             </div>
         </form>
     </dialog>
-    <?php include  $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/confirm_dialog.php"; ?>
-    <script src="/mahans/javascript/admin.js"></script>
+    <?php include  $_SERVER['DOCUMENT_ROOT'] . "/mips/components/confirm_dialog.php"; ?>
+    <script src="/mips/javascript/admin.js"></script>
     <script>
         document.querySelectorAll('.edit-grade-btn').forEach(button => {
             button.addEventListener('click', function() {
                 const gradeId = this.dataset.gradeId;
 
-                fetch(`ajax.php?action=get_grade&grade_id=${gradeId}`)
+                fetch(`/mips/admin/ajax.php?action=get_grade&grade_id=${gradeId}`)
                     .then(response => response.json())
                     .then(grade => {
                         if (grade.error) {

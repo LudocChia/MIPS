@@ -2,8 +2,8 @@
 
 session_start();
 
-include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/db_connect.php";
-include "./components/customer_login.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/db_connect.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/customer_login.php";
 
 $sql = "SELECT p.product_id, p.product_name, p.product_description, p.product_price, p.stock_quantity, p.color, p.gender, 
                pi.image_url AS primary_image
@@ -17,17 +17,17 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 ?>
 
-<?php include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/customer_head.php"; ?>
+<?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/customer_head.php"; ?>
 
 <body>
-    <?php include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/customer_header.php"; ?>
+    <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/customer_header.php"; ?>
     <section class="bookshop">
         <div class="container">
             <div class="products">
                 <div class="wrapper">
                     <div class="title">
                         <div class="left">
-                            <h1>Mahans International Primary School Bookshop</h1>
+                            <h1>MIPS Bookshop</h1>
                         </div>
                         <div class="right">
                             <p>Total <b id="count"><?= count($products) ?></b> products</p>
@@ -67,9 +67,9 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <a href="#" class="back-to-top">
         <span class="material-symbols-outlined">arrow_upward</span>
     </a>
-    <?php include $_SERVER['DOCUMENT_ROOT'] . '/mahans/components/customer_footer.php'; ?>
-    <script src="/mahans/javascript/common.js"></script>
-    <script src="/mahans/javascript/customer.js"></script>
+    <?php include $_SERVER['DOCUMENT_ROOT'] . '/mips/components/customer_footer.php'; ?>
+    <script src="/mips/javascript/common.js"></script>
+    <script src="/mips/javascript/customer.js"></script>
 </body>
 
 </html>

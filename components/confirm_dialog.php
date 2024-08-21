@@ -2,7 +2,7 @@
     <form method="dialog">
         <h1></h1>
         <label>Are you sure to proceed?</label>
-        <div class="controls">
+        <div class="input-container controls">
             <button value="cancel" class="cancel">Cancel</button>
             <button value="confirm" class="confirm"></button>
         </div>

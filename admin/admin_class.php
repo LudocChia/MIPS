@@ -5,7 +5,7 @@ class Action
 
     public function __construct()
     {
-        include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/db_connect.php";
+        include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/db_connect.php";
         $this->db = $pdo;
     }
 

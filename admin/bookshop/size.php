@@ -2,7 +2,7 @@
 
 session_start();
 
-include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/db_connect.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/db_connect.php";
 
 if (!isset($_SESSION['admin_id'])) {
     header('Location: login.php');
@@ -74,12 +74,12 @@ function getSizes($pdo)
 $all_product_sizes = getSizes($pdo);
 
 $pageTitle = "Apparel Size - MIPS";
-include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/admin_head.php"; ?>
+include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
 
 <body>
-    <?php include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/admin_header.php"; ?>
+    <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_header.php"; ?>
     <div class="container">
-        <?php include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/admin_sidebar.php"; ?>
+        <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_sidebar.php"; ?>
         <main class="product-size">
             <div class="wrapper">
                 <div class="title">
@@ -159,14 +159,14 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/admin_head.php"; ?>
         </form>
     </dialog>
 
-    <?php include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/confirm_dialog.php"; ?>
+    <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/confirm_dialog.php"; ?>
 
-    <script src="mahans/javascript/admin.js"></script>
+    <script src="mips/javascript/admin.js"></script>
     <script>
         document.querySelectorAll('.edit-size-btn').forEach(button => {
             button.addEventListener('click', function() {
                 const sizeId = this.dataset.sizeId;
-                fetch(`mahans/admin/ajax.php?action=get_size&size_id=${sizeId}`)
+                fetch(`mips/admin/ajax.php?action=get_size&size_id=${sizeId}`)
                     .then(response => response.json())
                     .then(size => {
                         if (size.error) {

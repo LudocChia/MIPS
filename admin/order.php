@@ -2,7 +2,7 @@
 
 session_start();
 
-include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/db_connect.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/db_connect.php";
 
 if (!isset($_SESSION['admin_id'])) {
     header('Location: login.php');
@@ -91,12 +91,12 @@ if (isset($_POST["submit"])) {
 ?>
 
 <?php $pageTitle = "Bookshop Order - MIPS";
-include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/admin_head.php"; ?>
+include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
 
 <body>
-    <?php include  $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/admin_header.php"; ?>
+    <?php include  $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_header.php"; ?>
     <div class="container">
-        <?php include  $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/admin_sidebar.php"; ?>
+        <?php include  $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_sidebar.php"; ?>
         <main class="admin">
             <div class="wrapper">
                 <div class="title">
@@ -150,13 +150,13 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/admin_head.php"; ?>
                                         </form>
                                     </td>
                                     <td>
-                                        <button type="button" class="view-order-detail-btn" data-order-id="<?= htmlspecialchars($order['order_id']); ?>"><i class="bi bi-info-circle-fill"></i></button>
-                                        <button type="button" class="edit-order-btn" data-order-id="<?= htmlspecialchars($order['order_id']); ?>"><i class="bi bi-pencil-square"></i></button>
                                         <form action="" method="POST" style="display:inline;" onsubmit="return showDeactivateConfirmDialog(event);">
                                             <input type="hidden" name="order_id" value="<?= htmlspecialchars($order['order_id']); ?>">
                                             <input type="hidden" name="delete" value="true">
-                                            <button type="submit" class="delete-order-btn"><i class="bi bi-x-square-fill"></i></button>
+                                            <button type="submit" class="delete-order-btn"><i class="bi bi-x-square"></i></button>
                                         </form>
+                                        <button type="button" class="view-order-detail-btn" data-order-id="<?= htmlspecialchars($order['order_id']); ?>"><i class="bi bi-info-circle-fill"></i></button>
+                                        <button type="button" class="edit-order-btn" data-order-id="<?= htmlspecialchars($order['order_id']); ?>"><i class="bi bi-pencil-square"></i></button>
                                     </td>
                                 </tr>
                             <?php } ?>
@@ -297,8 +297,8 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/admin_head.php"; ?>
             <button type="button" class="cancel">Close</button>
         </div>
     </dialog>
-    <?php include  $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/confirm_dialog.php"; ?>
-    <script src="/mahans/javascript/admin.js"></script>
+    <?php include  $_SERVER['DOCUMENT_ROOT'] . "/mips/components/confirm_dialog.php"; ?>
+    <script src="/mips/javascript/admin.js"></script>
     <script>
         document.getElementById('add-product-btn').addEventListener('click', function() {
             const productInfo = document.querySelector('.product-info').cloneNode(true);
@@ -313,7 +313,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/admin_head.php"; ?>
                     const orderId = this.closest('form').querySelector('input[name="order_id"]').value;
                     const orderStatus = this.value;
 
-                    fetch('/mahans/admin/ajax.php?action=update_order_status', {
+                    fetch('/mips/admin/ajax.php?action=update_order_status', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/x-www-form-urlencoded'
@@ -356,7 +356,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/admin_head.php"; ?>
                 button.addEventListener('click', function() {
                     const orderId = this.dataset.orderId;
 
-                    fetch('/mahans/admin/ajax.php?action=get_order', {
+                    fetch('/mips/admin/ajax.php?action=get_order', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/x-www-form-urlencoded'
@@ -373,7 +373,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/admin_head.php"; ?>
                                 document.getElementById('order-date').textContent = data.order_datetime;
                                 document.getElementById('order-amount').textContent = `MYR ${data.order_price}`;
                                 document.getElementById('order-status').textContent = data.payment_status;
-                                document.getElementById('payment-image').src = '/mahans/uploads/receipts/' + data.payment_image || '/mahans/images/default_image_path.png';
+                                document.getElementById('payment-image').src = '/mips/uploads/receipts/' + data.payment_image || '/mips/images/default_image_path.png';
 
                                 const itemsList = document.getElementById('order-items-list');
                                 itemsList.innerHTML = '';

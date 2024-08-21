@@ -11,7 +11,7 @@ function isActive($pageName, $currentPage)
     <div class="sidebar">
         <ul>
             <li>
-                <a href="/mahans/admin" class="<?= isActive('index.php', $currentPage); ?>"><i class="bi bi-grid-1x2-fill"></i>
+                <a href="/mips/admin" class="<?= isActive('index.php', $currentPage); ?>"><i class="bi bi-grid-1x2-fill"></i>
                     <h4>Dashboard</h4>
                 </a>
             </li>
@@ -22,45 +22,45 @@ function isActive($pageName, $currentPage)
                     <i class="bi bi-chevron-down <?= strpos($currentPage, 'mainCategory') !== false || strpos($currentPage, 'subcategory') !== false || strpos($currentPage, 'size') !== false || strpos($currentPage, 'product') !== false ? 'rotate' : ''; ?>"></i>
                 </a>
                 <ul class="bookshop-show" style="display: <?= strpos($currentPage, 'mainCategory') !== false || strpos($currentPage, 'subcategory') !== false || strpos($currentPage, 'size') !== false || strpos($currentPage, 'product') !== false ? 'block' : 'none'; ?>">
-                    <li><a href="/mahans/admin/bookshop/mainCategory.php" class="<?= isActive('mainCategory.php', $currentPage); ?>"><i class="bi bi-tags-fill"></i>
+                    <li><a href="/mips/admin/bookshop/mainCategory.php" class="<?= isActive('mainCategory.php', $currentPage); ?>"><i class="bi bi-tags-fill"></i>
                             <h4>Main Category</h4>
                         </a>
                     </li>
-                    <li><a href="/mahans/admin/bookshop/subcategory.php" class="<?= isActive('subcategory.php', $currentPage); ?>"><i class="bi bi-tag-fill"></i>
+                    <li><a href="/mips/admin/bookshop/subcategory.php" class="<?= isActive('subcategory.php', $currentPage); ?>"><i class="bi bi-tag-fill"></i>
                             <h4>Subcategory</h4>
                         </a>
                     </li>
-                    <li><a href="/mahans/admin/bookshop/size.php" class="<?= isActive('size.php', $currentPage); ?>"><i class="bi bi-aspect-ratio-fill"></i>
+                    <li><a href="/mips/admin/bookshop/size.php" class="<?= isActive('size.php', $currentPage); ?>"><i class="bi bi-aspect-ratio-fill"></i>
                             <h4>Product Size</h4>
                         </a>
                     </li>
-                    <li><a href="/mahans/admin/bookshop/product.php" class="<?= isActive('product.php', $currentPage); ?>"><i class="bi bi-box-seam-fill"></i>
+                    <li><a href="/mips/admin/bookshop/product.php" class="<?= isActive('product.php', $currentPage); ?>"><i class="bi bi-box-seam-fill"></i>
                             <h4>All Product</h4>
                         </a>
                     </li>
                 </ul>
             </li>
             <li>
-                <a href="/mahans/admin/order.php" class="<?= isActive('order.php', $currentPage); ?>">
+                <a href="/mips/admin/order.php" class="<?= isActive('order.php', $currentPage); ?>">
                     <i class="bi bi-receipt"></i>
                     <h4>Order</h4>
                     <span class="count" id="pending-order-count"></span>
                 </a>
             </li>
             <li>
-                <a href="/mahans/admin/grade.php" class="<?= isActive('grade.php', $currentPage); ?>">
+                <a href="/mips/admin/grade.php" class="<?= isActive('grade.php', $currentPage); ?>">
                     <i class="bi bi-mortarboard-fill"></i>
                     <h4>Grade</h4>
                 </a>
             </li>
             <li>
-                <a href="/mahans/admin/class.php" class="<?= isActive('class.php', $currentPage); ?>">
+                <a href="/mips/admin/class.php" class="<?= isActive('class.php', $currentPage); ?>">
                     <i class="bi bi-easel2-fill"></i>
                     <h4>Class</h4>
                 </a>
             </li>
             <li>
-                <a href="/mahans/admin/announment.php" class="<?= isActive('announment.php', $currentPage); ?>">
+                <a href="/mips/admin/announment.php" class="<?= isActive('announment.php', $currentPage); ?>">
                     <i class="bi bi-megaphone-fill"></i>
                     <h4>Announment</h4>
                 </a>
@@ -73,11 +73,11 @@ function isActive($pageName, $currentPage)
                 </a>
                 <ul class="user-show" style="display: <?= strpos($currentPage, 'admin') !== false || strpos($currentPage, 'teacher') !== false || strpos($currentPage, 'parent') !== false ? 'block' : 'none'; ?>">
                     <li>
-                        <a href="/mahans/admin/user/admin.php" class="<?= isActive('admin.php', $currentPage); ?>"><i class="bi bi-person-fill-gear"></i>
+                        <a href="/mips/admin/user/admin.php" class="<?= isActive('admin.php', $currentPage); ?>"><i class="bi bi-person-fill-gear"></i>
                             <h4>All Admin</h4>
                         </a>
                     </li>
-                    <li><a href="/mahans/admin/user/teacher.php" class="<?= isActive('teacher.php', $currentPage); ?>"><svg width="20px" data-name="Layer 1" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <li><a href="/mips/admin/user/teacher.php" class="<?= isActive('teacher.php', $currentPage); ?>"><svg width="20px" data-name="Layer 1" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M12.5 11.5H15a1.5 1.5 0 0 0 1.5-1.5h0A1.5 1.5 0 0 0 15 8.5H4.5a3 3 0 0 0-3 3v2a3 3 0 0 0 1.456 2.573" fill="none" stroke="#86848c" stroke-linecap="round" stroke-linejoin="round" class="stroke-000000"></path>
                                 <path d="M7.5 16.5v6H9a1.5 1.5 0 0 0 1.5-1.5v-9.5M7.5 22.5H6A1.5 1.5 0 0 1 4.5 21v-9.5" fill="none" stroke="#86848c" stroke-linecap="round" stroke-linejoin="round" class="stroke-000000"></path>
                                 <circle cx="7.5" cy="4.5" r="2.5" fill="none" stroke="#86848c" stroke-linecap="round" stroke-linejoin="round" class="stroke-000000"></circle>
@@ -87,12 +87,12 @@ function isActive($pageName, $currentPage)
                         </a>
                     </li>
                     <li>
-                        <a href="/mahans/admin/user/parent.php" class="<?= isActive('parent.php', $currentPage); ?>"><i class="bi bi-people-fill"></i>
+                        <a href="/mips/admin/user/parent.php" class="<?= isActive('parent.php', $currentPage); ?>"><i class="bi bi-people-fill"></i>
                             <h4>All Parent</h4>
                         </a>
                     </li>
                     <li>
-                        <a href="/mahans/admin/user/student.php" class="<?= isActive('student.php', $currentPage); ?>"><span class="material-symbols-outlined">local_library </span>
+                        <a href="/mips/admin/user/student.php" class="<?= isActive('student.php', $currentPage); ?>"><span class="material-symbols-outlined">local_library </span>
                             <h4>All Student</h4>
                         </a>
                     </li>
@@ -106,25 +106,25 @@ function isActive($pageName, $currentPage)
                 </a>
                 <ul>
                     <li>
-                        <a href="/mahans/admin/deactivate/user.php" class="<?= isActive('user.php', $currentPage); ?>"><i class="bi bi-person-fill-slash"></i>
+                        <a href="/mips/admin/deactivate/user.php" class="<?= isActive('user.php', $currentPage); ?>"><i class="bi bi-person-fill-slash"></i>
                             <h4>User</h4>
                         </a>
 
                     </li>
                     <li>
-                        <a href="/mahans/admin/deactivate/bookshop.php" class="<?= isActive('bookshop.php', $currentPage); ?>"><i class="bi bi-person-fill-slash"></i>
+                        <a href="/mips/admin/deactivate/bookshop.php" class="<?= isActive('bookshop.php', $currentPage); ?>"><i class="bi bi-person-fill-slash"></i>
                             <h4>Bookshop</h4>
                         </a>
 
                     </li>
                     <li>
-                        <a href="/mahans/admin/deactivate/gradeclass.php" class="<?= isActive('gradeclass.php', $currentPage); ?>"><i class="bi bi-person-fill-slash"></i>
+                        <a href="/mips/admin/deactivate/gradeclass.php" class="<?= isActive('gradeclass.php', $currentPage); ?>"><i class="bi bi-person-fill-slash"></i>
                             <h4>Grade and Class</h4>
                         </a>
 
                     </li>
                     <li>
-                        <a href="/mahans/admin/deactivate/announment.php" class="<?= isActive('announment.php', $currentPage); ?>"><i class="bi bi-person-fill-slash"></i>
+                        <a href="/mips/admin/deactivate/announment.php" class="<?= isActive('announment.php', $currentPage); ?>"><i class="bi bi-person-fill-slash"></i>
                             <h4>Announment</h4>
                         </a>
 
@@ -145,7 +145,7 @@ function isActive($pageName, $currentPage)
 <Script>
     $(document).ready(function() {
         $.ajax({
-            url: '/mahans/admin/ajax.php?action=get_pending_count',
+            url: '/mips/admin/ajax.php?action=get_pending_count',
             type: 'GET',
             success: function(response) {
                 if (parseInt(response) == 0) {

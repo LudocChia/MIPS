@@ -2,7 +2,7 @@
 
 session_start();
 
-include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/db_connect.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/db_connect.php";
 
 if (!isset($_SESSION['admin_id'])) {
     header('Location: login.php');
@@ -62,7 +62,7 @@ function handleFileUpload($files)
 
         if (in_array($fileExtension, $allowedfileExtensions)) {
             $newFileName = uniqid() . '.' . $fileExtension;
-            $dest_path = '/mahans/uploads/product/' . $newFileName;
+            $dest_path = '/mips/uploads/product/' . $newFileName;
 
             if (move_uploaded_file($tmpName, $dest_path)) {
                 $uploadedImages[] = $newFileName;
@@ -202,12 +202,12 @@ if (isset($_POST['delete'])) {
     }
 }
 $pageTitle = "Bookshop Products - MIPS";
-include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/admin_head.php"; ?>
+include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
 
 <body>
-    <?php include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/admin_header.php"; ?>
+    <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_header.php"; ?>
     <div class="container">
-        <?php include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/admin_sidebar.php"; ?>
+        <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_sidebar.php"; ?>
         <main class="products">
             <div class="wrapper">
                 <div class="title">
@@ -224,13 +224,13 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/admin_head.php"; ?>
                         <div class="box" data-product-id="<?= htmlspecialchars($product['product_id']); ?>">
                             <div class="image-container">
                                 <a href="item.php?pid=<?= htmlspecialchars($product['product_id']); ?>">
-                                    <img src="<?= htmlspecialchars("/mahans/uploads/product/" . $product['image_url']) ?>" alt="Product Image">
+                                    <img src="<?= htmlspecialchars("/mips/uploads/product/" . $product['image_url']) ?>" alt="Product Image">
                                 </a>
                                 <div class="actions">
                                     <form action="" method="POST" style="display:inline;" onsubmit="return showDeactivateConfirmDialog(event);">
                                         <input type="hidden" name="product_id" value="<?= htmlspecialchars($product['product_id']); ?>">
                                         <input type="hidden" name="delete" value="true">
-                                        <button type="submit" class="delete-product-btn"><i class="bi bi-x-circle"></i></button>
+                                        <button type="submit" class="delete-product-btn"><i class="bi bi-x-square"></i></button>
                                     </form>
                                     <button type="button" class="edit-product-btn" data-product-id="<?= htmlspecialchars($product['product_id']); ?>"><i class="bi bi-pencil-square"></i></button>
                                 </div>
@@ -276,7 +276,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/admin_head.php"; ?>
                 <p>Please select a product category.</p>
             </div>
             <div class="input-container">
-                <div>
+                <div class="input-field">
                     <h2>Product Images<sup>*</sup></h2>
                     <input type="file" name="images[]" id="images" accept=".jpg, .jpeg, .png" multiple>
                 </div>
@@ -344,8 +344,8 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/admin_head.php"; ?>
             </div>
         </form>
     </dialog>
-    <?php include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/confirm_dialog.php"; ?>
-    <script src="/mahans/javascript/admin.js"></script>
+    <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/confirm_dialog.php"; ?>
+    <script src="/mips/javascript/admin.js"></script>
     <script>
         document.querySelector('form').addEventListener('submit', function(event) {
             const filesInput = document.querySelector('#images');
@@ -363,7 +363,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/admin_head.php"; ?>
         document.querySelectorAll('.edit-product-btn').forEach(button => {
             button.addEventListener('click', function() {
                 const productId = this.dataset.productId;
-                fetch(`/mahans/admin/ajax.php?action=get_product&product_id=${productId}`)
+                fetch(`/mips/admin/ajax.php?action=get_product&product_id=${productId}`)
                     .then(response => response.json())
                     .then(product => {
                         if (product.error) {
