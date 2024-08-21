@@ -127,7 +127,11 @@ function isActive($pageName, $currentPage)
                         <a href="/mips/admin/deactivate/announment.php" class="<?= isActive('announment.php', $currentPage); ?>"><i class="bi bi-person-fill-slash"></i>
                             <h4>Announment</h4>
                         </a>
-
+                    </li>
+                    <li>
+                        <a href="/mips/admin/deactivate/payment.php" class="<?= isActive('payment.php', $currentPage); ?>"><i class="bi bi-person-fill-slash"></i>
+                            <h4>Payment</h4>
+                        </a>
                     </li>
                 </ul>
             </li>

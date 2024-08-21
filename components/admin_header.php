@@ -1,7 +1,7 @@
 <header>
     <div class="wrapper">
         <a href="index.php">
-            <img src="/Mips/images/Mips_IPS_logo.png" class="logo" alt="Mahans International Primary School logo">
+            <img src="/Mips/images/MIPS_logo.png" class="logo" alt="Mahans International Primary School logo">
         </a>
         <div class="profile-area">
             <button id="menu-btn">

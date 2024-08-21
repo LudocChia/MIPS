@@ -15,9 +15,9 @@ $stmt = $pdo->prepare($sql);
 $stmt->execute();
 $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+$pageTitle = "Bookshop - MIPS";
+include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/customer_head.php";
 ?>
-
-<?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/customer_head.php"; ?>
 
 <body>
     <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/customer_header.php"; ?>

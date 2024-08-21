@@ -114,7 +114,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                                         <form action="" method="POST" style="display:inline;" onsubmit="return showDeactivateConfirmDialog(event);">
                                             <input type="hidden" name="product_size_id" value="<?= htmlspecialchars($size['size_id']); ?>">
                                             <input type="hidden" name="delete" value="true">
-                                            <button type="submit" class="delete-category-btn"><i class="bi bi-x-circle"></i></button>
+                                            <button type="submit" class="delete-category-btn"><i class="bi bi-x-square"></i></button>
                                         </form>
                                         <button type="button" class="edit-size-btn" data-size-id="<?= htmlspecialchars($size['size_id']); ?>"><i class="bi bi-pencil-square"></i></button>
                                     </td>

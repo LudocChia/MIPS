@@ -5,16 +5,16 @@ session_start();
 include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/db_connect.php";
 
 if (!isset($_SESSION['admin_id'])) {
-    header('Location: login.php');
+    header('Location: /mips/admin/login.php');
     exit();
 }
 
 $currentPage = basename($_SERVER['PHP_SELF']);
 
-function handleFileUpload($file)
+function handleFileUpload($file, $existingImagePath = null)
 {
     if ($file['error'] === UPLOAD_ERR_NO_FILE) {
-        return null;
+        return $existingImagePath;
     }
 
     $allowedfileExtensions = ['jpg', 'jpeg', 'png'];
@@ -24,17 +24,20 @@ function handleFileUpload($file)
 
     if (in_array($fileExtension, $allowedfileExtensions)) {
         $newFileName = uniqid() . '.' . $fileExtension;
-        $dest_path = '../uploads/category/' . $newFileName;
+        $dest_path = $_SERVER['DOCUMENT_ROOT'] . '/mips/uploads/category/' . $newFileName;
 
         if (move_uploaded_file($fileTmpPath, $dest_path)) {
+            if ($existingImagePath && file_exists($_SERVER['DOCUMENT_ROOT'] . '/mips/uploads/category/' . $existingImagePath)) {
+                unlink($_SERVER['DOCUMENT_ROOT'] . '/mips/uploads/category/' . $existingImagePath);
+            }
             return $newFileName;
         } else {
             echo "<script>alert('There was an error moving the uploaded file: $fileName');</script>";
-            return null;
+            return $existingImagePath;
         }
     } else {
         echo "<script>alert('Upload failed. Allowed file types: " . implode(',', $allowedfileExtensions) . "');</script>";
-        return null;
+        return $existingImagePath;
     }
 }
 
@@ -44,9 +47,18 @@ if (isset($_POST["submit"])) {
     $subcategoryId = isset($_POST['subcategory_id']) ? $_POST['subcategory_id'] : null;
 
     if ($_FILES["image"]["error"] === 4 && !$subcategoryId) {
-        echo "<script> alert('Image Does Not Exist'); </script>";
+        echo "<script>alert('Image Does Not Exist');</script>";
     } else {
-        $newImageName = handleFileUpload($_FILES['image']);
+        if ($subcategoryId) {
+            $sql = "SELECT category_icon FROM Product_Category WHERE category_id = :subcategory_id";
+            $stmt = $pdo->prepare($sql);
+            $stmt->bindParam(':subcategory_id', $subcategoryId);
+            $stmt->execute();
+            $existingSubcategory = $stmt->fetch(PDO::FETCH_ASSOC);
+            $existingImagePath = $existingSubcategory['category_icon'] ?? null;
+        }
+
+        $newImageName = handleFileUpload($_FILES['image'], $existingImagePath);
 
         if ($subcategoryId) {
             $sql = "UPDATE Product_Category SET category_name = :name, parent_id = :parentId";
@@ -68,7 +80,8 @@ if (isset($_POST["submit"])) {
 
             try {
                 $stmt->execute();
-                echo "<script>alert('Successfully Updated');document.location.href ='subcategory.php';</script>";
+                header('Location: ' . $_SERVER['PHP_SELF']);
+                exit();
             } catch (PDOException $e) {
                 echo "<script>alert('Database error: " . $e->getMessage() . "');</script>";
             }
@@ -79,29 +92,16 @@ if (isset($_POST["submit"])) {
                 $stmt->bindParam(':name', $name);
                 $stmt->bindParam(':icon', $newImageName);
                 $stmt->bindParam(':parentId', $parentId);
+
                 try {
                     $stmt->execute();
-                    echo "<script>alert('Successfully Added');document.location.href ='subcategory.php';</script>";
+                    header('Location: ' . $_SERVER['PHP_SELF']);
+                    exit();
                 } catch (PDOException $e) {
                     echo "<script>alert('Database error: " . $e->getMessage() . "');</script>";
                 }
             }
         }
-    }
-}
-
-if (isset($_POST['delete'])) {
-    $subcategoryId = $_POST['subcategory_id'];
-
-    $sql = "UPDATE Product_Category SET is_deleted = 1 WHERE category_id = :subcategory_id";
-    $stmt = $pdo->prepare($sql);
-    $stmt->bindParam(':subcategory_id', $subcategoryId);
-
-    try {
-        $stmt->execute();
-        echo "<script>alert('Subcategory successfully deleted');document.location.href ='subcategory.php';</script>";
-    } catch (PDOException $e) {
-        echo "<script>alert('Database error: " . $e->getMessage() . "');</script>";
     }
 }
 
@@ -150,8 +150,8 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                             <div class="actions">
                                 <form action="" method="POST" style="display:inline;" onsubmit="return showDeactivateConfirmDialog(event);">
                                     <input type="hidden" name="subcategory_id" value="<?= htmlspecialchars($subcategory['category_id']); ?>">
-                                    <input type="hidden" name="delete" value="true">
-                                    <button type="submit" class="delete-subcategory-btn"><i class="bi bi-x-circle"></i></button>
+                                    <input type="hidden" name="action" value="deactivate_product_category">
+                                    <button type="submit" class="delete-subcategory-btn"><i class="bi bi-x-square"></i></button>
                                 </form>
                                 <button type="button" class="edit-subcategory-btn" data-subcategory-id="<?= htmlspecialchars($subcategory['category_id']); ?>"><i class="bi bi-pencil-square"></i></button>
                             </div>

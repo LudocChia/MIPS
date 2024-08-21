@@ -5,7 +5,7 @@ session_start();
 include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/db_connect.php";
 
 if (isset($_SESSION['admin_id'])) {
-    header('Location: ./login.php');
+    header('Location: /mips/admin/login.php');
     exit();
 }
 
@@ -43,9 +43,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 
-?>
-
-<?php $pageTitle = "Admin Login Page - MIPS";
+$pageTitle = "Admin Login Page - MIPS";
 include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
 
 <body>
@@ -53,7 +51,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
         <div class="container">
             <div class="wrapper">
                 <div class="title">
-                    <img src="/mips/images/mips_IPS_logo.png" alt="mips_ISP_Logo">
+                    <img src="/mips/images/MIPS_logo.png" alt="MIPS_Logo">
                 </div>
                 <?php if (!empty($errorMsg)) : ?>
                     <div class="alert alert-danger">

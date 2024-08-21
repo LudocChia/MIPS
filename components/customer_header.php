@@ -2,7 +2,7 @@
     <div class="wrapper">
         <div class="logo">
             <a href="/mips">
-                <img src="/mips/images/mips_IPS_logo.png" class="logo" alt="Mahans International Primary School logo">
+                <img src="/mips/images/MIPS_logo.png" class="logo" alt="Mahans International Primary School logo">
             </a>
         </div>
         <span class="fas fa-bars" id="menuIcon" onclick="toggle()"></span>

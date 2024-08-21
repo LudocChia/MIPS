@@ -43,9 +43,13 @@ if (isset($_POST["login"])) {
 
 ?>
 
+<head>
+    <link rel="icon" type="image/x-icon" href="/mips/images/MIPS_icon.png">
+</head>
+
 <dialog id="login-form">
     <div class="title">
-        <img src="/mips/images/mips_IPS_icon.png" alt="mips_ISP_Logo">
+        <img src="/mips/images/MIPS_icon.png" alt="MIPS_Logo">
     </div>
     <?php if (!empty($errorMsg)) : ?>
         <div class="alert alert-danger">

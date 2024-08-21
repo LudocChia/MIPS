@@ -5,26 +5,16 @@ session_start();
 include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/db_connect.php";
 
 if (!isset($_SESSION['admin_id'])) {
-    header('Location: login.php');
+    header('Location: /mpis/admin/login.php');
     exit();
 }
 
 $currentPage = basename($_SERVER['PHP_SELF']);
 
-if (isset($_POST['delete'])) {
-    $category_id = $_POST['category_id'];
-
-    $sql = "UPDATE Product_Category SET is_deleted = 1 WHERE category_id = :category_id";
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute(['category_id' => $category_id]);
-    header('Location: ' . $currentPage);
-    exit();
-}
-
-function handleFileUpload($file)
+function handleFileUpload($file, $existingImagePath = null)
 {
     if ($file['error'] === UPLOAD_ERR_NO_FILE) {
-        return null;
+        return $existingImagePath;
     }
 
     $allowedfileExtensions = ['jpg', 'jpeg', 'png'];
@@ -34,17 +24,20 @@ function handleFileUpload($file)
 
     if (in_array($fileExtension, $allowedfileExtensions)) {
         $newFileName = uniqid() . '.' . $fileExtension;
-        $dest_path = '/mips/uploads/category/' . $newFileName;
+        $dest_path = $_SERVER['DOCUMENT_ROOT'] . '/mips/uploads/category/' . $newFileName;
 
         if (move_uploaded_file($fileTmpPath, $dest_path)) {
+            if ($existingImagePath && file_exists($_SERVER['DOCUMENT_ROOT'] . '/mips/uploads/category/' . $existingImagePath)) {
+                unlink($_SERVER['DOCUMENT_ROOT'] . '/mips/uploads/category/' . $existingImagePath);
+            }
             return $newFileName;
         } else {
             echo "<script>alert('There was an error moving the uploaded file: $fileName');</script>";
-            return null;
+            return $existingImagePath;
         }
     } else {
         echo "<script>alert('Upload failed. Allowed file types: " . implode(',', $allowedfileExtensions) . "');</script>";
-        return null;
+        return $existingImagePath;
     }
 }
 
@@ -52,10 +45,19 @@ if (isset($_POST["submit"])) {
     $name = $_POST["name"];
     $categoryId = isset($_POST['category_id']) ? $_POST['category_id'] : null;
 
-    if ($_FILES["image"]["error"] === 4 && !$categoryId) {
-        echo "<script> alert('Image Does Not Exist'); </script>";
+    if (!$categoryId && $_FILES["image"]["error"] === 4) {
+        echo "<script>alert('Image Does Not Exist');</script>";
     } else {
-        $newImageName = handleFileUpload($_FILES['image']);
+        if ($categoryId) {
+            $sql = "SELECT category_icon FROM Product_Category WHERE category_id = :category_id";
+            $stmt = $pdo->prepare($sql);
+            $stmt->bindParam(':category_id', $categoryId);
+            $stmt->execute();
+            $existingCategory = $stmt->fetch(PDO::FETCH_ASSOC);
+            $existingImagePath = $existingCategory['category_icon'] ?? null;
+        }
+
+        $newImageName = handleFileUpload($_FILES['image'], $existingImagePath);
 
         if ($categoryId) {
             $sql = "UPDATE Product_Category SET category_name = :name";
@@ -76,7 +78,8 @@ if (isset($_POST["submit"])) {
 
             try {
                 $stmt->execute();
-                echo "<script>alert('Successfully Updated');document.location.href ='mainCategory.php';</script>";
+                header('Location: ' . $_SERVER['PHP_SELF']);
+                exit();
             } catch (PDOException $e) {
                 echo "<script>alert('Database error: " . $e->getMessage() . "');</script>";
             }
@@ -86,9 +89,11 @@ if (isset($_POST["submit"])) {
                 $stmt = $pdo->prepare($sql);
                 $stmt->bindParam(':name', $name);
                 $stmt->bindParam(':icon', $newImageName);
+
                 try {
                     $stmt->execute();
-                    echo "<script>alert('Successfully Added');document.location.href ='mainCategory.php';</script>";
+                    header('Location: ' . $_SERVER['PHP_SELF']);
+                    exit();
                 } catch (PDOException $e) {
                     echo "<script>alert('Database error: " . $e->getMessage() . "');</script>";
                 }
@@ -97,20 +102,6 @@ if (isset($_POST["submit"])) {
     }
 }
 
-if (isset($_POST['delete'])) {
-    $categoryId = $_POST['category_id'];
-
-    $sql = "UPDATE Product_Category SET is_deleted = 1 WHERE category_id = :category_id";
-    $stmt = $pdo->prepare($sql);
-    $stmt->bindParam(':category_id', $categoryId);
-
-    try {
-        $stmt->execute();
-        echo "<script>alert('Category successfully deleted');document.location.href ='mainCategory.php';</script>";
-    } catch (PDOException $e) {
-        echo "<script>alert('Database error: " . $e->getMessage() . "');</script>";
-    }
-}
 
 function getMainCategories($pdo)
 {
@@ -148,7 +139,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                             <div class="actions">
                                 <form action="" method="POST" style="display:inline;" onsubmit="return showDeactivateConfirmDialog(event);">
                                     <input type="hidden" name="category_id" value="<?= htmlspecialchars($category['category_id']); ?>">
-                                    <input type="hidden" name="delete" value="true">
+                                    <input type="hidden" name="action" value="deactivate_product_category">
                                     <button type="submit" class="delete-category-btn"><i class="bi bi-x-square"></i></button>
                                 </form>
                                 <button type="button" class="edit-category-btn" data-category-id="<?= htmlspecialchars($category['category_id']); ?>"><i class="bi bi-pencil-square"></i></button>
@@ -176,14 +167,14 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
             <div class="input-container">
                 <div class="input-field">
                     <h2>Category Name<sup>*</sup></h2>
-                    <input type="text" name="name" value="<?php echo isset($_POST['name']) ? htmlspecialchars($_POST['name']) : ''; ?>" required>
+                    <input type="text" name="name" value="<?php echo isset($_POST['name']) ? htmlspecialchars($_POST['name']) : ''; ?>">
                 </div>
                 <p>Please enter the category name.</p>
             </div>
             <div class="input-container">
                 <div class="input-field">
                     <h2>Category Icon<sup>*</sup></h2>
-                    <input type="file" name="image" id="image" accept=".jpg, .jpeg, .png" required>
+                    <input type="file" name="image" id="image" accept=".jpg, .jpeg, .png">
                 </div>
                 <p>Please upload an image for the category.</p>
             </div>
@@ -217,10 +208,6 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                         alert('Failed to load category data.');
                     });
             });
-        });
-
-        document.querySelector('.cancel').addEventListener('click', function() {
-            document.getElementById('add-edit-data').close();
         });
     </script>
 </body>

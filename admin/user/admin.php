@@ -2,7 +2,7 @@
 
 session_start();
 
-include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/db_connect.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/db_connect.php";
 
 $currentPage = basename($_SERVER['PHP_SELF']);
 
@@ -64,12 +64,12 @@ if (isset($_POST["submit"])) {
 }
 
 $pageTitle = "Admin Management - MIPS";
-include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/admin_head.php"; ?>
+include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
 
 <body>
-    <?php include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/admin_header.php"; ?>
+    <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_header.php"; ?>
     <div class="container">
-        <?php include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/admin_sidebar.php"; ?>
+        <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_sidebar.php"; ?>
         <main class="admin">
             <div class="wrapper">
                 <div class="title">
@@ -112,7 +112,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/admin_head.php"; ?>
                                         <form action="" method="POST" style="display:inline;" onsubmit="return showDeactivateConfirmDialog(event);">
                                             <input type="hidden" name="admin_id" value="<?= htmlspecialchars($admin['admin_id']); ?>">
                                             <input type="hidden" name="delete" value="true">
-                                            <button type="submit" class="delete-admin-btn"><i class="bi bi-x-square-fill"></i></button>
+                                            <button type="submit" class="delete-admin-btn"><i class="bi bi-x-square"></i></button>
                                         </form>
                                         <button type="button" class="edit-admin-btn" data-admin-id="<?= htmlspecialchars($admin['admin_id']); ?>"><i class="bi bi-pencil-square"></i></button>
                                     </td>
@@ -169,14 +169,14 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/admin_head.php"; ?>
             </div>
         </form>
     </dialog>
-    <?php include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/confirm_dialog.php"; ?>
-    <script src="/mahans/javascript/admin.js"></script>
+    <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/confirm_dialog.php"; ?>
+    <script src="/mips/javascript/admin.js"></script>
     <script>
         document.querySelectorAll('.edit-admin-btn').forEach(button => {
             button.addEventListener('click', function() {
                 const adminId = this.dataset.adminId;
 
-                fetch(`/mahans/admin/ajax.php?action=get_admin&admin_id=${adminId}`)
+                fetch(`/mips/admin/ajax.php?action=get_admin&admin_id=${adminId}`)
                     .then(response => response.json())
                     .then(admin => {
                         if (admin.error) {

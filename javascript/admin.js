@@ -86,26 +86,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    window.showRecoverConfirmDialog = function (event) {
-        event.preventDefault();
-        const recoverForm = event.target;
-        const recoverConfirmDialog = document.querySelector('#recover-confirm-dialog');
-
-        if (recoverForm && recoverConfirmDialog) {
-            document.querySelector('#add-edit-data h1').textContent = "Recover Bookshop Product";
-            recoverConfirmDialog.showModal();
-        }
-    }
-
-    const recoverConfirmDialog = document.querySelector('#recover-confirm-dialog');
-    if (recoverConfirmDialog) {
-        recoverConfirmDialog.addEventListener('close', function () {
-            if (recoverConfirmDialog.returnValue === 'confirm' && recoverForm) {
-                recoverForm.submit();
-            }
-        });
-    }
-
     document.querySelectorAll('#add-edit-data .cancel, #delete-confirm-dialog .cancel, #detail-dialog .cancel').forEach(button => {
         if (button) {
             button.addEventListener('click', function () {
@@ -128,56 +108,76 @@ document.addEventListener('DOMContentLoaded', function () {
         currentForm = event.target;
 
         if (currentForm && ConfirmDialog) {
+            const actionType = currentForm.querySelector('input[name="action"]').value;
+            const idField = currentForm.querySelector('input[name*="_id"]').name;
+            const idValue = currentForm.querySelector(`input[name="${idField}"]`).value;
+
             document.querySelector('#confirm-dialog h1').textContent = "This data will be recovered!";
             document.querySelector('.confirm').textContent = "Recover";
             ConfirmDialog.showModal();
-        }
-    };
 
-    if (ConfirmDialog) {
-        ConfirmDialog.addEventListener('close', function () {
-            if (ConfirmDialog.returnValue === 'confirm' && currentForm) {
-                const parentId = currentForm.querySelector('input[name="parent_id"]').value;
-
-                fetch(`/mahans/admin/ajax.php?action=recover_parent`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded'
-                    },
-                    body: `parent_id=${parentId}`
-                })
-                    .then(response => response.json())
-                    .then(result => {
-                        if (result.success) {
-                            alert('Parent successfully recovered.');
-                            location.reload();
-                        } else {
-                            alert('Error recovering parent: ' + result.error);
-                        }
+            ConfirmDialog.addEventListener('close', function () {
+                if (ConfirmDialog.returnValue === 'confirm' && currentForm) {
+                    fetch(`/mips/admin/ajax.php?action=${actionType}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded'
+                        },
+                        body: `${idField}=${idValue}`
                     })
-                    .catch(error => {
-                        console.error('Error:', error);
-                        alert('An error occurred while recovering the parent.');
-                    });
-            }
-        });
+                        .then(response => response.json())
+                        .then(result => {
+                            if (result.success) {
+                                location.reload();
+                            } else {
+                                alert('Error recovering: ' + result.error);
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            alert('An error occurred while recovering.');
+                        });
+                }
+            });
+        }
     }
+
     window.showDeactivateConfirmDialog = function (event) {
         event.preventDefault();
         currentForm = event.target;
 
         if (currentForm && ConfirmDialog) {
+            const actionType = currentForm.querySelector('input[name="action"]').value;
+            const idField = currentForm.querySelector('input[name*="_id"]').name;
+            const idValue = currentForm.querySelector(`input[name="${idField}"]`).value;
+
             document.querySelector('#confirm-dialog h1').textContent = "This data will be deactivated!";
             document.querySelector('.confirm').textContent = "Deactivate";
             ConfirmDialog.showModal();
-        }
-    }
 
-    if (ConfirmDialog) {
-        ConfirmDialog.addEventListener('close', function () {
-            if (ConfirmDialog.returnValue === 'confirm' && currentForm) {
-                currentForm.submit();
-            }
-        });
+            ConfirmDialog.addEventListener('close', function () {
+                if (ConfirmDialog.returnValue === 'confirm' && currentForm) {
+                    fetch(`/mips/admin/ajax.php?action=${actionType}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded'
+                        },
+                        body: `${idField}=${idValue}`
+                    })
+                        .then(response => response.json())
+                        .then(result => {
+                            if (result.success) {
+                                location.reload();
+                            } else {
+                                alert('Error deactivating: ' + result.error);
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            alert('An error occurred while deactivating.');
+                        });
+                }
+            });
+        }
     }
 });

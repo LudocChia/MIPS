@@ -8,6 +8,10 @@ $pageTitle = "Home - MIPS";
 include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/customer_head.php";
 ?>
 
+<head>
+    <link rel="icon" type="image/x-icon" href="./">
+</head>
+
 <body>
     <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/customer_header.php"; ?>
     <section class="banner">

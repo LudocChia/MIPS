@@ -2,7 +2,7 @@
 
 session_start();
 
-include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/db_connect.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/db_connect.php";
 
 if (!isset($_SESSION['admin_id'])) {
     header('Location: login.php');
@@ -37,7 +37,7 @@ $all_classes = getAllClasses($pdo);
 
 function handleFileUpload($file, $studentId)
 {
-    $uploadDir = '/mahans/uploads/student/';
+    $uploadDir = '/mips/uploads/student/';
 
     if (!is_dir($uploadDir)) {
         mkdir($uploadDir, 0777, true);
@@ -116,12 +116,12 @@ if (isset($_POST['delete'])) {
 }
 
 $pageTitle = "Student Management - MIPS";
-include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/admin_head.php"; ?>
+include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
 
 <body>
-    <?php include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/admin_header.php"; ?>
+    <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_header.php"; ?>
     <div class="container">
-        <?php include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/admin_sidebar.php"; ?>
+        <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_sidebar.php"; ?>
         <main class="category">
             <div class="wrapper">
                 <div class="title">
@@ -149,12 +149,12 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/admin_head.php"; ?>
                                     <td><?= htmlspecialchars($student['student_name']) ?></td>
                                     <td><?= htmlspecialchars($student['class_name']) ?></td>
                                     <td>
-                                        <button type="button" class="edit-student-btn" data-student-id="<?= htmlspecialchars($student['student_id']); ?>"><i class="bi bi-pencil-square"></i></button>
                                         <form action="" method="POST" style="display:inline;" onsubmit="return showDeactivateConfirmDialog(event);">
                                             <input type="hidden" name="student_id" value="<?= htmlspecialchars($student['student_id']); ?>">
                                             <input type="hidden" name="delete" value="true">
-                                            <button type="submit" class="delete-student-btn"><i class="bi bi-x-square-fill"></i></button>
+                                            <button type="submit" class="delete-student-btn"><i class="bi bi-x-square"></i></button>
                                         </form>
+                                        <button type="button" class="edit-student-btn" data-student-id="<?= htmlspecialchars($student['student_id']); ?>"><i class="bi bi-pencil-square"></i></button>
                                     </td>
                                 </tr>
                             <?php } ?>
@@ -208,8 +208,8 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/admin_head.php"; ?>
             </div>
         </form>
     </dialog>
-    <?php include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/confirm_dialog.php"; ?>
-    <script src="/mahans/javascript/admin.js"></script>
+    <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/confirm_dialog.php"; ?>
+    <script src="/mips/javascript/admin.js"></script>
     <script>
         document.querySelectorAll('.edit-student-btn').forEach(button => {
             button.addEventListener('click', function() {

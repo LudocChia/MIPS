@@ -9,12 +9,8 @@ class Action
         $this->db = $pdo;
     }
 
-    public function recover_parent($parent_id)
+    private function execute_statement($stmt)
     {
-        $sql = "UPDATE Parent SET is_deleted = 0 WHERE parent_id = :parent_id";
-        $stmt = $this->db->prepare($sql);
-        $stmt->bindParam(':parent_id', $parent_id);
-
         try {
             $stmt->execute();
             return json_encode(['success' => true]);
@@ -23,6 +19,75 @@ class Action
         }
     }
 
+    // Admin Functions
+    public function deactivate_admin($admin_id)
+    {
+        $sql = "UPDATE Admin SET is_deleted = 1 WHERE admin_id = :admin_id";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':admin_id', $admin_id);
+        return $this->execute_statement($stmt);
+    }
+
+    public function recover_admin($admin_id)
+    {
+        $sql = "UPDATE Admin SET is_deleted = 0 WHERE admin_id = :admin_id";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':admin_id', $admin_id);
+        return $this->execute_statement($stmt);
+    }
+
+    // Parent Functions
+    public function deactivate_parent($parent_id)
+    {
+        $sql = "UPDATE Parent SET is_deleted = 1 WHERE parent_id = :parent_id";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':parent_id', $parent_id);
+        return $this->execute_statement($stmt);
+    }
+
+    public function recover_parent($parent_id)
+    {
+        $sql = "UPDATE Parent SET is_deleted = 0 WHERE parent_id = :parent_id";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':parent_id', $parent_id);
+        return $this->execute_statement($stmt);
+    }
+
+    // Product Category Functions
+    public function deactivate_product_category($category_id)
+    {
+        $sql = "UPDATE Product_Category SET is_deleted = 1 WHERE category_id = :category_id";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':category_id', $category_id);
+        return $this->execute_statement($stmt);
+    }
+
+    public function recover_product_category($category_id)
+    {
+        $sql = "UPDATE Product_Category SET is_deleted = 0 WHERE category_id = :category_id";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':category_id', $category_id);
+        return $this->execute_statement($stmt);
+    }
+
+    // Order Functions
+    public function deactivate_order($order_id)
+    {
+        $sql = "UPDATE Orders SET is_deleted = 1 WHERE order_id = :order_id";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':order_id', $order_id);
+        return $this->execute_statement($stmt);
+    }
+
+    public function recover_order($order_id)
+    {
+        $sql = "UPDATE Orders SET is_deleted = 0 WHERE order_id = :order_id";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':order_id', $order_id);
+        return $this->execute_statement($stmt);
+    }
+
+    // Retrieve category data
     public function get_category($category_id)
     {
         $sql = "
@@ -36,11 +101,7 @@ class Action
         $stmt->execute();
         $category = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        if ($category) {
-            return json_encode($category);
-        } else {
-            return json_encode(['error' => 'Category not found']);
-        }
+        return $category ? json_encode($category) : json_encode(['error' => 'Category not found']);
     }
 
     public function get_subcategory($subcategory_id)
@@ -56,28 +117,10 @@ class Action
         $stmt->execute();
         $subcategory = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        if ($subcategory) {
-            return json_encode($subcategory);
-        } else {
-            return json_encode(['error' => 'Subcategory not found']);
-        }
+        return $subcategory ? json_encode($subcategory) : json_encode(['error' => 'Subcategory not found']);
     }
 
-    public function get_subcategory_count()
-    {
-        $sql = "
-            SELECT COUNT(*) as total_count
-            FROM Product_Category
-            WHERE parent_id IS NOT NULL AND is_deleted = 0
-        ";
-
-        $stmt = $this->db->prepare($sql);
-        $stmt->execute();
-        $count = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        return json_encode($count);
-    }
-
+    // Retrieve pending order count
     public function get_pending_count()
     {
         $sql = "
@@ -92,6 +135,7 @@ class Action
         return $stmt->fetchColumn();
     }
 
+    // Retrieve size data
     public function get_size($size_id)
     {
         $sql = "SELECT * FROM Sizes WHERE size_id = :size_id";
@@ -100,13 +144,10 @@ class Action
         $stmt->execute();
         $size = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        if ($size) {
-            return json_encode($size);
-        } else {
-            return json_encode(['error' => 'Size not found']);
-        }
+        return $size ? json_encode($size) : json_encode(['error' => 'Size not found']);
     }
 
+    // Retrieve order details
     public function get_order_details($order_id)
     {
         $sql = "SELECT o.order_id, o.order_datetime, o.order_price, p.parent_name, pm.payment_status, pm.payment_image
@@ -131,6 +172,7 @@ class Action
         }
     }
 
+    // Update order status
     public function update_order_status($order_id, $order_status)
     {
         $sql = "UPDATE Orders o
@@ -141,15 +183,10 @@ class Action
         $stmt = $this->db->prepare($sql);
         $stmt->bindParam(':order_id', $order_id);
         $stmt->bindParam(':order_status', $order_status);
-
-        try {
-            $stmt->execute();
-            return json_encode(['success' => true]);
-        } catch (PDOException $e) {
-            return json_encode(['error' => 'Database error: ' . $e->getMessage()]);
-        }
+        return $this->execute_statement($stmt);
     }
 
+    // Retrieve student data
     public function get_student($student_id)
     {
         $sql = "SELECT * FROM Student WHERE student_id = :student_id AND is_deleted = 0";
@@ -158,13 +195,10 @@ class Action
         $stmt->execute();
         $student = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        if ($student) {
-            return json_encode($student);
-        } else {
-            return json_encode(['error' => 'Student not found']);
-        }
+        return $student ? json_encode($student) : json_encode(['error' => 'Student not found']);
     }
 
+    // Retrieve class data
     public function get_class($class_id)
     {
         $sql = "
@@ -180,13 +214,10 @@ class Action
         $stmt->execute();
         $class = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        if ($class) {
-            return json_encode($class);
-        } else {
-            return json_encode(['error' => 'Class not found']);
-        }
+        return $class ? json_encode($class) : json_encode(['error' => 'Class not found']);
     }
 
+    // Retrieve grade data
     public function get_grade($grade_id)
     {
         $sql = "
@@ -200,14 +231,10 @@ class Action
         $stmt->execute();
         $grade = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        if ($grade) {
-            return json_encode($grade);
-        } else {
-            return json_encode(['error' => 'Grade not found']);
-        }
+        return $grade ? json_encode($grade) : json_encode(['error' => 'Grade not found']);
     }
 
-
+    // Retrieve order data
     public function get_order($order_id)
     {
         $sql = "
@@ -247,27 +274,24 @@ class Action
         }
     }
 
-
+    // Retrieve parent data
     public function get_parent($parent_id)
     {
         $sql = "
-        SELECT parent_id, parent_name, parent_email
-        FROM Parent
-        WHERE parent_id = :parent_id AND is_deleted = 0
-    ";
+            SELECT parent_id, parent_name, parent_email
+            FROM Parent
+            WHERE parent_id = :parent_id AND is_deleted = 0
+        ";
 
         $stmt = $this->db->prepare($sql);
         $stmt->bindParam(':parent_id', $parent_id);
         $stmt->execute();
         $parent = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        if ($parent) {
-            return json_encode($parent);
-        } else {
-            return json_encode(['error' => 'Parent not found']);
-        }
+        return $parent ? json_encode($parent) : json_encode(['error' => 'Parent not found']);
     }
 
+    // Retrieve admin data
     public function get_admin($admin_id)
     {
         $sql = "
@@ -281,12 +305,10 @@ class Action
         $stmt->execute();
         $admin = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        if ($admin) {
-            return json_encode($admin);
-        } else {
-            return json_encode(['error' => 'Admin not found']);
-        }
+        return $admin ? json_encode($admin) : json_encode(['error' => 'Admin not found']);
     }
+
+    // Retrieve product data
     public function get_product($product_id)
     {
         $sql = "
@@ -314,18 +336,9 @@ class Action
 
             $product['sizes'] = $sizes;
 
-            error_log(json_encode($product));
             return json_encode($product);
         } else {
             return json_encode(['error' => 'Product not found']);
         }
-    }
-
-
-    public function delete_product()
-    {
-        extract($_POST);
-        $delete = $this->db->query("DELETE FROM Product WHERE product_id = $product_id");
-        return $delete ? 1 : 0;
     }
 }

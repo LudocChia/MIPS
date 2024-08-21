@@ -72,9 +72,9 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                                     <td><?= htmlspecialchars($parent['register_datetime']); ?></td>
                                     <td>
                                         <button type="button" class="view-order-detail-btn" data-order-id="<?= htmlspecialchars($order['order_id']); ?>"><i class="bi bi-info-circle-fill"></i></button>
-                                        <form action="" method="POST" style="display:inline;" onsubmit="showRecoverConfirmDialog(event);">
+                                        <form action="" method="POST" style="display:inline;" onsubmit="return showRecoverConfirmDialog(event);">
                                             <input type="hidden" name="parent_id" value="<?= htmlspecialchars($parent['parent_id']); ?>">
-                                            <input type="hidden" name="recover" value="true">
+                                            <input type="hidden" name="action" value="recover_parent">
                                             <button type="submit" class="recover-parent-btn"><i class="bi bi-arrow-clockwise"></i></button>
                                         </form>
 

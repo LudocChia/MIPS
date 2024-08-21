@@ -2,7 +2,7 @@
 
 session_start();
 
-include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/db_connect.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/db_connect.php";
 
 if (!isset($_SESSION['admin_id'])) {
     header('Location: login.php');
@@ -120,28 +120,13 @@ if (isset($_POST["submit"])) {
     }
 }
 
-if (isset($_POST['deactivate'])) {
-    $parentId = $_POST['parent_id'];
-
-    $sql = "UPDATE Parent SET is_deleted = 1 WHERE parent_id = :parent_id";
-    $stmt = $pdo->prepare($sql);
-    $stmt->bindParam(':parent_id', $parentId);
-
-    try {
-        $stmt->execute();
-        header('Location: parent.php');
-        exit();
-    } catch (PDOException $e) {
-        echo "<script>alert('Database error: " . $e->getMessage() . "');</script>";
-    }
-}
 $pageTitle = "Parent Management - MIPS";
-include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/admin_head.php"; ?>
+include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
 
 <body>
-    <?php include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/admin_header.php"; ?>
+    <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_header.php"; ?>
     <div class="container">
-        <?php include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/admin_sidebar.php"; ?>
+        <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_sidebar.php"; ?>
         <main class="parent">
             <div class="wrapper">
                 <div class="title">
@@ -150,18 +135,6 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/admin_head.php"; ?>
                     </div>
                     <div class="right">
                         <button class="btn btn-outline-primary" id="open-popup"><i class="bi bi-person-fill-add"></i>Add New Parent</button>
-                        <?php
-                        try {
-                            $countQuery = "SELECT COUNT(*) FROM Parent WHERE is_deleted = 0";
-                            $stmt = $pdo->prepare($countQuery);
-                            $stmt->execute();
-                            $count = $stmt->fetchColumn();
-
-                            echo "<p>Total $count Parent(s)</p>";
-                        } catch (PDOException $e) {
-                            echo "<script>alert('Database error: " . $e->getMessage() . "');</script>";
-                        }
-                        ?>
                     </div>
                 </div>
                 <div class="table-body">
@@ -185,8 +158,8 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/admin_head.php"; ?>
                                     <td>
                                         <form action="" method="POST" style="display:inline;" onsubmit="return showDeactivateConfirmDialog(event);">
                                             <input type="hidden" name="parent_id" value="<?= htmlspecialchars($parent['parent_id']); ?>">
-                                            <input type="hidden" name="deactivate" value="true">
-                                            <button type="submit" class="delete-parent-btn"><i class="bi bi-x-square-fill"></i></button>
+                                            <input type="hidden" name="action" value="deactivate_parent">
+                                            <button type="submit" class="delete-parent-btn"><i class="bi bi-x-square"></i></button>
                                         </form>
                                         <button type="button" class="edit-parent-btn" data-parent-id="<?= htmlspecialchars($parent['parent_id']); ?>"><i class="bi bi-pencil-square"></i></button>
                                     </td>
@@ -262,8 +235,8 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/admin_head.php"; ?>
             </div>
         </form>
     </dialog>
-    <?php include $_SERVER['DOCUMENT_ROOT'] . "/mahans/components/confirm_dialog.php"; ?>
-    <script src="/mahans/javascript/admin.js"></script>
+    <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/confirm_dialog.php"; ?>
+    <script src="/mips/javascript/admin.js"></script>
     <script>
         document.getElementById('add-child-btn').addEventListener('click', function() {
             const childInfoDiv = document.createElement('div');
