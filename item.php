@@ -98,7 +98,7 @@ function handleFileUpload($file)
 
     if (in_array($fileExtension, $allowedfileExtensions)) {
         $newFileName = uniqid() . '.' . $fileExtension;
-        $dest_path = '/mips/uploads/receipts/' . $newFileName;
+        $dest_path = $_SERVER['DOCUMENT_ROOT'] . '/mips/uploads/receipts/' . $newFileName;
 
         if (move_uploaded_file($fileTmpPath, $dest_path)) {
             return $newFileName;
@@ -158,6 +158,15 @@ if (isset($_POST['submit'])) {
                 $paymentStmt->bindParam(':payment_amount', $productPrice);
                 $paymentStmt->bindParam(':payment_image', $fileName);
                 $paymentStmt->execute();
+
+                $orderItemStudentQuery = "INSERT INTO Order_Item_Student (order_item_student_id, order_item_id, student_id)
+                                          VALUES (:order_item_student_id, :order_item_id, :student_id)";
+                $orderItemStudentStmt = $pdo->prepare($orderItemStudentQuery);
+                $orderItemStudentId = uniqid('OIS');
+                $orderItemStudentStmt->bindParam(':order_item_student_id', $orderItemStudentId);
+                $orderItemStudentStmt->bindParam(':order_item_id', $orderItemId);
+                $orderItemStudentStmt->bindParam(':student_id', $childId);
+                $orderItemStudentStmt->execute();
             }
 
             $pdo->commit();
