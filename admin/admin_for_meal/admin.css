@@ -726,6 +726,18 @@ main .recent-orders a {
     main table tbody tr td:first-child {
         display: none;
     }
+    #btn{
+        position: absolute;
+        margin-left: 200px;
+        margin-top: 100px;
+        background: #d38989;
+    }
+    #btn1{
+        position: absolute;
+        margin-left: 200px;
+        margin-top: 100px;
+        background: #d38989;
+    }
 }
 
 @media screen and (max-width: 768px) {
