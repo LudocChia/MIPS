@@ -1,4 +1,5 @@
 <?php
+    session_start();
     include "../admin_for_meal/header.php"; 
 ?>
 
@@ -18,8 +19,6 @@
     <link rel="stylesheet" href="../admin_for_meal/admin.css">
 </head>
 <body>
-    <script src="../admin_for_meal/admin.js">
-        
-    </script>
+    <script src="../admin_for_meal/admin.js"></script>
 </body>
 </html>
