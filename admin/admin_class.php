@@ -202,7 +202,23 @@ class Action
         return $this->execute_statement($stmt);
     }
 
-    // Retrieve student data
+    // student Functions
+    public function deactivate_student($student_id)
+    {
+        $sql = "UPDATE Student SET is_deleted = 1 WHERE student_id = :student_id";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':student_id', $student_id);
+        return $this->execute_statement($stmt);
+    }
+
+    public function activate_student($student_id)
+    {
+        $sql = "UPDATE Student SET is_deleted = 0 WHERE student_id = :student_id";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':student_id', $student_id);
+        return $this->execute_statement($stmt);
+    }
+
     public function get_student($student_id)
     {
         $sql = "SELECT * FROM Student WHERE student_id = :student_id AND is_deleted = 0";
@@ -315,7 +331,6 @@ class Action
             FROM Admin
             WHERE admin_id = :admin_id AND is_deleted = 0
         ";
-
         $stmt = $this->db->prepare($sql);
         $stmt->bindParam(':admin_id', $admin_id);
         $stmt->execute();

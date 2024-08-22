@@ -33,12 +33,12 @@ $all_students = getAllStudents($pdo);
 
 function generateParentId()
 {
-    return uniqid('PAR');
+    return uniqid('PR');
 }
 
 function generateParentCartID()
 {
-    return uniqid('CART');
+    return uniqid('CR');
 }
 
 if (isset($_POST["submit"])) {
@@ -110,7 +110,7 @@ if (isset($_POST["submit"])) {
 
                 $pdo->commit();
 
-                header('Location: parent.php');
+                header('Location:' . $_SERVER['PHP_SELF']);
                 exit();
             } catch (PDOException $e) {
                 $pdo->rollBack();
@@ -172,34 +172,43 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
         </main>
     </div>
     <dialog id="add-edit-data">
-        <h1>Add/Edit Parent</h1>
+        <div class="title">
+            <div class="left">
+                <h1>Add Parent</h1>
+            </div>
+            <div class="right">
+                <button id="cancel"><i class="bi bi-x-circle"></i></button>
+            </div>
+        </div>
         <form action="" method="post">
             <input type="hidden" name="parent_id" value="">
             <div class="input-container">
+                <h2>Parent Name<sup>*</sup></h2>
                 <div class="input-field">
-                    <h2>Parent Name<sup>*</sup></h2>
                     <input type="text" name="name" value="" required>
                 </div>
                 <p>Please enter the parent's full name.</p>
             </div>
             <div class="input-container">
+                <h2>Parent Email<sup>*</sup></h2>
                 <div class="input-field">
-                    <h2>Parent Email<sup>*</sup></h2>
                     <input type="email" name="email" value="" required>
                 </div>
                 <p>Please enter the parent's email address.</p>
             </div>
             <div class="input-container">
+                <h2>Password<sup>*</sup></h2>
                 <div class="input-field">
-                    <h2>Password<sup>*</sup></h2>
                     <input type="password" name="password" required>
                 </div>
                 <p>Please enter a secure password.</p>
             </div>
-            <div class="input-field">
+            <div class="input-container">
                 <h2>Confirm Password<sup>*</sup></h2>
-                <input type="password" name="confirm_password" required>
-                <p>Please confirm the password.</p>
+                <div class="input-field">
+                    <input type="password" name="confirm_password" required>
+                    <p>Please confirm the password.</p>
+                </div>
             </div>
             <div class="input-container">
                 <h2>Children Information</h2>
@@ -228,7 +237,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                     <button type="button" id="add-child-btn">Add Another Child</button>
                 </div>
             </div>
-            <div class="controls">
+            <div class="input-container controls">
                 <button type="button" class="cancel">Cancel</button>
                 <button type="reset">Clear</button>
                 <button type="submit" name="submit">Publish</button>
@@ -268,8 +277,13 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
         document.querySelectorAll('.edit-parent-btn').forEach(button => {
             button.addEventListener('click', function() {
                 const parentId = this.dataset.parentId;
-
-                fetch(`ajax.php?action=get_parent&parent_id=${parentId}`)
+                fetch(`/mips/admin/ajax.php?action=get_parent`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded'
+                        },
+                        body: `parent_id=${encodeURIComponent(parentId)}`
+                    })
                     .then(response => response.json())
                     .then(parent => {
                         if (parent.error) {
@@ -287,10 +301,6 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                         alert('Failed to load parent data.');
                     });
             });
-        });
-
-        document.querySelector('.cancel').addEventListener('click', function() {
-            document.getElementById('add-edit-data').close();
         });
     </script>
 </body>

@@ -200,24 +200,27 @@ class Action
         }
     }
 
-    // 获取购物车项目
     public function get_cart_items($parent_id)
     {
         try {
             $sql = "
                     SELECT 
-                    ci.cart_item_id,
-                    ci.product_quantity,
-                    p.product_name,
-                    p.product_price,
-                    p.is_deleted,
-                    pi.image_url,
-                    p.product_price
-                FROM Cart_Item ci
-                JOIN Product p ON ci.product_id = p.product_id
-                JOIN Product_Image pi ON p.product_id = pi.product_id AND pi.sort_order = 1
-                WHERE ci.cart_id = (SELECT cart_id FROM Cart WHERE parent_id = :parent_id)
-            ";
+                ci.cart_item_id,
+                ci.product_quantity,
+                p.product_name,
+                p.product_price,
+                p.is_deleted,
+                pi.image_url,
+                p.product_price,
+                GROUP_CONCAT(DISTINCT s.student_id, ':', s.student_name) AS children
+            FROM Cart_Item ci
+            JOIN Product p ON ci.product_id = p.product_id
+            JOIN Product_Image pi ON p.product_id = pi.product_id AND pi.sort_order = 1
+            JOIN Parent_Student ps ON ps.parent_id = :parent_id
+            JOIN Student s ON ps.student_id = s.student_id
+            WHERE ci.cart_id = (SELECT cart_id FROM Cart WHERE parent_id = :parent_id)
+            GROUP BY ci.cart_item_id
+        ";
             $stmt = $this->db->prepare($sql);
             $stmt->bindParam(':parent_id', $parent_id);
             $stmt->execute();
@@ -229,7 +232,6 @@ class Action
         }
     }
 
-    // 删除选中的购物车项目
     public function delete_selected($cart_item_ids)
     {
         try {
@@ -248,7 +250,6 @@ class Action
         }
     }
 
-    // 清空购物车
     public function clear_cart($parent_id)
     {
         try {

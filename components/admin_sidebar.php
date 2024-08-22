@@ -66,6 +66,12 @@ function isActive($pageName, $currentPage)
                 </a>
             </li>
             <li>
+                <a href="#" class="<?= isActive('#.php', $currentPage); ?>">
+                    <i></i>
+                    <h4>Meal Donation</h4>
+                </a>
+            </li>
+            <li>
                 <a href="javascript:void(0);" class="user-btn">
                     <i class="bi bi-person-fill"></i>
                     <h4>User Type</h4>

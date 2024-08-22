@@ -54,7 +54,9 @@ dialog form {
 
 dialog form input[type="text"],
 dialog form input[type="file"],
-dialog form input[type="number"] {
+dialog form input[type="number"],
+dialog form input[type="email"],
+dialog form input[type="password"] {
     height: 3rem;
 }
 
@@ -79,6 +81,8 @@ dialog form input[type="text"] {
 dialog form input[type="text"],
 dialog form input[type="file"],
 dialog form input[type="number"],
+dialog form input[type="email"],
+dialog form input[type="password"],
 textarea {
     font-size: 1.2rem;
     background: #fff;
@@ -88,6 +92,10 @@ textarea {
     border: 1px solid #ddd;
     width: 85%;
     transition: border 0.3s ease;
+}
+
+#login-form input {
+    box-shadow: none;
 }
 
 dialog form input:focus,
@@ -324,6 +332,10 @@ header .profile-area .user-img {
     object-fit: cover;
 }
 
+header .profile-area img.login {
+    display: none;
+}
+
 header .profile-area i {
     display: flex;
     font-size: 1.7rem;
@@ -433,13 +445,13 @@ table th {
     background-color: var(--color-primary);
 }
 
-td img {
+/* td img {
     width: 36px;
     height: 36px;
     margin-right: .5rem;
     border-radius: 50%;
     vertical-align: middle;
-}
+} */
 
 /* tbody tr:nth-child(even) {
     background-color: black;
@@ -639,12 +651,20 @@ thead th {
 
     header .profile-area i {
         font-size: 1.5rem;
-        border-radius: 50%;
         background-color: var(--color-white);
         padding: 10px;
     }
 
-    header .profile-area .user-img {
+    header .profile-area .profile img {
+        width: 3.4rem;
+        height: 3.4rem;
+    }
+
+}
+
+@media screen and (max-width: 574px) {
+    header .profile-area img.login {
+        display: flex;
         width: 3rem;
         height: 3rem;
     }
