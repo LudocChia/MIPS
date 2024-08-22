@@ -66,7 +66,7 @@ function isActive($pageName, $currentPage)
                 </a>
             </li>
             <li>
-                <a href="/mahans/admin/admin_for_meal/donationMain.php" class="<?= isActive('donationMain.php', $currentPage); ?>">
+                <a href="/mips/admin/admin_for_meal/donationMain.php" class="<?= isActive('donationMain.php', $currentPage); ?>">
                     <i></i>
                     <h4>Meal Donation</h4>
                 </a>

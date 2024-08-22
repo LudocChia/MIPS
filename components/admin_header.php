@@ -28,7 +28,7 @@
                         <p>My Activities</p>
                         <span>></span>
                     </a>
-                    <a href="logout.php" class="profile-menu-link">
+                    <a href="/mips/admin/logout.php" class="profile-menu-link">
                         <i class="bi bi-box-arrow-right"></i>
                         <p>Logout</p>
                         <span>></span>

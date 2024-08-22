@@ -5,7 +5,7 @@
     --color-gray-light: #ccc;
     --color-gray-super-light: #e5e5e5;
     --color-dark: #27282f;
-    --color-primary: rgb(144, 88, 47);
+    --color-primary: rgb(0, 52, 85);
     --color-success: rgb(34, 202, 75);
     --color-danger: rgb(255, 67, 54);
     --color-warning: rgb(234, 181, 7);
@@ -352,6 +352,10 @@ header img.logo {
 .copyright p {
     color: white;
     font-size: 14px;
+}
+
+.footer-col ul li a {
+    display: flex;
 }
 
 .footer-col ul li {
