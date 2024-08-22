@@ -51,7 +51,7 @@
                                 <p>My Activities</p>
                                 <span>></span>
                             </a>
-                            <a href="logout.php" class="profile-menu-link">
+                            <a href="/mips/admin/logout.php" class="profile-menu-link">
                                 <i class="bi bi-box-arrow-right"></i>
                                 <p>Logout</p>
                                 <span>></span>
@@ -62,7 +62,7 @@
                 } else {
                 ?>
                     <button class="btn login" id="login-btn">Login</button>
-                    <button class="btn btn-outline-primary" id="signup-btn">Sign Up</button>
+                    <!-- <button class="btn btn-outline-primary" id="signup-btn">Sign Up</button> -->
                     <img src="/mips/images/default_profile.png" alt="User Image" class="user-img login" id="user-btn">
                 <?php
                 }
