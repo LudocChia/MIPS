@@ -86,6 +86,13 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    // Pagination
+    if (document.body.id) {
+        let links = document.querySelectorAll('.page-numbers > a');
+        let bodyId = parseInt(document.body.id) - 1;
+        links[bodyId].classList.add("active");
+    }
+
     document.querySelectorAll('#add-edit-data .cancel, #delete-confirm-dialog .cancel, #detail-dialog .cancel').forEach(button => {
         if (button) {
             button.addEventListener('click', function () {

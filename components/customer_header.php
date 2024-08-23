@@ -8,15 +8,15 @@
         <span class="fas fa-bars" id="menuIcon" onclick="toggle()"></span>
         <div class="navbar" id="nav">
             <ul>
-                <li>
+                <!-- <li>
                     <a href="index.php"><span class="material-symbols-outlined icon-adjust">local_library</span></i>Meal Donation</a>
-                </li>
+                </li> -->
                 <li>
-                    <a href="meal.php"><span class="material-symbols-outlined icon-adjust">food_bank</span>Student Meal Plan</a>
+                    <a href="meal.php"><span class="material-symbols-outlined icon-adjust">food_bank</span>Meal Donation</a>
                 </li>
-                <li>
+                <!-- <li>
                     <a href="event.php"><i class="bi bi-calendar4-event"></i>School Event</a>
-                </li>
+                </li> -->
                 <li>
                     <a href="bookshop.php"><i class="bi bi-shop-window"></i>Bookshop</a>
                 </li>
@@ -51,7 +51,7 @@
                                 <p>My Activities</p>
                                 <span>></span>
                             </a>
-                            <a href="/mips/admin/logout.php" class="profile-menu-link">
+                            <a href="/mips/logout.php" class="profile-menu-link">
                                 <i class="bi bi-box-arrow-right"></i>
                                 <p>Logout</p>
                                 <span>></span>
@@ -63,7 +63,7 @@
                 ?>
                     <button class="btn login" id="login-btn">Login</button>
                     <!-- <button class="btn btn-outline-primary" id="signup-btn">Sign Up</button> -->
-                    <img src="/mips/images/default_profile.png" alt="User Image" class="user-img login" id="user-btn">
+                    <a href="/mips/login.php"><img src="/mips/images/default_profile.png" alt="User Image" class="user-img login" id="user-btn"></a>
                 <?php
                 }
                 ?>

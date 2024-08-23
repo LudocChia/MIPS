@@ -1,12 +1,12 @@
 <?php
 
+session_start();
 include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/db_connect.php";
 $product_id = $_GET['pid'] ?? null;
 
 ?>
 
 <head>
-    <link rel="icon" type="image/x-icon" href="/mips/images/MIPS_icon.png">
     <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
     <style>
         .login-alert {
@@ -23,7 +23,7 @@ $product_id = $_GET['pid'] ?? null;
     </style>
 </head>
 
-<dialog id="login-form">
+<div id="login-form">
     <div class="title">
         <img src="/mips/images/MIPS_icon.png" alt="MIPS_Logo">
     </div>
@@ -51,7 +51,7 @@ $product_id = $_GET['pid'] ?? null;
             <button type="submit" name="login" class="btn btn-outline-primary login">Login</button>
         </div>
     </form>
-</dialog>
+</div>
 <script>
     $(document).ready(function() {
         $('#login-form-ajax').on('submit', function(e) {

@@ -1,30 +1,27 @@
 <?php
 
-session_start();
+$database_table = "Orders";
+$rows_per_page = 12;
+include $_SERVER['DOCUMENT_ROOT'] . "/mips/php/admin.php";
 
-include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/db_connect.php";
-
-if (!isset($_SESSION['admin_id'])) {
-    header('Location: login.php');
-    exit();
-}
-
-$currentPage = basename($_SERVER['PHP_SELF']);
-
-function getAllOrders($pdo)
+function getAllOrders($pdo, $start, $rows_per_page)
 {
     $sql = "SELECT o.order_id, o.order_datetime, o.order_price, p.parent_name, pm.payment_status
             FROM Orders o
             JOIN Parent_Student ps ON o.parent_student_id = ps.parent_student_id
             JOIN Parent p ON ps.parent_id = p.parent_id
             JOIN Payment pm ON o.order_id = pm.order_id
-            WHERE o.is_deleted = 0";
+            WHERE o.is_deleted = 0
+            ORDER BY o.order_datetime DESC
+            LIMIT :start, :rows_per_page";
     $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(':start', $start, PDO::PARAM_INT);
+    $stmt->bindParam(':rows_per_page', $rows_per_page, PDO::PARAM_INT);
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
-$all_orders = getAllOrders($pdo);
+$all_orders = getAllOrders($pdo, $start, $rows_per_page);
 
 function generateOrderId()
 {
@@ -88,12 +85,10 @@ if (isset($_POST["submit"])) {
     }
 }
 
-?>
-
-<?php $pageTitle = "Bookshop Order - MIPS";
+$pageTitle = "Bookshop Order - MIPS";
 include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
 
-<body>
+<body id="<?php echo $id ?>">
     <?php include  $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_header.php"; ?>
     <div class="container">
         <?php include  $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_sidebar.php"; ?>
@@ -163,6 +158,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                         </tbody>
                     </table>
                 </div>
+                <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/pagination.php"; ?>
             </div>
         </main>
     </div>

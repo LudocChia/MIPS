@@ -1,5 +1,5 @@
 <?php
 session_start();
 if (session_destroy()) {
-    header("location: /mips");
+    header("location: /mips/");
 }

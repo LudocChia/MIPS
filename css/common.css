@@ -6,12 +6,13 @@
     --color-gray-super-light: #e5e5e5;
     --color-dark: #27282f;
     --color-primary: rgb(0, 52, 85);
+    --color-secondary: rgb(184, 124, 80);
     --color-success: rgb(34, 202, 75);
     --color-danger: rgb(255, 67, 54);
     --color-warning: rgb(234, 181, 7);
     --color-purple: rgb(160, 99, 245);
 
-    --color-primary-light: rgba(71, 7, 234, 0.2);
+    --color-primary-light: rgba(0, 52, 82, 0.1);
     --color-primary-dark: #734523;
     --color-success-light: rgba(34, 202, 75, 0.2);
     --color-danger-light: rgba(255, 67, 54, 0.2);
@@ -156,9 +157,13 @@ dialog form textarea {
 }
 
 .btn-outline-primary {
-    background-color: #fff7f5;
+    background-color: var(--color-primary-light);
     color: var(--color-primary);
     border: 1px solid var(--color-primary);
+}
+
+.btn.login {
+    width: 70px;
 }
 
 .btn-outline-gray {
@@ -232,8 +237,6 @@ dialog form textarea {
 
 #login-form .input-container {
     position: relative;
-    height: 50px;
-    margin-bottom: 3rem;
     width: 100%;
 }
 

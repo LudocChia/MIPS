@@ -1,28 +1,26 @@
 <?php
 
-session_start();
+$database_table = "Student";
+$rows_per_page = 12;
+include $_SERVER['DOCUMENT_ROOT'] . "/mips/php/admin.php";
 
-include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/db_connect.php";
 
-if (!isset($_SESSION['admin_id'])) {
-    header('Location: login.php');
-    exit();
-}
-
-$currentPage = basename($_SERVER['PHP_SELF']);
-
-function getAllStudents($pdo)
+function getAllStudents($pdo, $start, $rows_per_page)
 {
-    $sql = "
-        SELECT s.*, c.class_name 
-        FROM Student s
-        LEFT JOIN Class c ON s.class_id = c.class_id
-        WHERE s.is_deleted = 0
-    ";
+    $sql = "SELECT s.*, c.class_name 
+            FROM Student s
+            LEFT JOIN Class c ON s.class_id = c.class_id
+            WHERE s.is_deleted = 0
+            LIMIT :start, :rows_per_page";
     $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(':start', $start, PDO::PARAM_INT);
+    $stmt->bindParam(':rows_per_page', $rows_per_page, PDO::PARAM_INT);
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
+
+
+$all_students = getAllStudents($pdo, $start, $rows_per_page);
 
 function getAllClasses($pdo)
 {
@@ -32,7 +30,6 @@ function getAllClasses($pdo)
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
-$all_students = getAllStudents($pdo);
 $all_classes = getAllClasses($pdo);
 
 function handleFileUpload($file, $studentId)
@@ -145,6 +142,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                         </tbody>
                     </table>
                 </div>
+                <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/pagination.php"; ?>
             </div>
         </main>
     </div>

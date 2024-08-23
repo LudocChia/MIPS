@@ -1,15 +1,21 @@
 <?php
 
-session_start();
+$database_table = "Sizes";
+$rows_per_page = 12;
+include $_SERVER['DOCUMENT_ROOT'] . "/mips/php/admin.php";
 
-include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/db_connect.php";
-
-if (!isset($_SESSION['admin_id'])) {
-    header('Location: login.php');
-    exit();
+function getSizes($pdo, $start, $rows_per_page)
+{
+    $sql = "SELECT * FROM Sizes WHERE is_deleted = 0 ORDER BY size_name ASC
+            LIMIT :start, :rows_per_page;";
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(':start', $start, PDO::PARAM_INT);
+    $stmt->bindParam(':rows_per_page', $rows_per_page, PDO::PARAM_INT);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
-$currentPage = basename($_SERVER['PHP_SELF']);
+$all_product_sizes = getSizes($pdo, $start, $rows_per_page);
 
 if (isset($_POST['submit'])) {
     $name = $_POST['name'];
@@ -47,20 +53,10 @@ if (isset($_POST['submit'])) {
     }
 }
 
-function getSizes($pdo)
-{
-    $sql = "SELECT * FROM Sizes";
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute();
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
-}
-
-$all_product_sizes = getSizes($pdo);
-
 $pageTitle = "Apparel Size - MIPS";
 include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
 
-<body>
+<body id="<?php echo $id ?>">
     <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_header.php"; ?>
     <div class="container">
         <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_sidebar.php"; ?>
@@ -107,6 +103,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                         </tbody>
                     </table>
                 </div>
+                <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/pagination.php"; ?>
             </div>
         </main>
     </div>

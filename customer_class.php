@@ -9,6 +9,34 @@ class Action
         $this->db = $pdo;
     }
 
+    public function login($email, $password)
+    {
+        try {
+            $sqlParent = "SELECT * FROM Parent WHERE parent_email = :email AND is_deleted = 0";
+            $stmtParent = $this->db->prepare($sqlParent);
+            $stmtParent->bindParam(':email', $email);
+            $stmtParent->execute();
+
+            $parent = $stmtParent->fetch(PDO::FETCH_ASSOC);
+
+            if ($parent && password_verify($password, $parent['parent_password'])) {
+                session_start();
+                $_SESSION['user_type'] = 'parent';
+                $_SESSION['user_id'] = $parent['parent_id'];
+                $_SESSION['user_name'] = $parent['parent_name'];
+                $_SESSION['user_email'] = $parent['parent_email'];
+                $_SESSION['user_image'] = !empty($parent['parent_image']) ? $parent['parent_image'] : './images/default_profile.png';
+
+                $redirectUrl = $_GET['pid'] ? "item.php?pid=" . $_GET['pid'] : '/mips';
+                return json_encode(['success' => true, 'redirect' => $redirectUrl]);
+            } else {
+                return json_encode(['success' => false, 'error' => 'Invalid email or password.']);
+            }
+        } catch (PDOException $e) {
+            return json_encode(['error' => 'Database error: ' . $e->getMessage()]);
+        }
+    }
+
     public function add_to_cart($parent_id, $product_id, $quantity, $product_size_id)
     {
         try {

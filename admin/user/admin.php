@@ -1,25 +1,20 @@
 <?php
 
-session_start();
+$database_table = "admin";
+$rows_per_page = 12;
+include $_SERVER['DOCUMENT_ROOT'] . "/mips/php/admin.php";
 
-include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/db_connect.php";
-
-$currentPage = basename($_SERVER['PHP_SELF']);
-
-if (!isset($_SESSION['admin_id'])) {
-    header('Location: /misp/admin/login.php');
-    exit();
-}
-
-function getAllAdmins($pdo)
+function getAllAdmins($pdo, $start, $rows_per_page)
 {
-    $sql = "SELECT * FROM Admin WHERE is_deleted = 0";
+    $sql = "SELECT * FROM Admin WHERE is_deleted = 0 LIMIT :start, :rows_per_page";
     $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(':start', $start, PDO::PARAM_INT);
+    $stmt->bindParam(':rows_per_page', $rows_per_page, PDO::PARAM_INT);
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
-$all_admins = getAllAdmins($pdo);
+$all_admins = getAllAdmins($pdo, $start, $rows_per_page);
 
 function generateAdminId()
 {
@@ -121,6 +116,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                         </tbody>
                     </table>
                 </div>
+                <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/pagination.php"; ?>
             </div>
         </main>
     </div>

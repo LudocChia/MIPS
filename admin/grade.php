@@ -1,20 +1,11 @@
 <?php
 
-session_start();
-
-include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/db_connect.php";
-
-if (!isset($_SESSION['admin_id'])) {
-    header('Location: /mips/admin/login.php');
-    exit();
-}
-
-$currentPage = basename($_SERVER['PHP_SELF']);
-
-function getGrades($pdo)
+$database_table = "grade";
+$rows_per_page = 12;
+include $_SERVER['DOCUMENT_ROOT'] . "/mips/php/admin.php";
+function getGrades($pdo, $start, $rows_per_page)
 {
-    $sql = "
-        SELECT 
+    $sql = "SELECT 
             g.grade_id, 
             g.grade_name, 
             g.grade_level, 
@@ -24,13 +15,15 @@ function getGrades($pdo)
             Grade g 
         WHERE 
             g.is_deleted = 0
-    ";
+        LIMIT :start, :rows_per_page";
     $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(':start', $start, PDO::PARAM_INT);
+    $stmt->bindParam(':rows_per_page', $rows_per_page, PDO::PARAM_INT);
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
-$all_grades = getGrades($pdo);
+$all_grades = getGrades($pdo, $start, $rows_per_page);
 
 $msg = [];
 if (isset($_POST["submit"])) {
@@ -59,7 +52,6 @@ if (isset($_POST["submit"])) {
         echo "<script>alert('Database error: " . $e->getMessage() . "');</script>";
     }
 }
-
 
 $pageTitle = "Grade Management - MIPS";
 include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
@@ -110,6 +102,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                         </tbody>
                     </table>
                 </div>
+                <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/pagination.php"; ?>
             </div>
         </main>
     </div>

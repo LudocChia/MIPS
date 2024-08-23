@@ -1,15 +1,9 @@
 <?php
 
-session_start();
+$database_table = "Product";
+$rows_per_page = 10;
+include $_SERVER['DOCUMENT_ROOT'] . "/mips/php/admin.php";
 
-include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/db_connect.php";
-
-if (!isset($_SESSION['admin_id'])) {
-    header('Location: login.php');
-    exit();
-}
-
-$currentPage = basename($_SERVER['PHP_SELF']);
 function getSubcategories($pdo)
 {
     $sql = "SELECT * FROM Product_Category WHERE parent_id IS NOT NULL AND is_deleted = 0";
@@ -20,22 +14,23 @@ function getSubcategories($pdo)
 
 $all_subcategories = getSubcategories($pdo);
 
-function getAllProducts($pdo)
+function getAllProducts($pdo, $start, $rows_per_page)
 {
-    $sql = "
-        SELECT p.product_id, p.product_name, p.product_description, p.product_price,
+    $sql = "SELECT p.product_id, p.product_name, p.product_description, p.product_price,
                p.stock_quantity, p.color, p.gender, pi.image_url
-        FROM Product p
-        LEFT JOIN Product_Image pi ON p.product_id = pi.product_id
-        WHERE p.is_deleted = 0 AND pi.sort_order = 1
-        GROUP BY p.product_id
-    ";
+            FROM Product p
+            LEFT JOIN Product_Image pi ON p.product_id = pi.product_id
+            WHERE p.is_deleted = 0 AND pi.sort_order = 1
+            GROUP BY p.product_id
+            LIMIT :start, :rows_per_page";
     $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(':start', $start, PDO::PARAM_INT);
+    $stmt->bindParam(':rows_per_page', $rows_per_page, PDO::PARAM_INT);
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
-$all_products = getAllProducts($pdo);
+$all_products = getAllProducts($pdo, $start, $rows_per_page);
 
 function getAllSizes($pdo)
 {
@@ -231,6 +226,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                         </div>
                     <?php } ?>
                 </div>
+                <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/pagination.php"; ?>
             </div>
         </main>
     </div>
@@ -310,7 +306,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
             <div class="input-container">
                 <div class="input-field">
                     <h2>Color<sup>*</sup></h2>
-                    <input type="text" name="color" value="<?php echo isset($_POST['color']) ? htmlspecialchars($_POST['color']) : ''; ?>" required>
+                    <input type="text" name="color" value="<?php echo isset($_POST['color']) ? htmlspecialchars($_POST['color']) : ''; ?>">
                 </div>
                 <p>Please enter the color of the product.</p>
             </div>
