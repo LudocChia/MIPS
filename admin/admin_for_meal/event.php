@@ -7,11 +7,14 @@ if (!isset($_SESSION['admin_id'])) {
     header('Location: /mips/admin/login.php');
     exit();
 }
-
-
     // session_start();
     include "../admin_for_meal/header.php"; 
 
+    function getAll($pdo){
+        // Query to fetch all users
+        $stmt = $pdo->query("SELECT * FROM visitor");
+        $visitors = $stmt->fetchAll();
+    }
 ?>
 
 <!DOCTYPE html>
@@ -29,10 +32,21 @@ if (!isset($_SESSION['admin_id'])) {
     <link rel="stylesheet" href="../admin_for_meal/common.css">
     <link rel="stylesheet" href="../admin_for_meal/admin.css">
     <link rel="stylesheet" href="../admin_for_meal/donation.css">
+    <style>
+        h1{
+            margin-top: -50px;
+            margin-left: 350px;
+        }
+    </style>
 </head>
 <body>
     <script src="../admin_for_meal/admin.js"></script>
-    <a href="#"><button id="btn">Donation Info</button></a>
-    <a href="../admin_for_meal/event.php"><button id="btn1">Add Event</button></a>
+    <a href="../admin_for_meal/donationMain.php" class="back"><img src="back-button.png" alt="back-button" style="width: 80px;px;height:80px;"></a>
+    <button id="add">Add</button>
+    <h1>Upcoming Event</h1>
+    <div>
+
+    </div>
+
 </body>
 </html>

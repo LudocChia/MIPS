@@ -1,7 +1,7 @@
 <?php
 // Database connection settings
 $host = 'localhost';
-$dbname = 'mahans';
+$dbname = 'mips';
 $username = 'root';
 $password = '';
 
