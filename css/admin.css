@@ -118,7 +118,7 @@ ul.bookshop-show.second {
 
 /* Sidebar */
 aside {
-    margin: 1rem;
+    margin: var(--marging-1);
     height: 82vh;
     overflow-y: scroll;
 }
@@ -237,7 +237,6 @@ main .insights>div {
     padding: var(--card-padding);
     border-radius: var(--card-border-radius);
     margin-top: 1rem;
-    /* box-shadow: var(--box-shadow); */
     transition: all 300ms ease;
 }
 
@@ -527,7 +526,7 @@ main .recent-orders a {
         gap: 2rem;
     }
 
-    header .profile-area button#menu-btn {
+    header .profile-area button.menu-btn {
         display: block;
         background: transparent;
         color: var(--color-dark);
@@ -548,6 +547,7 @@ main .recent-orders a {
     }
 
     aside {
+        display: block;
         margin: 0;
         position: fixed;
         top: 0;
@@ -637,12 +637,19 @@ main .recent-orders a {
     }
 
     aside {
+        display: block;
+    }
+
+    aside.active {
+        display: block;
+    }
+
+    aside {
         position: fixed;
         left: -100%;
         background: var(--color-white);
         width: 18rem;
         z-index: 3;
-        box-shadow: 1rem 3rem 4rem var(--color-light);
         height: 100vh;
         padding-right: var(--card-padding);
         display: none;
@@ -669,6 +676,10 @@ main .recent-orders a {
     header .profile-area .user-img {
         width: 3rem;
         height: 3rem;
+    }
+
+    header .profile-area button.menu-btn {
+        display: none;
     }
 
     aside .sidebar h3 {

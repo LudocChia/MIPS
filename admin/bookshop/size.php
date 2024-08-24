@@ -86,10 +86,10 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                             <?php foreach ($all_product_sizes as $size) { ?>
                                 <tr>
                                     <td><?= htmlspecialchars($size['size_name']); ?></td>
-                                    <td><?= htmlspecialchars($size['shoulder_width']); ?></td>
-                                    <td><?= htmlspecialchars($size['bust']); ?></td>
-                                    <td><?= htmlspecialchars($size['waist']); ?></td>
-                                    <td><?= htmlspecialchars($size['length']); ?></td>
+                                    <td><?= htmlspecialchars($size['shoulder_width'] === null || $size['shoulder_width'] == 0 ? '-' : $size['shoulder_width']); ?></td>
+                                    <td><?= htmlspecialchars(($size['bust'] === null || $size['bust'] == 0) ? '-' : $size['bust']); ?></td>
+                                    <td><?= htmlspecialchars($size['waist'] === null || $size['waist'] == 0 ? '-' : $size['waist']); ?></td>
+                                    <td><?= htmlspecialchars($size['length'] === null || $size['length'] == 0 ? '-' : $size['length']); ?></td>
                                     <td>
                                         <form action="" method="POST" style="display:inline;" onsubmit="return showDeactivateConfirmDialog(event);">
                                             <input type="hidden" name="product_size_id" value="<?= htmlspecialchars($size['size_id']); ?>">

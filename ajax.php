@@ -74,12 +74,13 @@ switch ($action) {
         break;
 
     case 'checkout':
-        if (isset($_POST['selected_item_ids'])) {
-            echo $crud->checkout($_POST['selected_item_ids']);
+        if (isset($_POST['selected_item_ids']) && isset($_POST['selected_children'])) {
+            echo $crud->checkout($_POST['selected_item_ids'], $_POST['selected_children']);
         } else {
-            echo json_encode(['error' => 'No items selected for checkout']);
+            echo json_encode(['error' => 'No items or children selected for checkout']);
         }
         break;
+
     default:
         echo json_encode(['error' => 'Invalid action']);
         break;

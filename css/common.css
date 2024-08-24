@@ -318,6 +318,56 @@ header .wrapper {
     margin: 0 auto;
 }
 
+header .mobile-wrapper {
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+
+.mobile-navbar {
+    display: flex;
+    width: auto;
+}
+
+.navbar,
+.mobile-navbar {
+    display: flex;
+    width: auto;
+}
+
+.navbar ul,
+.mobile-navbar ul {
+    width: 100%;
+}
+
+.navbar ul li,
+.mobile-navbar ul li {
+    display: inline-block;
+    transition: all 0.5s ease;
+    cursor: pointer;
+    margin-right: 2rem;
+    overflow: hidden;
+}
+
+.navbar i,
+.navbar span {
+    color: var(--color-white);
+    margin-right: 1rem;
+}
+
+
+.navbar ul li a,
+.mobile-navbar ul li a {
+    color: var(--color-white);
+    text-decoration: none;
+    font-size: 1.5rem;
+    margin-left: 10px;
+}
+
+#menuIcon {
+    display: none;
+}
+
 header .profile-area {
     display: flex;
     align-items: center;
@@ -670,6 +720,18 @@ thead th {
         display: flex;
         width: 3rem;
         height: 3rem;
+    }
+
+    header .wrapper .profile-area .btn {
+        display: none;
+    }
+
+    #menuIcon {
+        display: none;
+    }
+
+    header .mobile-wrapper {
+        display: flex;
     }
 
     .breadcrumbs {

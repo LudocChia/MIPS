@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
     const sideMenu = document.querySelector("aside");
-    const menuBtn = document.querySelector("#menu-btn");
+    const menuBtn = document.querySelectorAll(".menu-btn");
     const closeBtn = document.querySelector("#close-btn");
     const userBtn = document.querySelector("#user-btn");
     const profileMenu = document.querySelector(".profile-menu");
@@ -10,17 +10,26 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Show Sidebar
     if (menuBtn && sideMenu) {
-        menuBtn.addEventListener("click", () => {
-            sideMenu.style.display = "block";
+        menuBtn.forEach(button => {
+            button.addEventListener("click", () => {
+                sideMenu.classList.toggle("active"); // Toggle the 'active' class
+            });
         });
     }
 
     // Close Sidebar
     if (closeBtn && sideMenu) {
         closeBtn.addEventListener("click", () => {
-            sideMenu.style.display = "none";
+            sideMenu.classList.remove("active"); // Ensure the 'active' class is removed
         });
     }
+
+    // Close Sidebar on Resize
+    window.addEventListener("resize", () => {
+        if (window.innerWidth > 1200) {
+            sideMenu.classList.remove("active"); // Ensure the sidebar stays hidden on large screens if closed
+        }
+    });
 
     // Show Profile Menu
     if (userBtn && profileMenu) {

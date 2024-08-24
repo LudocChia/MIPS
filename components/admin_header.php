@@ -4,7 +4,7 @@
             <img src="/mips/images/MIPS_logo.png" class="logo" alt="Mahans International Primary School logo">
         </a>
         <div class="profile-area">
-            <button id="menu-btn">
+            <button class="menu-btn">
                 <i class="bi bi-list"></i>
             </button>
             <div class="message-btn">
@@ -35,6 +35,30 @@
                     </a>
                 </div>
             </div>
+        </div>
+    </div>
+    <div class="mobile-wrapper">
+        <div class="mobile-navbar">
+            <ul>
+                <li>
+                    <a href="javascript:void(0);"><span class="material-symbols-outlined icon-adjust">food_bank</span></a>
+                </li>
+                <li>
+                    <a href="javascript:void(0);"><i class="bi bi-calendar4-event"></i></a>
+                </li>
+                <li>
+                    <a href="javascript:void(0);"><i class="bi bi-shop-window"></i></a>
+                </li>
+                <li>
+                    <a href="javascript:void(0);"><i class="bi bi-bell-fill"></i></a>
+                </li>
+                <li>
+                    <a href="javascript:void(0);"><i class="bi bi-basket3-fill"></i></a>
+                </li>
+                <li>
+                    <a href="javascript:void(0);" class="menu-btn"><i class="bi bi-list"></i></a>
+                </li>
+            </ul>
         </div>
     </div>
 </header>
