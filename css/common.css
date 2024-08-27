@@ -704,6 +704,30 @@ thead th {
     color: #666;
 }
 
+/* Empty Message */
+.empty {
+    grid-column: span 3;
+    text-align: center;
+    margin: 20px auto;
+    width: auto;
+}
+
+.empty p {
+    padding: 3%;
+}
+
+.empty img {
+    width: 40%;
+}
+
+
+.empty button {
+    border: 1px solid var(--deep-blue);
+    padding: 1rem 2rem;
+    border-radius: 5px;
+    width: 50%;
+}
+
 @media screen and (max-width: 1200px) {
     /* .title {
         justify-content: space-between;

@@ -232,24 +232,24 @@ class Action
     public function get_cart_items($parent_id)
     {
         try {
-            $sql = "
-                    SELECT 
+            $sql = "SELECT 
                 ci.cart_item_id,
                 ci.product_quantity,
+                ps.size_name AS product_size,
                 p.product_name,
                 p.product_price,
                 p.is_deleted,
                 pi.image_url,
-                p.product_price,
                 GROUP_CONCAT(DISTINCT s.student_id, ':', s.student_name) AS children
             FROM Cart_Item ci
             JOIN Product p ON ci.product_id = p.product_id
             JOIN Product_Image pi ON p.product_id = pi.product_id AND pi.sort_order = 1
-            JOIN Parent_Student ps ON ps.parent_id = :parent_id
-            JOIN Student s ON ps.student_id = s.student_id
+            JOIN Parent_Student ps2 ON ps2.parent_id = :parent_id
+            JOIN Student s ON ps2.student_id = s.student_id
+            LEFT JOIN Product_Size psz ON ci.product_size_id = psz.product_size_id
+            LEFT JOIN Sizes ps ON psz.size_id = ps.size_id
             WHERE ci.cart_id = (SELECT cart_id FROM Cart WHERE parent_id = :parent_id)
-            GROUP BY ci.cart_item_id
-        ";
+            GROUP BY ci.cart_item_id";
             $stmt = $this->db->prepare($sql);
             $stmt->bindParam(':parent_id', $parent_id);
             $stmt->execute();
@@ -283,7 +283,7 @@ class Action
     {
         try {
             $sql = "
-                DELETE FROM Cart_Item 
+                DELETE FROM Cart_Item
                 WHERE cart_id = (SELECT cart_id FROM Cart WHERE parent_id = :parent_id)
             ";
             $stmt = $this->db->prepare($sql);
