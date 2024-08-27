@@ -5,9 +5,39 @@ class Action
 
     public function __construct()
     {
-        include './components/db_connect.php';
+        session_start();
+        include $_SERVER['DOCUMENT_ROOT'] . '/mips/components/db_connect.php';
         $this->db = $pdo;
     }
+
+    public function login($email, $password, $currentPage = null, $productId = null)
+    {
+
+        try {
+            $sqlParent = "SELECT * FROM Parent WHERE parent_email = :email AND is_deleted = 0";
+            $stmtParent = $this->db->prepare($sqlParent);
+            $stmtParent->bindParam(':email', $email);
+            $stmtParent->execute();
+
+            $parent = $stmtParent->fetch(PDO::FETCH_ASSOC);
+
+            if ($parent && password_verify($password, $parent['parent_password'])) {
+                $_SESSION['user_type'] = 'parent';
+                $_SESSION['user_id'] = $parent['parent_id'];
+                $_SESSION['user_name'] = $parent['parent_name'];
+                $_SESSION['user_email'] = $parent['parent_email'];
+                $_SESSION['user_image'] = !empty($parent['parent_image']) ? $parent['parent_image'] : './images/default_profile.png';
+
+                $redirectUrl = $productId ? "item.php?pid=" . $productId : ($currentPage ?? '/mips');
+                return json_encode(['success' => true, 'redirect' => $redirectUrl]);
+            } else {
+                return json_encode(['success' => false, 'error' => 'Invalid email or password.']);
+            }
+        } catch (PDOException $e) {
+            return json_encode(['error' => 'Database error: ' . $e->getMessage()]);
+        }
+    }
+
 
     public function add_to_cart($parent_id, $product_id, $quantity, $product_size_id)
     {
@@ -181,7 +211,6 @@ class Action
         }
     }
 
-    // 删除购物车项目
     public function delete_cart_item($cart_item_id)
     {
         try {
@@ -270,26 +299,21 @@ class Action
             return json_encode(['error' => 'Database error: ' . $e->getMessage()]);
         }
     }
-
-    // 处理结账操作
-    public function checkout($selected_item_ids)
+    public function checkout($selected_item_ids, $selected_children)
     {
         try {
             $this->db->beginTransaction();
 
-            // 假设每个购物车项目都与一个 Parent_Student 关联
             $parent_student_id = null;
             $total_price = 0;
 
-            // 获取第一个选定的购物车项以确定 parent_student_id
-            $sql = "
-            SELECT ci.product_quantity, p.product_price, ps.parent_student_id
-            FROM Cart_Item ci
-            JOIN Product p ON ci.product_id = p.product_id
-            JOIN Parent_Student ps ON ci.cart_id = ps.parent_id
-            WHERE ci.cart_item_id = :cart_item_id
-        ";
-            $stmt = $this->db->prepare($sql);
+            $stmt = $this->db->prepare("
+                SELECT ci.product_quantity, p.product_price, ps.parent_student_id
+                FROM Cart_Item ci
+                JOIN Product p ON ci.product_id = p.product_id
+                JOIN Parent_Student ps ON ci.cart_id = ps.parent_id
+                WHERE ci.cart_item_id = :cart_item_id
+            ");
             $stmt->bindParam(':cart_item_id', $selected_item_ids[0]);
             $stmt->execute();
             $first_item = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -300,26 +324,24 @@ class Action
                 throw new Exception('Invalid cart item or parent_student_id not found.');
             }
 
-            // 创建订单
+            // Create order
             $order_id = uniqid('ORD');
-            $sql_order = "
-            INSERT INTO Orders (order_id, parent_student_id, order_datetime, order_price, is_deleted)
-            VALUES (:order_id, :parent_student_id, NOW(), 0, 0)
-        ";
-            $stmt_order = $this->db->prepare($sql_order);
+            $stmt_order = $this->db->prepare("
+                INSERT INTO Orders (order_id, parent_student_id, order_datetime, order_price, is_deleted)
+                VALUES (:order_id, :parent_student_id, NOW(), 0, 0)
+            ");
             $stmt_order->bindParam(':order_id', $order_id);
             $stmt_order->bindParam(':parent_student_id', $parent_student_id);
             $stmt_order->execute();
 
-            // 插入订单项并计算总价
+            // Insert order items and calculate the total price
             foreach ($selected_item_ids as $cart_item_id) {
-                $sql_item = "
-                SELECT ci.product_id, ci.product_size_id, ci.product_quantity, p.product_price
-                FROM Cart_Item ci
-                JOIN Product p ON ci.product_id = p.product_id
-                WHERE ci.cart_item_id = :cart_item_id
-            ";
-                $stmt_item = $this->db->prepare($sql_item);
+                $stmt_item = $this->db->prepare("
+                    SELECT ci.product_id, ci.product_size_id, ci.product_quantity, p.product_price
+                    FROM Cart_Item ci
+                    JOIN Product p ON ci.product_id = p.product_id
+                    WHERE ci.cart_item_id = :cart_item_id
+                ");
                 $stmt_item->bindParam(':cart_item_id', $cart_item_id);
                 $stmt_item->execute();
                 $item = $stmt_item->fetch(PDO::FETCH_ASSOC);
@@ -329,11 +351,10 @@ class Action
                     $order_subtotal = $item['product_price'] * $item['product_quantity'];
                     $total_price += $order_subtotal;
 
-                    $sql_order_item = "
-                    INSERT INTO Order_Item (order_item_id, order_id, product_id, product_size_id, product_quantity, order_subtotal, is_deleted)
-                    VALUES (:order_item_id, :order_id, :product_id, :product_size_id, :product_quantity, :order_subtotal, 0)
-                ";
-                    $stmt_order_item = $this->db->prepare($sql_order_item);
+                    $stmt_order_item = $this->db->prepare("
+                        INSERT INTO Order_Item (order_item_id, order_id, product_id, product_size_id, product_quantity, order_subtotal, is_deleted)
+                        VALUES (:order_item_id, :order_id, :product_id, :product_size_id, :product_quantity, :order_subtotal, 0)
+                    ");
                     $stmt_order_item->bindParam(':order_item_id', $order_item_id);
                     $stmt_order_item->bindParam(':order_id', $order_id);
                     $stmt_order_item->bindParam(':product_id', $item['product_id']);
@@ -341,26 +362,37 @@ class Action
                     $stmt_order_item->bindParam(':product_quantity', $item['product_quantity']);
                     $stmt_order_item->bindParam(':order_subtotal', $order_subtotal);
                     $stmt_order_item->execute();
+
+                    foreach ($selected_children as $selected_child) {
+                        if ($selected_child['cartItemId'] == $cart_item_id) {
+                            foreach ($selected_child['children'] as $child_id) {
+                                $stmt_order_item_student = $this->db->prepare("
+                                    INSERT INTO order_item_student (order_item_id, student_id) 
+                                    VALUES (:order_item_id, :student_id)
+                                ");
+                                $stmt_order_item_student->bindParam(':order_item_id', $order_item_id);
+                                $stmt_order_item_student->bindParam(':student_id', $child_id);
+                                $stmt_order_item_student->execute();
+                            }
+                        }
+                    }
                 } else {
                     throw new Exception('Invalid cart item or product not found.');
                 }
             }
 
-            // 更新订单总价
-            $sql_update_order = "
-            UPDATE Orders
-            SET order_price = :total_price
-            WHERE order_id = :order_id
-        ";
-            $stmt_update_order = $this->db->prepare($sql_update_order);
+            $stmt_update_order = $this->db->prepare("
+                UPDATE Orders
+                SET order_price = :total_price
+                WHERE order_id = :order_id
+            ");
             $stmt_update_order->bindParam(':total_price', $total_price);
             $stmt_update_order->bindParam(':order_id', $order_id);
             $stmt_update_order->execute();
 
-            // 删除购物车项目或将其标记为已处理
+            // Delete cart items
             $ids = implode(',', array_map('intval', $selected_item_ids));
-            $sql_delete_cart_items = "DELETE FROM Cart_Item WHERE cart_item_id IN ($ids)";
-            $this->db->exec($sql_delete_cart_items);
+            $this->db->exec("DELETE FROM Cart_Item WHERE cart_item_id IN ($ids)");
 
             $this->db->commit();
 

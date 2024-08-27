@@ -1,15 +1,25 @@
 <?php
 
-session_start();
+$database_table = "class";
+$rows_per_page = 12;
+include $_SERVER['DOCUMENT_ROOT'] . "/mips/php/admin.php";
 
-include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/db_connect.php";
-
-if (!isset($_SESSION['admin_id'])) {
-    header('Location: login.php');
-    exit();
+function getClasses($pdo, $start, $rows_per_page)
+{
+    $sql = "SELECT c.class_id, c.class_name, g.grade_name, 
+               (SELECT COUNT(*) FROM Student s WHERE s.class_id = c.class_id AND s.is_deleted = 0) AS student_count
+            FROM Class c
+            JOIN Grade g ON c.grade_id = g.grade_id
+            WHERE c.is_deleted = 0
+            LIMIT :start, :rows_per_page";
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(':start', $start, PDO::PARAM_INT);
+    $stmt->bindParam(':rows_per_page', $rows_per_page, PDO::PARAM_INT);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
-$currentPage = basename($_SERVER['PHP_SELF']);
+$all_classes = getClasses($pdo, $start, $rows_per_page);
 
 function getAllGrades($pdo)
 {
@@ -39,21 +49,6 @@ if (isset($_POST["submit"])) {
     }
 }
 
-function getClasses($pdo)
-{
-    $sql = "
-        SELECT c.class_id, c.class_name, g.grade_name, 
-               (SELECT COUNT(*) FROM Student s WHERE s.class_id = c.class_id AND s.is_deleted = 0) AS student_count
-        FROM Class c
-        JOIN Grade g ON c.grade_id = g.grade_id
-        WHERE c.is_deleted = 0
-    ";
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute();
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
-}
-
-$all_classes = getClasses($pdo);
 $pageTitle = "Class Management - MIPS";
 include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
 
@@ -100,6 +95,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                         </tbody>
                     </table>
                 </div>
+                <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/pagination.php"; ?>
             </div>
         </main>
     </div>

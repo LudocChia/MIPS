@@ -27,7 +27,8 @@ window.addEventListener('load', function () {
     get_cart_items().then(cartItems => {
         data = cartItems.map(item => ({
             ...item,
-            state: false
+            state: false,
+            selectedChildren: []
         }));
         init();
     }).catch(error => {
@@ -46,15 +47,14 @@ window.addEventListener('load', function () {
 
             let childrenHtml = '';
             if (item.children) {
-                const children = item.children.split(',').map(child => {
+                childrenHtml = item.children.split(',').map(child => {
                     const [id, name] = child.split(':');
                     return `
                         <div class="child-checkbox">
-                            <input type="checkbox" id="child-${id}" name="child[]" value="${id}">
-                            <label for="child-${id}">${name}</label>
+                            <input type="checkbox" id="child-${item.cart_item_id}-${id}" name="child[]" value="${id}" data-cart-item-id="${item.cart_item_id}">
+                            <label for="child-${item.cart_item_id}-${id}">${name}</label>
                         </div>`;
                 }).join('');
-                childrenHtml = children;
             }
 
             strHtml += `<tr>
@@ -87,10 +87,34 @@ window.addEventListener('load', function () {
             }
         });
         tbody.innerHTML = strHtml;
+        initializeChildCheckboxes();
         all.checked = activeItemCount > 0 && count === activeItemCount;
         selectAll.checked = all.checked;
         totalCount.innerHTML = count;
         totalPrice.innerHTML = num.toFixed(2);
+    }
+
+    function initializeChildCheckboxes() {
+        document.querySelectorAll('.child-checkbox input[type="checkbox"]').forEach(checkbox => {
+            checkbox.addEventListener('change', function () {
+                const cartItemId = this.dataset.cartItemId;
+                const childId = this.value;
+                const isChecked = this.checked;
+
+                // 更新 data 数组中的选中状态
+                const item = data.find(item => item.cart_item_id === cartItemId);
+                if (item) {
+                    if (!item.selectedChildren) {
+                        item.selectedChildren = [];
+                    }
+                    if (isChecked) {
+                        item.selectedChildren.push(childId);
+                    } else {
+                        item.selectedChildren = item.selectedChildren.filter(id => id !== childId);
+                    }
+                }
+            });
+        });
     }
 
     function updateSelection() {

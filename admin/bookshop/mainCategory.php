@@ -1,15 +1,8 @@
 <?php
 
-session_start();
-
-include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/db_connect.php";
-
-if (!isset($_SESSION['admin_id'])) {
-    header('Location: /mpis/admin/login.php');
-    exit();
-}
-
-$currentPage = basename($_SERVER['PHP_SELF']);
+$database_table = "Product Category";
+$rows_per_page = 10;
+include $_SERVER['DOCUMENT_ROOT'] . "/mips/php/admin.php";
 
 function handleFileUpload($file, $existingImagePath = null)
 {
@@ -103,20 +96,22 @@ if (isset($_POST["submit"])) {
 }
 
 
-function getMainCategories($pdo)
+function getMainCategories($pdo, $start, $rows_per_page)
 {
-    $sql = "SELECT * FROM Product_Category WHERE parent_id IS NULL AND is_deleted = 0";
+    $sql = "SELECT * FROM Product_Category WHERE parent_id IS NULL AND is_deleted = 0 LIMIT :start, :rows_per_page;";
     $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(':start', $start, PDO::PARAM_INT);
+    $stmt->bindParam(':rows_per_page', $rows_per_page, PDO::PARAM_INT);
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
-$all_main_categories = getMainCategories($pdo);
+$all_main_categories = getMainCategories($pdo, $start, $rows_per_page);
 
 $pageTitle = "Bookshop Main Category - MIPS";
 include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
 
-<body>
+<body id="<?php echo $id ?>">
     <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_header.php"; ?>
     <div class="container">
         <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_sidebar.php"; ?>
@@ -150,6 +145,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                         </div>
                     <?php endforeach; ?>
                 </div>
+                <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/pagination.php"; ?>
             </div>
         </main>
     </div>

@@ -6,12 +6,13 @@
     --color-gray-super-light: #e5e5e5;
     --color-dark: #27282f;
     --color-primary: rgb(0, 52, 85);
+    --color-secondary: rgb(184, 124, 80);
     --color-success: rgb(34, 202, 75);
     --color-danger: rgb(255, 67, 54);
     --color-warning: rgb(234, 181, 7);
     --color-purple: rgb(160, 99, 245);
 
-    --color-primary-light: rgba(71, 7, 234, 0.2);
+    --color-primary-light: rgba(0, 52, 82, 0.1);
     --color-primary-dark: #734523;
     --color-success-light: rgba(34, 202, 75, 0.2);
     --color-danger-light: rgba(255, 67, 54, 0.2);
@@ -156,9 +157,13 @@ dialog form textarea {
 }
 
 .btn-outline-primary {
-    background-color: #fff7f5;
+    background-color: var(--color-primary-light);
     color: var(--color-primary);
     border: 1px solid var(--color-primary);
+}
+
+.btn.login {
+    width: 70px;
 }
 
 .btn-outline-gray {
@@ -232,8 +237,6 @@ dialog form textarea {
 
 #login-form .input-container {
     position: relative;
-    height: 50px;
-    margin-bottom: 3rem;
     width: 100%;
 }
 
@@ -292,6 +295,19 @@ dialog form textarea {
     text-decoration: underline;
 }
 
+.login-alert {
+    padding: 10px;
+    background-color: rgba(128, 128, 128, 0.9);
+    color: white;
+    opacity: 1;
+    transition: opacity 0.6s;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999;
+}
+
 /* sup */
 sup {
     color: var(--color-primary);
@@ -313,6 +329,56 @@ header .wrapper {
     background-color: var(--color-primary);
     border: none;
     margin: 0 auto;
+}
+
+header .mobile-wrapper {
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+
+.mobile-navbar {
+    display: flex;
+    width: auto;
+}
+
+.navbar,
+.mobile-navbar {
+    display: flex;
+    width: auto;
+}
+
+.navbar ul,
+.mobile-navbar ul {
+    width: 100%;
+}
+
+.navbar ul li,
+.mobile-navbar ul li {
+    display: inline-block;
+    transition: all 0.5s ease;
+    cursor: pointer;
+    margin-right: 2rem;
+    overflow: hidden;
+}
+
+.navbar i,
+.navbar span {
+    color: var(--color-white);
+    margin-right: 1rem;
+}
+
+
+.navbar ul li a,
+.mobile-navbar ul li a {
+    color: var(--color-white);
+    text-decoration: none;
+    font-size: 1.5rem;
+    margin-left: 10px;
+}
+
+#menuIcon {
+    display: none;
 }
 
 header .profile-area {
@@ -667,6 +733,18 @@ thead th {
         display: flex;
         width: 3rem;
         height: 3rem;
+    }
+
+    header .wrapper .profile-area .btn {
+        display: none;
+    }
+
+    #menuIcon {
+        display: none;
+    }
+
+    header .mobile-wrapper {
+        display: flex;
     }
 
     .breadcrumbs {

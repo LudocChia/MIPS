@@ -1,25 +1,20 @@
 <?php
 
-session_start();
+$database_table = "Parent";
+$rows_per_page = 12;
+include $_SERVER['DOCUMENT_ROOT'] . "/mips/php/admin.php";
 
-include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/db_connect.php";
-
-if (!isset($_SESSION['admin_id'])) {
-    header('Location: /mips/admin/login.php');
-    exit();
-}
-
-$currentPage = basename($_SERVER['PHP_SELF']);
-
-function getDeactivatedParents($pdo)
+function getDeactivatedParents($pdo, $start, $rows_per_page)
 {
-    $sql = "SELECT * FROM Parent WHERE is_deleted = 1";
+    $sql = "SELECT * FROM Parent WHERE is_deleted = 1 LIMIT :start, :rows_per_page";
     $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(':start', $start, PDO::PARAM_INT);
+    $stmt->bindParam(':rows_per_page', $rows_per_page, PDO::PARAM_INT);
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
-$deactivated_parents = getDeactivatedParents($pdo);
+$deactivated_parents = getDeactivatedParents($pdo, $start, $rows_per_page);
 
 function getAllStudents($pdo)
 {
@@ -36,7 +31,7 @@ $all_students = getAllStudents($pdo);
 <?php $pageTitle = "Deactivated Users - MIPS";
 include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
 
-<body>
+<body id="<?php echo $id ?>">
     <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_header.php"; ?>
     <div class="container">
         <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_sidebar.php"; ?>
@@ -82,9 +77,9 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                                 </tr>
                             <?php endforeach; ?>
                         </tbody>
-
                     </table>
                 </div>
+                <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/pagination.php"; ?>
             </div>
         </main>
     </div>

@@ -39,7 +39,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/customer_head.php";
                                 <th>name</th>
                                 <th>quantity</th>
                                 <th>total price</th>
-                                <th>Child</th>
+                                <th>child</th>
                                 <th>action</th>
                             </tr>
                         </thead>

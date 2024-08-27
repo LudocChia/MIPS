@@ -1,62 +1,23 @@
 <?php
 
 include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/db_connect.php";
-
+$email = "";
 $product_id = $_GET['pid'] ?? null;
-
-$errorMsg = '';
-$email = '';
-
-if (isset($_POST["login"])) {
-    $email = trim($_POST['email']);
-    $password = trim($_POST['password']);
-
-    $sqlParent = "SELECT * FROM Parent WHERE parent_email = :email AND is_deleted = 0";
-    $stmtParent = $pdo->prepare($sqlParent);
-    $stmtParent->bindParam(':email', $email);
-
-    try {
-        $stmtParent->execute();
-        $parent = $stmtParent->fetch(PDO::FETCH_ASSOC);
-
-        if ($parent && password_verify($password, $parent['parent_password'])) {
-            $_SESSION['user_type'] = 'parent';
-            $_SESSION['user_id'] = $parent['parent_id'];
-            $_SESSION['user_name'] = $parent['parent_name'];
-            $_SESSION['user_email'] = $parent['parent_email'];
-            $_SESSION['user_image'] = !empty($parent['parent_image']) ? $parent['parent_image'] : './images/default_profile.png';
-
-            if ($product_id) {
-                header("Location: item.php?pid=" . $product_id);
-                exit;
-            }
-
-            header("Location: " . $_SERVER['PHP_SELF']);
-            exit;
-        }
-
-        $errorMsg = "Invalid email or password.";
-    } catch (PDOException $e) {
-        $errorMsg = "Database error: " . $e->getMessage();
-    }
-}
+$currentPage = basename($_SERVER['PHP_SELF']);
 
 ?>
 
 <head>
     <link rel="icon" type="image/x-icon" href="/mips/images/MIPS_icon.png">
+    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
 </head>
 
 <dialog id="login-form">
     <div class="title">
         <img src="/mips/images/MIPS_icon.png" alt="MIPS_Logo">
     </div>
-    <?php if (!empty($errorMsg)) : ?>
-        <div class="alert alert-danger">
-            <?php echo htmlspecialchars($errorMsg); ?>
-        </div>
-    <?php endif; ?>
-    <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST">
+    <div id="alert-container"></div>
+    <form id="login-form-ajax" method="POST">
         <div class="input-container">
             <div class="input-field">
                 <i class="fas fa-user"></i>
@@ -74,9 +35,60 @@ if (isset($_POST["login"])) {
         <div class="pass">
             <a href="#">Forgot password?</a>
         </div>
-        <div class="input-container controls">
+        <div class="controls">
             <button type="button" class="btn btn-outline-gray cancel">Cancel</button>
-            <button type="submit" name="login" class="btn">Login</button>
+            <button type="submit" name="login" class="btn btn-outline-primary login">Login</button>
         </div>
     </form>
 </dialog>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const loginForm = document.getElementById('login-form-ajax');
+
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const email = document.querySelector('input[name="email"]').value;
+            const password = document.querySelector('input[name="password"]').value;
+            const productId = "<?php echo $product_id; ?>";
+            const currentPage = window.location.pathname;
+
+            fetch('/mips/ajax.php?action=login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: new URLSearchParams({
+                        email: email,
+                        password: password,
+                        pid: productId,
+                        current_page: currentPage
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        window.location.href = data.redirect;
+                    } else {
+                        showAlert(data.error);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showAlert('An error occurred while processing the request.');
+                });
+        });
+
+        function showAlert(message) {
+            const alertHtml = `<div class="login-alert">${message}</div>`;
+            document.getElementById('alert-container').innerHTML = alertHtml;
+            setTimeout(function() {
+                const alertElement = document.querySelector('.login-alert');
+                if (alertElement) {
+                    alertElement.style.opacity = '0';
+                    setTimeout(() => alertElement.remove(), 600);
+                }
+            }, 3000);
+        }
+    });
+</script>
