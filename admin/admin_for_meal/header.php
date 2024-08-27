@@ -1,5 +1,5 @@
 <head>
-    <link rel="icon" type="image/x-icon" href="../../images/MIPS_icon.png">;
+    <link rel="icon" type="image/x-icon" href="../../images/MIPS_icon.png">
 </head>
 
 <header>
