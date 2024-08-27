@@ -5,6 +5,7 @@ session_start();
 include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/db_connect.php";
 include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/customer_login.php";
 $pageTitle = "Home - MIPS";
+$currentPage = basename($_SERVER['PHP_SELF']);
 include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/customer_head.php";
 ?>
 

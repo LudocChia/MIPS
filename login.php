@@ -3,6 +3,7 @@
 session_start();
 include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/db_connect.php";
 $product_id = $_GET['pid'] ?? null;
+$email = '';
 
 ?>
 

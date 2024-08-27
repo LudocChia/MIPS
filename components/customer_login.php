@@ -1,26 +1,15 @@
 <?php
 
 include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/db_connect.php";
+$email = "";
 $product_id = $_GET['pid'] ?? null;
+$currentPage = basename($_SERVER['PHP_SELF']);
 
 ?>
 
 <head>
     <link rel="icon" type="image/x-icon" href="/mips/images/MIPS_icon.png">
     <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
-    <style>
-        .login-alert {
-            padding: 10px;
-            background-color: rgba(128, 128, 128, 0.9);
-            color: white;
-            opacity: 1;
-            transition: opacity 0.6s;
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            z-index: 9999;
-        }
-    </style>
 </head>
 
 <dialog id="login-form">
@@ -53,42 +42,52 @@ $product_id = $_GET['pid'] ?? null;
     </form>
 </dialog>
 <script>
-    $(document).ready(function() {
-        $('#login-form-ajax').on('submit', function(e) {
+    document.addEventListener('DOMContentLoaded', function() {
+        const loginForm = document.getElementById('login-form-ajax');
+
+        loginForm.addEventListener('submit', function(e) {
             e.preventDefault();
 
-            const email = $('input[name="email"]').val();
-            const password = $('input[name="password"]').val();
+            const email = document.querySelector('input[name="email"]').value;
+            const password = document.querySelector('input[name="password"]').value;
+            const productId = "<?php echo $product_id; ?>";
+            const currentPage = window.location.pathname;
 
-            $.ajax({
-                type: 'POST',
-                url: '/mips/ajax.php?action=login',
-                data: $.param({
-                    email: email,
-                    password: password
-                }),
-                contentType: 'application/x-www-form-urlencoded',
-                success: function(response) {
-                    const result = JSON.parse(response);
-                    if (result.success) {
-                        window.location.href = result.redirect;
+            fetch('/mips/ajax.php?action=login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: new URLSearchParams({
+                        email: email,
+                        password: password,
+                        pid: productId,
+                        current_page: currentPage
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        window.location.href = data.redirect;
                     } else {
-                        showAlert(result.error);
+                        showAlert(data.error);
                     }
-                },
-                error: function() {
+                })
+                .catch(error => {
+                    console.error('Error:', error);
                     showAlert('An error occurred while processing the request.');
-                }
-            });
+                });
         });
 
         function showAlert(message) {
             const alertHtml = `<div class="login-alert">${message}</div>`;
-            $('#alert-container').html(alertHtml);
+            document.getElementById('alert-container').innerHTML = alertHtml;
             setTimeout(function() {
-                $('.login-alert').fadeOut('slow', function() {
-                    $(this).remove();
-                });
+                const alertElement = document.querySelector('.login-alert');
+                if (alertElement) {
+                    alertElement.style.opacity = '0';
+                    setTimeout(() => alertElement.remove(), 600);
+                }
             }, 3000);
         }
     });

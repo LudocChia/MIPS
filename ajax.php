@@ -9,11 +9,14 @@ $crud = new Action();
 switch ($action) {
     case 'login':
         if (isset($_POST['email'], $_POST['password'])) {
-            echo $crud->login($_POST['email'], $_POST['password']);
+            $currentPage = $_POST['current_page'] ?? null;
+            $productId = $_POST['pid'] ?? null;
+            echo $crud->login($_POST['email'], $_POST['password'], $currentPage, $productId);
         } else {
             echo json_encode(['error' => 'Email and password are required']);
         }
         break;
+
     case 'add_to_cart':
         if (isset($_POST['customer_id'], $_POST['product_id'], $_POST['qty'], $_POST['product_size_id'])) {
             echo $crud->add_to_cart($_POST['customer_id'], $_POST['product_id'], $_POST['qty'], $_POST['product_size_id']);
