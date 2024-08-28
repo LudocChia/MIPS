@@ -55,15 +55,49 @@ if (!isset($_SESSION['admin_id'])) {
             <h1>Please fill in required credentials</h1>
             <row>
                 <column>
-                    <label for="name">Name</label>
+                    <label for="name">Name :</label>
                     <input type="text" id="name" name="Name">
                 </column>
                 <column>
-                    <label for="place">Place</label>
+                    <label for="place">Place :</label>
                     <input type="text" id="place" name="Place">
                 </column>
             </row>
-
+            <row>
+                <column>
+                    <label for="time">Time :</label>
+                    <input type="text" id="time" name="Time">
+                </column>
+                <column>
+                    <label for="date">Date :</label>
+                    <input type="date" id="date" name="Date">
+                </column>
+            </row>
+            <row>
+                <column>
+                    <label for="meals">Meals type:</label>
+                    <row>
+                        <row1>
+                            <input type="checkbox" id="morningTea" name="meals" value="morningTea">
+                            <label for="morningTea">Morning tea</label>
+                        </row1>
+                        <row1>
+                            <input type="checkbox" id="lunch" name="meals" value="lunch">
+                            <label for="lunch">Lunch</label>
+                        </row1>
+                        <row1>
+                            <input type="checkbox" id="eveningTea" name="meals" value="eveningTea">
+                            <label for="eveningTea">Evening tea</label>
+                        </row1>
+                    </row>
+                </column>
+            </row>
+            <row>
+                <column>
+                    <label for="desc">Description :</label>
+                    <textarea id="desc" name="desc" rows="5" cols="75" required></textarea>
+                </column>
+            </row>
         </box1>
     </div>
 </body>

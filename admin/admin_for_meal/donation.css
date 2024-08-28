@@ -143,7 +143,9 @@
     display: flex;
     flex-direction: row;
     justify-content: center;
+    margin-top: 5px;
 }
+
 .bigflex box1{
     background-color: #6989a8;
     color: whitesmoke;
@@ -152,24 +154,60 @@
     padding-bottom: 20px;
     padding-left: 20px;
     padding-right: 20px;
+    margin-left: 20px;
 }
 .bigflex box1 row{
     display: flex;
     flex-direction: row;
-    justify-content: space-around;
+    justify-content: space-evenly;
 }
 .bigflex box1 row label{
     font-size: 25px;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-top: 20px;
 }
 .bigflex box1 row input[type=text]{
-    padding: 20px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 20px;
+    padding-right: 20px;
+    font-size: 22px;
+    border-radius: 10px;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+.bigflex box1 row input[type=date]{
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 70px;
+    padding-right: 70px;
+    font-size: 22px;
+    border-radius: 10px;
+
 }
 .bigflex box1 row column{
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
 }
-
+.bigflex box1 row column row{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+.bigflex box1 row column row row1{
+    justify-content: center;
+}
+.bigflex box1 row column row input[type=checkbox]{
+    height: 25px;
+    width: 25px;
+}
+.bigflex box1 row column textarea{
+    padding: 10px;
+    border-radius: 10px;
+    justify-content: center;
+}
 /* This is 1028px responsive */
 @media only screen and (max-width: 1280px){
 
