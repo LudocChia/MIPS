@@ -24,6 +24,7 @@ switch ($action) {
             echo json_encode(['error' => 'Invalid or missing input data']);
         }
         break;
+
     case 'purchase':
         if (isset($_POST['product_id']) && isset($_POST['size_id']) && isset($_POST['product_price']) && isset($_POST['child']) && isset($_FILES['payment_image'])) {
             echo $crud->purchase(
@@ -61,6 +62,7 @@ switch ($action) {
             echo json_encode(['error' => 'Parent ID is required']);
         }
         break;
+
     case 'delete_selected':
         if (isset($_POST['cart_item_ids'])) {
             echo $crud->delete_selected($_POST['cart_item_ids']);
@@ -68,6 +70,7 @@ switch ($action) {
             echo json_encode(['error' => 'No items selected for deletion']);
         }
         break;
+
     case 'clear_cart':
         if (isset($_POST['parent_id'])) {
             echo $crud->clear_cart($_POST['parent_id']);

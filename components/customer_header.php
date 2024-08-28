@@ -108,6 +108,7 @@
             });
 
             document.addEventListener('click', function(event) {
+                if (isAutoSliding) return;
                 if (!profileMenu.contains(event.target) && !userBtn.contains(event.target)) {
                     profileMenu.classList.remove('active');
                 }
