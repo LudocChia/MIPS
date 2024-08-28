@@ -63,7 +63,7 @@ if (!isset($_SESSION['admin_id'])) {
     <div class="top-bar">
         <a href="../admin_for_meal/donationMain.php" ><img src="back-button.png" alt="back-button" style="width: 80px;px;height:80px;"></a>
         <h1>Upcoming Event</h1>
-        <button id="add">Add</button>
+        <a href="../admin_for_meal/addEvent.php"><button id="add">Add</button></a>
     </div>
 
     <?php
@@ -72,7 +72,7 @@ if (!isset($_SESSION['admin_id'])) {
 
     try {
         // Your initial query (modify this to your actual conditions)
-        $stmt = $pdo->query("SELECT * FROM `event` WHERE event_id = 1");
+        $stmt = $pdo->query("SELECT * FROM `event` WHERE event_id = 0");
 
         // Check if any rows were returned
         if ($stmt->rowCount() > 0) {
@@ -96,19 +96,19 @@ if (!isset($_SESSION['admin_id'])) {
     <?php if (!empty($events)): ?>
         <?php foreach ($events as $event): ?>
             <div class="eventBox">
-                <div class="row" id="row">
+                <row id="row">
                     <p id="date">Date: <?= htmlspecialchars($event['date']) ?></p>
-                </div>
-                <div class="row">
+                </row>
+                <row>
                     <p id="name"><?= htmlspecialchars($event['name']) ?></p>
-                </div>
-                <div class="row" id="row1">
+                </row>
+                <row id="row1">
                     <p id="time">Time: <?= htmlspecialchars($event['time']) ?></p>
                     <p id="place">Place: <?= htmlspecialchars($event['place']) ?></p>
-                </div>
-                <div class="row">
+                </row>
+                <row>
                     <p id="desc">Description: <?= htmlspecialchars($event['description']) ?></p>
-                </div>
+                </row>
             </div>
         <?php endforeach; ?>
     <?php endif; ?>
