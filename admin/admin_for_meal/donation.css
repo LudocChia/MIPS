@@ -1,8 +1,6 @@
 
 #btn{
-    text-align: center;
-    margin-left: 500px;
-    margin-top: 25px;
+    margin-top: 50px;
     padding-top: 100px;
     padding-bottom: 100px;
     padding-left: 90px;
@@ -19,9 +17,7 @@
     opacity: 95%;
 }
 #btn1{
-    text-align: center;
-    margin-left: 500px;
-    margin-top: 40px;
+    margin-top: 50px;
     padding-top: 100px;
     padding-bottom: 100px;
     padding-left: 125px;
@@ -78,6 +74,7 @@
     flex-direction: column;
     flex-wrap: wrap;
     cursor: pointer;
+    border-radius: 10px;
 }
 .eventBox p{
     position: relative;
@@ -115,7 +112,7 @@
 }
 .eventBox #date{
     margin-right: 20px;
-    margin-top: 5px;
+    margin-top: 20px;
 }
 .eventBox #desc{
     margin-top: -20px;
@@ -139,9 +136,41 @@
     margin-top: 10px;  /* Adds some spacing between the image and text */
     font-size: 28px;   /* Adjusts the font size for the text */
     color: #6989a8;       /* Sets the text color */
+    margin-top: -30px;
   }
+
+.bigflex{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+.bigflex box1{
+    background-color: #6989a8;
+    color: whitesmoke;
+    border-radius: 10px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+.bigflex box1 row{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+.bigflex box1 row label{
+    font-size: 25px;
+}
+.bigflex box1 row input[type=text]{
+    padding: 20px;
+}
+.bigflex box1 row column{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
 
 /* This is 1028px responsive */
 @media only screen and (max-width: 1280px){
 
-} 
+}

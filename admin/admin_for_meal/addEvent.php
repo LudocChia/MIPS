@@ -7,17 +7,34 @@ if (!isset($_SESSION['admin_id'])) {
     header('Location: /mips/admin/login.php');
     exit();
 }
-
-
     // session_start();
     include "../admin_for_meal/header.php"; 
 
+    function getAll($pdo){
+        // Query to fetch all users
+        $stmt = $pdo->query("SELECT * FROM `event`");
+        $visitors = $stmt->fetchAll();
+    }
+    function getByDate($pdo){
+        $stmt = $pdo->query("SELECT * FROM `event` where DATE(date) > DATE(now())");
+        $visitors = $stmt->fetchAll();
+    }
+    function generateID(){
+        uniqid();
+    }
+    $all = getByDate($pdo);
+    $sql = "SELECT * FROM `event` where DATE(date) > DATE(now())";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute();
+
+
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+<meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Meal Donation</title>
     <link rel="icon" type="image/x-icon" href="../images/MIPS_icon.png">
@@ -29,22 +46,25 @@ if (!isset($_SESSION['admin_id'])) {
     <link rel="stylesheet" href="../admin_for_meal/common.css">
     <link rel="stylesheet" href="../admin_for_meal/admin.css">
     <link rel="stylesheet" href="../admin_for_meal/donation.css">
-    <style>
-        .mainbox {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: space-evenly;
-            flex-wrap: wrap;
-        }
-    </style>
 </head>
 <body>
     <script src="../admin_for_meal/admin.js"></script>
-    <div class="mainbox">
-        <a href="#"><button id="btn">Donation Info</button></a>
-        <a href="../admin_for_meal/event.php"><button id="btn1">Add Event</button></a>
-    </div>
+    <div class="bigflex">
+        <a href="../admin_for_meal/event.php" ><img src="back-button.png" alt="back-button" style="width: 80px;px;height:80px;"></a>
+        <box1>
+            <h1>Please fill in required credentials</h1>
+            <row>
+                <column>
+                    <label for="name">Name</label>
+                    <input type="text" id="name" name="Name">
+                </column>
+                <column>
+                    <label for="place">Place</label>
+                    <input type="text" id="place" name="Place">
+                </column>
+            </row>
 
+        </box1>
+    </div>
 </body>
 </html>
