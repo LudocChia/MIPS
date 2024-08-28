@@ -117,46 +117,58 @@ class Action
         try {
             $this->db->beginTransaction();
 
-            foreach ($selectedChildren as $childId) {
-                $orderQuery = "
+            // Create a single order
+            $orderQuery = "
                 INSERT INTO Orders (order_id, parent_student_id, order_price) 
-                VALUES (:order_id, (SELECT parent_student_id FROM Parent_Student WHERE parent_id = :parent_id AND student_id = :student_id), :order_price)
+                VALUES (:order_id, (SELECT parent_student_id FROM Parent_Student WHERE parent_id = :parent_id LIMIT 1), :order_price)
             ";
-                $orderStmt = $this->db->prepare($orderQuery);
-                $orderId = uniqid('ORD');
-                $orderStmt->bindParam(':order_id', $orderId);
-                $orderStmt->bindParam(':parent_id', $parentId);
-                $orderStmt->bindParam(':student_id', $childId);
-                $orderStmt->bindParam(':order_price', $productPrice);
-                $orderStmt->execute();
+            $orderStmt = $this->db->prepare($orderQuery);
+            $orderId = uniqid('ORD');
+            $orderStmt->bindParam(':order_id', $orderId);
+            $orderStmt->bindParam(':parent_id', $parentId);
+            $orderStmt->bindParam(':order_price', $productPrice);
+            $orderStmt->execute();
 
-                $orderItemQuery = "
+            // Create a single order item
+            $orderItemQuery = "
                 INSERT INTO Order_Item (order_item_id, order_id, product_id, product_size_id, product_quantity, order_subtotal) 
                 VALUES (:order_item_id, :order_id, :product_id, :product_size_id, 1, :order_subtotal)
             ";
-                $orderItemStmt = $this->db->prepare($orderItemQuery);
-                $orderItemId = uniqid('OI');
-                $orderItemStmt->bindParam(':order_item_id', $orderItemId);
-                $orderItemStmt->bindParam(':order_id', $orderId);
-                $orderItemStmt->bindParam(':product_id', $productId);
-                $orderItemStmt->bindParam(':product_size_id', $sizeId);
-                $orderItemStmt->bindParam(':order_subtotal', $productPrice);
-                $orderItemStmt->execute();
+            $orderItemStmt = $this->db->prepare($orderItemQuery);
+            $orderItemId = uniqid('OI');
+            $orderItemStmt->bindParam(':order_item_id', $orderItemId);
+            $orderItemStmt->bindParam(':order_id', $orderId);
+            $orderItemStmt->bindParam(':product_id', $productId);
+            $orderItemStmt->bindParam(':product_size_id', $sizeId);
+            $orderItemStmt->bindParam(':order_subtotal', $productPrice);
+            $orderItemStmt->execute();
 
-                $paymentQuery = "
-                INSERT INTO Payment (payment_id, parent_student_id, order_id, payment_amount, payment_status, payment_image) 
-                VALUES (:payment_id, (SELECT parent_student_id FROM Parent_Student WHERE parent_id = :parent_id AND student_id = :student_id), :order_id, :payment_amount, 'pending', :payment_image)
-            ";
-                $paymentStmt = $this->db->prepare($paymentQuery);
-                $paymentId = uniqid('PAY');
-                $paymentStmt->bindParam(':payment_id', $paymentId);
-                $paymentStmt->bindParam(':parent_id', $parentId);
-                $paymentStmt->bindParam(':student_id', $childId);
-                $paymentStmt->bindParam(':order_id', $orderId);
-                $paymentStmt->bindParam(':payment_amount', $productPrice);
-                $paymentStmt->bindParam(':payment_image', $fileName);
-                $paymentStmt->execute();
+            // Associate order item with each child
+            foreach ($selectedChildren as $childId) {
+                $orderItemStudentQuery = "
+                    INSERT INTO Order_Item_Student (order_item_student_id, order_item_id, student_id)
+                    VALUES (:order_item_student_id, :order_item_id, :student_id)
+                ";
+                $orderItemStudentStmt = $this->db->prepare($orderItemStudentQuery);
+                $orderItemStudentId = uniqid('OIS');
+                $orderItemStudentStmt->bindParam(':order_item_student_id', $orderItemStudentId);
+                $orderItemStudentStmt->bindParam(':order_item_id', $orderItemId);
+                $orderItemStudentStmt->bindParam(':student_id', $childId);
+                $orderItemStudentStmt->execute();
             }
+
+            $paymentQuery = "
+                INSERT INTO Payment (payment_id, parent_student_id, order_id, payment_amount, payment_status, payment_image) 
+                VALUES (:payment_id, (SELECT parent_student_id FROM Parent_Student WHERE parent_id = :parent_id LIMIT 1), :order_id, :payment_amount, 'pending', :payment_image)
+            ";
+            $paymentStmt = $this->db->prepare($paymentQuery);
+            $paymentId = uniqid('PAY');
+            $paymentStmt->bindParam(':payment_id', $paymentId);
+            $paymentStmt->bindParam(':parent_id', $parentId);
+            $paymentStmt->bindParam(':order_id', $orderId);
+            $paymentStmt->bindParam(':payment_amount', $productPrice);
+            $paymentStmt->bindParam(':payment_image', $fileName);
+            $paymentStmt->execute();
 
             $this->db->commit();
             return json_encode(['success' => true, 'message' => 'Purchase successful']);
@@ -165,6 +177,7 @@ class Action
             return json_encode(['error' => 'Purchase failed: ' . $e->getMessage()]);
         }
     }
+
 
     private function handleFileUpload($file)
     {

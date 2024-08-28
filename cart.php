@@ -140,7 +140,7 @@ $parentId = $_SESSION['user_id'] ?? null;
 
     <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/customer_footer.php"; ?>
     <script src="/mips/javascript/common.js"></script>
-    <script src="/mips/javascript/customer.js"></script>
+    <script src="/mips/javascript/temp.js"></script>
 </body>
 
 </html>
