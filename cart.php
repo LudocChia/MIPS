@@ -28,9 +28,8 @@ $parentId = $_SESSION['user_id'] ?? null;
                 <div id="cart-content">
                     <div class="empty">
                         <img src='images/empty_cart.png' alt='Empty Cart Image'>
-                        <h4>No Products Added</h4>
-                        <p>Your cart is currently empty. Browse our selection and add items you like!</p>
-                        <button class='empty'><a href='products.php'>Start Browsing</a></button>
+                        <h3>No Products Added</h3>
+                        <a href="/mips/bookshop.php"><button class='btn btn-outline-primary'>Start Browsing</button></a>
                     </div>
                 </div>
 
@@ -54,7 +53,7 @@ $parentId = $_SESSION['user_id'] ?? null;
                         <div class="controls clearfix">
                             <input type="checkbox" id="selectAll" class="select-all">
                             <label for="selectAll">Select All Products</label>
-                            <a href="javascript:" class="del-all">Delete Selected Products</a>
+                            <a href="javascript:" class="delete-selected">Delete Selected Products</a>
                             <a href="javascript:" class="clear">Delete All Products</a>
                             <p>Total (<span id="totalCount">0</span> items): RM <span id="totalPrice" class="total-price">0.00</span></p>
                             <button class="pay">Checkout</button>
@@ -77,28 +76,25 @@ $parentId = $_SESSION['user_id'] ?? null;
             <input type="hidden" name="product_id" id="product-id" value="">
             <input type="hidden" name="size_id" id="size-id" value="">
             <input type="hidden" name="product_price" id="product-price" value="">
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Product Name</th>
+                        <th>Size</th>
+                        <th>Child</th>
+                        <th>Price (RM)</th>
+                    </tr>
+                </thead>
+                <tbody id="checkout-items-body">
+                </tbody>
+            </table>
+
             <div class="input-container">
                 <div class="input-field">
-                    <h2>Product Name</h2>
-                    <input type="text" name="product_name" id="product-name-display" value="Product Name Here" readonly>
+                    <h2>Total Price (RM)</h2>
+                    <input type="text" name="total_price_display" id="total-price-display" value="0.00" readonly>
                 </div>
-            </div>
-            <div class="input-container">
-                <div class="input-field">
-                    <h2>Selected Size</h2>
-                    <input type="text" name="selected_size" id="selected-size-display" value="Selected Size Here" readonly>
-                </div>
-            </div>
-            <div class="input-container">
-                <div class="input-field">
-                    <h2>Price (RM)</h2>
-                    <input type="text" name="product_price_display" id="product-price-display" value="Product Price Here" readonly>
-                </div>
-            </div>
-            <div class="input-container">
-                <div class="input-field">
-                </div>
-                <p>Please select which child you are buying for.</p>
             </div>
             <div class="input-container">
                 <h2>Payment Method</h2>
@@ -126,6 +122,7 @@ $parentId = $_SESSION['user_id'] ?? null;
                     </tr>
                 </table>
             </div>
+
             <div class="input-container">
                 <div class="input-field">
                     <h2>Upload Transfer Receipt<sup>*</sup></h2>
@@ -140,10 +137,10 @@ $parentId = $_SESSION['user_id'] ?? null;
             </div>
         </form>
     </dialog>
+
     <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/customer_footer.php"; ?>
-    <script src="./javascript/common.js"></script>
-    <script src="./javascript/customer.js"></script>
-    <script src="./javascript/cart.js"></script>
+    <script src="/mips/javascript/common.js"></script>
+    <script src="/mips/javascript/customer.js"></script>
 </body>
 
 </html>

@@ -39,6 +39,8 @@ switch ($action) {
             echo json_encode(['error' => 'Missing required fields']);
         }
         break;
+
+
     case 'update_cart_item':
         if (isset($_POST['cart_item_id'], $_POST['quantity'])) {
             echo $crud->update_cart_item($_POST['cart_item_id'], $_POST['quantity']);
@@ -76,14 +78,6 @@ switch ($action) {
             echo $crud->clear_cart($_POST['parent_id']);
         } else {
             echo json_encode(['error' => 'Parent ID is required']);
-        }
-        break;
-
-    case 'checkout':
-        if (isset($_POST['selected_item_ids']) && isset($_POST['selected_children'])) {
-            echo $crud->checkout($_POST['selected_item_ids'], $_POST['selected_children']);
-        } else {
-            echo json_encode(['error' => 'No items or children selected for checkout']);
         }
         break;
 

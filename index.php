@@ -52,7 +52,6 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/customer_head.php";
         </div>
     </section>
     <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/customer_footer.php"; ?>
-    <script src="/mips/javascript/home.js"></script>
     <script src="/mips/javascript/customer.js"></script>
 </body>
 

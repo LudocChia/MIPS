@@ -38,7 +38,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/customer_head.php";
                             <?php foreach ($products as $product) : ?>
                                 <div class="box">
                                     <div class="image-container">
-                                        <a href="item.php?pid=<?= htmlspecialchars($product['product_id']); ?>">
+                                        <a href="/mips/item.php?pid=<?= htmlspecialchars($product['product_id']); ?>">
                                             <img src="<?= htmlspecialchars(!empty($product['primary_image']) ? "uploads/product/" . $product['primary_image'] : 'images/defaultproductimage.png'); ?>" alt="Product Image" class="primary-image">
                                         </a>
                                     </div>
