@@ -712,19 +712,19 @@ thead th {
     width: auto;
 }
 
+/* !!!!!!!!!!!! */
 .empty p {
     padding: 3%;
 }
 
 .empty img {
+    margin-top: 2rem;
     width: 40%;
 }
 
 
 .empty button {
-    border: 1px solid var(--deep-blue);
-    padding: 1rem 2rem;
-    border-radius: 5px;
+    margin: ;
     width: 50%;
 }
 

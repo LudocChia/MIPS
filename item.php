@@ -85,99 +85,6 @@ $children = getParentChildren($pdo, $_SESSION['user_id'] ?? null);
 
 $stockQuantity = $product['stock_quantity'] ?? 0;
 
-function handleFileUpload($file)
-{
-    if ($file['error'] === UPLOAD_ERR_NO_FILE) {
-        return null;
-    }
-
-    $allowedfileExtensions = ['jpg', 'jpeg', 'png'];
-    $fileName = $file['name'];
-    $fileTmpPath = $file['tmp_name'];
-    $fileExtension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
-
-    if (in_array($fileExtension, $allowedfileExtensions)) {
-        $newFileName = uniqid() . '.' . $fileExtension;
-        $dest_path = $_SERVER['DOCUMENT_ROOT'] . '/mips/uploads/receipts/' . $newFileName;
-
-        if (move_uploaded_file($fileTmpPath, $dest_path)) {
-            return $newFileName;
-        } else {
-            echo "<script>alert('There was an error moving the uploaded file: $fileName');</script>";
-            return null;
-        }
-    } else {
-        echo "<script>alert('Upload failed. Allowed file types: " . implode(',', $allowedfileExtensions) . "');</script>";
-        return null;
-    }
-}
-
-if (isset($_POST['submit'])) {
-    $productId = $_POST['product_id'];
-    $sizeId = $_POST['size_id'];
-    $productPrice = $_POST['product_price'];
-    $selectedChildren = $_POST['child'] ?? [];
-    $parentId = $_SESSION['user_id'];
-
-    $fileName = handleFileUpload($_FILES['payment_image']);
-
-    if ($fileName) {
-        try {
-            $pdo->beginTransaction();
-
-            foreach ($selectedChildren as $childId) {
-                $orderQuery = "INSERT INTO Orders (order_id, parent_student_id, order_price) 
-                               VALUES (:order_id, (SELECT parent_student_id FROM Parent_Student WHERE parent_id = :parent_id AND student_id = :student_id), :order_price)";
-                $orderStmt = $pdo->prepare($orderQuery);
-                $orderId = uniqid('ORD');
-                $orderStmt->bindParam(':order_id', $orderId);
-                $orderStmt->bindParam(':parent_id', $parentId);
-                $orderStmt->bindParam(':student_id', $childId);
-                $orderStmt->bindParam(':order_price', $productPrice);
-                $orderStmt->execute();
-
-                $orderItemQuery = "INSERT INTO Order_Item (order_item_id, order_id, product_id, product_size_id, product_quantity, order_subtotal) 
-                                   VALUES (:order_item_id, :order_id, :product_id, :product_size_id, 1, :order_subtotal)";
-                $orderItemStmt = $pdo->prepare($orderItemQuery);
-                $orderItemId = uniqid('OI');
-                $orderItemStmt->bindParam(':order_item_id', $orderItemId);
-                $orderItemStmt->bindParam(':order_id', $orderId);
-                $orderItemStmt->bindParam(':product_id', $productId);
-                $orderItemStmt->bindParam(':product_size_id', $sizeId);
-                $orderItemStmt->bindParam(':order_subtotal', $productPrice);
-                $orderItemStmt->execute();
-
-                $paymentQuery = "INSERT INTO Payment (payment_id, parent_student_id, order_id, payment_amount, payment_status, payment_image) 
-                                 VALUES (:payment_id, (SELECT parent_student_id FROM Parent_Student WHERE parent_id = :parent_id AND student_id = :student_id), :order_id, :payment_amount, 'pending', :payment_image)";
-                $paymentStmt = $pdo->prepare($paymentQuery);
-                $paymentId = uniqid('PAY');
-                $paymentStmt->bindParam(':payment_id', $paymentId);
-                $paymentStmt->bindParam(':parent_id', $parentId);
-                $paymentStmt->bindParam(':student_id', $childId);
-                $paymentStmt->bindParam(':order_id', $orderId);
-                $paymentStmt->bindParam(':payment_amount', $productPrice);
-                $paymentStmt->bindParam(':payment_image', $fileName);
-                $paymentStmt->execute();
-
-                $orderItemStudentQuery = "INSERT INTO Order_Item_Student (order_item_student_id, order_item_id, student_id)
-                                          VALUES (:order_item_student_id, :order_item_id, :student_id)";
-                $orderItemStudentStmt = $pdo->prepare($orderItemStudentQuery);
-                $orderItemStudentId = uniqid('OIS');
-                $orderItemStudentStmt->bindParam(':order_item_student_id', $orderItemStudentId);
-                $orderItemStudentStmt->bindParam(':order_item_id', $orderItemId);
-                $orderItemStudentStmt->bindParam(':student_id', $childId);
-                $orderItemStudentStmt->execute();
-            }
-
-            $pdo->commit();
-        } catch (PDOException $e) {
-            $pdo->rollBack();
-            echo "<script>alert('Purchase failed: " . $e->getMessage() . "');</script>";
-        }
-    } else {
-        echo "<script>alert('Failed to upload receipt.');</script>";
-    }
-}
 
 $pageTitle = $product['product_name'] . " - MIPS";
 include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/customer_head.php";
@@ -431,6 +338,52 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/customer_head.php";
                 <?php endif; ?>
             });
         });
+
+        document.addEventListener("DOMContentLoaded", function() {
+            const form = document.querySelector('#add-edit-data form');
+
+            form.addEventListener('submit', function(event) {
+                event.preventDefault(); // Prevent the default form submission
+
+                const selectedSizeButton = document.querySelector('.size-button.selected');
+                if (!selectedSizeButton) {
+                    alert('Please select a size.');
+                    return;
+                }
+
+                const sizeId = selectedSizeButton.getAttribute('data-size-id');
+                const selectedChildren = Array.from(document.querySelectorAll('input[name="child[]"]:checked')).map(el => el.value);
+                const paymentImage = document.querySelector('input[name="payment_image"]').files[0];
+
+                if (selectedChildren.length === 0) {
+                    alert('Please select at least one child.');
+                    return;
+                }
+
+                const formData = new FormData(form);
+                formData.append('size_id', sizeId);
+                formData.append('children', selectedChildren.join(','));
+
+                fetch('/mips/ajax.php?action=purchase', {
+                        method: 'POST',
+                        body: formData
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert('Purchase successful!');
+                            document.querySelector('#add-edit-data').close();
+                        } else {
+                            alert('Failed to complete purchase: ' + data.error);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error completing purchase:', error);
+                        alert('An error occurred while processing your request.');
+                    });
+            });
+        });
+
 
         document.addEventListener("DOMContentLoaded", function() {
             const thumbnails = document.querySelectorAll('.thumbnail');

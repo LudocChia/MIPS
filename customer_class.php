@@ -117,46 +117,58 @@ class Action
         try {
             $this->db->beginTransaction();
 
-            foreach ($selectedChildren as $childId) {
-                $orderQuery = "
+            // Create a single order
+            $orderQuery = "
                 INSERT INTO Orders (order_id, parent_student_id, order_price) 
-                VALUES (:order_id, (SELECT parent_student_id FROM Parent_Student WHERE parent_id = :parent_id AND student_id = :student_id), :order_price)
+                VALUES (:order_id, (SELECT parent_student_id FROM Parent_Student WHERE parent_id = :parent_id LIMIT 1), :order_price)
             ";
-                $orderStmt = $this->db->prepare($orderQuery);
-                $orderId = uniqid('ORD');
-                $orderStmt->bindParam(':order_id', $orderId);
-                $orderStmt->bindParam(':parent_id', $parentId);
-                $orderStmt->bindParam(':student_id', $childId);
-                $orderStmt->bindParam(':order_price', $productPrice);
-                $orderStmt->execute();
+            $orderStmt = $this->db->prepare($orderQuery);
+            $orderId = uniqid('ORD');
+            $orderStmt->bindParam(':order_id', $orderId);
+            $orderStmt->bindParam(':parent_id', $parentId);
+            $orderStmt->bindParam(':order_price', $productPrice);
+            $orderStmt->execute();
 
-                $orderItemQuery = "
+            // Create a single order item
+            $orderItemQuery = "
                 INSERT INTO Order_Item (order_item_id, order_id, product_id, product_size_id, product_quantity, order_subtotal) 
                 VALUES (:order_item_id, :order_id, :product_id, :product_size_id, 1, :order_subtotal)
             ";
-                $orderItemStmt = $this->db->prepare($orderItemQuery);
-                $orderItemId = uniqid('OI');
-                $orderItemStmt->bindParam(':order_item_id', $orderItemId);
-                $orderItemStmt->bindParam(':order_id', $orderId);
-                $orderItemStmt->bindParam(':product_id', $productId);
-                $orderItemStmt->bindParam(':product_size_id', $sizeId);
-                $orderItemStmt->bindParam(':order_subtotal', $productPrice);
-                $orderItemStmt->execute();
+            $orderItemStmt = $this->db->prepare($orderItemQuery);
+            $orderItemId = uniqid('OI');
+            $orderItemStmt->bindParam(':order_item_id', $orderItemId);
+            $orderItemStmt->bindParam(':order_id', $orderId);
+            $orderItemStmt->bindParam(':product_id', $productId);
+            $orderItemStmt->bindParam(':product_size_id', $sizeId);
+            $orderItemStmt->bindParam(':order_subtotal', $productPrice);
+            $orderItemStmt->execute();
 
-                $paymentQuery = "
-                INSERT INTO Payment (payment_id, parent_student_id, order_id, payment_amount, payment_status, payment_image) 
-                VALUES (:payment_id, (SELECT parent_student_id FROM Parent_Student WHERE parent_id = :parent_id AND student_id = :student_id), :order_id, :payment_amount, 'pending', :payment_image)
-            ";
-                $paymentStmt = $this->db->prepare($paymentQuery);
-                $paymentId = uniqid('PAY');
-                $paymentStmt->bindParam(':payment_id', $paymentId);
-                $paymentStmt->bindParam(':parent_id', $parentId);
-                $paymentStmt->bindParam(':student_id', $childId);
-                $paymentStmt->bindParam(':order_id', $orderId);
-                $paymentStmt->bindParam(':payment_amount', $productPrice);
-                $paymentStmt->bindParam(':payment_image', $fileName);
-                $paymentStmt->execute();
+            // Associate order item with each child
+            foreach ($selectedChildren as $childId) {
+                $orderItemStudentQuery = "
+                    INSERT INTO Order_Item_Student (order_item_student_id, order_item_id, student_id)
+                    VALUES (:order_item_student_id, :order_item_id, :student_id)
+                ";
+                $orderItemStudentStmt = $this->db->prepare($orderItemStudentQuery);
+                $orderItemStudentId = uniqid('OIS');
+                $orderItemStudentStmt->bindParam(':order_item_student_id', $orderItemStudentId);
+                $orderItemStudentStmt->bindParam(':order_item_id', $orderItemId);
+                $orderItemStudentStmt->bindParam(':student_id', $childId);
+                $orderItemStudentStmt->execute();
             }
+
+            $paymentQuery = "
+                INSERT INTO Payment (payment_id, parent_student_id, order_id, payment_amount, payment_status, payment_image) 
+                VALUES (:payment_id, (SELECT parent_student_id FROM Parent_Student WHERE parent_id = :parent_id LIMIT 1), :order_id, :payment_amount, 'pending', :payment_image)
+            ";
+            $paymentStmt = $this->db->prepare($paymentQuery);
+            $paymentId = uniqid('PAY');
+            $paymentStmt->bindParam(':payment_id', $paymentId);
+            $paymentStmt->bindParam(':parent_id', $parentId);
+            $paymentStmt->bindParam(':order_id', $orderId);
+            $paymentStmt->bindParam(':payment_amount', $productPrice);
+            $paymentStmt->bindParam(':payment_image', $fileName);
+            $paymentStmt->execute();
 
             $this->db->commit();
             return json_encode(['success' => true, 'message' => 'Purchase successful']);
@@ -165,6 +177,7 @@ class Action
             return json_encode(['error' => 'Purchase failed: ' . $e->getMessage()]);
         }
     }
+
 
     private function handleFileUpload($file)
     {
@@ -235,7 +248,9 @@ class Action
             $sql = "SELECT 
                 ci.cart_item_id,
                 ci.product_quantity,
+                ci.product_size_id,
                 ps.size_name AS product_size,
+                p.product_id,
                 p.product_name,
                 p.product_price,
                 p.is_deleted,
@@ -297,109 +312,6 @@ class Action
             }
         } catch (PDOException $e) {
             return json_encode(['error' => 'Database error: ' . $e->getMessage()]);
-        }
-    }
-    public function checkout($selected_item_ids, $selected_children)
-    {
-        try {
-            $this->db->beginTransaction();
-
-            $parent_student_id = null;
-            $total_price = 0;
-
-            $stmt = $this->db->prepare("
-                SELECT ci.product_quantity, p.product_price, ps.parent_student_id
-                FROM Cart_Item ci
-                JOIN Product p ON ci.product_id = p.product_id
-                JOIN Parent_Student ps ON ci.cart_id = ps.parent_id
-                WHERE ci.cart_item_id = :cart_item_id
-            ");
-            $stmt->bindParam(':cart_item_id', $selected_item_ids[0]);
-            $stmt->execute();
-            $first_item = $stmt->fetch(PDO::FETCH_ASSOC);
-
-            if ($first_item) {
-                $parent_student_id = $first_item['parent_student_id'];
-            } else {
-                throw new Exception('Invalid cart item or parent_student_id not found.');
-            }
-
-            // Create order
-            $order_id = uniqid('ORD');
-            $stmt_order = $this->db->prepare("
-                INSERT INTO Orders (order_id, parent_student_id, order_datetime, order_price, is_deleted)
-                VALUES (:order_id, :parent_student_id, NOW(), 0, 0)
-            ");
-            $stmt_order->bindParam(':order_id', $order_id);
-            $stmt_order->bindParam(':parent_student_id', $parent_student_id);
-            $stmt_order->execute();
-
-            // Insert order items and calculate the total price
-            foreach ($selected_item_ids as $cart_item_id) {
-                $stmt_item = $this->db->prepare("
-                    SELECT ci.product_id, ci.product_size_id, ci.product_quantity, p.product_price
-                    FROM Cart_Item ci
-                    JOIN Product p ON ci.product_id = p.product_id
-                    WHERE ci.cart_item_id = :cart_item_id
-                ");
-                $stmt_item->bindParam(':cart_item_id', $cart_item_id);
-                $stmt_item->execute();
-                $item = $stmt_item->fetch(PDO::FETCH_ASSOC);
-
-                if ($item) {
-                    $order_item_id = uniqid('ORIT');
-                    $order_subtotal = $item['product_price'] * $item['product_quantity'];
-                    $total_price += $order_subtotal;
-
-                    $stmt_order_item = $this->db->prepare("
-                        INSERT INTO Order_Item (order_item_id, order_id, product_id, product_size_id, product_quantity, order_subtotal, is_deleted)
-                        VALUES (:order_item_id, :order_id, :product_id, :product_size_id, :product_quantity, :order_subtotal, 0)
-                    ");
-                    $stmt_order_item->bindParam(':order_item_id', $order_item_id);
-                    $stmt_order_item->bindParam(':order_id', $order_id);
-                    $stmt_order_item->bindParam(':product_id', $item['product_id']);
-                    $stmt_order_item->bindParam(':product_size_id', $item['product_size_id']);
-                    $stmt_order_item->bindParam(':product_quantity', $item['product_quantity']);
-                    $stmt_order_item->bindParam(':order_subtotal', $order_subtotal);
-                    $stmt_order_item->execute();
-
-                    foreach ($selected_children as $selected_child) {
-                        if ($selected_child['cartItemId'] == $cart_item_id) {
-                            foreach ($selected_child['children'] as $child_id) {
-                                $stmt_order_item_student = $this->db->prepare("
-                                    INSERT INTO order_item_student (order_item_id, student_id) 
-                                    VALUES (:order_item_id, :student_id)
-                                ");
-                                $stmt_order_item_student->bindParam(':order_item_id', $order_item_id);
-                                $stmt_order_item_student->bindParam(':student_id', $child_id);
-                                $stmt_order_item_student->execute();
-                            }
-                        }
-                    }
-                } else {
-                    throw new Exception('Invalid cart item or product not found.');
-                }
-            }
-
-            $stmt_update_order = $this->db->prepare("
-                UPDATE Orders
-                SET order_price = :total_price
-                WHERE order_id = :order_id
-            ");
-            $stmt_update_order->bindParam(':total_price', $total_price);
-            $stmt_update_order->bindParam(':order_id', $order_id);
-            $stmt_update_order->execute();
-
-            // Delete cart items
-            $ids = implode(',', array_map('intval', $selected_item_ids));
-            $this->db->exec("DELETE FROM Cart_Item WHERE cart_item_id IN ($ids)");
-
-            $this->db->commit();
-
-            return json_encode(['success' => true, 'orderId' => $order_id]);
-        } catch (Exception $e) {
-            $this->db->rollBack();
-            return json_encode(['error' => $e->getMessage()]);
         }
     }
 }
