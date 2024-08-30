@@ -1,16 +1,6 @@
 <?php
 
-session_start();
-
-include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/db_connect.php";
-
-if (!isset($_SESSION['admin_id'])) {
-    header('Location: /mips/admin/login.php');
-    exit();
-}
-
-$currentPage = basename($_SERVER['PHP_SELF']);
-
+include $_SERVER['DOCUMENT_ROOT'] . "/mips/php/admin.php";
 function getTotalParentsAndStudents($pdo)
 {
     $sqlParents = "SELECT COUNT(*) as total_parents FROM Parent WHERE is_deleted = 0";

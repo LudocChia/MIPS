@@ -414,12 +414,10 @@ main .recent-orders a {
     border-radius: .5rem;
     padding: 1rem;
     margin: 0.5rem;
-    /* max-height: 10rem; */
 }
 
 .products .box-container .box .image-container {
     position: relative;
-    /* height: 304px; */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -427,8 +425,6 @@ main .recent-orders a {
 
 
 .products .box-container .image-container img {
-    /* width: 250px; */
-    /* height: 310px; */
     background-color: white;
     object-fit: contain;
     border-radius: 10px;
@@ -450,13 +446,35 @@ main .recent-orders a {
     right: -20px;
     top: -10px;
     cursor: pointer;
-    /* z-index: 999; */
 }
 
 .products .box-container .box:hover {
     border: 1px var(--color-primary) solid;
 }
 
+.announcement .box-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, 300px);
+    border-color: #24262b;
+    justify-content: center;
+    padding-bottom: 2%;
+}
+
+.announcement .box-container .box {
+    position: relative;
+    border: 1px solid #dfe1e5;
+    background-color: #f4f4f4;
+    border-radius: .5rem;
+    margin: 0.5rem;
+}
+
+.announcement .box-container .image-container img {
+    background-color: white;
+    object-fit: contain;
+    border-top-left-radius: .5rem;
+    border-top-right-radius: .5rem;
+
+}
 
 .actions {
     position: absolute;

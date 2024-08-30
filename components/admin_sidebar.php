@@ -60,7 +60,7 @@ function isActive($pageName, $currentPage)
                 </a>
             </li>
             <li>
-                <a href="/mips/admin/announment.php" class="<?= isActive('announment.php', $currentPage); ?>">
+                <a href="/mips/admin/announcement.php" class="<?= isActive('announcement.php', $currentPage); ?>">
                     <i class="bi bi-megaphone-fill"></i>
                     <h4>Announment</h4>
                 </a>
@@ -105,49 +105,10 @@ function isActive($pageName, $currentPage)
                 </ul>
             </li>
             <li>
-                <a href="javascript:void(0);" class="deactivate-btn">
+                <a href="/mips/admin/recycleBin.php" class="<?= isActive('recycleBin.php', $currentPage); ?>">
                     <i class="bi bi-trash2-fill"></i>
-                    <h4>Deactivated</h4>
-                    <i class="bi bi-chevron-down <?= strpos($currentPage, 'user') !== false || strpos($currentPage, 'bookshop') !== false || strpos($currentPage, 'gradeclass') !== false || strpos($currentPage, 'announment') !== false ? 'rotate' : ''; ?>"></i>
+                    <h4>Recycle Bin</h4>
                 </a>
-                <ul>
-                    <li>
-                        <a href="/mips/admin/deactivate/user.php" class="<?= isActive('user.php', $currentPage); ?>"><i class="bi bi-person-fill-slash"></i>
-                            <h4>User</h4>
-                        </a>
-
-                    </li>
-                    <li>
-                        <a href="/mips/admin/deactivate/bookshop.php" class="<?= isActive('bookshop.php', $currentPage); ?>"><i class="bi bi-person-fill-slash"></i>
-                            <h4>Bookshop</h4>
-                        </a>
-
-                    </li>
-                    <li>
-                        <a href="/mips/admin/deactivate/gradeclass.php" class="<?= isActive('gradeclass.php', $currentPage); ?>"><i class="bi bi-person-fill-slash"></i>
-                            <h4>Grade and Class</h4>
-                        </a>
-
-                    </li>
-                    <li>
-                        <a href="/mips/admin/deactivate/announment.php" class="<?= isActive('announment.php', $currentPage); ?>"><i class="bi bi-person-fill-slash"></i>
-                            <h4>Announment</h4>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="/mips/admin/deactivate/payment.php" class="<?= isActive('payment.php', $currentPage); ?>"><i class="bi bi-person-fill-slash"></i>
-                            <h4>Payment</h4>
-                        </a>
-                    </li>
-                </ul>
-            </li>
-            <li><a href="javascript:void(0);">
-                    <i class="bi bi-file-text-fill"></i>
-                    <h4>Report</h4>
-                    <i class="bi bi-chevron-down first"></i>
-                </a>
-                <ul>
-                </ul>
             </li>
         </ul>
     </div>

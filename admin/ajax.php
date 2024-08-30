@@ -189,6 +189,39 @@ switch ($action) {
         }
         break;
 
+        // Announcement Functions
+    case 'deactivate_announcement':
+        if (isset($_POST['announcement_id'])) {
+            echo $crud->deactivate_announcement($_POST['announcement_id']);
+        } else {
+            echo json_encode(['error' => 'Announcement ID not provided']);
+        }
+        break;
+
+    case 'recover_announcement':
+        if (isset($_POST['announcement_id'])) {
+            echo $crud->recover_announcement($_POST['announcement_id']);
+        } else {
+            echo json_encode(['error' => 'Announcement ID not provided']);
+        }
+        break;
+
+    case 'get_announcement':
+        if (isset($_GET['announcement_id'])) {
+            echo $crud->get_announcement($_GET['announcement_id']);
+        } else {
+            echo json_encode(['error' => 'Announcement ID not provided']);
+        }
+        break;
+
+    case 'delete_announcement':
+        if (isset($_POST['announcement_id'])) {
+            echo $crud->delete_announcement($_POST['announcement_id']);
+        } else {
+            echo json_encode(['error' => 'Announcement ID not provided']);
+        }
+        break;
+
         // Count Functions
     case 'get_pending_count':
         echo $crud->get_pending_count();

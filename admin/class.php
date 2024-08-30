@@ -3,6 +3,7 @@
 $database_table = "class";
 $rows_per_page = 12;
 include $_SERVER['DOCUMENT_ROOT'] . "/mips/php/admin.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/mips/php/activate_pagination.php";
 
 function getClasses($pdo, $start, $rows_per_page)
 {

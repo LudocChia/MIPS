@@ -3,6 +3,7 @@
 $database_table = "Parent";
 $rows_per_page = 12;
 include $_SERVER['DOCUMENT_ROOT'] . "/mips/php/admin.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/mips/php/activate_pagination.php";
 
 function getDeactivatedParents($pdo, $start, $rows_per_page)
 {
@@ -72,7 +73,6 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                                             <input type="hidden" name="action" value="recover_parent">
                                             <button type="submit" class="recover-parent-btn"><i class="bi bi-arrow-clockwise"></i></button>
                                         </form>
-
                                     </td>
                                 </tr>
                             <?php endforeach; ?>
