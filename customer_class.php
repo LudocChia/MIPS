@@ -107,7 +107,7 @@ class Action
         }
     }
 
-    public function purchase($productId, $sizeId, $productPrice, $selectedChildren, $parentId, $paymentImage)
+    public function purchase($productId, $sizeId, $totalPrice, $selectedChildren, $parentId, $paymentImage)
     {
         $fileName = $this->handleFileUpload($paymentImage);
         if (!$fileName) {
@@ -126,7 +126,7 @@ class Action
             $orderId = uniqid('ORD');
             $orderStmt->bindParam(':order_id', $orderId);
             $orderStmt->bindParam(':parent_id', $parentId);
-            $orderStmt->bindParam(':order_price', $productPrice);
+            $orderStmt->bindParam(':order_price', $totalPrice);
             $orderStmt->execute();
 
             // Create a single order item
@@ -140,7 +140,7 @@ class Action
             $orderItemStmt->bindParam(':order_id', $orderId);
             $orderItemStmt->bindParam(':product_id', $productId);
             $orderItemStmt->bindParam(':product_size_id', $sizeId);
-            $orderItemStmt->bindParam(':order_subtotal', $productPrice);
+            $orderItemStmt->bindParam(':order_subtotal', $totalPrice);
             $orderItemStmt->execute();
 
             // Associate order item with each child
@@ -166,7 +166,7 @@ class Action
             $paymentStmt->bindParam(':payment_id', $paymentId);
             $paymentStmt->bindParam(':parent_id', $parentId);
             $paymentStmt->bindParam(':order_id', $orderId);
-            $paymentStmt->bindParam(':payment_amount', $productPrice);
+            $paymentStmt->bindParam(':payment_amount', $totalPrice);
             $paymentStmt->bindParam(':payment_image', $fileName);
             $paymentStmt->execute();
 

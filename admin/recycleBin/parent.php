@@ -40,7 +40,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
             <div class="wrapper">
                 <div class="title">
                     <div class="left">
-                        <h1>Student Parents</h1>
+                        <h1>Student Parent Accounts Recycle Bin</h1>
                     </div>
                     <div class="right">
 
@@ -50,7 +50,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                     <table>
                         <thead>
                             <tr>
-                                <th><input type="checkbox"></th>
+                                <!-- <th><input type="checkbox"></th> -->
                                 <th>Parent ID</th>
                                 <th>Parent Name</th>
                                 <th>Parent Email</th>
@@ -61,7 +61,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                         <tbody>
                             <?php foreach ($deactivated_parents as $parent) : ?>
                                 <tr>
-                                    <td><input type="checkbox" class="parent-checkbox" value="<?= htmlspecialchars($parent['parent_id']); ?>"></td>
+                                    <!-- <td><input type="checkbox" class="parent-checkbox" value="<?= htmlspecialchars($parent['parent_id']); ?>"></td> -->
                                     <td><?= htmlspecialchars($parent['parent_id']); ?></td>
                                     <td><?= htmlspecialchars($parent['parent_name']); ?></td>
                                     <td><?= htmlspecialchars($parent['parent_email']); ?></td>

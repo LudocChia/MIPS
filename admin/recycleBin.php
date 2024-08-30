@@ -1,7 +1,7 @@
 <?php
 
-$database_table = "admin";
-$rows_per_page = 12;
+// $database_table = "admin";
+// $rows_per_page = 12;
 include $_SERVER['DOCUMENT_ROOT'] . "/mips/php/admin.php";
 
 $pageTitle = "Admin Management - MIPS";
@@ -17,9 +17,6 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                     <div class="left">
                         <h1>Recycle Bin</h1>
                     </div>
-                    <div class="right">
-                        <button class="btn btn-outline-primary" id="open-popup"><i class="bi bi-person-fill-add"></i>Add New Admin</button>
-                    </div>
                 </div>
                 <div class="table-body">
                     <table>
@@ -29,7 +26,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                                     <h3>File Name</h3>
                                 </th>
                                 <th>
-                                    <h3>Admin Name</h3>
+                                    <h3></h3>
                                 </th>
                                 <th>
                                     <h3>Admin Email</h3>
@@ -43,17 +40,20 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td onclick="window.location.href='/mips/admin/recycleBin/announcement.php';" style="cursor: pointer;">
+                            <tr onclick="window.location.href='/mips/admin/recycleBin/announcement.php';" style="cursor: pointer;">
+                                <td>
                                     <h3>Announcement</h3>
                                 </td>
                             </tr>
-
+                            <tr onclick="window.location.href='/mips/admin/recycleBin/parent.php';" style="cursor: pointer;">
+                                <td>
+                                    <h3>Parent</h3>
+                                </td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
-                <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/pagination.php"; ?>
+                <!-- </?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/pagination.php"; ?> -->
             </div>
         </main>
     </div>

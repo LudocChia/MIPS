@@ -232,6 +232,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/customer_header.php"; ?>
         <input type="hidden" name="product_id" id="product-id" value="">
         <input type="hidden" name="size_id" id="size-id" value="">
         <input type="hidden" name="product_price" id="product-price" value="">
+        <input type="hidden" name="total_price" id="total-price" value="">
         <div class="input-container">
             <div class="input-field">
                 <h2>Product Name</h2>
@@ -321,7 +322,9 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/customer_header.php"; ?>
 
                 const sizeId = selectedSizeButton.getAttribute('data-size-id');
                 const productName = '<?= htmlspecialchars($product['product_name']) ?>';
-                const productPrice = '<?= number_format($product['product_price'], 2) ?>';
+                const productPrice = parseFloat('<?= number_format($product['product_price'], 2) ?>');
+                const quantity = parseInt(document.getElementById('qty').value);
+                const totalPrice = (productPrice * quantity).toFixed(2);
 
                 document.getElementById('product-id').value = '<?= $product_id ?>';
                 document.getElementById('size-id').value = sizeId;
@@ -329,19 +332,29 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/customer_header.php"; ?>
 
                 document.getElementById('product-name-display').value = productName;
                 document.getElementById('selected-size-display').value = selectedSizeButton.textContent;
-                document.getElementById('product-price-display').value = 'MYR ' + productPrice;
+                document.getElementById('product-price-display').value = `${quantity} x MYR ${productPrice} = MYR ${totalPrice}`;
 
                 const dialog = document.getElementById('add-edit-data');
                 dialog.showModal();
             <?php endif; ?>
         });
-    });
 
-    document.addEventListener("DOMContentLoaded", function() {
         const form = document.querySelector('#add-edit-data form');
+        const qtyInput = document.getElementById('qty');
+        const totalPriceInput = document.getElementById('total-price');
+        const productPrice = parseFloat('<?= $product['product_price'] ?>');
+
+        function updateTotalPrice() {
+            const quantity = parseInt(qtyInput.value);
+            const totalPrice = (productPrice * quantity).toFixed(2);
+            document.getElementById('product-price-display').value = 'MYR ' + totalPrice;
+            totalPriceInput.value = totalPrice;
+        }
+
+        qtyInput.addEventListener('input', updateTotalPrice);
 
         form.addEventListener('submit', function(event) {
-            event.preventDefault(); // Prevent the default form submission
+            event.preventDefault();
 
             const selectedSizeButton = document.querySelector('.size-button.selected');
             if (!selectedSizeButton) {
@@ -349,7 +362,6 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/customer_header.php"; ?>
                 return;
             }
 
-            const sizeId = selectedSizeButton.getAttribute('data-size-id');
             const selectedChildren = Array.from(document.querySelectorAll('input[name="child[]"]:checked')).map(el => el.value);
             const paymentImage = document.querySelector('input[name="payment_image"]').files[0];
 
@@ -359,8 +371,9 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/customer_header.php"; ?>
             }
 
             const formData = new FormData(form);
-            formData.append('size_id', sizeId);
+            formData.append('size_id', selectedSizeButton.getAttribute('data-size-id'));
             formData.append('children', selectedChildren.join(','));
+            formData.append('total_price', totalPriceInput.value);
 
             fetch('/mips/ajax.php?action=purchase', {
                     method: 'POST',
@@ -380,10 +393,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/customer_header.php"; ?>
                     alert('An error occurred while processing your request.');
                 });
         });
-    });
 
-
-    document.addEventListener("DOMContentLoaded", function() {
         const thumbnails = document.querySelectorAll('.thumbnail');
         const mainImage = document.querySelector('.product-image img');
 
@@ -405,16 +415,14 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/customer_header.php"; ?>
                 mainImage.setAttribute('alt', newSrc);
             });
         });
-    });
 
-    document.querySelectorAll('.size-button').forEach(button => {
-        button.addEventListener('click', function() {
-            document.querySelectorAll('.size-button').forEach(btn => btn.classList.remove('selected'));
-            this.classList.add('selected');
+        document.querySelectorAll('.size-button').forEach(button => {
+            button.addEventListener('click', function() {
+                document.querySelectorAll('.size-button').forEach(btn => btn.classList.remove('selected'));
+                this.classList.add('selected');
+            });
         });
-    });
 
-    document.addEventListener('DOMContentLoaded', function() {
         document.querySelectorAll('.add-to-cart-btn').forEach(button => {
             button.addEventListener('click', function() {
                 const selectedSizeButton = document.querySelector('.size-button.selected');
@@ -425,7 +433,6 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/customer_header.php"; ?>
                 const productId = button.dataset.productId;
                 const sizeId = selectedSizeButton.dataset.sizeId;
                 const qty = document.getElementById('qty').value;
-
 
                 fetch('/mips/ajax.php?action=add_to_cart', {
                         method: 'POST',
@@ -454,7 +461,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/customer_header.php"; ?>
                     });
             });
         });
-    })
+    });
 </script>
 </body>
 
