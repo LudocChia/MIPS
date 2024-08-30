@@ -1,4 +1,10 @@
-
+#okbtn{
+    background: #6989a8;
+    color: whitesmoke;
+    padding: 20px 40px 20px 40px;
+    font-size: 22px;
+    border-radius: 10px;
+}
 #btn{
     margin-top: 50px;
     padding-top: 100px;
@@ -184,7 +190,20 @@
     padding-right: 70px;
     font-size: 22px;
     border-radius: 10px;
-
+}
+.bigflex box1 row button{
+    margin-top: 20px;
+    background: #2f56809e;
+    color: whitesmoke;
+    border-radius: 10px;
+    font-size: 22px;
+    padding: 10px 40px 10px 40px;
+}
+.bigflex box1 row button:hover{
+    opacity: 90%;
+}
+.bigflex box1 row button:active{
+    opacity: 80%;
 }
 .bigflex box1 row column{
     display: flex;
@@ -202,11 +221,53 @@
 .bigflex box1 row column row input[type=checkbox]{
     height: 25px;
     width: 25px;
+    margin-top: 10px;
+    cursor: pointer;
 }
 .bigflex box1 row column textarea{
     padding: 10px;
     border-radius: 10px;
     justify-content: center;
+}
+.topB{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+}
+.topB a{
+    user-select: none;
+    margin-right: 100px;
+}
+.topB #back{
+    margin-top: 20px;
+}
+.topB #add{
+    margin-top: -10px;
+}
+.topB #block{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+.mealBox{
+    margin-left: 300px;
+    margin-top: 25px;
+    background: #6989a8;
+    margin-right: 300px;
+    user-select: none;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    cursor: pointer;
+    text-align: center;
+    border-radius: 10px;
+    padding-top: 50px;
+    padding-bottom: 50px;
+}
+.mealBox row #meal{
+    font-size: 30px;
+    color: whitesmoke;
 }
 /* This is 1028px responsive */
 @media only screen and (max-width: 1280px){

@@ -37,7 +37,7 @@ if (!isset($_SESSION['admin_id'])) {
 <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Meal Donation</title>
-    <link rel="icon" type="image/x-icon" href="../images/MIPS_icon.png">
+    <link rel="icon" type="image/x-icon" href="../../images/MIPS_icon.png">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -51,31 +51,33 @@ if (!isset($_SESSION['admin_id'])) {
     <script src="../admin_for_meal/admin.js"></script>
     <div class="bigflex">
         <a href="../admin_for_meal/event.php" ><img src="back-button.png" alt="back-button" style="width: 80px;px;height:80px;"></a>
+        
         <box1>
+        <form action="submit.php" method="post">
             <h1>Please fill in required credentials</h1>
             <row>
                 <column>
                     <label for="name">Name :</label>
-                    <input type="text" id="name" name="Name">
+                    <input type="text" id="name" name="Name" required>
                 </column>
                 <column>
                     <label for="place">Place :</label>
-                    <input type="text" id="place" name="Place">
+                    <input type="text" id="place" name="Place" required>
                 </column>
             </row>
             <row>
                 <column>
                     <label for="time">Time :</label>
-                    <input type="text" id="time" name="Time">
+                    <input type="text" id="time" name="Time" required>
                 </column>
                 <column>
                     <label for="date">Date :</label>
-                    <input type="date" id="date" name="Date">
+                    <input type="date" id="date" name="Date" required>
                 </column>
             </row>
             <row>
                 <column>
-                    <label for="meals">Meals type:</label>
+                    <label for="meals">Meals type: (not developed for now)</label>
                     <row>
                         <row1>
                             <input type="checkbox" id="morningTea" name="meals" value="morningTea">
@@ -95,10 +97,21 @@ if (!isset($_SESSION['admin_id'])) {
             <row>
                 <column>
                     <label for="desc">Description :</label>
-                    <textarea id="desc" name="desc" rows="5" cols="75" required></textarea>
+                    <textarea id="desc" name="Desc" rows="5" cols="75" required></textarea>
                 </column>
             </row>
+            <row>
+                <column>
+                    <label for="pic">Food Picture :</label>
+                    <input type="file" id="pic" name="Pic" required>
+                </column>
+            </row>
+            <row>
+                <a href="submit.php"><button>Add</button></a>
+            </row>
+        </form>
         </box1>
+        
     </div>
 </body>
 </html>
