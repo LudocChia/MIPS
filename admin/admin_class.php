@@ -70,41 +70,6 @@ class Action
         return $this->execute_statement($stmt);
     }
 
-    // Product Size Functions
-    public function deactivate_product_size($product_size_id)
-    {
-        $sql = "UPDATE Product_Size SET is_deleted = 1 WHERE product_size_id = :product_size_id";
-        $stmt = $this->db->prepare($sql);
-        $stmt->bindParam(':product_size_id', $product_size_id);
-        return $this->execute_statement($stmt);
-    }
-
-    public function recover_product_size($product_size_id)
-    {
-        $sql = "UPDATE Product_Size SET is_deleted = 0 WHERE product_size_id = :product_size_id";
-        $stmt = $this->db->prepare($sql);
-        $stmt->bindParam(':product_size_id', $product_size_id);
-        return $this->execute_statement($stmt);
-    }
-
-    // Order Functions
-    public function deactivate_order($order_id)
-    {
-        $sql = "UPDATE Orders SET is_deleted = 1 WHERE order_id = :order_id";
-        $stmt = $this->db->prepare($sql);
-        $stmt->bindParam(':order_id', $order_id);
-        return $this->execute_statement($stmt);
-    }
-
-    public function recover_order($order_id)
-    {
-        $sql = "UPDATE Orders SET is_deleted = 0 WHERE order_id = :order_id";
-        $stmt = $this->db->prepare($sql);
-        $stmt->bindParam(':order_id', $order_id);
-        return $this->execute_statement($stmt);
-    }
-
-    // Retrieve category data
     public function get_category($category_id)
     {
         $sql = "
@@ -135,6 +100,141 @@ class Action
         $subcategory = $stmt->fetch(PDO::FETCH_ASSOC);
 
         return $subcategory ? json_encode($subcategory) : json_encode(['error' => 'Subcategory not found']);
+    }
+
+
+    // Product Size Functions
+    public function deactivate_product_size($product_size_id)
+    {
+        $sql = "UPDATE Product_Size SET is_deleted = 1 WHERE product_size_id = :product_size_id";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':product_size_id', $product_size_id);
+        return $this->execute_statement($stmt);
+    }
+
+    public function recover_product_size($product_size_id)
+    {
+        $sql = "UPDATE Product_Size SET is_deleted = 0 WHERE product_size_id = :product_size_id";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':product_size_id', $product_size_id);
+        return $this->execute_statement($stmt);
+    }
+
+    // Announcement Functions
+    public function deactivate_announcement($announcement_id)
+    {
+        $sql = "UPDATE Announcement SET is_deleted = 1 WHERE announcement_id = :announcement_id";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':announcement_id', $announcement_id);
+        return $this->execute_statement($stmt);
+    }
+
+    public function recover_announcement($announcement_id)
+    {
+        $sql = "UPDATE Announcement SET is_deleted = 0 WHERE announcement_id = :announcement_id";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':announcement_id', $announcement_id);
+        return $this->execute_statement($stmt);
+    }
+
+    public function get_announcement($announcement_id)
+    {
+        $sql = "SELECT announcement_id, admin_id, announcement_image_url, announcement_url, announcement_title, announcement_message, created_at, updated_at
+                FROM Announcement
+                WHERE announcement_id = :announcement_id AND is_deleted = 0";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':announcement_id', $announcement_id);
+        $stmt->execute();
+        $announcement = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $announcement ? json_encode($announcement) : json_encode(['error' => 'Announcement not found']);
+    }
+
+    public function delete_announcement($announcement_id)
+    {
+        try {
+            $stmt = $this->db->prepare("SELECT announcement_image_url FROM Announcement WHERE announcement_id = :announcement_id");
+            $stmt->bindParam(':announcement_id', $announcement_id);
+            $stmt->execute();
+            $announcement = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($announcement && !empty($announcement['announcement_image_url'])) {
+                $imagePath = $_SERVER['DOCUMENT_ROOT'] . '/mips/uploads/announcement/' . $announcement['announcement_image_url'];
+                if (file_exists($imagePath)) {
+                    unlink($imagePath);
+                }
+            }
+
+            $stmt = $this->db->prepare("DELETE FROM Announcement WHERE announcement_id = :announcement_id");
+            $stmt->bindParam(':announcement_id', $announcement_id);
+            $stmt->execute();
+
+            return json_encode(['success' => 'Announcement deleted successfully']);
+        } catch (PDOException $e) {
+            return json_encode(['error' => 'Database error: ' . $e->getMessage()]);
+        }
+    }
+
+
+    // Order Functions
+    public function deactivate_order($order_id)
+    {
+        $sql = "UPDATE Orders SET is_deleted = 1 WHERE order_id = :order_id";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':order_id', $order_id);
+        return $this->execute_statement($stmt);
+    }
+
+    public function recover_order($order_id)
+    {
+        $sql = "UPDATE Orders SET is_deleted = 0 WHERE order_id = :order_id";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':order_id', $order_id);
+        return $this->execute_statement($stmt);
+    }
+
+    public function delete_order($order_id)
+    {
+        try {
+            $this->db->beginTransaction();
+
+            $sqlGetImage = "SELECT payment_image FROM Payment WHERE order_id = :order_id";
+            $stmtGetImage = $this->db->prepare($sqlGetImage);
+            $stmtGetImage->bindParam(':order_id', $order_id);
+            $stmtGetImage->execute();
+            $paymentImage = $stmtGetImage->fetch(PDO::FETCH_ASSOC);
+
+            if ($paymentImage && !empty($paymentImage['payment_image'])) {
+                $imagePath = $_SERVER['DOCUMENT_ROOT'] . '/mips/uploads/receipts/' . $paymentImage['payment_image'];
+                if (file_exists($imagePath)) {
+                    unlink($imagePath);
+                }
+            }
+
+            $sqlPayment = "DELETE FROM Payment WHERE order_id = :order_id";
+            $stmtPayment = $this->db->prepare($sqlPayment);
+            $stmtPayment->bindParam(':order_id', $order_id);
+            $stmtPayment->execute();
+
+            $sqlOrderItemStudent = "DELETE FROM Order_Item_Student WHERE order_item_id IN (SELECT order_item_id FROM Order_Item WHERE order_id = :order_id)";
+            $stmtOrderItemStudent = $this->db->prepare($sqlOrderItemStudent);
+            $stmtOrderItemStudent->bindParam(':order_id', $order_id);
+            $stmtOrderItemStudent->execute();
+
+            $sqlOrderItem = "DELETE FROM Order_Item WHERE order_id = :order_id";
+            $stmtOrderItem = $this->db->prepare($sqlOrderItem);
+            $stmtOrderItem->bindParam(':order_id', $order_id);
+            $stmtOrderItem->execute();
+
+            $sqlOrder = "DELETE FROM Orders WHERE order_id = :order_id";
+            $stmtOrder = $this->db->prepare($sqlOrder);
+            $stmtOrder->bindParam(':order_id', $order_id);
+            $stmtOrder->execute();
+
+            $this->db->commit();
+            return json_encode(['success' => 'Order and all related data including payment image deleted successfully']);
+        } catch (PDOException $e) {
+            return json_encode(['error' => 'Database error: ' . $e->getMessage()]);
+        }
     }
 
     // Retrieve pending order count

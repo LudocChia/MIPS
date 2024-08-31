@@ -196,4 +196,43 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         }
     }
+
+    window.showDeleteConfirmDialog = function (event) {
+        event.preventDefault();
+        currentForm = event.target;
+
+        if (currentForm && ConfirmDialog) {
+            const actionType = currentForm.querySelector('input[name="action"]').value;
+            const idField = currentForm.querySelector('input[name*="_id"]').name;
+            const idValue = currentForm.querySelector(`input[name="${idField}"]`).value;
+
+            document.querySelector('#confirm-dialog h1').textContent = "This data will be Deleted!";
+            document.querySelector('.confirm').textContent = "Delete";
+            ConfirmDialog.showModal();
+
+            ConfirmDialog.addEventListener('close', function () {
+                if (ConfirmDialog.returnValue === 'confirm' && currentForm) {
+                    fetch(`/mips/admin/ajax.php?action=${actionType}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded'
+                        },
+                        body: `${idField}=${idValue}`
+                    })
+                        .then(response => response.json())
+                        .then(result => {
+                            if (result.success) {
+                                location.reload();
+                            } else {
+                                alert('Error deleting: ' + result.error);
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            alert('An error occurred while deleting.');
+                        });
+                }
+            });
+        }
+    }
 });

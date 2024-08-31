@@ -3,7 +3,7 @@
 $database_table = "Product_Category";
 $rows_per_page = 10;
 include $_SERVER['DOCUMENT_ROOT'] . "/mips/php/admin.php";
-
+include $_SERVER['DOCUMENT_ROOT'] . "/mips/php/activate_pagination.php";
 
 function getSubcategories($pdo, $start, $rows_per_page)
 {

@@ -3,6 +3,7 @@
 $database_table = "Product";
 $rows_per_page = 10;
 include $_SERVER['DOCUMENT_ROOT'] . "/mips/php/admin.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/mips/php/activate_pagination.php";
 
 function getSubcategories($pdo)
 {
@@ -188,7 +189,7 @@ if (isset($_POST['submit'])) {
 $pageTitle = "Bookshop Products - MIPS";
 include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
 
-<body>
+<body id="<?php echo $id ?>">
     <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_header.php"; ?>
     <div class="container">
         <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_sidebar.php"; ?>

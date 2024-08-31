@@ -3,6 +3,8 @@
 $database_table = "grade";
 $rows_per_page = 12;
 include $_SERVER['DOCUMENT_ROOT'] . "/mips/php/admin.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/mips/php/activate_pagination.php";
+
 function getGrades($pdo, $start, $rows_per_page)
 {
     $sql = "SELECT 
@@ -60,7 +62,6 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
     <?php include  $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_header.php"; ?>
     <div class="container">
         <?php include  $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_sidebar.php"; ?>
-        <!-- END OF ASIDE -->
         <main class="grade">
             <div class="wrapper">
                 <div class="title">

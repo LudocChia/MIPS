@@ -90,6 +90,14 @@ switch ($action) {
         }
         break;
 
+    case 'delete_order':
+        if (isset($_POST['order_id'])) {
+            echo $crud->delete_order($_POST['order_id']);
+        } else {
+            echo json_encode(['error' => 'Order ID not provided']);
+        }
+        break;
+
     case 'get_order':
         if (isset($_POST['order_id'])) {
             echo $crud->get_order($_POST['order_id']);
@@ -186,6 +194,39 @@ switch ($action) {
             echo $crud->get_product($_GET['product_id']);
         } else {
             echo json_encode(['error' => 'Product ID not provided']);
+        }
+        break;
+
+        // Announcement Functions
+    case 'deactivate_announcement':
+        if (isset($_POST['announcement_id'])) {
+            echo $crud->deactivate_announcement($_POST['announcement_id']);
+        } else {
+            echo json_encode(['error' => 'Announcement ID not provided']);
+        }
+        break;
+
+    case 'recover_announcement':
+        if (isset($_POST['announcement_id'])) {
+            echo $crud->recover_announcement($_POST['announcement_id']);
+        } else {
+            echo json_encode(['error' => 'Announcement ID not provided']);
+        }
+        break;
+
+    case 'get_announcement':
+        if (isset($_GET['announcement_id'])) {
+            echo $crud->get_announcement($_GET['announcement_id']);
+        } else {
+            echo json_encode(['error' => 'Announcement ID not provided']);
+        }
+        break;
+
+    case 'delete_announcement':
+        if (isset($_POST['announcement_id'])) {
+            echo $crud->delete_announcement($_POST['announcement_id']);
+        } else {
+            echo json_encode(['error' => 'Announcement ID not provided']);
         }
         break;
 

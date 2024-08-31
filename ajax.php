@@ -26,13 +26,19 @@ switch ($action) {
         break;
 
     case 'purchase':
-        if (isset($_POST['product_id']) && isset($_POST['size_id']) && isset($_POST['product_price']) && isset($_POST['children']) && isset($_FILES['payment_image'])) {
-            $children = explode(',', $_POST['children']);
+        if (isset($_POST['product_id']) && isset($_POST['size_id']) && isset($_POST['total_item_quantities']) && isset($_POST['total_price_items']) && isset($_POST['total_price']) && isset($_POST['children']) && isset($_SESSION['user_id']) && isset($_FILES['payment_image'])) {
+            $productIds = explode(',', $_POST['product_id']);
+            $sizeIds = explode(',', $_POST['size_id']);
+            $totalItemQuantities = explode(',', $_POST['total_item_quantities']);
+            $totalPriceItems = explode(',', $_POST['total_price_items']);
+            $childrenGroups = explode(';', $_POST['children']);
             echo $crud->purchase(
-                $_POST['product_id'],
-                $_POST['size_id'],
-                $_POST['product_price'],
-                $children,
+                $productIds,
+                $sizeIds,
+                $totalItemQuantities,
+                $totalPriceItems,
+                $_POST['total_price'],
+                $childrenGroups,
                 $_SESSION['user_id'],
                 $_FILES['payment_image']
             );
@@ -40,7 +46,6 @@ switch ($action) {
             echo json_encode(['error' => 'Missing required fields']);
         }
         break;
-
 
     case 'update_cart_item':
         if (isset($_POST['cart_item_id'], $_POST['quantity'])) {
