@@ -26,11 +26,12 @@ switch ($action) {
         break;
 
     case 'purchase':
-        if (isset($_POST['product_id']) && isset($_POST['size_id']) && isset($_POST['total_price']) && isset($_POST['children']) && isset($_FILES['payment_image'])) {
+        if (isset($_POST['product_id']) && isset($_POST['size_id']) && isset($_POST['total_qty']) && isset($_POST['total_price']) && isset($_POST['children']) && isset($_SESSION['user_id']) && isset($_FILES['payment_image'])) {
             $children = explode(',', $_POST['children']);
             echo $crud->purchase(
                 $_POST['product_id'],
                 $_POST['size_id'],
+                $_POST['total_qty'],
                 $_POST['total_price'],
                 $children,
                 $_SESSION['user_id'],

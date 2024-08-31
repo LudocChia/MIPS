@@ -107,7 +107,7 @@ class Action
         }
     }
 
-    public function purchase($productId, $sizeId, $totalPrice, $selectedChildren, $parentId, $paymentImage)
+    public function purchase($productId, $sizeId, $totalQty, $totalPrice, $selectedChildren, $parentId, $paymentImage)
     {
         $fileName = $this->handleFileUpload($paymentImage);
         if (!$fileName) {
@@ -117,7 +117,6 @@ class Action
         try {
             $this->db->beginTransaction();
 
-            // Create a single order
             $orderQuery = "
                 INSERT INTO Orders (order_id, parent_student_id, order_price) 
                 VALUES (:order_id, (SELECT parent_student_id FROM Parent_Student WHERE parent_id = :parent_id LIMIT 1), :order_price)
@@ -129,10 +128,10 @@ class Action
             $orderStmt->bindParam(':order_price', $totalPrice);
             $orderStmt->execute();
 
-            // Create a single order item
+
             $orderItemQuery = "
                 INSERT INTO Order_Item (order_item_id, order_id, product_id, product_size_id, product_quantity, order_subtotal) 
-                VALUES (:order_item_id, :order_id, :product_id, :product_size_id, 1, :order_subtotal)
+                VALUES (:order_item_id, :order_id, :product_id, :product_size_id, :product_quantity, :order_subtotal)
             ";
             $orderItemStmt = $this->db->prepare($orderItemQuery);
             $orderItemId = uniqid('OI');
@@ -140,10 +139,10 @@ class Action
             $orderItemStmt->bindParam(':order_id', $orderId);
             $orderItemStmt->bindParam(':product_id', $productId);
             $orderItemStmt->bindParam(':product_size_id', $sizeId);
+            $orderItemStmt->bindParam(':product_quantity', $totalQty);
             $orderItemStmt->bindParam(':order_subtotal', $totalPrice);
             $orderItemStmt->execute();
 
-            // Associate order item with each child
             foreach ($selectedChildren as $childId) {
                 $orderItemStudentQuery = "
                     INSERT INTO Order_Item_Student (order_item_student_id, order_item_id, student_id)

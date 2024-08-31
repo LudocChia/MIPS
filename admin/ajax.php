@@ -90,6 +90,14 @@ switch ($action) {
         }
         break;
 
+    case 'delete_order':
+        if (isset($_POST['order_id'])) {
+            echo $crud->delete_order($_POST['order_id']);
+        } else {
+            echo json_encode(['error' => 'Order ID not provided']);
+        }
+        break;
+
     case 'get_order':
         if (isset($_POST['order_id'])) {
             echo $crud->get_order($_POST['order_id']);

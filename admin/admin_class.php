@@ -192,6 +192,51 @@ class Action
         return $this->execute_statement($stmt);
     }
 
+    public function delete_order($order_id)
+    {
+        try {
+            $this->db->beginTransaction();
+
+            $sqlGetImage = "SELECT payment_image FROM Payment WHERE order_id = :order_id";
+            $stmtGetImage = $this->db->prepare($sqlGetImage);
+            $stmtGetImage->bindParam(':order_id', $order_id);
+            $stmtGetImage->execute();
+            $paymentImage = $stmtGetImage->fetch(PDO::FETCH_ASSOC);
+
+            if ($paymentImage && !empty($paymentImage['payment_image'])) {
+                $imagePath = $_SERVER['DOCUMENT_ROOT'] . '/mips/uploads/receipts/' . $paymentImage['payment_image'];
+                if (file_exists($imagePath)) {
+                    unlink($imagePath);
+                }
+            }
+
+            $sqlPayment = "DELETE FROM Payment WHERE order_id = :order_id";
+            $stmtPayment = $this->db->prepare($sqlPayment);
+            $stmtPayment->bindParam(':order_id', $order_id);
+            $stmtPayment->execute();
+
+            $sqlOrderItemStudent = "DELETE FROM Order_Item_Student WHERE order_item_id IN (SELECT order_item_id FROM Order_Item WHERE order_id = :order_id)";
+            $stmtOrderItemStudent = $this->db->prepare($sqlOrderItemStudent);
+            $stmtOrderItemStudent->bindParam(':order_id', $order_id);
+            $stmtOrderItemStudent->execute();
+
+            $sqlOrderItem = "DELETE FROM Order_Item WHERE order_id = :order_id";
+            $stmtOrderItem = $this->db->prepare($sqlOrderItem);
+            $stmtOrderItem->bindParam(':order_id', $order_id);
+            $stmtOrderItem->execute();
+
+            $sqlOrder = "DELETE FROM Orders WHERE order_id = :order_id";
+            $stmtOrder = $this->db->prepare($sqlOrder);
+            $stmtOrder->bindParam(':order_id', $order_id);
+            $stmtOrder->execute();
+
+            $this->db->commit();
+            return json_encode(['success' => 'Order and all related data including payment image deleted successfully']);
+        } catch (PDOException $e) {
+            return json_encode(['error' => 'Database error: ' . $e->getMessage()]);
+        }
+    }
+
     // Retrieve pending order count
     public function get_pending_count()
     {

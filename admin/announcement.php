@@ -150,7 +150,8 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                             </div>
                             <div class="txt">
                                 <h3><?php echo htmlspecialchars($announcement['announcement_title']); ?></h3>
-                                <p><?php echo htmlspecialchars($announcement['announcement_message']); ?></p>
+                                <h3>Updated at: <?php echo htmlspecialchars($announcement['updated_at']); ?></h3>
+                                <h3>Created at: <?php echo htmlspecialchars($announcement['created_at']); ?></h3>
                             </div>
                         </div>
                     <?php endforeach; ?>

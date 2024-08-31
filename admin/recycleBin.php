@@ -11,47 +11,62 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
     <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_header.php"; ?>
     <div class="container">
         <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_sidebar.php"; ?>
-        <main class="admin">
+        <main class="announcement">
             <div class="wrapper">
                 <div class="title">
                     <div class="left">
                         <h1>Recycle Bin</h1>
                     </div>
                 </div>
-                <div class="table-body">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>
-                                    <h3>File Name</h3>
-                                </th>
-                                <th>
-                                    <h3></h3>
-                                </th>
-                                <th>
-                                    <h3>Admin Email</h3>
-                                </th>
-                                <th>
-                                    <h3>Admin Register Date</h3>
-                                </th>
-                                <th>
-                                    <h3>Actions</h3>
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr onclick="window.location.href='/mips/admin/recycleBin/announcement.php';" style="cursor: pointer;">
-                                <td>
-                                    <h3>Announcement</h3>
-                                </td>
-                            </tr>
-                            <tr onclick="window.location.href='/mips/admin/recycleBin/parent.php';" style="cursor: pointer;">
-                                <td>
-                                    <h3>Parent</h3>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <div class="box-container">
+                    <div class="box">
+                        <div class="image-container">
+                            <a href="/mips/admin/recycleBin/announcement.php"><img src="images/" alt="Recycle Bin"></a>
+                        </div>
+                        <div class="actions">
+                            <form action="" method="POST" style="display:inline;" onsubmit="return showDeactivateConfirmDialog(event);">
+                                <input type="hidden" name="announcement_id" value="<?= htmlspecialchars($announcement['announcement_id']); ?>">
+                                <input type="hidden" name="action" value="deactivate_announcement">
+                                <button type="submit" class="delete-announcement-btn"><i class="bi bi-x-square"></i></button>
+                            </form>
+                            <button type="button" class="edit-announcement-btn" data-announcement-id="<?= htmlspecialchars($announcement['announcement_id']); ?>"><i class="bi bi-pencil-square"></i></button>
+                        </div>
+                        <div class="txt">
+                            <h3>Announcement</h3>
+                        </div>
+                    </div>
+                    <div class="box">
+                        <div class="image-container">
+                            <a href="/mips/admin/recycleBin/order.php"><img src="images/" alt="Recycle Bin"></a>
+                        </div>
+                        <div class="actions">
+                            <form action="" method="POST" style="display:inline;" onsubmit="return showDeactivateConfirmDialog(event);">
+                                <input type="hidden" name="announcement_id" value="<?= htmlspecialchars($announcement['announcement_id']); ?>">
+                                <input type="hidden" name="action" value="deactivate_announcement">
+                                <button type="submit" class="delete-announcement-btn"><i class="bi bi-x-square"></i></button>
+                            </form>
+                            <button type="button" class="edit-announcement-btn" data-announcement-id="<?= htmlspecialchars($announcement['announcement_id']); ?>"><i class="bi bi-pencil-square"></i></button>
+                        </div>
+                        <div class="txt">
+                            <h3>Order</h3>
+                        </div>
+                    </div>
+                    <div class="box">
+                        <div class="image-container">
+                            <a href="/mips/admin/recycleBin/parent.php"><img src="images/" alt="Recycle Bin"></a>
+                        </div>
+                        <div class="actions">
+                            <form action="" method="POST" style="display:inline;" onsubmit="return showDeactivateConfirmDialog(event);">
+                                <input type="hidden" name="announcement_id" value="<?= htmlspecialchars($announcement['announcement_id']); ?>">
+                                <input type="hidden" name="action" value="deactivate_announcement">
+                                <button type="submit" class="delete-announcement-btn"><i class="bi bi-x-square"></i></button>
+                            </form>
+                            <button type="button" class="edit-announcement-btn" data-announcement-id="<?= htmlspecialchars($announcement['announcement_id']); ?>"><i class="bi bi-pencil-square"></i></button>
+                        </div>
+                        <div class="txt">
+                            <h3>Parent</h3>
+                        </div>
+                    </div>
                 </div>
                 <!-- </?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/pagination.php"; ?> -->
             </div>

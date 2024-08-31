@@ -373,6 +373,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/customer_header.php"; ?>
             const formData = new FormData(form);
             formData.append('size_id', selectedSizeButton.getAttribute('data-size-id'));
             formData.append('children', selectedChildren.join(','));
+            formData.append('total_qty', qtyInput.value);
             formData.append('total_price', totalPriceInput.value);
 
             fetch('/mips/ajax.php?action=purchase', {
