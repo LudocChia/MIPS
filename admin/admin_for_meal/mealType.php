@@ -48,21 +48,39 @@ if (isset($_GET['event_id'])) {
     $events = [];
 
     try {
-        // Your initial query (modify this to your actual conditions)
-        $stmt = $pdo->query("SELECT * FROM `event` WHERE event_id = 0");
+        // Example event_id for demonstration (you should replace this with actual logic to fetch $event_id)
+        $event_id = $_GET['event_id'] ?? null; // Assuming you're getting the event_id from a GET request
 
-        // Check if any rows were returned
-        if ($stmt->rowCount() > 0) {
-            // Execute a new query to fetch events where date is in the future
-            $stmt = $pdo->query("SELECT * FROM `event` WHERE DATE(date) > DATE(now())");
+        // Ensure event_id is not null or empty to avoid SQL errors
+        if (!empty($event_id)) {
+            // Using a prepared statement to prevent SQL injection
+            $stmt = $pdo->prepare("SELECT * FROM `event_meal` 
+                                INNER JOIN `meal_type` ON event_meal.meal_type_id = meal_type.meal_type_id 
+                                WHERE event_meal.event_id = :event_id");
+
+            // Bind the event_id parameter to the placeholder
+            $stmt->bindParam(':event_id', $event_id);
+
+            // Execute the prepared statement
+            $stmt->execute();
+
             // Fetch all events
             $events = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            // Check if any rows were returned
+            if (empty($events)) {
+                // No results found, display the picture
+                echo '<div class="center-container">
+                        <img src="../admin_for_meal/pngwing(1).com.png" alt="No results found" style="width: 520px;height:520px;">
+                        <p class="center-text">-No event for now-</p>
+                    </div>';
+            }
         } else {
-            // No results found, display the picture
+            // Handle the case where event_id is not provided
             echo '<div class="center-container">
-            <img src="../admin_for_meal/pngwing(1).com.png" alt="No results found" style="width: 520px;px;height:520px;">
-            <p class="center-text">-No event for now-</p>
-            </div>';
+                    <img src="../admin_for_meal/pngwing(1).com.png" alt="No results found" style="width: 520px;height:520px;">
+                    <p class="center-text">-No meal type for now-</p>
+                </div>';
         }
     } catch (PDOException $e) {
         // Handle any errors
@@ -70,17 +88,18 @@ if (isset($_GET['event_id'])) {
     }
     ?>
 
+
 <?php if (!empty($events)): ?>
     <?php foreach ($events as $event): ?>
         <?php 
         // Construct the URL with the event_id parameter
-        $nextPageUrl = 'mealType.php?event_id=' . urlencode($event['event_id']); 
+        $nextPageUrl = 'menuOption.php?event_id=' . urlencode($event['event_id']); 
         ?>
         <!-- Wrap the event box in an anchor tag -->
         <a href="<?= htmlspecialchars($nextPageUrl) ?>" style="text-decoration: none; color: inherit;">
             <div class="mealBox">
                 <row id="row">
-                    <p id="meal"><?= htmlspecialchars($event['date']) ?></p>
+                    <p id="meal"><?= htmlspecialchars($event['name']) ?></p>
                 </row>
             </div>
         </a>
