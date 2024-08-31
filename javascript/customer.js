@@ -234,8 +234,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 const productIds = selectedItems.map(item => item.product_id).join(',');
                 const sizeIds = selectedItems.map(item => item.product_size_id).join(',');
-                const productPrices = selectedItems.map(item => item.product_price).join(',');
-                const childIds = selectedItems.map(item => item.selectedChildren.join(',')).join(';');
                 const totalPrice = selectedItems.reduce((sum, item) => sum + (item.product_price * item.product_quantity), 0).toFixed(2);
 
                 form.querySelector('#product-id').value = productIds;
@@ -247,6 +245,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 selectedItems.forEach((item) => {
                     const selectedChildren = item.selectedChildren || [];
+                    const totalPriceItem = (item.product_price * item.product_quantity).toFixed(2);
+
                     if (selectedChildren.length > 0) {
                         const childrenNames = item.children.split(',').map(child => {
                             const [id, name] = child.split(':');
@@ -262,7 +262,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                     <td>${item.product_name}</td>
                                     <td>${item.product_size || '-'}</td>
                                     <td>${childrenNames}</td>
-                                    <td>RM ${item.product_price}</td>
+                                    <td>MYR ${totalPriceItem}</td>
                                 </tr>`;
                         }
                     }
@@ -285,14 +285,16 @@ document.addEventListener('DOMContentLoaded', function () {
         const productIds = selectedItems.map(item => item.product_id).join(',');
         const sizeIds = selectedItems.map(item => item.product_size_id).join(',');
         const quantities = selectedItems.map(item => item.product_quantity).join(',');
-        const childIds = selectedItems.map(item => item.selectedChildren.join(',')).join(',');
+        const totalPriceItems = selectedItems.map(item => item.product_price * item.product_quantity).join(',');
+        const childrenIds = selectedItems.map(item => item.selectedChildren.join(',')).join(';');
         const totalPrice = document.querySelector('#total-price-display').value;
 
         const formData = new FormData(form);
         formData.append('product_id', productIds);
         formData.append('size_id', sizeIds);
-        formData.append('children', childIds);
-        formData.append('total_qty', quantities);
+        formData.append('total_item_quantities', quantities);
+        formData.append('total_price_items', totalPriceItems);
+        formData.append('children', childrenIds);
         formData.append('total_price', totalPrice);
 
         fetch('/mips/ajax.php?action=purchase', {

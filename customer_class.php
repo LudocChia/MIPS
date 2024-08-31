@@ -107,7 +107,7 @@ class Action
         }
     }
 
-    public function purchase($productId, $sizeId, $totalQty, $totalPrice, $selectedChildren, $parentId, $paymentImage)
+    public function purchase($selectedProducts, $selectedSizes, $totalItemQuantities, $totalPriceItems, $totalPrice, $selectedChildren, $parentId, $paymentImage)
     {
         $fileName = $this->handleFileUpload($paymentImage);
         if (!$fileName) {
@@ -128,32 +128,33 @@ class Action
             $orderStmt->bindParam(':order_price', $totalPrice);
             $orderStmt->execute();
 
+            foreach ($selectedProducts as $index => $productId) {
+                $orderItemQuery = "INSERT INTO Order_Item (order_item_id, order_id, product_id, product_size_id, product_quantity, order_subtotal) 
+                                    VALUES (:order_item_id, :order_id, :product_id, :product_size_id, :product_quantity, :order_subtotal)";
+                $orderItemStmt = $this->db->prepare($orderItemQuery);
+                $orderItemId = uniqid('OI');
+                $currentSizeId = $selectedSizes[$index];
+                $currentQuantity = $totalItemQuantities[$index];
+                $currentSubtotal = $totalPriceItems[$index];
+                $orderItemStmt->bindParam(':order_item_id', $orderItemId);
+                $orderItemStmt->bindParam(':order_id', $orderId);
+                $orderItemStmt->bindParam(':product_id', $productId);
+                $orderItemStmt->bindParam(':product_size_id', $currentSizeId);
+                $orderItemStmt->bindParam(':product_quantity', $currentQuantity);
+                $orderItemStmt->bindParam(':order_subtotal', $currentSubtotal);
+                $orderItemStmt->execute();
 
-            $orderItemQuery = "
-                INSERT INTO Order_Item (order_item_id, order_id, product_id, product_size_id, product_quantity, order_subtotal) 
-                VALUES (:order_item_id, :order_id, :product_id, :product_size_id, :product_quantity, :order_subtotal)
-            ";
-            $orderItemStmt = $this->db->prepare($orderItemQuery);
-            $orderItemId = uniqid('OI');
-            $orderItemStmt->bindParam(':order_item_id', $orderItemId);
-            $orderItemStmt->bindParam(':order_id', $orderId);
-            $orderItemStmt->bindParam(':product_id', $productId);
-            $orderItemStmt->bindParam(':product_size_id', $sizeId);
-            $orderItemStmt->bindParam(':product_quantity', $totalQty);
-            $orderItemStmt->bindParam(':order_subtotal', $totalPrice);
-            $orderItemStmt->execute();
-
-            foreach ($selectedChildren as $childId) {
-                $orderItemStudentQuery = "
-                    INSERT INTO Order_Item_Student (order_item_student_id, order_item_id, student_id)
-                    VALUES (:order_item_student_id, :order_item_id, :student_id)
-                ";
-                $orderItemStudentStmt = $this->db->prepare($orderItemStudentQuery);
-                $orderItemStudentId = uniqid('OIS');
-                $orderItemStudentStmt->bindParam(':order_item_student_id', $orderItemStudentId);
-                $orderItemStudentStmt->bindParam(':order_item_id', $orderItemId);
-                $orderItemStudentStmt->bindParam(':student_id', $childId);
-                $orderItemStudentStmt->execute();
+                $childrenIds = explode(',', $selectedChildren[$index]);
+                foreach ($childrenIds as $childId) {
+                    $orderItemStudentQuery = "INSERT INTO Order_Item_Student (order_item_student_id, order_item_id, student_id)
+                                VALUES (:order_item_student_id, :order_item_id, :student_id)";
+                    $orderItemStudentStmt = $this->db->prepare($orderItemStudentQuery);
+                    $orderItemStudentId = uniqid('OIS');
+                    $orderItemStudentStmt->bindParam(':order_item_student_id', $orderItemStudentId);
+                    $orderItemStudentStmt->bindParam(':order_item_id', $orderItemId);
+                    $orderItemStudentStmt->bindParam(':student_id', $childId);
+                    $orderItemStudentStmt->execute();
+                }
             }
 
             $paymentQuery = "
@@ -202,7 +203,6 @@ class Action
             return null;
         }
     }
-
 
     public function update_cart_item($cart_item_id, $quantity)
     {
