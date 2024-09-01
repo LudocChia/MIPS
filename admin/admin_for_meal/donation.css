@@ -251,10 +251,10 @@
     justify-content: space-around;
 }
 .mealBox{
-    margin-left: 300px;
+    margin-left: 400px;
     margin-top: 25px;
     background: #6989a8;
-    margin-right: 300px;
+    margin-right: 400px;
     user-select: none;
     display: flex;
     flex-direction: column;
@@ -268,6 +268,26 @@
 .mealBox row #meal{
     font-size: 30px;
     color: whitesmoke;
+}
+.formDialog h1{
+    font-size: 35px;
+}
+.formDialog i{
+    font-size: 35px;
+}
+.formDialog #btn1{
+    padding: 20px 40px 20px 40px;
+    font-size: 20px;
+}
+.formDialog{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.formDialog div{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
 }
 /* This is 1028px responsive */
 @media only screen and (max-width: 1280px){
