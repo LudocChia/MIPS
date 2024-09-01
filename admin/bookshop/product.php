@@ -334,6 +334,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
         </form>
     </dialog>
     <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/confirm_dialog.php"; ?>
+    <script src="/mips/javascript/common.js"></script>
     <script src="/mips/javascript/admin.js"></script>
     <script>
         document.querySelector('form').addEventListener('submit', function(event) {

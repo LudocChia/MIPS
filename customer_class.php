@@ -40,25 +40,30 @@ class Action
     }
 
     // Order Functions
-    public function getOrders($parent_id, $status)
+    public function get_orders($parent_id, $status)
     {
-        $sql = "SELECT o.order_id, o.order_datetime, o.order_price, p.payment_status
-                FROM Orders o
-                JOIN Payment p ON o.order_id = p.order_id
-                WHERE o.parent_student_id IN (
-                    SELECT parent_student_id
-                    FROM Parent_Student
-                    WHERE parent_id = ?
-                ) AND o.is_deleted = 0
-                AND p.payment_status = ?
-                ORDER BY o.order_datetime DESC";
+        try {
+            $sql = "
+            SELECT o.*, p.payment_status 
+            FROM Orders o 
+            JOIN Payment p ON o.order_id = p.order_id
+            WHERE o.parent_student_id = (SELECT parent_student_id FROM Parent_Student WHERE parent_id = :parent_id LIMIT 1)";
 
-        $stmt = $this->db->prepare($sql);
-        $stmt->bindParam(1, $parent_id, PDO::PARAM_STR);
-        $stmt->bindParam(2, $status, PDO::PARAM_STR);
-        $stmt->execute();
-        $orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        return json_encode($orders);
+            if ($status !== 'all') {
+                $sql .= " AND p.payment_status = :status";
+            }
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindParam(':parent_id', $parent_id);
+            if ($status !== 'all') {
+                $stmt->bindParam(':status', $status);
+            }
+            $stmt->execute();
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            return json_encode(['success' => true, 'data' => $result]);
+        } catch (PDOException $e) {
+            return json_encode(['error' => 'Database error: ' . $e->getMessage()]);
+        }
     }
 
 
@@ -67,11 +72,9 @@ class Action
     public function add_to_cart($parent_id, $product_id, $quantity, $product_size_id)
     {
         try {
-            $sql_cart = "
-            SELECT cart_id 
-            FROM Cart 
-            WHERE parent_id = :parent_id
-        ";
+            $sql_cart = "SELECT cart_id 
+                            FROM Cart 
+                            WHERE parent_id = :parent_id";
             $stmt_cart = $this->db->prepare($sql_cart);
             $stmt_cart->bindParam(':parent_id', $parent_id);
             $stmt_cart->execute();

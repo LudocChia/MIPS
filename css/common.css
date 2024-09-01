@@ -658,7 +658,6 @@ thead th {
     margin: 0 40px;
 }
 
-
 .category .box-container .box {
     position: relative;
     background-color: #f4f4f4;
@@ -724,8 +723,78 @@ thead th {
 
 
 .empty button {
-    margin: ;
+    /* margin: ; */
     width: 50%;
+}
+
+/* Product Details */
+.product-detail .wrapper {
+    background-color: var(--color-white);
+}
+
+.product-details {
+    position: relative;
+    max-width: 80vw;
+    border-radius: 20px;
+    /* background-color: white; */
+}
+
+.product-details p {
+    line-height: 30px;
+    margin-bottom: 30px;
+}
+
+.product-actions input[type="number"] {
+    width: 60px;
+}
+
+
+.product-detail .product-details-container {
+    margin: 2rem 0;
+}
+
+.product-detail .product-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: .3em;
+    padding: 0px;
+    margin: 0;
+}
+
+.product-container .picture-div {
+    display: flex;
+    border-radius: 8px;
+    margin: 0 0 1rem 1rem;
+    border: 1px solid var(--color-gray-super-light);
+}
+
+.product-container .product-image {
+    width: 85%;
+}
+
+#picture {
+    padding: 1rem 0.5rem 1rem 1rem;
+    object-fit: cover;
+}
+
+.thumbnails {
+    width: auto;
+    padding: 1rem 1rem 1rem 0.5rem;
+}
+
+.thumbnails img {
+    margin-bottom: 1rem;
+    display: inline-block;
+    border: 1px solid var(--color-gray-light);
+}
+
+.thumbnails img:hover,
+.thumbnails img.active {
+    border: 1px solid var(--color-primary);
+}
+
+.product-info {
+    padding: 1.2em;
 }
 
 @media screen and (max-width: 1200px) {

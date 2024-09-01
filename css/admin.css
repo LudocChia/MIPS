@@ -82,6 +82,10 @@
     display: grid;
 }
 
+#login-form .input-container {
+    margin-bottom: 2rem;
+}
+
 #login-form .container {
     width: 40rem;
     display: grid;

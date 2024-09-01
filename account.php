@@ -1,10 +1,9 @@
 <?php
 
 session_start();
-
 include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/db_connect.php";
 include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/customer_login.php";
-
+$currentPage = basename($_SERVER['PHP_SELF']);
 $pageTitle = "My Account  - MIPS";
 include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/customer_head.php";
 
@@ -12,7 +11,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/customer_head.php";
 
 <body>
     <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/customer_header.php"; ?>
-    <div class="container">
+    <div class="container aside-main">
         <?php include  $_SERVER['DOCUMENT_ROOT'] . "/mips/components/customer_sidebar.php"; ?>
         <main class="profile">
             <div class="wrapper">

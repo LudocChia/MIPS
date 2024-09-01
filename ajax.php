@@ -19,8 +19,8 @@ switch ($action) {
 
         // Order Functions
     case 'get_orders':
-        if (isset($_POST['parent_id'], $_POST['status'])) {
-            echo $crud->getOrders($_POST['parent_id'], $_POST['status']);
+        if (isset($_GET['parent_id'], $_GET['status'])) {
+            echo $crud->get_Orders($_GET['parent_id'], $_GET['status']);
         } else {
             echo json_encode(['error' => 'Parent ID and Status are required']);
         }
