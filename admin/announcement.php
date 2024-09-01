@@ -86,7 +86,7 @@ if (isset($_POST["submit"])) {
                 echo "<script>alert('Database error: " . $e->getMessage() . "');</script>";
             }
         } else {
-            $sql = "INSERT INTO Announcement (announcement_id, announcement_title, announcement_message, announcement_image_url, admin_id, is_deleted) VALUES (:announcement_id, :title, :message, :image_url, :admin_id, 0)";
+            $sql = "INSERT INTO Announcement (announcement_id, announcement_title, announcement_message, announcement_image_url, admin_id, status) VALUES (:announcement_id, :title, :message, :image_url, :admin_id, 0)";
             $stmt = $pdo->prepare($sql);
             $stmt->bindParam(':announcement_id', $announcementId);
             $stmt->bindParam(':title', $announcementTitle);
@@ -107,7 +107,7 @@ if (isset($_POST["submit"])) {
 
 function getAnnouncements($pdo, $start, $rows_per_page)
 {
-    $sql = "SELECT * FROM Announcement WHERE is_deleted = 0 LIMIT :start, :rows_per_page;";
+    $sql = "SELECT * FROM Announcement WHERE status = 0 LIMIT :start, :rows_per_page;";
     $stmt = $pdo->prepare($sql);
     $stmt->bindParam(':start', $start, PDO::PARAM_INT);
     $stmt->bindParam(':rows_per_page', $rows_per_page, PDO::PARAM_INT);

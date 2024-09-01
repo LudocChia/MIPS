@@ -6,7 +6,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/php/admin.php";
 
 function getAllParents($pdo, $start, $rows_per_page)
 {
-    $sql = "SELECT * FROM Parent WHERE is_deleted = 0 LIMIT :start, :rows_per_page";
+    $sql = "SELECT * FROM Parent WHERE status = 0 LIMIT :start, :rows_per_page";
     $stmt = $pdo->prepare($sql);
     $stmt->bindParam(':start', $start, PDO::PARAM_INT);
     $stmt->bindParam(':rows_per_page', $rows_per_page, PDO::PARAM_INT);
@@ -18,7 +18,7 @@ $all_parents = getAllParents($pdo, $start, $rows_per_page);
 
 function getAllStudents($pdo)
 {
-    $sql = "SELECT student_id, student_name FROM Student WHERE is_deleted = 0";
+    $sql = "SELECT student_id, student_name FROM Student WHERE status = 0";
     $stmt = $pdo->prepare($sql);
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -68,7 +68,7 @@ if (isset($_POST["submit"])) {
                 if ($existingParent) {
                     $sql = "UPDATE Parent SET parent_name = :name, parent_email = :email, parent_password = :password WHERE parent_id = :parentId";
                 } else {
-                    $sql = "INSERT INTO Parent (parent_id, parent_name, parent_email, parent_password, is_deleted) 
+                    $sql = "INSERT INTO Parent (parent_id, parent_name, parent_email, parent_password, status) 
                             VALUES (:parentId, :name, :email, :password, 0)";
                 }
 

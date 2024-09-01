@@ -12,7 +12,7 @@ function getAllOrders($pdo, $start, $rows_per_page)
             JOIN Parent_Student ps ON o.parent_student_id = ps.parent_student_id
             JOIN Parent p ON ps.parent_id = p.parent_id
             JOIN Payment pm ON o.order_id = pm.order_id
-            WHERE o.is_deleted = 0
+            WHERE o.status = 0
             ORDER BY o.order_datetime DESC
             LIMIT :start, :rows_per_page";
     $stmt = $pdo->prepare($sql);
@@ -43,7 +43,7 @@ if (isset($_POST["submit"])) {
         try {
             $pdo->beginTransaction();
 
-            $sqlOrder = "INSERT INTO Orders (order_id, parent_student_id, order_price, is_deleted) 
+            $sqlOrder = "INSERT INTO Orders (order_id, parent_student_id, order_price, status) 
                          VALUES (:orderId, :parent_student_id, :order_price, 0)";
             $stmtOrder = $pdo->prepare($sqlOrder);
             $stmtOrder->bindParam(':orderId', $order_id);
@@ -64,7 +64,7 @@ if (isset($_POST["submit"])) {
 
             foreach ($product_ids as $index => $product_id) {
                 $quantity = $quantities[$index];
-                $sqlOrderItem = "INSERT INTO Order_Item (order_item_id, order_id, product_id, product_quantity, order_subtotal, is_deleted) 
+                $sqlOrderItem = "INSERT INTO Order_Item (order_item_id, order_id, product_id, product_quantity, order_subtotal, status) 
                                  VALUES (:order_item_id, :order_id, :product_id, :product_quantity, :order_subtotal, 0)";
                 $stmtOrderItem = $pdo->prepare($sqlOrderItem);
                 $order_item_id = uniqid('OI');

@@ -14,7 +14,7 @@ class Action
     {
 
         try {
-            $sqlParent = "SELECT * FROM Parent WHERE parent_email = :email AND is_deleted = 0";
+            $sqlParent = "SELECT * FROM Parent WHERE parent_email = :email AND status = 0";
             $stmtParent = $this->db->prepare($sqlParent);
             $stmtParent->bindParam(':email', $email);
             $stmtParent->execute();
@@ -280,7 +280,7 @@ class Action
                 p.product_id,
                 p.product_name,
                 p.product_price,
-                p.is_deleted,
+                p.status,
                 pi.image_url,
                 GROUP_CONCAT(DISTINCT s.student_id, ':', s.student_name) AS children
             FROM Cart_Item ci

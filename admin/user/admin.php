@@ -6,7 +6,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/php/admin.php";
 
 function getAllAdmins($pdo, $start, $rows_per_page)
 {
-    $sql = "SELECT * FROM Admin WHERE is_deleted = 0 LIMIT :start, :rows_per_page";
+    $sql = "SELECT * FROM Admin WHERE status = 0 LIMIT :start, :rows_per_page";
     $stmt = $pdo->prepare($sql);
     $stmt->bindParam(':start', $start, PDO::PARAM_INT);
     $stmt->bindParam(':rows_per_page', $rows_per_page, PDO::PARAM_INT);
@@ -40,7 +40,7 @@ if (isset($_POST["submit"])) {
             $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
             try {
-                $sql = "INSERT INTO Admin (admin_id, admin_name, admin_email, admin_password, admin_type, is_deleted) 
+                $sql = "INSERT INTO Admin (admin_id, admin_name, admin_email, admin_password, admin_type, status) 
                         VALUES (:adminId, :name, :email, :password, :adminType, 0)";
                 $stmt = $pdo->prepare($sql);
                 $stmt->bindParam(':adminId', $adminId);

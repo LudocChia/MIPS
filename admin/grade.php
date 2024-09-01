@@ -11,12 +11,12 @@ function getGrades($pdo, $start, $rows_per_page)
             g.grade_id, 
             g.grade_name, 
             g.grade_level, 
-            (SELECT COUNT(*) FROM Class c WHERE c.grade_id = g.grade_id AND c.is_deleted = 0) AS total_classes,
-            (SELECT COUNT(*) FROM Student s JOIN Class c ON s.class_id = c.class_id WHERE c.grade_id = g.grade_id AND s.is_deleted = 0) AS total_students
+            (SELECT COUNT(*) FROM Class c WHERE c.grade_id = g.grade_id AND c.status = 0) AS total_classes,
+            (SELECT COUNT(*) FROM Student s JOIN Class c ON s.class_id = c.class_id WHERE c.grade_id = g.grade_id AND s.status = 0) AS total_students
         FROM 
             Grade g 
         WHERE 
-            g.is_deleted = 0
+            g.status = 0
         LIMIT :start, :rows_per_page";
     $stmt = $pdo->prepare($sql);
     $stmt->bindParam(':start', $start, PDO::PARAM_INT);
@@ -40,7 +40,7 @@ if (isset($_POST["submit"])) {
         $stmt->bindParam(':gradeLevel', $gradeLevel);
         $stmt->bindParam(':gradeId', $gradeId);
     } else {
-        $sql = "INSERT INTO Grade (grade_name, grade_level, is_deleted) VALUES (:gradeName, :gradeLevel, 0)";
+        $sql = "INSERT INTO Grade (grade_name, grade_level, status) VALUES (:gradeName, :gradeLevel, 0)";
         $stmt = $pdo->prepare($sql);
         $stmt->bindParam(':gradeName', $gradeName);
         $stmt->bindParam(':gradeLevel', $gradeLevel);

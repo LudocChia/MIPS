@@ -20,7 +20,7 @@ function getProductDetail($pdo, $product_id)
         FROM Product p
         LEFT JOIN Product_Category pc ON p.category_id = pc.category_id
         LEFT JOIN Product_Image pi ON p.product_id = pi.product_id AND pi.sort_order = 1
-        WHERE p.product_id = ? AND p.is_deleted = 0
+        WHERE p.product_id = ? AND p.status = 0
     ");
     $stmt->execute([$product_id]);
     return $stmt->fetch(PDO::FETCH_ASSOC);
@@ -36,7 +36,7 @@ function getApparelSizes($pdo, $product_id)
         JOIN Product_Size ps ON s.size_id = ps.size_id
         JOIN Product p ON ps.product_id = p.product_id
         WHERE p.product_id = :product_id
-        AND p.is_deleted = 0
+        AND p.status = 0
         ORDER BY s.size_name ASC
     ");
     $stmt->bindParam(':product_id', $product_id, PDO::PARAM_INT);

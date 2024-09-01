@@ -10,7 +10,7 @@ function getDeletedProducts($pdo, $start, $rows_per_page)
     $sql = "SELECT p.product_id, p.product_name, p.product_price, pi.image_url
             FROM Product p
             JOIN Product_Image pi ON p.product_id = pi.product_id AND pi.sort_order = 1
-            WHERE p.is_deleted = 1
+            WHERE p.status = 1
             GROUP BY p.product_id
             LIMIT :start, :rows_per_page";
     $stmt = $pdo->prepare($sql);

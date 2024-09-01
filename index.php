@@ -8,7 +8,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/customer_login.php";
 
 function getAnnouncements($pdo)
 {
-    $sql = "SELECT * FROM Announcement WHERE is_deleted = 0";
+    $sql = "SELECT * FROM Announcement WHERE status = 0";
     $stml = $pdo->prepare($sql);
     $stml->execute();
     return $stml->fetchAll(PDO::FETCH_ASSOC);

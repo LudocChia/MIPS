@@ -85,7 +85,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         data.forEach(function (item, index) {
             const totalPriceItem = (item.product_price * item.product_quantity).toFixed(2);
-            const isDeleted = item.is_deleted === 1;
+            const isDeleted = item.status === 1;
 
             let childrenHtml = '';
             if (item.children) {
@@ -194,7 +194,7 @@ document.addEventListener('DOMContentLoaded', function () {
         all.addEventListener('change', function () {
             const isChecked = this.checked;
             data.forEach((item, index) => {
-                if (!item.is_deleted) {
+                if (!item.status) {
                     item.state = isChecked;
                     document.querySelector(`#ckh-${index}`).checked = isChecked;
                 }
@@ -205,7 +205,7 @@ document.addEventListener('DOMContentLoaded', function () {
         selectAll.addEventListener('change', function () {
             const isChecked = this.checked;
             data.forEach((item, index) => {
-                if (!item.is_deleted) {
+                if (!item.status) {
                     item.state = isChecked;
                     document.querySelector(`#ckh-${index}`).checked = isChecked;
                 }
@@ -334,7 +334,7 @@ document.addEventListener('DOMContentLoaded', function () {
             document.querySelector('#total-price-display').value = totalAmount;
         }
 
-        const allSelected = data.every(item => item.state || item.is_deleted);
+        const allSelected = data.every(item => item.state || item.status);
         document.querySelector('#all').checked = allSelected;
         document.querySelector('#selectAll').checked = allSelected;
     }

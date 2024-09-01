@@ -7,7 +7,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/php/activate_pagination.php";
 
 function getSubcategories($pdo)
 {
-    $sql = "SELECT * FROM Product_Category WHERE parent_id IS NOT NULL AND is_deleted = 0";
+    $sql = "SELECT * FROM Product_Category WHERE parent_id IS NOT NULL AND status = 0";
     $stmt = $pdo->prepare($sql);
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -21,7 +21,7 @@ function getAllProducts($pdo, $start, $rows_per_page)
                p.stock_quantity, p.color, p.gender, pi.image_url
             FROM Product p
             LEFT JOIN Product_Image pi ON p.product_id = pi.product_id
-            WHERE p.is_deleted = 0 AND pi.sort_order = 1
+            WHERE p.status = 0 AND pi.sort_order = 1
             GROUP BY p.product_id
             LIMIT :start, :rows_per_page";
     $stmt = $pdo->prepare($sql);

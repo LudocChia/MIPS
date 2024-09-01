@@ -7,7 +7,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/php/activate_pagination.php";
 
 function getDeactivateAnnouncements($pdo, $start, $rows_per_page)
 {
-    $sql = "SELECT * FROM Announcement WHERE is_deleted = 1 LIMIT :start, :rows_per_page;";
+    $sql = "SELECT * FROM Announcement WHERE status = 1 LIMIT :start, :rows_per_page;";
     $stmt = $pdo->prepare($sql);
     $stmt->bindParam(':start', $start, PDO::PARAM_INT);
     $stmt->bindParam(':rows_per_page', $rows_per_page, PDO::PARAM_INT);

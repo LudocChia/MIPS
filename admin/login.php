@@ -16,7 +16,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = trim($_POST['email']);
     $password = trim($_POST['password']);
 
-    $sql = "SELECT * FROM Admin WHERE admin_email = :email AND is_deleted = 0";
+    $sql = "SELECT * FROM Admin WHERE admin_email = :email AND status = 0";
     $stmt = $pdo->prepare($sql);
     $stmt->bindParam(':email', $email);
 
