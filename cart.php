@@ -1,6 +1,11 @@
 <?php
 session_start();
 
+if (!isset($_SESSION['user_id'])) {
+    header('Location: login.php');
+    exit();
+}
+
 include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/db_connect.php";
 include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/customer_login.php";
 

@@ -37,6 +37,9 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                     <div class="left">
                         <h1>Bookshop Order Recycle Bin</h1>
                     </div>
+                    <div class="right">
+                        <a href="/mips/admin/recycleBin.php"><i class="bi bi-arrow-return-left"></i>Recycle Bin Menu</a>
+                    </div>
                 </div>
                 <div class="table-body">
                     <table>

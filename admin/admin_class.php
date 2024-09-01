@@ -176,21 +176,59 @@ class Action
 
 
     // Order Functions
-    public function deactivate_order($order_id)
+    public function update_order_status($order_id, $new_status)
     {
-        $sql = "UPDATE Orders SET is_deleted = 1 WHERE order_id = :order_id";
-        $stmt = $this->db->prepare($sql);
-        $stmt->bindParam(':order_id', $order_id);
-        return $this->execute_statement($stmt);
+        try {
+            $this->db->beginTransaction();
+
+            $query = "SELECT p.payment_status, oi.product_id, oi.product_quantity
+                        FROM Orders o
+                        JOIN Payment p ON o.order_id = p.order_id
+                        JOIN Order_Item oi ON oi.order_id = o.order_id
+                        WHERE o.order_id = :order_id AND o.is_deleted = 0
+            ";
+            $stmt = $this->db->prepare($query);
+            $stmt->bindParam(':order_id', $order_id);
+            $stmt->execute();
+            $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            if (!$results) {
+                throw new Exception("Order not found or no items linked with it.");
+            }
+
+            $current_status = $results[0]['payment_status'];
+
+            $updateSql = "UPDATE Orders o
+                        JOIN Payment p ON o.order_id = p.order_id
+                        SET p.payment_status = :new_status
+                        WHERE o.order_id = :order_id AND o.is_deleted = 0
+            ";
+            $updateStmt = $this->db->prepare($updateSql);
+            $updateStmt->bindParam(':order_id', $order_id);
+            $updateStmt->bindParam(':new_status', $new_status);
+            $updateStmt->execute();
+
+            foreach ($results as $item) {
+                if ($current_status != 'completed' && $new_status == 'completed') {
+                    $stockSql = "UPDATE Product SET stock_quantity = stock_quantity - :quantity WHERE product_id = :product_id";
+                } elseif ($current_status == 'completed' && $new_status != 'completed') {
+                    $stockSql = "UPDATE Product SET stock_quantity = stock_quantity + :quantity WHERE product_id = :product_id";
+                } else {
+                    continue;
+                }
+                $stockStmt = $this->db->prepare($stockSql);
+                $stockStmt->bindParam(':quantity', $item['product_quantity']);
+                $stockStmt->bindParam(':product_id', $item['product_id']);
+                $stockStmt->execute();
+            }
+
+            $this->db->commit();
+            return json_encode(['success' => 'Order status udated successfully']);
+        } catch (Exception $e) {
+            return json_encode(['error' => 'Database error: ' . $e->getMessage()]);
+        }
     }
 
-    public function recover_order($order_id)
-    {
-        $sql = "UPDATE Orders SET is_deleted = 0 WHERE order_id = :order_id";
-        $stmt = $this->db->prepare($sql);
-        $stmt->bindParam(':order_id', $order_id);
-        return $this->execute_statement($stmt);
-    }
 
     public function delete_order($order_id)
     {
@@ -286,20 +324,6 @@ class Action
         } else {
             return json_encode(['error' => 'Order not found']);
         }
-    }
-
-    // Update order status
-    public function update_order_status($order_id, $order_status)
-    {
-        $sql = "UPDATE Orders o
-            JOIN Payment p ON o.order_id = p.order_id
-            SET p.payment_status = :order_status
-            WHERE o.order_id = :order_id AND o.is_deleted = 0";
-
-        $stmt = $this->db->prepare($sql);
-        $stmt->bindParam(':order_id', $order_id);
-        $stmt->bindParam(':order_status', $order_status);
-        return $this->execute_statement($stmt);
     }
 
     // student Functions

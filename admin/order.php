@@ -104,60 +104,68 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                     </div>
                 </div>
                 <div class="table-body">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>
-                                    <h3>Order ID</h3>
-                                </th>
-                                <th>
-                                    <h3>Parent Name</h3>
-                                </th>
-                                <th>
-                                    <h3>Order Date</h3>
-                                </th>
-                                <th>
-                                    <h3>Order Amount</h3>
-                                </th>
-                                <th>
-                                    <h3>Status</h3>
-                                </th>
-                                <th>
-                                    <h3>Actions</h3>
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php foreach ($all_orders as $order) { ?>
+                    <?php if (!empty($all_orders)) : ?>
+                        <table>
+                            <thead>
                                 <tr>
-                                    <td><?php echo htmlspecialchars($order['order_id']); ?></td>
-                                    <td><?php echo htmlspecialchars($order['parent_name']); ?></td>
-                                    <td><?php echo htmlspecialchars($order['order_datetime']); ?></td>
-                                    <td>MYR <?php echo htmlspecialchars($order['order_price']); ?></td>
-                                    <td>
-                                        <form action="" method="POST" style="display:inline;">
-                                            <input type="hidden" name="order_id" value="<?= htmlspecialchars($order['order_id']); ?>">
-                                            <select name="order_status" class="status-select" data-order-id="<?= htmlspecialchars($order['order_id']); ?>">
-                                                <option value="pending" <?= $order['payment_status'] == 'pending' ? 'selected' : ''; ?>>Pending</option>
-                                                <option value="received" <?= $order['payment_status'] == 'received' ? 'selected' : ''; ?>>Received</option>
-                                                <option value="completed" <?= $order['payment_status'] == 'completed' ? 'selected' : ''; ?>>Completed</option>
-                                                <option value="cancelled" <?= $order['payment_status'] == 'cancelled' ? 'selected' : ''; ?>>Cancelled</option>
-                                            </select>
-                                        </form>
-                                    </td>
-                                    <td>
-                                        <form action="" method="POST" style="display:inline;" onsubmit="return showDeactivateConfirmDialog(event);">
-                                            <input type="hidden" name="order_id" value="<?= htmlspecialchars($order['order_id']); ?>">
-                                            <input type="hidden" name="action" value="deactivate_order">
-                                            <button type="submit" class="delete-order-btn"><i class="bi bi-x-square"></i></button>
-                                        </form>
-                                        <button type="button" class="view-order-detail-btn" data-order-id="<?= htmlspecialchars($order['order_id']); ?>"><i class="bi bi-info-circle-fill"></i></button>
-                                        <button type="button" class="edit-order-btn" data-order-id="<?= htmlspecialchars($order['order_id']); ?>"><i class="bi bi-pencil-square"></i></button>
-                                    </td>
+                                    <th>
+                                        <h3>Order ID</h3>
+                                    </th>
+                                    <th>
+                                        <h3>Parent Name</h3>
+                                    </th>
+                                    <th>
+                                        <h3>Order Date</h3>
+                                    </th>
+                                    <th>
+                                        <h3>Order Amount</h3>
+                                    </th>
+                                    <th>
+                                        <h3>Status</h3>
+                                    </th>
+                                    <th>
+                                        <h3>Actions</h3>
+                                    </th>
                                 </tr>
-                            <?php } ?>
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($all_orders as $order) : ?>
+                                    <tr>
+                                        <td><?php echo htmlspecialchars($order['order_id']); ?></td>
+                                        <td><?php echo htmlspecialchars($order['parent_name']); ?></td>
+                                        <td><?php echo htmlspecialchars($order['order_datetime']); ?></td>
+                                        <td>MYR <?php echo htmlspecialchars($order['order_price']); ?></td>
+                                        <td>
+                                            <form action="" method="POST" style="display:inline;">
+                                                <input type="hidden" name="order_id" value="<?= htmlspecialchars($order['order_id']); ?>">
+                                                <select name="order_status" class="status-select" data-order-id="<?= htmlspecialchars($order['order_id']); ?>">
+                                                    <option value="pending" <?= $order['payment_status'] == 'pending' ? 'selected' : ''; ?>>Pending</option>
+                                                    <option value="received" <?= $order['payment_status'] == 'received' ? 'selected' : ''; ?>>Received</option>
+                                                    <option value="completed" <?= $order['payment_status'] == 'completed' ? 'selected' : ''; ?>>Completed</option>
+                                                    <option value="underpaid" <?= $order['payment_status'] == 'underpaid' ? 'selected' : ''; ?>>Underpaid</option>
+                                                    <option value="cancelled" <?= $order['payment_status'] == 'cancelled' ? 'selected' : ''; ?>>Cancelled</option>
+                                                </select>
+                                            </form>
+                                        </td>
+                                        <td>
+                                            <form action="" method="POST" style="display:inline;" onsubmit="return showDeactivateConfirmDialog(event);">
+                                                <input type="hidden" name="order_id" value="<?= htmlspecialchars($order['order_id']); ?>">
+                                                <input type="hidden" name="action" value="deactivate_order">
+                                                <button type="submit" class="delete-order-btn"><i class="bi bi-x-square"></i></button>
+                                            </form>
+                                            <button type="button" class="view-order-detail-btn" data-order-id="<?= htmlspecialchars($order['order_id']); ?>"><i class="bi bi-info-circle-fill"></i></button>
+                                            <button type="button" class="edit-order-btn" data-order-id="<?= htmlspecialchars($order['order_id']); ?>"><i class="bi bi-pencil-square"></i></button>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    <?php else : ?>
+                        <div class="empty">
+                            <img src='/mips/images/empty.png' alt='Empty Cart Image'>
+                            <h3>No Orders Found</h3>
+                        </div>
+                    <?php endif; ?>
                 </div>
                 <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/pagination.php"; ?>
             </div>

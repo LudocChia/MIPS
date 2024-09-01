@@ -30,6 +30,9 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                     <div class="left">
                         <h1>Announcement Recycle Bin</h1>
                     </div>
+                    <div class="right">
+                        <a href="/mips/admin/recycleBin.php"><i class="bi bi-arrow-return-left"></i>Recycle Bin Menu</a>
+                    </div>
                 </div>
                 <div class="box-container">
                     <?php foreach ($all_announcements as $announcement) : ?>

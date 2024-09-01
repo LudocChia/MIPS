@@ -17,6 +17,17 @@ switch ($action) {
         }
         break;
 
+        // Order Functions
+    case 'get_orders':
+        if (isset($_POST['parent_id'], $_POST['status'])) {
+            echo $crud->getOrders($_POST['parent_id'], $_POST['status']);
+        } else {
+            echo json_encode(['error' => 'Parent ID and Status are required']);
+        }
+        break;
+
+
+        // Checkout Functions
     case 'add_to_cart':
         if (isset($_POST['customer_id'], $_POST['product_id'], $_POST['qty'], $_POST['product_size_id'])) {
             echo $crud->add_to_cart($_POST['customer_id'], $_POST['product_id'], $_POST['qty'], $_POST['product_size_id']);

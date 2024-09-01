@@ -274,10 +274,13 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    form.addEventListener('submit', function (event) {
-        event.preventDefault();
-        handlePurchase();
-    });
+    if (form) {
+        form.addEventListener('submit', function (event) {
+            event.preventDefault();
+            handlePurchase();
+        });
+    }
+
 
     function handlePurchase() {
         const selectedItems = data.filter(item => item.state);
@@ -407,7 +410,23 @@ document.addEventListener('DOMContentLoaded', function () {
 
             reloadSlider();
         }
+    }
 
+    if (document.querySelector("#login-btn")) {
+        document.querySelector("#login-btn").addEventListener("click", function () {
+            scrollPosition = window.pageYOffset;
+            const productId = new URLSearchParams(window.location.search).get('pid');
+
+            document.body.style.overflowY = 'hidden';
+            document.body.style.paddingRight = '15px';
+            document.body.style.backgroundColor = 'white';
+
+            const loginForm = document.getElementById('login-form');
+            if (productId) {
+                loginForm.querySelector('form').action += `?pid=${encodeURIComponent(productId)}`;
+            }
+            loginForm.showModal();
+        });
     }
 
     if (document.getElementById('login-form')) {

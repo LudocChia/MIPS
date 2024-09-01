@@ -224,6 +224,9 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                             <div class="price">
                                 MYR <?= number_format($product['product_price'], 2); ?>
                             </div>
+                            <div class="stock">
+                                Stock: <?= htmlspecialchars($product['stock_quantity']); ?>
+                            </div>
                         </div>
                     <?php } ?>
                 </div>

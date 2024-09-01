@@ -25,6 +25,7 @@ class Action
                 $_SESSION['user_type'] = 'parent';
                 $_SESSION['user_id'] = $parent['parent_id'];
                 $_SESSION['user_name'] = $parent['parent_name'];
+                $_SESSION['user_phone'] = $parent['parent_phone'];
                 $_SESSION['user_email'] = $parent['parent_email'];
                 $_SESSION['user_image'] = !empty($parent['parent_image']) ? $parent['parent_image'] : './images/default_profile.png';
 
@@ -38,6 +39,30 @@ class Action
         }
     }
 
+    // Order Functions
+    public function getOrders($parent_id, $status)
+    {
+        $sql = "SELECT o.order_id, o.order_datetime, o.order_price, p.payment_status
+                FROM Orders o
+                JOIN Payment p ON o.order_id = p.order_id
+                WHERE o.parent_student_id IN (
+                    SELECT parent_student_id
+                    FROM Parent_Student
+                    WHERE parent_id = ?
+                ) AND o.is_deleted = 0
+                AND p.payment_status = ?
+                ORDER BY o.order_datetime DESC";
+
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(1, $parent_id, PDO::PARAM_STR);
+        $stmt->bindParam(2, $status, PDO::PARAM_STR);
+        $stmt->execute();
+        $orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return json_encode($orders);
+    }
+
+
+    // Checkout Functions
 
     public function add_to_cart($parent_id, $product_id, $quantity, $product_size_id)
     {

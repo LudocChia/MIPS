@@ -1,5 +1,7 @@
 <?php
 
+session_start();
+
 include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/db_connect.php";
 include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/customer_login.php";
 
@@ -18,6 +20,14 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/customer_head.php";
                     <div class="left">
                         <h1>My Account</h1>
                     </div>
+                </div>
+                <div class="img">
+                    <img src=<?php echo htmlspecialchars($_SESSION['user_image']); ?> alt="">
+                </div>
+                <div>
+                    <p>Name: <?php echo htmlspecialchars($_SESSION['user_name']); ?></p>
+                    <p>Email: <?php echo htmlspecialchars($_SESSION['user_email']); ?></p>
+                    <p>Phone: <?php echo htmlspecialchars($_SESSION['user_phone']); ?></p>
                 </div>
             </div>
         </main>

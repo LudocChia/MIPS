@@ -11,7 +11,7 @@ function isActive($pageName, $currentPage)
     <div class="sidebar">
         <ul>
             <li>
-                <a href="/mips/profile.php" class="<?= isActive('profile.php', $currentPage); ?>"><i class="bi bi-grid-1x2-fill"></i>
+                <a href="/mips/account.php" class="<?= isActive('profile.php', $currentPage); ?>"><i class="bi bi-grid-1x2-fill"></i>
                     <h4>My Account</h4>
                 </a>
             </li>

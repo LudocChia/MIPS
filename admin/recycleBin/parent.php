@@ -43,7 +43,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                         <h1>Student Parent Accounts Recycle Bin</h1>
                     </div>
                     <div class="right">
-
+                        <a href="/mips/admin/recycleBin.php"><i class="bi bi-arrow-return-left"></i>Recycle Bin Menu</a>
                     </div>
                 </div>
                 <div class="table-body">
