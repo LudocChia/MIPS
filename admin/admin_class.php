@@ -22,7 +22,7 @@ class Action
     public function login($email, $password)
     {
         try {
-            $sql = "SELECT * FROM Admin WHERE admin_email = :email AND status = 0";
+            $sql = "SELECT * FROM Admin WHERE admin_email = :email AND status IN (0, -1)";
             $stmt = $this->db->prepare($sql);
             $stmt->bindParam(':email', $email);
             $stmt->execute();
@@ -35,7 +35,12 @@ class Action
                 $_SESSION['admin_name'] = $admin['admin_name'];
                 $_SESSION['admin_type'] = $admin['admin_type'];
                 $_SESSION['admin_email'] = $admin['admin_email'];
+                $_SESSION['admin_status'] = $admin['status'];
                 $_SESSION['admin_image'] = $admin['admin_image'] ?? '/mips/images/default_profile.png';
+
+                if ($admin['status'] == -1) {
+                    return json_encode(['new_user' => true, 'redirect' => '/mips/admin/new-password.php']);
+                }
 
                 return json_encode(['success' => true, 'redirect' => '/mips/admin']);
             } else {
@@ -45,6 +50,7 @@ class Action
             return json_encode(['error' => 'Database error: ' . $e->getMessage()]);
         }
     }
+
 
     // Admin Functions
     public function deactivate_admin($admin_id)

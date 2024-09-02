@@ -95,7 +95,7 @@ textarea {
     transition: border 0.3s ease;
 }
 
-#login-form input {
+.login-form input {
     box-shadow: none;
 }
 
@@ -213,12 +213,14 @@ dialog form textarea {
 }
 
 /* LOGIN */
-#login-form .wrapper {
+.login-form .wrapper,
+.set-new-password-form .wrapper {
     width: 90%;
     margin: 0 auto;
 }
 
-#login-form .title {
+.login-form .logo-container,
+.set-new-password-form .logo-container {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -227,26 +229,31 @@ dialog form textarea {
     border-radius: 1rem 1rem 0 0;
 }
 
-#login-form img {
+.login-form img,
+.set-new-password-form img {
     padding: 1rem;
 }
 
-#login-form form {
+.login-form form,
+.set-new-password-form form {
     padding: 30px 25px 25px 25px;
 }
 
-#login-form .input-container {
+.login-form .input-container,
+.set-new-password-form .input-container {
     position: relative;
     width: 100%;
 }
 
-#login-form .input-field {
+.login-form .input-field,
+.set-new-password-form .input-field {
     height: 45px;
     position: relative;
     margin-bottom: 0.5rem;
 }
 
-#login-form .input-field input {
+.login-form .input-field input,
+.set-new-password-form .input-field input {
     height: 100%;
     width: 100%;
     outline: none;
@@ -256,7 +263,8 @@ dialog form textarea {
     font-size: 16px;
 }
 
-#login-form .input-field i {
+.login-form .input-field i,
+.set-new-password-form .input-field i {
     position: absolute;
     width: 47px;
     height: 100%;
@@ -270,28 +278,33 @@ dialog form textarea {
     justify-content: center;
 }
 
-#login-form .pass {
+.login-form .pass,
+.set-new-password-form .pass {
     margin: -1rem 0 1rem 0;
 }
 
-#login-form .pass a {
+.login-form .pass a,
+.set-new-password-form .pass a {
     color: var(--color-primary);
     font-size: 1.4rem;
     text-decoration: none;
 }
 
-#login-form .signup-link {
+.login-form .signup-link,
+.set-new-password-form .signup-link {
     text-align: center;
     margin-top: 20px;
 }
 
-#login-form .signup-link a {
+.login-form .signup-link a,
+.set-new-password-form .signup-link a {
     color: var(--color-primary);
     font-size: 18px;
     text-decoration: none;
 }
 
-#login-form .signup-link a:hover {
+.login-form .signup-link a:hover,
+.set-new-password-form .signup-link a:hover {
     text-decoration: underline;
 }
 

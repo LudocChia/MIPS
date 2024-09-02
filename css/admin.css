@@ -76,24 +76,28 @@
 }
 
 /* LOGIN */
-#login-form {
+.login-form,
+.set-new-password-form {
     margin: 0;
     height: 100vh;
     display: grid;
 }
 
-#login-form .input-container {
+.login-form .input-container,
+.set-new-password-form .input-container {
     margin-bottom: 2rem;
 }
 
-#login-form .container {
+.login-form .container,
+.set-new-password-form .container {
     width: 40rem;
     display: grid;
     place-items: center;
     grid-template-columns: 1fr;
 }
 
-#login-form .btn {
+.login-form .btn,
+.set-new-password-form .btn {
     width: 100%;
 }
 

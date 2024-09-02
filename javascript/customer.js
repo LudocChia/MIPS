@@ -421,7 +421,7 @@ document.addEventListener('DOMContentLoaded', function () {
             document.body.style.paddingRight = '15px';
             document.body.style.backgroundColor = 'white';
 
-            const loginForm = document.getElementById('login-form');
+            const loginForm = document.querySelector('.login-form');
             if (productId) {
                 loginForm.querySelector('form').action += `?pid=${encodeURIComponent(productId)}`;
             }
@@ -429,9 +429,9 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    if (document.getElementById('login-form')) {
-        document.querySelector('#login-form .cancel').addEventListener('click', function () {
-            const dialog = document.getElementById('login-form');
+    if (document.querySelector('.login-form')) {
+        document.querySelector('.login-form .cancel').addEventListener('click', function () {
+            const dialog = document.querySelector('.login-form');
             dialog.close();
             dialog.querySelector('form').reset();
 

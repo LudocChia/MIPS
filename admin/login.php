@@ -15,10 +15,10 @@ $pageTitle = "Admin Login Page - MIPS";
 include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
 
 <body>
-    <main id="login-form">
+    <main class="login-form">
         <div class="container">
             <div class="wrapper">
-                <div class="title">
+                <div class="logo-container">
                     <img src="/mips/images/MIPS_logo.png" alt="MIPS_Logo">
                 </div>
                 <div id="alert-container"></div>
@@ -70,7 +70,9 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                     .then(response => response.json())
                     .then(data => {
                         if (data.success) {
-                            window.location.href = '/mips/admin/';
+                            window.location.href = data.redirect;
+                        } else if (data.new_user) {
+                            window.location.href = data.redirect;
                         } else {
                             showAlert(data.error);
                         }

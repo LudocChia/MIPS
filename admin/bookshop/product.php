@@ -246,8 +246,8 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
         <form action="" method="post" enctype="multipart/form-data">
             <input type="hidden" name="product_id" value="">
             <div class="input-container">
+                <h2>Product Name<sup>*</sup></h2>
                 <div class="input-field">
-                    <h2>Product Name<sup>*</sup></h2>
                     <input type="text" name="name" value="<?php echo isset($_POST['name']) ? htmlspecialchars($_POST['name']) : ''; ?>" required>
                 </div>
                 <p>Please enter the product name.</p>

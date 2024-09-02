@@ -9,6 +9,11 @@ if (!isset($_SESSION['admin_id'])) {
     exit();
 }
 
+if ($_SESSION['admin_status'] == -1) {
+    header('Location: /mips/admin/new-password.php');
+    exit();
+}
+
 $currentPage = basename($_SERVER['PHP_SELF']);
 
 $start = 0;

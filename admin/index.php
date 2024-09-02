@@ -262,6 +262,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
             </section>
         </main>
     </div>
+    <script src="/mips/javascript/common.js"></script>
     <script src="../javascript/admin.js"></script>
     <script>
         $(document).ready(function() {

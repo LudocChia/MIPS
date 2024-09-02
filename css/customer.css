@@ -148,15 +148,15 @@ aside .sidebar h4 {
     border-radius: var(--card-border-radius);
 }
 
-#login-form {
+.login-form {
     border-radius: var(--card-border-radius);
 }
 
-#login-form img {
+.login-form img {
     width: 100px;
 }
 
-#login-form {
+.login-form {
     position: fixed;
     top: 50%;
     left: 50%;
