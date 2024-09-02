@@ -32,15 +32,33 @@ function getAllGrades($pdo)
 
 $all_grades = getAllGrades($pdo);
 
+function generateClassId()
+{
+    return uniqid("CL");
+}
+
 $msg = [];
 if (isset($_POST["submit"])) {
+    $classId = isset($_POST["class_id"]) && !empty($_POST["class_id"]) ? $_POST["class_id"] : generateClassId();
     $className = $_POST["class_name"];
     $gradeId = $_POST["grade_id"];
+    $adminId = $_SESSION['admin_id'];
 
-    $sql = "INSERT INTO Class (class_name, grade_id, status) VALUES (:className, :gradeId, 0)";
-    $stmt = $pdo->prepare($sql);
-    $stmt->bindParam(':className', $className);
-    $stmt->bindParam(':gradeId', $gradeId);
+    if (isset($_POST['class_id']) && !empty($_POST['class_id'])) {
+        $sql = "UPDATE Class SET class_name = :className, grade_id = :gradeId WHERE class_id = :classId";
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindParam(':className', $className);
+        $stmt->bindParam(':gradeId', $gradeId);
+        $stmt->bindParam(':classId', $classId);
+    } else {
+        $sql = "INSERT INTO Class (class_id, class_name, grade_id, status, admin_id) VALUES (:classId, :className, :gradeId, 0, :adminId)";
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindParam(':classId', $classId);
+        $stmt->bindParam(':className', $className);
+        $stmt->bindParam(':gradeId', $gradeId);
+        $stmt->bindParam(':adminId', $adminId);
+    }
+
     try {
         $stmt->execute();
         header('Location: class.php');
@@ -68,35 +86,41 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                     </div>
                 </div>
                 <div class="table-body">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Class Name</th>
-                                <th>Grade Name</th>
-                                <th>Total Students</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php foreach ($all_classes as $class) : ?>
+                    <?php if (!empty($all_classes)) : ?>
+                        <table>
+                            <thead>
                                 <tr>
-                                    <td><?php echo htmlspecialchars($class['class_name']); ?></td>
-                                    <td><?php echo htmlspecialchars($class['grade_name']); ?></td>
-                                    <td><?php echo htmlspecialchars($class['student_count']); ?></td>
-                                    <td>
-                                        <form action="" method="POST" style="display:inline;" onsubmit="return showDeactivateConfirmDialog(event);">
-                                            <input type="hidden" name="class_id" value="<?= htmlspecialchars($class['class_id']); ?>">
-                                            <input type="hidden" name="action" value="deactivate_class">
-                                            <button type="submit" class="delete-class-btn"><i class="bi bi-x-square"></i></button>
-                                        </form>
-                                        <button type="button" class="edit-class-btn" data-class-id="<?= htmlspecialchars($class['class_id']); ?>"><i class="bi bi-pencil-square"></i></button>
-                                    </td>
+                                    <th>Class Name</th>
+                                    <th>Grade Name</th>
+                                    <th>Total Students</th>
+                                    <th>Actions</th>
                                 </tr>
-                            <?php endforeach; ?>
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($all_classes as $class) : ?>
+                                    <tr>
+                                        <td><?php echo htmlspecialchars($class['class_name']); ?></td>
+                                        <td><?php echo htmlspecialchars($class['grade_name']); ?></td>
+                                        <td><?php echo htmlspecialchars($class['student_count']); ?></td>
+                                        <td>
+                                            <form action="" method="POST" style="display:inline;" onsubmit="return showDeactivateConfirmDialog(event);">
+                                                <input type="hidden" name="class_id" value="<?= htmlspecialchars($class['class_id']); ?>">
+                                                <input type="hidden" name="action" value="deactivate_class">
+                                                <button type="submit" class="delete-class-btn"><i class="bi bi-x-square"></i></button>
+                                            </form>
+                                            <button type="button" class="edit-class-btn" data-class-id="<?= htmlspecialchars($class['class_id']); ?>"><i class="bi bi-pencil-square"></i></button>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    <?php else : ?>
+                        <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/no_data_found.php"; ?>
+                    <?php endif; ?>
                 </div>
-                <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/pagination.php"; ?>
+                <?php if (!empty($all_classes)) : ?>
+                    <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/pagination.php"; ?>
+                <?php endif; ?>
             </div>
         </main>
     </div>
@@ -137,7 +161,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
             </div>
         </form>
     </dialog>
-    <?php include "../components/confirm_dialog.php"; ?>
+    <?php include  $_SERVER['DOCUMENT_ROOT'] . "/mips/components/confirm_dialog.php"; ?>
     <script src="/mips/javascript/common.js"></script>
     <script src="/mips/javascript/admin.js"></script>
     <script>
@@ -145,12 +169,13 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
             button.addEventListener('click', function() {
                 const classId = this.dataset.classId;
 
-                fetch(`ajax.php?action=get_class&class_id=${classId}`)
+                fetch(`/mips/admin/ajax.php?action=get_class&class_id=${classId}`)
                     .then(response => response.json())
                     .then(classData => {
                         if (classData.error) {
                             alert(classData.error);
                         } else {
+                            document.querySelector('#add-edit-data [name="class_id"]').value = classData.class_id;
                             document.querySelector('#add-edit-data [name="class_name"]').value = classData.class_name;
                             document.querySelector('#add-edit-data [name="grade_id"]').value = classData.grade_id;
 

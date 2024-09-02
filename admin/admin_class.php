@@ -410,7 +410,7 @@ class Action
     public function get_grade($grade_id)
     {
         $sql = "
-            SELECT grade_id, grade_name, grade_level
+            SELECT grade_id, grade_name, grade_level, student_id_prefix
             FROM Grade
             WHERE grade_id = :grade_id AND status = 0
         ";

@@ -730,8 +730,8 @@ thead th {
 }
 
 .empty img {
-    margin-top: 2rem;
-    width: 40%;
+    /* margin-top: 2rem; */
+    width: 30%;
 }
 
 

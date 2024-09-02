@@ -21,3 +21,7 @@ if (isset($_GET['page-nr'])) {
 } else {
     $id = 1;
 }
+
+?>
+
+<body data-page-count="<?php echo $pageCount; ?>" data-current-page="<?php echo $currentPage; ?>"></body>

@@ -77,14 +77,6 @@ if (isset($_POST["submit"])) {
             if ($newImageName) {
                 $stmt->bindParam(':image_url', $newImageName);
             }
-
-            try {
-                $stmt->execute();
-                header('Location: ' . $_SERVER['PHP_SELF']);
-                exit();
-            } catch (PDOException $e) {
-                echo "<script>alert('Database error: " . $e->getMessage() . "');</script>";
-            }
         } else {
             $sql = "INSERT INTO Announcement (announcement_id, announcement_title, announcement_message, announcement_image_url, admin_id, status) VALUES (:announcement_id, :title, :message, :image_url, :admin_id, 0)";
             $stmt = $pdo->prepare($sql);
@@ -93,14 +85,14 @@ if (isset($_POST["submit"])) {
             $stmt->bindParam(':message', $announcementMessage);
             $stmt->bindParam(':image_url', $newImageName);
             $stmt->bindParam(':admin_id', $_SESSION['admin_id']);
+        }
 
-            try {
-                $stmt->execute();
-                header('Location: ' . $_SERVER['PHP_SELF']);
-                exit();
-            } catch (PDOException $e) {
-                echo "<script>alert('Database error: " . $e->getMessage() . "');</script>";
-            }
+        try {
+            $stmt->execute();
+            header('Location: ' . $_SERVER['PHP_SELF']);
+            exit();
+        } catch (PDOException $e) {
+            echo "<script>alert('Database error: " . $e->getMessage() . "');</script>";
         }
     }
 }
