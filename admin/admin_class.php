@@ -19,6 +19,33 @@ class Action
         }
     }
 
+    public function login($email, $password)
+    {
+        try {
+            $sql = "SELECT * FROM Admin WHERE admin_email = :email AND status = 0";
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindParam(':email', $email);
+            $stmt->execute();
+
+            $admin = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($admin && password_verify($password, $admin['admin_password'])) {
+                session_start();
+                $_SESSION['admin_id'] = $admin['admin_id'];
+                $_SESSION['admin_name'] = $admin['admin_name'];
+                $_SESSION['admin_type'] = $admin['admin_type'];
+                $_SESSION['admin_email'] = $admin['admin_email'];
+                $_SESSION['admin_image'] = $admin['admin_image'] ?? '/mips/images/default_profile.png';
+
+                return json_encode(['success' => true, 'redirect' => '/mips/admin']);
+            } else {
+                return json_encode(['success' => false, 'error' => 'Invalid email or password.']);
+            }
+        } catch (PDOException $e) {
+            return json_encode(['error' => 'Database error: ' . $e->getMessage()]);
+        }
+    }
+
     // Admin Functions
     public function deactivate_admin($admin_id)
     {

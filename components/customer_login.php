@@ -32,9 +32,9 @@ $currentPage = basename($_SERVER['PHP_SELF']);
             </div>
             <p>Please enter your password</p>
         </div>
-        <div class="pass">
+        <!-- <div class="pass">
             <a href="#">Forgot password?</a>
-        </div>
+        </div> -->
         <div class="controls">
             <button type="button" class="btn btn-outline-gray cancel">Cancel</button>
             <button type="submit" name="login" class="btn btn-outline-primary login">Login</button>
