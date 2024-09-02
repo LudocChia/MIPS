@@ -9,7 +9,7 @@ $sql = "SELECT p.product_id, p.product_name, p.product_description, p.product_pr
                pi.image_url AS primary_image
         FROM Product p
         LEFT JOIN Product_Image pi ON p.product_id = pi.product_id AND pi.sort_order = 1
-        WHERE p.is_deleted = 0";
+        WHERE p.status = 0";
 
 $stmt = $pdo->prepare($sql);
 $stmt->execute();
@@ -42,13 +42,15 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/customer_head.php";
                                             <img src="<?= htmlspecialchars(!empty($product['primary_image']) ? "uploads/product/" . $product['primary_image'] : 'images/defaultproductimage.png'); ?>" alt="Product Image" class="primary-image">
                                         </a>
                                     </div>
-                                    <div class="name"><?= htmlspecialchars($product['product_name']); ?></div>
-                                    <div class="price-size-container">
-                                        <div class="price">MYR <?= number_format($product['product_price'], 2); ?></div>
-                                    </div>
-                                    <div class="color-gender">
-                                        <span class="color">Color: <?= htmlspecialchars($product['color']); ?></span>
-                                        <span class="gender">Gender: <?= htmlspecialchars($product['gender']); ?></span>
+                                    <div class="info-container">
+                                        <div class="name"><?= htmlspecialchars($product['product_name']); ?></div>
+                                        <div class="price-size-container">
+                                            <div class="price">MYR <?= number_format($product['product_price'], 2); ?></div>
+                                        </div>
+                                        <div class="color-gender">
+                                            <span class="color">Color: <?= htmlspecialchars($product['color']); ?></span>
+                                            <span class="gender">Gender: <?= htmlspecialchars($product['gender']); ?></span>
+                                        </div>
                                     </div>
                                 </div>
                             <?php endforeach; ?>

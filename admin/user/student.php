@@ -10,7 +10,7 @@ function getAllStudents($pdo, $start, $rows_per_page)
     $sql = "SELECT s.*, c.class_name 
             FROM Student s
             LEFT JOIN Class c ON s.class_id = c.class_id
-            WHERE s.is_deleted = 0
+            WHERE s.status = 0
             LIMIT :start, :rows_per_page";
     $stmt = $pdo->prepare($sql);
     $stmt->bindParam(':start', $start, PDO::PARAM_INT);
@@ -24,7 +24,7 @@ $all_students = getAllStudents($pdo, $start, $rows_per_page);
 
 function getAllClasses($pdo)
 {
-    $sql = "SELECT * FROM Class WHERE is_deleted = 0";
+    $sql = "SELECT * FROM Class WHERE status = 0";
     $stmt = $pdo->prepare($sql);
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -79,7 +79,7 @@ if (isset($_POST["submit"])) {
             $stmt = $pdo->prepare($sql);
             $stmt->bindParam(':existing_student_id', $existingStudentId);
         } else {
-            $sql = "INSERT INTO Student (student_id, student_name, class_id, student_image, is_deleted) VALUES (:studentId, :name, :classId, :student_image, 0)";
+            $sql = "INSERT INTO Student (student_id, student_name, class_id, student_image, status) VALUES (:studentId, :name, :classId, :student_image, 0)";
             $stmt = $pdo->prepare($sql);
         }
 
@@ -198,6 +198,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
         </form>
     </dialog>
     <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/confirm_dialog.php"; ?>
+    <script src="/mips/javascript/common.js"></script>
     <script src="/mips/javascript/admin.js"></script>
     <script>
         document.querySelectorAll('.edit-student-btn').forEach(button => {

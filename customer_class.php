@@ -14,7 +14,7 @@ class Action
     {
 
         try {
-            $sqlParent = "SELECT * FROM Parent WHERE parent_email = :email AND is_deleted = 0";
+            $sqlParent = "SELECT * FROM Parent WHERE parent_email = :email AND status = 0";
             $stmtParent = $this->db->prepare($sqlParent);
             $stmtParent->bindParam(':email', $email);
             $stmtParent->execute();
@@ -25,6 +25,7 @@ class Action
                 $_SESSION['user_type'] = 'parent';
                 $_SESSION['user_id'] = $parent['parent_id'];
                 $_SESSION['user_name'] = $parent['parent_name'];
+                $_SESSION['user_phone'] = $parent['parent_phone'];
                 $_SESSION['user_email'] = $parent['parent_email'];
                 $_SESSION['user_image'] = !empty($parent['parent_image']) ? $parent['parent_image'] : './images/default_profile.png';
 
@@ -38,15 +39,42 @@ class Action
         }
     }
 
+    // Order Functions
+    public function get_orders($parent_id, $status)
+    {
+        try {
+            $sql = "
+            SELECT o.*, p.payment_status 
+            FROM Orders o 
+            JOIN Payment p ON o.order_id = p.order_id
+            WHERE o.parent_student_id = (SELECT parent_student_id FROM Parent_Student WHERE parent_id = :parent_id LIMIT 1)";
+
+            if ($status !== 'all') {
+                $sql .= " AND p.payment_status = :status";
+            }
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindParam(':parent_id', $parent_id);
+            if ($status !== 'all') {
+                $stmt->bindParam(':status', $status);
+            }
+            $stmt->execute();
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            return json_encode(['success' => true, 'data' => $result]);
+        } catch (PDOException $e) {
+            return json_encode(['error' => 'Database error: ' . $e->getMessage()]);
+        }
+    }
+
+
+    // Checkout Functions
 
     public function add_to_cart($parent_id, $product_id, $quantity, $product_size_id)
     {
         try {
-            $sql_cart = "
-            SELECT cart_id 
-            FROM Cart 
-            WHERE parent_id = :parent_id
-        ";
+            $sql_cart = "SELECT cart_id 
+                            FROM Cart 
+                            WHERE parent_id = :parent_id";
             $stmt_cart = $this->db->prepare($sql_cart);
             $stmt_cart->bindParam(':parent_id', $parent_id);
             $stmt_cart->execute();
@@ -252,7 +280,7 @@ class Action
                 p.product_id,
                 p.product_name,
                 p.product_price,
-                p.is_deleted,
+                p.status,
                 pi.image_url,
                 GROUP_CONCAT(DISTINCT s.student_id, ':', s.student_name) AS children
             FROM Cart_Item ci

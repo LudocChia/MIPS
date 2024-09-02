@@ -3,11 +3,11 @@
 include $_SERVER['DOCUMENT_ROOT'] . "/mips/php/admin.php";
 function getTotalParentsAndStudents($pdo)
 {
-    $sqlParents = "SELECT COUNT(*) as total_parents FROM Parent WHERE is_deleted = 0";
+    $sqlParents = "SELECT COUNT(*) as total_parents FROM Parent WHERE status = 0";
     $stmtParents = $pdo->query($sqlParents);
     $totalParents = $stmtParents->fetch(PDO::FETCH_ASSOC)['total_parents'];
 
-    $sqlStudents = "SELECT COUNT(*) as total_students FROM Student WHERE is_deleted = 0";
+    $sqlStudents = "SELECT COUNT(*) as total_students FROM Student WHERE status = 0";
     $stmtStudents = $pdo->query($sqlStudents);
     $totalStudents = $stmtStudents->fetch(PDO::FETCH_ASSOC)['total_students'];
 
@@ -18,7 +18,7 @@ $totalParentsAndStudents = getTotalParentsAndStudents($pdo);
 
 function getTotalAdmins($pdo)
 {
-    $sqlAdmins = "SELECT COUNT(*) as total_admins FROM Admin WHERE is_deleted = 0";
+    $sqlAdmins = "SELECT COUNT(*) as total_admins FROM Admin WHERE status = 0";
     $stmtAdmins = $pdo->query($sqlAdmins);
     return $stmtAdmins->fetch(PDO::FETCH_ASSOC)['total_admins'];
 }
@@ -262,6 +262,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
             </section>
         </main>
     </div>
+    <script src="/mips/javascript/common.js"></script>
     <script src="../javascript/admin.js"></script>
     <script>
         $(document).ready(function() {

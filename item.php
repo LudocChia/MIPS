@@ -20,7 +20,7 @@ function getProductDetail($pdo, $product_id)
         FROM Product p
         LEFT JOIN Product_Category pc ON p.category_id = pc.category_id
         LEFT JOIN Product_Image pi ON p.product_id = pi.product_id AND pi.sort_order = 1
-        WHERE p.product_id = ? AND p.is_deleted = 0
+        WHERE p.product_id = ? AND p.status = 0
     ");
     $stmt->execute([$product_id]);
     return $stmt->fetch(PDO::FETCH_ASSOC);
@@ -36,7 +36,7 @@ function getApparelSizes($pdo, $product_id)
         JOIN Product_Size ps ON s.size_id = ps.size_id
         JOIN Product p ON ps.product_id = p.product_id
         WHERE p.product_id = :product_id
-        AND p.is_deleted = 0
+        AND p.status = 0
         ORDER BY s.size_name ASC
     ");
     $stmt->bindParam(':product_id', $product_id, PDO::PARAM_INT);
@@ -132,11 +132,11 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/customer_header.php"; ?>
                     <div class="picture-div">
                         <div class="product-image">
                             <?php if (!empty($images)) : ?>
-                                <img id="picture" alt="<?php echo htmlspecialchars($images[0]['image_url']); ?>" src="uploads/product/<?php echo htmlspecialchars($images[0]['image_url']); ?>">
+                                <img id="picture" alt="<?php echo htmlspecialchars($images[0]['image_url']); ?>" src="/mips/uploads/product/<?php echo htmlspecialchars($images[0]['image_url']); ?>">
                         </div>
                         <div class="thumbnails">
                             <?php foreach ($images as $image) : ?>
-                                <img class="thumbnail" src="uploads/product/<?php echo htmlspecialchars($image['image_url']); ?>" data-src="uploads/product/<?php echo htmlspecialchars($image['image_url']); ?>" style="width: 80px;">
+                                <img class="thumbnail" src="/mips/uploads/product/<?php echo htmlspecialchars($image['image_url']); ?>" data-src="uploads/product/<?php echo htmlspecialchars($image['image_url']); ?>" style="width: 80px;">
                             <?php endforeach; ?>
                         </div>
                     <?php else : ?>
@@ -373,7 +373,8 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/customer_header.php"; ?>
             const formData = new FormData(form);
             formData.append('size_id', selectedSizeButton.getAttribute('data-size-id'));
             formData.append('children', selectedChildren.join(','));
-            formData.append('total_qty', qtyInput.value);
+            formData.append('total_item_quantities', qtyInput.value);
+            formData.append('total_price_items', totalPriceInput.value);
             formData.append('total_price', totalPriceInput.value);
 
             fetch('/mips/ajax.php?action=purchase', {

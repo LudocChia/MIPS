@@ -7,7 +7,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/php/activate_pagination.php";
 
 function getDeactivatedParents($pdo, $start, $rows_per_page)
 {
-    $sql = "SELECT * FROM Parent WHERE is_deleted = 1 LIMIT :start, :rows_per_page";
+    $sql = "SELECT * FROM Parent WHERE status = 1 LIMIT :start, :rows_per_page";
     $stmt = $pdo->prepare($sql);
     $stmt->bindParam(':start', $start, PDO::PARAM_INT);
     $stmt->bindParam(':rows_per_page', $rows_per_page, PDO::PARAM_INT);
@@ -19,7 +19,7 @@ $deactivated_parents = getDeactivatedParents($pdo, $start, $rows_per_page);
 
 function getAllStudents($pdo)
 {
-    $sql = "SELECT student_id, student_name FROM Student WHERE is_deleted = 0";
+    $sql = "SELECT student_id, student_name FROM Student WHERE status = 0";
     $stmt = $pdo->prepare($sql);
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -43,7 +43,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                         <h1>Student Parent Accounts Recycle Bin</h1>
                     </div>
                     <div class="right">
-
+                        <a href="/mips/admin/recycleBin.php"><i class="bi bi-arrow-return-left"></i>Recycle Bin Menu</a>
                     </div>
                 </div>
                 <div class="table-body">

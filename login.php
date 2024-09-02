@@ -25,7 +25,7 @@ $email = '';
 </head>
 
 <div id="login-form">
-    <div class="title">
+    <div class="logo-container">
         <img src="/mips/images/MIPS_icon.png" alt="MIPS_Logo">
     </div>
     <div id="alert-container"></div>

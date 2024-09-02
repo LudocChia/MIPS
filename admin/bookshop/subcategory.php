@@ -7,7 +7,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/php/activate_pagination.php";
 
 function getSubcategories($pdo, $start, $rows_per_page)
 {
-    $sql = "SELECT * FROM Product_Category WHERE parent_id IS NOT NULL AND is_deleted = 0 LIMIT :start, :rows_per_page";
+    $sql = "SELECT * FROM Product_Category WHERE parent_id IS NOT NULL AND status = 0 LIMIT :start, :rows_per_page";
     $stmt = $pdo->prepare($sql);
     $stmt->bindParam(':start', $start, PDO::PARAM_INT);
     $stmt->bindParam(':rows_per_page', $rows_per_page, PDO::PARAM_INT);
@@ -20,7 +20,7 @@ $all_subcategories = getSubcategories($pdo, $start, $rows_per_page);
 
 function getMainCategories($pdo)
 {
-    $sql = "SELECT * FROM Product_Category WHERE parent_id IS NULL AND is_deleted = 0";
+    $sql = "SELECT * FROM Product_Category WHERE parent_id IS NULL AND status = 0";
     $stmt = $pdo->prepare($sql);
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -105,7 +105,7 @@ if (isset($_POST["submit"])) {
             }
         } else {
             if ($newImageName) {
-                $sql = "INSERT INTO Product_Category (category_name, category_icon, parent_id, is_deleted) VALUES (:name, :icon, :parentId, 0)";
+                $sql = "INSERT INTO Product_Category (category_name, category_icon, parent_id, status) VALUES (:name, :icon, :parentId, 0)";
                 $stmt = $pdo->prepare($sql);
                 $stmt->bindParam(':name', $name);
                 $stmt->bindParam(':icon', $newImageName);

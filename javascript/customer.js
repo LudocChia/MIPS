@@ -85,7 +85,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         data.forEach(function (item, index) {
             const totalPriceItem = (item.product_price * item.product_quantity).toFixed(2);
-            const isDeleted = item.is_deleted === 1;
+            const isDeleted = item.status === 1;
 
             let childrenHtml = '';
             if (item.children) {
@@ -194,7 +194,7 @@ document.addEventListener('DOMContentLoaded', function () {
         all.addEventListener('change', function () {
             const isChecked = this.checked;
             data.forEach((item, index) => {
-                if (!item.is_deleted) {
+                if (!item.status) {
                     item.state = isChecked;
                     document.querySelector(`#ckh-${index}`).checked = isChecked;
                 }
@@ -205,7 +205,7 @@ document.addEventListener('DOMContentLoaded', function () {
         selectAll.addEventListener('change', function () {
             const isChecked = this.checked;
             data.forEach((item, index) => {
-                if (!item.is_deleted) {
+                if (!item.status) {
                     item.state = isChecked;
                     document.querySelector(`#ckh-${index}`).checked = isChecked;
                 }
@@ -274,10 +274,13 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    form.addEventListener('submit', function (event) {
-        event.preventDefault();
-        handlePurchase();
-    });
+    if (form) {
+        form.addEventListener('submit', function (event) {
+            event.preventDefault();
+            handlePurchase();
+        });
+    }
+
 
     function handlePurchase() {
         const selectedItems = data.filter(item => item.state);
@@ -331,7 +334,7 @@ document.addEventListener('DOMContentLoaded', function () {
             document.querySelector('#total-price-display').value = totalAmount;
         }
 
-        const allSelected = data.every(item => item.state || item.is_deleted);
+        const allSelected = data.every(item => item.state || item.status);
         document.querySelector('#all').checked = allSelected;
         document.querySelector('#selectAll').checked = allSelected;
     }
@@ -407,12 +410,28 @@ document.addEventListener('DOMContentLoaded', function () {
 
             reloadSlider();
         }
-
     }
 
-    if (document.getElementById('login-form')) {
-        document.querySelector('#login-form .cancel').addEventListener('click', function () {
-            const dialog = document.getElementById('login-form');
+    if (document.querySelector("#login-btn")) {
+        document.querySelector("#login-btn").addEventListener("click", function () {
+            scrollPosition = window.pageYOffset;
+            const productId = new URLSearchParams(window.location.search).get('pid');
+
+            document.body.style.overflowY = 'hidden';
+            document.body.style.paddingRight = '15px';
+            document.body.style.backgroundColor = 'white';
+
+            const loginForm = document.querySelector('.login-form');
+            if (productId) {
+                loginForm.querySelector('form').action += `?pid=${encodeURIComponent(productId)}`;
+            }
+            loginForm.showModal();
+        });
+    }
+
+    if (document.querySelector('.login-form')) {
+        document.querySelector('.login-form .cancel').addEventListener('click', function () {
+            const dialog = document.querySelector('.login-form');
             dialog.close();
             dialog.querySelector('form').reset();
 

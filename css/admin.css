@@ -76,20 +76,28 @@
 }
 
 /* LOGIN */
-#login-form {
+.login-form,
+.set-new-password-form {
     margin: 0;
     height: 100vh;
     display: grid;
 }
 
-#login-form .container {
+.login-form .input-container,
+.set-new-password-form .input-container {
+    margin-bottom: 2rem;
+}
+
+.login-form .container,
+.set-new-password-form .container {
     width: 40rem;
     display: grid;
     place-items: center;
     grid-template-columns: 1fr;
 }
 
-#login-form .btn {
+.login-form .btn,
+.set-new-password-form .btn {
     width: 100%;
 }
 
@@ -400,34 +408,7 @@ main .recent-orders a {
 
 /* PRODUCTS */
 .products .box-container {
-    display: grid;
     grid-template-columns: repeat(auto-fit, 190px);
-    border-color: #24262b;
-    justify-content: center;
-    padding-bottom: 2%;
-}
-
-.products .box-container .box {
-    position: relative;
-    border: 1px solid #dfe1e5;
-    background-color: #f4f4f4;
-    border-radius: .5rem;
-    padding: 1rem;
-    margin: 0.5rem;
-}
-
-.products .box-container .box .image-container {
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-
-.products .box-container .image-container img {
-    background-color: white;
-    object-fit: contain;
-    border-radius: 10px;
 }
 
 .deactivate-product {
@@ -446,10 +427,6 @@ main .recent-orders a {
     right: -20px;
     top: -10px;
     cursor: pointer;
-}
-
-.products .box-container .box:hover {
-    border: 1px var(--color-primary) solid;
 }
 
 .announcement .box-container {

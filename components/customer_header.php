@@ -41,12 +41,12 @@
                                 <h4><?= htmlspecialchars($_SESSION['user_name']); ?></h4>
                             </div>
                             <hr>
-                            <a href="profile.php" class="profile-menu-link">
+                            <a href="/mips/account.php" class="profile-menu-link">
                                 <i class="bi bi-person-fill"></i>
                                 <p>My Account</p>
                                 <span>></span>
                             </a>
-                            <a href="order_history.php?filter=all" class="profile-menu-link">
+                            <a href="purchase.php" class="profile-menu-link">
                                 <i class="bi bi-calendar-check"></i>
                                 <p>My Activities</p>
                                 <span>></span>
@@ -95,8 +95,8 @@
         </div>
     </div>
 </header>
-
-<script>
+<!-- <script src="/mips/javascript/customer.js"></script> -->
+<!-- <script>
     document.addEventListener('DOMContentLoaded', function() {
         const userBtn = document.querySelector("#user-btn");
         const profileMenu = document.querySelector(".profile-menu");
@@ -149,4 +149,4 @@
             });
         }
     });
-</script>
+</script> -->

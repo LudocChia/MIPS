@@ -12,7 +12,7 @@ function getAllDeactivatedOrders($pdo, $start, $rows_per_page)
             JOIN Parent_Student ps ON o.parent_student_id = ps.parent_student_id
             JOIN Parent p ON ps.parent_id = p.parent_id
             JOIN Payment pm ON o.order_id = pm.order_id
-            WHERE o.is_deleted = 1
+            WHERE o.status = 1
             ORDER BY o.order_datetime DESC
             LIMIT :start, :rows_per_page";
     $stmt = $pdo->prepare($sql);
@@ -36,6 +36,9 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                 <div class="title">
                     <div class="left">
                         <h1>Bookshop Order Recycle Bin</h1>
+                    </div>
+                    <div class="right">
+                        <a href="/mips/admin/recycleBin.php"><i class="bi bi-arrow-return-left"></i>Recycle Bin Menu</a>
                     </div>
                 </div>
                 <div class="table-body">

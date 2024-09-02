@@ -8,10 +8,10 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/php/activate_pagination.php";
 function getClasses($pdo, $start, $rows_per_page)
 {
     $sql = "SELECT c.class_id, c.class_name, g.grade_name, 
-               (SELECT COUNT(*) FROM Student s WHERE s.class_id = c.class_id AND s.is_deleted = 0) AS student_count
+               (SELECT COUNT(*) FROM Student s WHERE s.class_id = c.class_id AND s.status = 0) AS student_count
             FROM Class c
             JOIN Grade g ON c.grade_id = g.grade_id
-            WHERE c.is_deleted = 0
+            WHERE c.status = 0
             LIMIT :start, :rows_per_page";
     $stmt = $pdo->prepare($sql);
     $stmt->bindParam(':start', $start, PDO::PARAM_INT);
@@ -24,7 +24,7 @@ $all_classes = getClasses($pdo, $start, $rows_per_page);
 
 function getAllGrades($pdo)
 {
-    $sql = "SELECT * FROM Grade WHERE is_deleted = 0";
+    $sql = "SELECT * FROM Grade WHERE status = 0";
     $stmt = $pdo->prepare($sql);
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -37,7 +37,7 @@ if (isset($_POST["submit"])) {
     $className = $_POST["class_name"];
     $gradeId = $_POST["grade_id"];
 
-    $sql = "INSERT INTO Class (class_name, grade_id, is_deleted) VALUES (:className, :gradeId, 0)";
+    $sql = "INSERT INTO Class (class_name, grade_id, status) VALUES (:className, :gradeId, 0)";
     $stmt = $pdo->prepare($sql);
     $stmt->bindParam(':className', $className);
     $stmt->bindParam(':gradeId', $gradeId);
@@ -138,6 +138,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
         </form>
     </dialog>
     <?php include "../components/confirm_dialog.php"; ?>
+    <script src="/mips/javascript/common.js"></script>
     <script src="/mips/javascript/admin.js"></script>
     <script>
         document.querySelectorAll('.edit-class-btn').forEach(button => {

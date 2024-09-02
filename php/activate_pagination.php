@@ -2,7 +2,7 @@
 
 function getPageCount($pdo, $rows_per_page, $database_table)
 {
-    $sql = "SELECT COUNT(*) AS count FROM $database_table WHERE is_deleted = 0";
+    $sql = "SELECT COUNT(*) AS count FROM $database_table WHERE status = 0";
     $stmt = $pdo->prepare($sql);
     $stmt->execute();
     $result = $stmt->fetch(PDO::FETCH_ASSOC);

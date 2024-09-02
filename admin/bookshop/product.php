@@ -7,7 +7,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/php/activate_pagination.php";
 
 function getSubcategories($pdo)
 {
-    $sql = "SELECT * FROM Product_Category WHERE parent_id IS NOT NULL AND is_deleted = 0";
+    $sql = "SELECT * FROM Product_Category WHERE parent_id IS NOT NULL AND status = 0";
     $stmt = $pdo->prepare($sql);
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -21,7 +21,7 @@ function getAllProducts($pdo, $start, $rows_per_page)
                p.stock_quantity, p.color, p.gender, pi.image_url
             FROM Product p
             LEFT JOIN Product_Image pi ON p.product_id = pi.product_id
-            WHERE p.is_deleted = 0 AND pi.sort_order = 1
+            WHERE p.status = 0 AND pi.sort_order = 1
             GROUP BY p.product_id
             LIMIT :start, :rows_per_page";
     $stmt = $pdo->prepare($sql);
@@ -224,6 +224,9 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                             <div class="price">
                                 MYR <?= number_format($product['product_price'], 2); ?>
                             </div>
+                            <div class="stock">
+                                Stock: <?= htmlspecialchars($product['stock_quantity']); ?>
+                            </div>
                         </div>
                     <?php } ?>
                 </div>
@@ -243,8 +246,8 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
         <form action="" method="post" enctype="multipart/form-data">
             <input type="hidden" name="product_id" value="">
             <div class="input-container">
+                <h2>Product Name<sup>*</sup></h2>
                 <div class="input-field">
-                    <h2>Product Name<sup>*</sup></h2>
                     <input type="text" name="name" value="<?php echo isset($_POST['name']) ? htmlspecialchars($_POST['name']) : ''; ?>" required>
                 </div>
                 <p>Please enter the product name.</p>
@@ -331,6 +334,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
         </form>
     </dialog>
     <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/confirm_dialog.php"; ?>
+    <script src="/mips/javascript/common.js"></script>
     <script src="/mips/javascript/admin.js"></script>
     <script>
         document.querySelector('form').addEventListener('submit', function(event) {

@@ -7,7 +7,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/php/activate_pagination.php";
 
 function getDeactivateAnnouncements($pdo, $start, $rows_per_page)
 {
-    $sql = "SELECT * FROM Announcement WHERE is_deleted = 1 LIMIT :start, :rows_per_page;";
+    $sql = "SELECT * FROM Announcement WHERE status = 1 LIMIT :start, :rows_per_page;";
     $stmt = $pdo->prepare($sql);
     $stmt->bindParam(':start', $start, PDO::PARAM_INT);
     $stmt->bindParam(':rows_per_page', $rows_per_page, PDO::PARAM_INT);
@@ -29,6 +29,9 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                 <div class="title">
                     <div class="left">
                         <h1>Announcement Recycle Bin</h1>
+                    </div>
+                    <div class="right">
+                        <a href="/mips/admin/recycleBin.php"><i class="bi bi-arrow-return-left"></i>Recycle Bin Menu</a>
                     </div>
                 </div>
                 <div class="box-container">

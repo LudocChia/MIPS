@@ -7,7 +7,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/php/activate_pagination.php";
 
 function getSizes($pdo, $start, $rows_per_page)
 {
-    $sql = "SELECT * FROM Sizes WHERE is_deleted = 0 ORDER BY size_name ASC
+    $sql = "SELECT * FROM Sizes WHERE status = 0 ORDER BY size_name ASC
             LIMIT :start, :rows_per_page;";
     $stmt = $pdo->prepare($sql);
     $stmt->bindParam(':start', $start, PDO::PARAM_INT);

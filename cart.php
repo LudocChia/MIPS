@@ -1,6 +1,11 @@
 <?php
 session_start();
 
+if (!isset($_SESSION['user_id'])) {
+    header('Location: login.php');
+    exit();
+}
+
 include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/db_connect.php";
 include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/customer_login.php";
 
@@ -24,7 +29,6 @@ $parentId = $_SESSION['user_id'] ?? null;
                         <p>Total <b id="count">0</b> Products</p>
                     </div>
                 </div>
-
                 <div id="cart-content">
                     <div class="empty">
                         <img src='images/empty_cart.png' alt='Empty Cart Image'>
@@ -32,7 +36,6 @@ $parentId = $_SESSION['user_id'] ?? null;
                         <a href="/mips/bookshop.php"><button class='btn btn-outline-primary'>Start Browsing</button></a>
                     </div>
                 </div>
-
                 <div id="cart-items" style="display:none;">
                     <div class="table-cart-items">
                         <table>

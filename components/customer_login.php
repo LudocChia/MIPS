@@ -12,8 +12,8 @@ $currentPage = basename($_SERVER['PHP_SELF']);
     <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
 </head>
 
-<dialog id="login-form">
-    <div class="title">
+<dialog class="login-form">
+    <div class="logo-container">
         <img src="/mips/images/MIPS_icon.png" alt="MIPS_Logo">
     </div>
     <div id="alert-container"></div>
@@ -32,9 +32,9 @@ $currentPage = basename($_SERVER['PHP_SELF']);
             </div>
             <p>Please enter your password</p>
         </div>
-        <div class="pass">
+        <!-- <div class="pass">
             <a href="#">Forgot password?</a>
-        </div>
+        </div> -->
         <div class="controls">
             <button type="button" class="btn btn-outline-gray cancel">Cancel</button>
             <button type="submit" name="login" class="btn btn-outline-primary login">Login</button>
