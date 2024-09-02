@@ -15,6 +15,19 @@ if (isset($_GET['event_id'])) {
 } else {
     echo "No event selected.";
 }
+if (isset($_GET['meal_type_id'])) {
+    $meal_type_id = htmlspecialchars($_GET['meal_type_id']);
+
+    // Example:
+    // $stmt = $pdo->prepare("SELECT * FROM events WHERE event_id = :event_id");
+    // $stmt->bindParam(':event_id', $event_id);
+    // $stmt->execute();
+    // $event = $stmt->fetch();
+    // echo '<p>Meal_type_ID: ' . htmlspecialchars($meal_type_id) . '</p>';
+     // echo '<p>Name: ' . htmlspecialchars($event['name']) . '</p>';
+} else {
+    echo "No meal type selected.";
+}
 
 function generateID(){
     uniqid();

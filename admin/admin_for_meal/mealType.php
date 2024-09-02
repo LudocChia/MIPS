@@ -50,6 +50,7 @@ if (isset($_GET['event_id'])) {
     try {
         // Example event_id for demonstration (you should replace this with actual logic to fetch $event_id)
         $event_id = $_GET['event_id'] ?? null; // Assuming you're getting the event_id from a GET request
+        $meal_type_id = $_GET['meal_type_id'] ?? null;
 
         // Ensure event_id is not null or empty to avoid SQL errors
         if (!empty($event_id)) {
@@ -93,7 +94,7 @@ if (isset($_GET['event_id'])) {
     <?php foreach ($events as $event): ?>
         <?php 
         // Construct the URL with the event_id parameter
-        $nextPageUrl = 'menuOption.php?event_id=' . urlencode($event['event_id']); 
+        $nextPageUrl = 'menuOption.php?event_id=' . urlencode($event['event_id']) . '&meal_type_id=' . urlencode($event['meal_type_id']);
         ?>
         <!-- Wrap the event box in an anchor tag -->
         <a href="<?= htmlspecialchars($nextPageUrl) ?>" style="text-decoration: none; color: inherit;">
