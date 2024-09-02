@@ -59,13 +59,7 @@ if (isset($_POST["submit"])) {
         $stmt->bindParam(':adminId', $adminId);
     }
 
-    try {
-        $stmt->execute();
-        header('Location: class.php');
-        exit();
-    } catch (PDOException $e) {
-        echo "<script>alert('Database error: " . $e->getMessage() . "');</script>";
-    }
+    include $_SERVER['DOCUMENT_ROOT'] . "/mips/php/refresh_page.php";
 }
 
 $pageTitle = "Class Management - MIPS";

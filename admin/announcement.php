@@ -1,9 +1,21 @@
 <?php
 
-$database_table = "Announcement";
+$database_table = "announcement";
 $rows_per_page = 5;
 include $_SERVER['DOCUMENT_ROOT'] . "/mips/php/admin.php";
 include $_SERVER['DOCUMENT_ROOT'] . "/mips/php/activate_pagination.php";
+
+function getAnnouncements($pdo, $start, $rows_per_page)
+{
+    $sql = "SELECT * FROM Announcement WHERE status = 0 LIMIT :start, :rows_per_page;";
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(':start', $start, PDO::PARAM_INT);
+    $stmt->bindParam(':rows_per_page', $rows_per_page, PDO::PARAM_INT);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+$all_announcements = getAnnouncements($pdo, $start, $rows_per_page);
 
 function generateAnnouncementID()
 {
@@ -61,7 +73,7 @@ if (isset($_POST["submit"])) {
 
         if (isset($_POST['announcement_id']) && !empty($_POST['announcement_id'])) {
 
-            $sql = "UPDATE Announcement SET announcement_title = :title, announcement_message = :message";
+            $sql = "UPDATE Announcement SET announcement_title = :title, announcement_message = :message, admin_id = :admin_id";
 
             if ($newImageName) {
                 $sql .= ", announcement_image_url = :image_url";
@@ -73,6 +85,8 @@ if (isset($_POST["submit"])) {
             $stmt->bindParam(':title', $announcementTitle);
             $stmt->bindParam(':message', $announcementMessage);
             $stmt->bindParam(':announcement_id', $announcementId);
+            $stmt->bindParam(':admin_id', $_SESSION['admin_id']);
+
 
             if ($newImageName) {
                 $stmt->bindParam(':image_url', $newImageName);
@@ -87,27 +101,9 @@ if (isset($_POST["submit"])) {
             $stmt->bindParam(':admin_id', $_SESSION['admin_id']);
         }
 
-        try {
-            $stmt->execute();
-            header('Location: ' . $_SERVER['PHP_SELF']);
-            exit();
-        } catch (PDOException $e) {
-            echo "<script>alert('Database error: " . $e->getMessage() . "');</script>";
-        }
+        include $_SERVER['DOCUMENT_ROOT'] . "/mips/php/refresh_page.php";
     }
 }
-
-function getAnnouncements($pdo, $start, $rows_per_page)
-{
-    $sql = "SELECT * FROM Announcement WHERE status = 0 LIMIT :start, :rows_per_page;";
-    $stmt = $pdo->prepare($sql);
-    $stmt->bindParam(':start', $start, PDO::PARAM_INT);
-    $stmt->bindParam(':rows_per_page', $rows_per_page, PDO::PARAM_INT);
-    $stmt->execute();
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
-}
-
-$all_announcements = getAnnouncements($pdo, $start, $rows_per_page);
 
 $pageTitle = "Announcement Management - MIPS";
 include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
@@ -126,30 +122,36 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                         <button id="open-popup" class="btn btn-outline-primary"><i class="bi bi-plus-circle"></i>Add New Announcement</button>
                     </div>
                 </div>
-                <div class="box-container">
-                    <?php foreach ($all_announcements as $announcement) : ?>
-                        <div class="box" data-announcement-id="<?= htmlspecialchars($announcement['announcement_id']); ?>">
-                            <div class="image-container">
-                                <img src="/mips/uploads/announcement/<?php echo htmlspecialchars($announcement['announcement_image_url']); ?>" alt="Image for <?php echo htmlspecialchars($announcement['announcement_title']); ?>">
+                <?php if (!empty($all_announcements)) : ?>
+                    <div class="box-container">
+                        <?php foreach ($all_announcements as $announcement) : ?>
+                            <div class="box" data-announcement-id="<?= htmlspecialchars($announcement['announcement_id']); ?>">
+                                <div class="image-container">
+                                    <img src="/mips/uploads/announcement/<?php echo htmlspecialchars($announcement['announcement_image_url']); ?>" alt="Image for <?php echo htmlspecialchars($announcement['announcement_title']); ?>">
+                                </div>
+                                <div class="actions">
+                                    <form action="" method="POST" style="display:inline;" onsubmit="return showDeactivateConfirmDialog(event);">
+                                        <input type="hidden" name="announcement_id" value="<?= htmlspecialchars($announcement['announcement_id']); ?>">
+                                        <input type="hidden" name="action" value="deactivate_announcement">
+                                        <button type="submit" class="delete-announcement-btn"><i class="bi bi-x-square"></i></button>
+                                    </form>
+                                    <button type="button" class="edit-announcement-btn" data-announcement-id="<?= htmlspecialchars($announcement['announcement_id']); ?>"><i class="bi bi-pencil-square"></i></button>
+                                </div>
+                                <div class="txt">
+                                    <h3><?php echo htmlspecialchars($announcement['announcement_title']); ?></h3>
+                                    <h3>Updated at: <?php echo htmlspecialchars($announcement['updated_at']); ?></h3>
+                                    <h3>Created at: <?php echo htmlspecialchars($announcement['created_at']); ?></h3>
+                                </div>
                             </div>
-                            <div class="actions">
-                                <form action="" method="POST" style="display:inline;" onsubmit="return showDeactivateConfirmDialog(event);">
-                                    <input type="hidden" name="announcement_id" value="<?= htmlspecialchars($announcement['announcement_id']); ?>">
-                                    <input type="hidden" name="action" value="deactivate_announcement">
-                                    <button type="submit" class="delete-announcement-btn"><i class="bi bi-x-square"></i></button>
-                                </form>
-                                <button type="button" class="edit-announcement-btn" data-announcement-id="<?= htmlspecialchars($announcement['announcement_id']); ?>"><i class="bi bi-pencil-square"></i></button>
-                            </div>
-                            <div class="txt">
-                                <h3><?php echo htmlspecialchars($announcement['announcement_title']); ?></h3>
-                                <h3>Updated at: <?php echo htmlspecialchars($announcement['updated_at']); ?></h3>
-                                <h3>Created at: <?php echo htmlspecialchars($announcement['created_at']); ?></h3>
-                            </div>
-                        </div>
-                    <?php endforeach; ?>
-                </div>
-                <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/pagination.php"; ?>
+                        <?php endforeach; ?>
+                    </div>
+                <?php else : ?>
+                    <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/no_data_found.php"; ?>
+                <?php endif; ?>
             </div>
+            <?php if (!empty($all_classes)) : ?>
+                <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/pagination.php"; ?>
+            <?php endif; ?>
         </main>
     </div>
     <dialog id="add-edit-data">

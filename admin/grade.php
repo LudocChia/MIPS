@@ -58,13 +58,7 @@ if (isset($_POST["submit"])) {
         $stmt->bindParam(':adminId', $_SESSION['admin_id']);
     }
 
-    try {
-        $stmt->execute();
-        header('Location: grade.php');
-        exit();
-    } catch (PDOException $e) {
-        echo "<script>alert('Database error: " . $e->getMessage() . "');</script>";
-    }
+    include $_SERVER['DOCUMENT_ROOT'] . "/mips/php/refresh_page.php";
 }
 
 $pageTitle = "Grade Management - MIPS";
