@@ -24,4 +24,8 @@ if (isset($_GET['page-nr'])) {
 
 ?>
 
+<head>
+    <link rel="icon" type="image/x-icon" href="/mips/images/MIPS_icon.png">
+</head>
+
 <body data-page-count="<?php echo $pageCount; ?>" data-current-page="<?php echo $currentPage; ?>"></body>

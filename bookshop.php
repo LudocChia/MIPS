@@ -42,21 +42,22 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/customer_head.php";
                         <div class="box-container">
                             <?php foreach ($all_products as $product) : ?>
                                 <div class="box">
-                                    <div class="image-container">
-                                        <a href="/mips/item.php?pid=<?= htmlspecialchars($product['product_id']); ?>">
+                                    <a href="/mips/item.php?pid=<?= htmlspecialchars($product['product_id']); ?>">
+                                        <div class="image-container">
+
                                             <img src="<?= htmlspecialchars(!empty($product['primary_image']) ? "uploads/product/" . $product['primary_image'] : 'images/defaultproductimage.png'); ?>" alt="Product Image" class="primary-image">
-                                        </a>
-                                    </div>
-                                    <div class="info-container">
-                                        <div class="name"><?= htmlspecialchars($product['product_name']); ?></div>
-                                        <div class="price-size-container">
-                                            <div class="price">MYR <?= number_format($product['product_price'], 2); ?></div>
                                         </div>
-                                        <div class="color-gender">
-                                            <span class="color">Color: <?= htmlspecialchars($product['color']); ?></span>
-                                            <span class="gender">Gender: <?= htmlspecialchars($product['gender']); ?></span>
+                                        <div class="info-container">
+                                            <div class="name"><?= htmlspecialchars($product['product_name']); ?></div>
+                                            <div class="price-size-container">
+                                                <div class="price">MYR <?= number_format($product['product_price'], 2); ?></div>
+                                            </div>
+                                            <div class="color-gender">
+                                                <span class="color">Color: <?= htmlspecialchars($product['color']); ?></span>
+                                                <span class="gender">Gender: <?= htmlspecialchars($product['gender']); ?></span>
+                                            </div>
                                         </div>
-                                    </div>
+                                    </a>
                                 </div>
                             <?php endforeach; ?>
                         </div>
