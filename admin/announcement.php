@@ -163,7 +163,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                 <button class="cancel"><i class="bi bi-x-circle"></i></button>
             </div>
         </div>
-        <form action="" method="post" enctype="multipart/form-data">
+        <form method="post" enctype="multipart/form-data">
             <input type="hidden" name="announcement_id" value="">
             <div class="input-container">
                 <h2>Announcement Title<sup>*</sup></h2>
@@ -186,7 +186,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                 </div>
                 <p>Please upload an image for the announcement.</p>
             </div>
-            <div class="input-container controls">
+            <div class="controls">
                 <button type="button" class="cancel">Cancel</button>
                 <button type="reset">Clear</button>
                 <button type="submit" name="submit">Publish</button>

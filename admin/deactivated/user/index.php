@@ -15,37 +15,29 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
             <div class="wrapper">
                 <div class="title">
                     <div class="left">
-                        <h1>Recycle Bin</h1>
+                        <h1>Deactivated User Menu</h1>
                     </div>
                 </div>
                 <div class="box-container">
                     <div class="box">
                         <div class="image-container">
-                            <a href="/mips/admin/recycleBin/announcement.php"><img src="images/" alt="Recycle Bin"></a>
+                            <a href="/mips/admin/deactivated/user/parent.php"><img src="/mips/images/default_folder.png" alt="Deactivated Parent"></a>
                         </div>
-                        <div class="txt">
-                            <h3>Announcement</h3>
-                        </div>
-                    </div>
-                    <div class="box">
-                        <div class="image-container">
-                            <a href="/mips/admin/recycleBin/order.php"><img src="images/" alt="Recycle Bin"></a>
-                        </div>
-                        <div class="txt">
-                            <h3>Order</h3>
+                        <div class="info-container">
+                            <h3>Admin</h3>
                         </div>
                     </div>
                     <div class="box">
                         <div class="image-container">
-                            <a href="/mips/admin/recycleBin/parent.php"><img src="images/" alt="Recycle Bin"></a>
+                            <a href="/mips/admin/deactivated/user/parent.php"><img src="/mips/images/default_folder.png" alt="Deactivated Parent"></a>
                         </div>
-                        <div class="txt">
+                        <div class="info-container">
                             <h3>Parent</h3>
                         </div>
                     </div>
                 </div>
-                <!-- </?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/pagination.php"; ?> -->
             </div>
+            <!-- </?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/pagination.php"; ?> -->
         </main>
     </div>
     <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/confirm_dialog.php"; ?>

@@ -36,8 +36,8 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/customer_head.php";
                     </div>
                     <div class="buttons">
                         <?php if (count($announcements) > 1) { ?>
-                            <button id="prev"><span class="material-symbols-outlined">arrow_back_ios_new</span></button>
-                            <button id="next"><span class="material-symbols-outlined">arrow_forward_ios</span></button>
+                            <button id="prev"><i class="bi bi-chevron-left"></i></button>
+                            <button id="next"><i class="bi bi-chevron-right"></i></button>
                         <?php } ?>
                     </div>
                     <ul class="dots">

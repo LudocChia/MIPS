@@ -83,7 +83,7 @@ function isActive($pageName, $currentPage)
                             <h4>All Admin</h4>
                         </a>
                     </li>
-                    <li><a href="/mips/admin/user/teacher.php" class="<?= isActive('teacher.php', $currentPage); ?>"><svg width="20px" data-name="Layer 1" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <!-- <li><a href="/mips/admin/user/teacher.php" class="</?= isActive('teacher.php', $currentPage); ?>"><svg width="20px" data-name="Layer 1" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M12.5 11.5H15a1.5 1.5 0 0 0 1.5-1.5h0A1.5 1.5 0 0 0 15 8.5H4.5a3 3 0 0 0-3 3v2a3 3 0 0 0 1.456 2.573" fill="none" stroke="#86848c" stroke-linecap="round" stroke-linejoin="round" class="stroke-000000"></path>
                                 <path d="M7.5 16.5v6H9a1.5 1.5 0 0 0 1.5-1.5v-9.5M7.5 22.5H6A1.5 1.5 0 0 1 4.5 21v-9.5" fill="none" stroke="#86848c" stroke-linecap="round" stroke-linejoin="round" class="stroke-000000"></path>
                                 <circle cx="7.5" cy="4.5" r="2.5" fill="none" stroke="#86848c" stroke-linecap="round" stroke-linejoin="round" class="stroke-000000"></circle>
@@ -91,23 +91,23 @@ function isActive($pageName, $currentPage)
                             </svg>
                             <h4>All Teacher</h4>
                         </a>
-                    </li>
+                    </li> -->
                     <li>
                         <a href="/mips/admin/user/parent.php" class="<?= isActive('parent.php', $currentPage); ?>"><i class="bi bi-people-fill"></i>
                             <h4>All Parent</h4>
                         </a>
                     </li>
                     <li>
-                        <a href="/mips/admin/user/student.php" class="<?= isActive('student.php', $currentPage); ?>"><span class="material-symbols-outlined">local_library </span>
+                        <a href="/mips/admin/user/student.php" class="<?= isActive('student.php', $currentPage); ?>"><i class='bx bxs-book-reader'></i>
                             <h4>All Student</h4>
                         </a>
                     </li>
                 </ul>
             </li>
             <li>
-                <a href="/mips/admin/recycleBin.php" class="<?= isActive('recycleBin.php', $currentPage); ?>">
+                <a href="/mips/admin/deactivated.php" class="<?= isActive('deactivated.php', $currentPage); ?>">
                     <i class="bi bi-trash2-fill"></i>
-                    <h4>Recycle Bin</h4>
+                    <h4>Deactivated</h4>
                 </a>
             </li>
         </ul>

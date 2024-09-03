@@ -80,7 +80,7 @@ $currentPage = basename($_SERVER['PHP_SELF']);
         });
 
         function showAlert(message) {
-            const alertHtml = `<div class="login-alert">${message}</div>`;
+            const alertHtml = `<div class="mini-alert">${message}</div>`;
             document.getElementById('alert-container').innerHTML = alertHtml;
             setTimeout(function() {
                 const alertElement = document.querySelector('.login-alert');

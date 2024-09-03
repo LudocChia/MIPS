@@ -1,20 +1,19 @@
 <?php
 
-$database_table = "Product_Category";
+$database_table = "Product Category";
 $rows_per_page = 10;
 include $_SERVER['DOCUMENT_ROOT'] . "/mips/php/admin.php";
 include $_SERVER['DOCUMENT_ROOT'] . "/mips/php/activate_pagination.php";
 
 function getSubcategories($pdo, $start, $rows_per_page)
 {
-    $sql = "SELECT * FROM Product_Category WHERE parent_id IS NOT NULL AND status = 0 LIMIT :start, :rows_per_page";
+    $sql = "SELECT * FROM Product_Category WHERE parent_id IS NOT NULL AND status = 0 LIMIT :start, :rows_per_page;";
     $stmt = $pdo->prepare($sql);
     $stmt->bindParam(':start', $start, PDO::PARAM_INT);
     $stmt->bindParam(':rows_per_page', $rows_per_page, PDO::PARAM_INT);
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
-
 
 $all_subcategories = getSubcategories($pdo, $start, $rows_per_page);
 
@@ -27,7 +26,6 @@ function getMainCategories($pdo)
 }
 
 $all_main_categories = getMainCategories($pdo);
-
 
 function handleFileUpload($file, $existingImagePath = null)
 {
@@ -59,26 +57,30 @@ function handleFileUpload($file, $existingImagePath = null)
     }
 }
 
+function generateCategoryId()
+{
+    return uniqid("SC");
+}
+
 if (isset($_POST["submit"])) {
+    $subcategoryId = isset($_POST['subcategory_id']) && !empty($_POST['subcategory_id']) ? $_POST['subcategory_id'] : generateCategoryId();
     $name = $_POST["name"];
     $parentId = !empty($_POST["parent_category"]) ? $_POST["parent_category"] : null;
-    $subcategoryId = isset($_POST['subcategory_id']) ? $_POST['subcategory_id'] : null;
 
-    if ($_FILES["image"]["error"] === 4 && !$subcategoryId) {
+    if (!$subcategoryId && $_FILES["image"]["error"] === 4) {
         echo "<script>alert('Image Does Not Exist');</script>";
     } else {
-        if ($subcategoryId) {
-            $sql = "SELECT category_icon FROM Product_Category WHERE category_id = :subcategory_id";
-            $stmt = $pdo->prepare($sql);
+        $oldImagePath = null;
+        if (isset($_POST['subcategory_id']) && !empty($_POST['subcategory_id'])) {
+            $stmt = $pdo->prepare("SELECT category_icon FROM Product_Category WHERE category_id = :subcategory_id");
             $stmt->bindParam(':subcategory_id', $subcategoryId);
             $stmt->execute();
-            $existingSubcategory = $stmt->fetch(PDO::FETCH_ASSOC);
-            $existingImagePath = $existingSubcategory['category_icon'] ?? null;
+            $oldImage = $stmt->fetch(PDO::FETCH_ASSOC);
         }
 
-        $newImageName = handleFileUpload($_FILES['image'], $existingImagePath);
+        $newImageName = handleFileUpload($_FILES['image'], $oldImagePath);
 
-        if ($subcategoryId) {
+        if (isset($_POST['subcategory_id']) && !empty($_POST['subcategory_id'])) {
             $sql = "UPDATE Product_Category SET category_name = :name, parent_id = :parentId";
 
             if ($newImageName) {
@@ -89,37 +91,22 @@ if (isset($_POST["submit"])) {
 
             $stmt = $pdo->prepare($sql);
             $stmt->bindParam(':name', $name);
-            $stmt->bindParam(':parentId', $parentId);
             $stmt->bindParam(':subcategory_id', $subcategoryId);
+            $stmt->bindParam(':parentId', $parentId);
 
             if ($newImageName) {
                 $stmt->bindParam(':icon', $newImageName);
-            }
-
-            try {
-                $stmt->execute();
-                header('Location: ' . $_SERVER['PHP_SELF']);
-                exit();
-            } catch (PDOException $e) {
-                echo "<script>alert('Database error: " . $e->getMessage() . "');</script>";
             }
         } else {
-            if ($newImageName) {
-                $sql = "INSERT INTO Product_Category (category_name, category_icon, parent_id, status) VALUES (:name, :icon, :parentId, 0)";
-                $stmt = $pdo->prepare($sql);
-                $stmt->bindParam(':name', $name);
-                $stmt->bindParam(':icon', $newImageName);
-                $stmt->bindParam(':parentId', $parentId);
-
-                try {
-                    $stmt->execute();
-                    header('Location: ' . $_SERVER['PHP_SELF']);
-                    exit();
-                } catch (PDOException $e) {
-                    echo "<script>alert('Database error: " . $e->getMessage() . "');</script>";
-                }
-            }
+            $sql = "INSERT INTO Product_Category (category_id, category_name, category_icon, parent_id, status) VALUES (:subcategory_id, :name, :icon, :parentId, 0)";
+            $stmt = $pdo->prepare($sql);
+            $stmt->bindParam(':subcategory_id', $subcategoryId);
+            $stmt->bindParam(':name', $name);
+            $stmt->bindParam(':icon', $newImageName);
+            $stmt->bindParam(':parentId', $parentId);
         }
+
+        include $_SERVER['DOCUMENT_ROOT'] . "/mips/php/refresh_page.php";
     }
 }
 
@@ -140,27 +127,33 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                         <button id="open-popup" class="btn btn-outline-primary"><i class="bi bi-plus-circle"></i>Add New Subcategory</button>
                     </div>
                 </div>
-                <div class="box-container">
-                    <?php foreach ($all_subcategories as $subcategory) : ?>
-                        <div class="box" data-subcategory-id="<?= htmlspecialchars($subcategory['category_id']); ?>">
-                            <div class="image-container">
-                                <img src="/mips/uploads/category/<?php echo htmlspecialchars($subcategory['category_icon']); ?>" alt="Icon for <?php echo htmlspecialchars($subcategory['category_name']); ?>">
+                <?php if (!empty($all_subcategories)) : ?>
+                    <div class="box-container">
+                        <?php foreach ($all_subcategories as $subcategory) : ?>
+                            <div class="box" data-subcategory-id="<?= htmlspecialchars($subcategory['category_id']); ?>">
+                                <div class="image-container">
+                                    <img src="/mips/uploads/category/<?php echo htmlspecialchars($subcategory['category_icon']); ?>" alt="Icon for <?php echo htmlspecialchars($subcategory['category_name']); ?>">
+                                </div>
+                                <div class="actions">
+                                    <form method="POST" style="display:inline;" onsubmit="return showDeactivateConfirmDialog(event);">
+                                        <input type="hidden" name="subcategory_id" value="<?= htmlspecialchars($subcategory['category_id']); ?>">
+                                        <input type="hidden" name="action" value="deactivate_product_category">
+                                        <button type="submit" class="delete-subcategory-btn"><i class="bi bi-x-square"></i></button>
+                                    </form>
+                                    <button type="button" class="edit-subcategory-btn" data-subcategory-id="<?= htmlspecialchars($subcategory['category_id']); ?>"><i class="bi bi-pencil-square"></i></button>
+                                </div>
+                                <div class="txt">
+                                    <h3><?php echo htmlspecialchars($subcategory['category_name']); ?></h3>
+                                </div>
                             </div>
-                            <div class="actions">
-                                <form action="" method="POST" style="display:inline;" onsubmit="return showDeactivateConfirmDialog(event);">
-                                    <input type="hidden" name="subcategory_id" value="<?= htmlspecialchars($subcategory['category_id']); ?>">
-                                    <input type="hidden" name="action" value="deactivate_product_category">
-                                    <button type="submit" class="delete-subcategory-btn"><i class="bi bi-x-square"></i></button>
-                                </form>
-                                <button type="button" class="edit-subcategory-btn" data-subcategory-id="<?= htmlspecialchars($subcategory['category_id']); ?>"><i class="bi bi-pencil-square"></i></button>
-                            </div>
-                            <div class="txt">
-                                <h3><?php echo htmlspecialchars($subcategory['category_name']); ?></h3>
-                            </div>
-                        </div>
-                    <?php endforeach; ?>
-                </div>
-                <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/pagination.php"; ?>
+                        <?php endforeach; ?>
+                    </div>
+                <?php else : ?>
+                    <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/no_data_found.php"; ?>
+                <?php endif; ?>
+                <?php if (!empty($all_subcategories)) : ?>
+                    <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/pagination.php"; ?>
+                <?php endif; ?>
             </div>
         </main>
     </div>
@@ -173,7 +166,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                 <button class="cancel"><i class="bi bi-x-circle"></i></button>
             </div>
         </div>
-        <form action="" method="post" enctype="multipart/form-data">
+        <form method="post" enctype="multipart/form-data">
             <input type="hidden" name="subcategory_id" value="">
             <div class="input-container">
                 <h2>Subcategory Name<sup>*</sup></h2>
@@ -203,7 +196,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                     <p>Select the main category for this subcategory.</p>
                 </div>
             </div>
-            <div class="input-container controls">
+            <div class="controls">
                 <button type="button" class="cancel">Cancel</button>
                 <button type="reset">Clear</button>
                 <button type="submit" name="submit">Publish</button>
@@ -211,7 +204,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
         </form>
     </dialog>
     <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/confirm_dialog.php"; ?>
-
+    <script src="/mips/javascript/common.js"></script>
     <script src="/mips/javascript/admin.js"></script>
     <script>
         document.querySelectorAll('.edit-subcategory-btn').forEach(button => {

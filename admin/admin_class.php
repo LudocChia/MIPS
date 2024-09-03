@@ -3,6 +3,7 @@ class Action
 {
     private $db;
 
+
     public function __construct()
     {
         include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/db_connect.php";
@@ -51,7 +52,6 @@ class Action
         }
     }
 
-
     // Admin Functions
     public function deactivate_admin($admin_id)
     {
@@ -68,6 +68,56 @@ class Action
         $stmt->bindParam(':admin_id', $admin_id);
         return $this->execute_statement($stmt);
     }
+
+    public function get_admin($admin_id)
+    {
+        $sql = "
+            SELECT admin_id, admin_name, admin_email, created_at
+            FROM Admin
+            WHERE admin_id = :admin_id AND status in (-1, 0)
+        ";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':admin_id', $admin_id);
+        $stmt->execute();
+        $admin = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        return $admin ? json_encode($admin) : json_encode(['error' => 'Admin not found']);
+    }
+
+
+    public function save_admin($admin_id, $admin_name, $admin_email, $admin_password, $confirm_password, $admin_type = 'admin')
+    {
+        if ($admin_password !== $confirm_password) {
+            return json_encode(['error' => 'Passwords do not match!']);
+        }
+
+        $hashed_password = password_hash($admin_password, PASSWORD_DEFAULT);
+
+        if (!empty($admin_id)) {
+            if (!empty($admin_password)) {
+                $sql = "UPDATE Admin SET admin_name = :name, admin_email = :email, admin_password = :password, admin_type = :adminType WHERE admin_id = :adminId";
+                $stmt = $this->db->prepare($sql);
+                $stmt->bindParam(':password', $hashed_password);
+            } else {
+                $sql = "UPDATE Admin SET admin_name = :name, admin_email = :email, admin_type = :adminType WHERE admin_id = :adminId";
+                $stmt = $this->db->prepare($sql);
+            }
+            $stmt->bindParam(':adminId', $admin_id);
+        } else {
+            $admin_id = uniqid("AD");
+            $sql = "INSERT INTO Admin (admin_id, admin_name, admin_email, admin_password, admin_type) VALUES (:adminId, :name, :email, :password, :adminType)";
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindParam(':adminId', $admin_id);
+            $stmt->bindParam(':password', $hashed_password);
+        }
+
+        $stmt->bindParam(':name', $admin_name);
+        $stmt->bindParam(':email', $admin_email);
+        $stmt->bindParam(':adminType', $admin_type);
+
+        return $this->execute_statement($stmt);
+    }
+
 
     // Parent Functions
     public function deactivate_parent($parent_id)
@@ -478,22 +528,6 @@ class Action
         $parent = $stmt->fetch(PDO::FETCH_ASSOC);
 
         return $parent ? json_encode($parent) : json_encode(['error' => 'Parent not found']);
-    }
-
-    // Retrieve admin data
-    public function get_admin($admin_id)
-    {
-        $sql = "
-            SELECT admin_id, admin_name, admin_email, register_date 
-            FROM Admin
-            WHERE admin_id = :admin_id AND status = 0
-        ";
-        $stmt = $this->db->prepare($sql);
-        $stmt->bindParam(':admin_id', $admin_id);
-        $stmt->execute();
-        $admin = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        return $admin ? json_encode($admin) : json_encode(['error' => 'Admin not found']);
     }
 
     // Product Functions

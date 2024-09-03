@@ -40,6 +40,27 @@ switch ($action) {
         }
         break;
 
+    case 'save_admin':
+        if (
+            isset($_POST['admin_id']) &&
+            isset($_POST['name']) &&
+            isset($_POST['email']) &&
+            isset($_POST['password']) &&
+            isset($_POST['confirm_password'])
+        ) {
+            echo $crud->save_admin(
+                $_POST['admin_id'],
+                $_POST['name'],
+                $_POST['email'],
+                $_POST['password'],
+                $_POST['confirm_password']
+            );
+        } else {
+            echo json_encode(['error' => 'Required fields not provided']);
+        }
+        break;
+
+
         // Parent Functions
     case 'deactivate_parent':
         if (isset($_POST['parent_id'])) {
@@ -82,21 +103,21 @@ switch ($action) {
         break;
 
         // Order Functions
-    case 'deactivate_order':
-        if (isset($_POST['order_id'])) {
-            echo $crud->deactivate_order($_POST['order_id']);
-        } else {
-            echo json_encode(['error' => 'Order ID not provided']);
-        }
-        break;
+        // case 'deactivate_order':
+        //     if (isset($_POST['order_id'])) {
+        //         echo $crud->deactivate_order($_POST['order_id']);
+        //     } else {
+        //         echo json_encode(['error' => 'Order ID not provided']);
+        //     }
+        //     break;
 
-    case 'recover_order':
-        if (isset($_POST['order_id'])) {
-            echo $crud->recover_order($_POST['order_id']);
-        } else {
-            echo json_encode(['error' => 'Order ID not provided']);
-        }
-        break;
+        // case 'recover_order':
+        //     if (isset($_POST['order_id'])) {
+        //         echo $crud->recover_order($_POST['order_id']);
+        //     } else {
+        //         echo json_encode(['error' => 'Order ID not provided']);
+        //     }
+        //     break;
 
     case 'delete_order':
         if (isset($_POST['order_id'])) {

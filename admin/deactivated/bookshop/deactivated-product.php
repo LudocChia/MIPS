@@ -3,7 +3,7 @@
 $database_table = "Product";
 $rows_per_page = 10;
 include $_SERVER['DOCUMENT_ROOT'] . "/mips/php/admin.php";
-// include $_SERVER['DOCUMENT_ROOT'] . "/mips/php/deactivate_pagination.php";
+// include $_SERVER['DOCUMENT_ROOT'] . "/mips/php/deactivated_pagination.php";
 
 function getDeletedProducts($pdo, $start, $rows_per_page)
 {
@@ -44,7 +44,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
         <main class="products">
             <div class="wrapper">
                 <div class="title">
-                    <h1>Bookshop Recycle Bin</h1>
+                    <h1>Deactivated Bookshop Items</h1>
                 </div>
                 <div class="box-container">
                     <?php foreach ($deleted_products as $product): ?>
@@ -52,7 +52,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                             <div class="image-container">
                                 <img src="/mips/uploads/product/<?= htmlspecialchars($product['image_url']); ?>" alt="<?= htmlspecialchars($product['product_name']); ?>">
                             </div>
-                            <div class="details">
+                            <div class="info-container">
                                 <h4><?= htmlspecialchars($product['product_name']); ?></h4>
                                 <p>Price: RM <?= number_format($product['product_price'], 2); ?></p>
                                 <form method="post">

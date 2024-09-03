@@ -84,10 +84,10 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
             });
 
             function showAlert(message) {
-                const alertHtml = `<div class="login-alert">${message}</div>`;
+                const alertHtml = `<div class="mini-alert">${message}</div>`;
                 document.getElementById('alert-container').innerHTML = alertHtml;
                 setTimeout(function() {
-                    const alertElement = document.querySelector('.login-alert');
+                    const alertElement = document.querySelector('.mini-alert');
                     if (alertElement) {
                         alertElement.style.opacity = '0';
                         setTimeout(() => alertElement.remove(), 600);

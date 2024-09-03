@@ -6,7 +6,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/php/admin.php";
 
 function getAllParents($pdo, $start, $rows_per_page)
 {
-    $sql = "SELECT * FROM Parent WHERE status = 0 LIMIT :start, :rows_per_page";
+    $sql = "SELECT * FROM Parent WHERE status = 0 LIMIT :start, :rows_per_page GROUP BY created_at DESC";
     $stmt = $pdo->prepare($sql);
     $stmt->bindParam(':start', $start, PDO::PARAM_INT);
     $stmt->bindParam(':rows_per_page', $rows_per_page, PDO::PARAM_INT);
