@@ -32,31 +32,37 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                 <div class="title">
                     <h1>Deactivated Bookshop Categories</h1>
                 </div>
-                <div class="box-container">
-                    <?php foreach ($deactivated_categories as $category): ?>
-                        <div class="box" data-category-id="<?= htmlspecialchars($category['category_id']); ?>">
-                            <div class="image-container">
-                                <img src="/mips/uploads/category/<?= htmlspecialchars($category['category_icon']); ?>" alt="<?= htmlspecialchars($category['category_name']); ?>">
+                <?php if (!empty($deactivated_categories)) : ?>
+                    <div class="box-container">
+                        <?php foreach ($deactivated_categories as $category): ?>
+                            <div class="box" data-category-id="<?= htmlspecialchars($category['category_id']); ?>">
+                                <div class="image-container">
+                                    <img src="/mips/uploads/category/<?= htmlspecialchars($category['category_icon']); ?>" alt="<?= htmlspecialchars($category['category_name']); ?>">
+                                </div>
+                                <div class="actions">
+                                    <form action="" method="POST" style="display:inline;" onsubmit="return showDeleteConfirmDialog(event);">
+                                        <input type="hidden" name="category_id" value="<?= htmlspecialchars($category['category_id']); ?>">
+                                        <input type="hidden" name="action" value="delete_product_category">
+                                        <button type="submit" class="delete-category-btn"><i class="bi bi-x-square"></i></button>
+                                    </form>
+                                    <form action="" method="POST" style="display:inline;" onsubmit="return showRecoverConfirmDialog(event);">
+                                        <input type="hidden" name="category_id" value="<?= htmlspecialchars($category['category_id']); ?>">
+                                        <input type="hidden" name="action" value="recover_product_category">
+                                        <button type="submit" class="recover-parent-btn"><i class="bi bi-arrow-clockwise"></i></button>
+                                    </form>
+                                </div>
+                                <div class="info-container">
+                                    <h4><?= htmlspecialchars($category['category_name']); ?></h4>
+                                </div>
                             </div>
-                            <div class="actions">
-                                <form action="" method="POST" style="display:inline;" onsubmit="return showDeleteConfirmDialog(event);">
-                                    <input type="hidden" name="category_id" value="<?= htmlspecialchars($category['category_id']); ?>">
-                                    <input type="hidden" name="action" value="delete_category">
-                                    <button type="submit" class="delete-category-btn"><i class="bi bi-x-square"></i></button>
-                                </form>
-                                <form action="" method="POST" style="display:inline;" onsubmit="return showRecoverConfirmDialog(event);">
-                                    <input type="hidden" name="category_id" value="<?= htmlspecialchars($category['category_id']); ?>">
-                                    <input type="hidden" name="action" value="recover_category">
-                                    <button type="submit" class="recover-parent-btn"><i class="bi bi-arrow-clockwise"></i></button>
-                                </form>
-                            </div>
-                            <div class="info-container">
-                                <h4><?= htmlspecialchars($category['category_name']); ?></h4>
-                            </div>
-                        </div>
-                    <?php endforeach; ?>
-                </div>
-                <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/pagination.php"; ?>
+                        <?php endforeach; ?>
+                    </div>
+                <?php else : ?>
+                    <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/no_data_found.php"; ?>
+                <?php endif; ?>
+                <?php if (!empty($deactivated_categories)) : ?>
+                    <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/pagination.php"; ?>
+                <?php endif; ?>
             </div>
         </main>
     </div>

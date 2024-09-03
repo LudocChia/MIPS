@@ -145,6 +145,31 @@ class Action
         return $this->execute_statement($stmt);
     }
 
+    public function delete_product_category($category_id)
+    {
+        try {
+            $stmt = $this->db->prepare("SELECT category_icon FROM Product_Category WHERE category_id = :category_id");
+            $stmt->bindParam(':category_id', $category_id);
+            $stmt->execute();
+            $category = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($category && !empty($category['category_icon'])) {
+                $imagePath = $_SERVER['DOCUMENT_ROOT'] . '/mips/uploads/category/' . $category['category_icon'];
+                if (file_exists($imagePath)) {
+                    unlink($imagePath);
+                }
+            }
+
+            $stmt = $this->db->prepare("DELETE FROM Product_Category WHERE category_id = :category_id");
+            $stmt->bindParam(':category_id', $category_id);
+            $stmt->execute();
+        } catch (PDOException $e) {
+            return json_encode(['error' => 'Failed to delete product category: ' . $e->getMessage()]);
+        }
+
+        return json_encode(['success' => true]);
+    }
+
     public function recover_product_category($category_id)
     {
         $sql = "UPDATE Product_Category SET status = 0 WHERE category_id = :category_id";

@@ -177,6 +177,14 @@ switch ($action) {
         }
         break;
 
+    case 'delete_product_category':
+        if (isset($_POST['category_id'])) {
+            echo $crud->delete_product_category($_POST['category_id']);
+        } else {
+            echo json_encode(['error' => 'Category ID not provided']);
+        }
+        break;
+
     case 'recover_product_category':
         if (isset($_POST['category_id'])) {
             echo $crud->recover_product_category($_POST['category_id']);

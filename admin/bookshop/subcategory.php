@@ -136,7 +136,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                                 </div>
                                 <div class="actions">
                                     <form method="POST" style="display:inline;" onsubmit="return showDeactivateConfirmDialog(event);">
-                                        <input type="hidden" name="subcategory_id" value="<?= htmlspecialchars($subcategory['category_id']); ?>">
+                                        <input type="hidden" name="category_id" value="<?= htmlspecialchars($subcategory['category_id']); ?>">
                                         <input type="hidden" name="action" value="deactivate_product_category">
                                         <button type="submit" class="delete-subcategory-btn"><i class="bi bi-x-square"></i></button>
                                     </form>
