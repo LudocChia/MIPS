@@ -40,12 +40,12 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                                     <img src="/mips/uploads/category/<?= htmlspecialchars($category['category_icon']); ?>" alt="<?= htmlspecialchars($category['category_name']); ?>">
                                 </div>
                                 <div class="actions">
-                                    <form action="" method="POST" style="display:inline;" onsubmit="return showDeleteConfirmDialog(event);">
+                                    <form method="POST" style="display:inline;" onsubmit="return showDeleteConfirmDialog(event);">
                                         <input type="hidden" name="category_id" value="<?= htmlspecialchars($category['category_id']); ?>">
                                         <input type="hidden" name="action" value="delete_product_category">
                                         <button type="submit" class="delete-category-btn"><i class="bi bi-x-square"></i></button>
                                     </form>
-                                    <form action="" method="POST" style="display:inline;" onsubmit="return showRecoverConfirmDialog(event);">
+                                    <form method="POST" style="display:inline;" onsubmit="return showRecoverConfirmDialog(event);">
                                         <input type="hidden" name="category_id" value="<?= htmlspecialchars($category['category_id']); ?>">
                                         <input type="hidden" name="action" value="recover_product_category">
                                         <button type="submit" class="recover-parent-btn"><i class="bi bi-arrow-clockwise"></i></button>

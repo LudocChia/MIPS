@@ -41,49 +41,53 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
                     </div>
                 </div>
                 <div class="table-body">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>
-                                    <h3>Admin ID</h3>
-                                </th>
-                                <th>
-                                    <h3>Admin Name</h3>
-                                </th>
-                                <th>
-                                    <h3>Admin Email</h3>
-                                </th>
-                                <th>
-                                    <h3>Admin Register Date</h3>
-                                </th>
-                                <th>
-                                    <h3>Status</h3>
-                                </th>
-                                <th>
-                                    <h3>Actions</h3>
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php foreach ($all_admins as $admin) { ?>
+                    <?php if (!empty($all_admins)) : ?>
+                        <table>
+                            <thead>
                                 <tr>
-                                    <td><?php echo htmlspecialchars($admin['admin_id']); ?></td>
-                                    <td><?php echo htmlspecialchars($admin['admin_name']); ?></td>
-                                    <td><?php echo htmlspecialchars($admin['admin_email']); ?></td>
-                                    <td><?php echo htmlspecialchars($admin['created_at']); ?></td>
-                                    <td><?php echo getStatusLabel($admin['status']); ?></td>
-                                    <td>
-                                        <form action="" method="POST" style="display:inline;" onsubmit="return showDeactivateConfirmDialog(event);">
-                                            <input type="hidden" name="admin_id" value="<?= htmlspecialchars($admin['admin_id']); ?>">
-                                            <input type="hidden" name="action" value="deactivate_admin">
-                                            <button type="submit" class="delete-admin-btn"><i class="bi bi-x-square"></i></button>
-                                        </form>
-                                        <button type="button" class="edit-admin-btn" data-admin-id="<?= htmlspecialchars($admin['admin_id']); ?>"><i class="bi bi-pencil-square"></i></button>
-                                    </td>
+                                    <th>
+                                        <h3>Admin ID</h3>
+                                    </th>
+                                    <th>
+                                        <h3>Admin Name</h3>
+                                    </th>
+                                    <th>
+                                        <h3>Admin Email</h3>
+                                    </th>
+                                    <th>
+                                        <h3>Admin Register Date</h3>
+                                    </th>
+                                    <th>
+                                        <h3>Status</h3>
+                                    </th>
+                                    <th>
+                                        <h3>Actions</h3>
+                                    </th>
                                 </tr>
-                            <?php } ?>
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($all_admins as $admin) { ?>
+                                    <tr>
+                                        <td><?php echo htmlspecialchars($admin['admin_id']); ?></td>
+                                        <td><?php echo htmlspecialchars($admin['admin_name']); ?></td>
+                                        <td><?php echo htmlspecialchars($admin['admin_email']); ?></td>
+                                        <td><?php echo htmlspecialchars($admin['created_at']); ?></td>
+                                        <td><?php echo getStatusLabel($admin['status']); ?></td>
+                                        <td>
+                                            <form action="" method="POST" style="display:inline;" onsubmit="return showDeactivateConfirmDialog(event);">
+                                                <input type="hidden" name="admin_id" value="<?= htmlspecialchars($admin['admin_id']); ?>">
+                                                <input type="hidden" name="action" value="deactivate_admin">
+                                                <button type="submit" class="delete-admin-btn"><i class="bi bi-x-square"></i></button>
+                                            </form>
+                                            <button type="button" class="edit-admin-btn" data-admin-id="<?= htmlspecialchars($admin['admin_id']); ?>"><i class="bi bi-pencil-square"></i></button>
+                                        </td>
+                                    </tr>
+                                <?php } ?>
+                            </tbody>
+                        </table>
+                    <?php else : ?>
+                        <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/no_data_found.php"; ?>
+                    <?php endif; ?>
                 </div>
                 <?php if (!empty($all_admins)) : ?>
                     <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/pagination.php"; ?>
@@ -160,6 +164,9 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
                             document.querySelector('#add-edit-data [name="name"]').value = admin.admin_name;
                             document.querySelector('#add-edit-data [name="email"]').value = admin.admin_email;
                             document.querySelector('#add-edit-data [name="admin_id"]').value = admin.admin_id;
+
+                            document.querySelector('#add-edit-data [name="password"]').removeAttribute('required');
+                            document.querySelector('#add-edit-data [name="confirm_password"]').removeAttribute('required');
 
                             document.querySelector('#add-edit-data h1').textContent = "Edit Admin";
                             document.getElementById('add-edit-data').showModal();

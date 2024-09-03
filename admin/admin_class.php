@@ -136,6 +136,57 @@ class Action
         return $this->execute_statement($stmt);
     }
 
+    public function get_parent($parent_id)
+    {
+        $sql = "
+            SELECT parent_id, parent_name, parent_email
+            FROM Parent
+            WHERE parent_id = :parent_id AND status = 0
+        ";
+
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':parent_id', $parent_id);
+        $stmt->execute();
+        $parent = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        return $parent ? json_encode($parent) : json_encode(['error' => 'Parent not found']);
+    }
+
+    public function save_parent($parent_id, $parent_name, $parent_email, $parent_phone, $parent_password, $confirm_password, $admin_id)
+    {
+        if ($parent_password !== $confirm_password) {
+            return json_encode(['error' => 'Passwords do not match!']);
+        }
+
+        $hashed_password = password_hash($parent_password, PASSWORD_DEFAULT);
+
+        if (!empty($parent_id)) {
+            if (!empty($parent_password)) {
+                $sql = "UPDATE Parent SET parent_name = :name, parent_email = :email, parent_phone = :phone, parent_password = :password, admin_id = :admin_id WHERE parent_id = :parent_id";
+                $stmt = $this->db->prepare($sql);
+                $stmt->bindParam(':password', $hashed_password);
+            } else {
+                $sql = "UPDATE Parent SET parent_name = :name, parent_email = :email, parent_phone = :phone, admin_id = :admin_id WHERE parent_id = :parent_id";
+                $stmt = $this->db->prepare($sql);
+            }
+            $stmt->bindParam(':parent_id', $parent_id, PDO::PARAM_STR);
+        } else {
+            $parent_id = uniqid("PR");
+            $sql = "INSERT INTO Parent (parent_id, parent_name, parent_email, parent_phone, parent_password, admin_id) VALUES (:parent_id, :name, :email, :phone, :password, :admin_id)";
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindParam(':parent_id', $parent_id, PDO::PARAM_STR);
+            $stmt->bindParam(':password', $hashed_password);
+        }
+
+        $stmt->bindParam(':name', $parent_name, PDO::PARAM_STR);
+        $stmt->bindParam(':email', $parent_email, PDO::PARAM_STR);
+        $stmt->bindParam(':phone', $parent_phone, PDO::PARAM_STR);
+        $stmt->bindParam(':admin_id', $admin_id, PDO::PARAM_STR);
+
+        return $this->execute_statement($stmt);
+    }
+
+
     // Product Category Functions
     public function deactivate_product_category($category_id)
     {
@@ -538,23 +589,6 @@ class Action
         }
     }
 
-    // Retrieve parent data
-    public function get_parent($parent_id)
-    {
-        $sql = "
-            SELECT parent_id, parent_name, parent_email
-            FROM Parent
-            WHERE parent_id = :parent_id AND status = 0
-        ";
-
-        $stmt = $this->db->prepare($sql);
-        $stmt->bindParam(':parent_id', $parent_id);
-        $stmt->execute();
-        $parent = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        return $parent ? json_encode($parent) : json_encode(['error' => 'Parent not found']);
-    }
-
     // Product Functions
     public function deactivate_product($product_id)
     {
@@ -563,6 +597,8 @@ class Action
         $stmt->bindParam(':product_id', $product_id);
         return $this->execute_statement($stmt);
     }
+
+    public function delete_product($product_id) {}
 
     public function recover_product($product_id)
     {
@@ -576,13 +612,13 @@ class Action
     {
         $sql = "
             SELECT p.product_id, p.product_name, p.product_description, p.product_price,
-            p.stock_quantity, p.color, p.gender, p.category_id
+                   p.stock_quantity, p.color, p.gender, p.category_id
             FROM Product p
             WHERE p.product_id = :product_id AND p.status = 0
         ";
 
         $stmt = $this->db->prepare($sql);
-        $stmt->bindParam(':product_id', $product_id);
+        $stmt->bindParam(':product_id', $product_id, PDO::PARAM_STR);
         $stmt->execute();
         $product = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -593,17 +629,30 @@ class Action
                 WHERE product_id = :product_id
             ";
             $sizeStmt = $this->db->prepare($sizeSql);
-            $sizeStmt->bindParam(':product_id', $product_id);
+            $sizeStmt->bindParam(':product_id', $product_id, PDO::PARAM_STR);
             $sizeStmt->execute();
             $sizes = $sizeStmt->fetchAll(PDO::FETCH_COLUMN);
 
+            $imageSql = "
+                SELECT image_url
+                FROM Product_Image
+                WHERE product_id = :product_id
+                ORDER BY sort_order ASC
+            ";
+            $imageStmt = $this->db->prepare($imageSql);
+            $imageStmt->bindParam(':product_id', $product_id, PDO::PARAM_STR);
+            $imageStmt->execute();
+            $images = $imageStmt->fetchAll(PDO::FETCH_COLUMN);
+
             $product['sizes'] = $sizes;
+            $product['images'] = $images;
 
             return json_encode($product);
         } else {
             return json_encode(['error' => 'Product not found']);
         }
     }
+
 
     // Grade and Class Functions
     public function deactivate_class($class_id)

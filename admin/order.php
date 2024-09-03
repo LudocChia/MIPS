@@ -100,7 +100,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                         <h1>Bookshop Order</h1>
                     </div>
                     <div class="right">
-                        <button class="btn btn-outline-primary" id="open-popup"><i class="bi bi-plus-circle"></i>Add New Order</button>
+                        <!-- <button class="btn btn-outline-primary" id="open-popup"><i class="bi bi-plus-circle"></i>Add New Order</button> -->
                     </div>
                 </div>
                 <div class="table-body">
@@ -161,13 +161,12 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                             </tbody>
                         </table>
                     <?php else : ?>
-                        <div class="empty">
-                            <img src='/mips/images/empty.png' alt='Empty Cart Image'>
-                            <h3>No Orders Found</h3>
-                        </div>
+                        <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/no_data_found.php"; ?>
                     <?php endif; ?>
                 </div>
-                <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/pagination.php"; ?>
+                <?php if (!empty($all_orders)) : ?>
+                    <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/pagination.php"; ?>
+                <?php endif; ?>
             </div>
         </main>
     </div>

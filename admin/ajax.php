@@ -86,6 +86,31 @@ switch ($action) {
         }
         break;
 
+    case 'save_parent':
+        if (
+            isset($_POST['parent_id']) &&
+            isset($_POST['name']) &&
+            isset($_POST['email']) &&
+            isset($_POST['phone']) &&
+            isset($_POST['password']) &&
+            isset($_POST['confirm_password']) &&
+            isset($_POST['admin_id'])
+        ) {
+            echo $crud->save_parent(
+                $_POST['parent_id'],
+                $_POST['name'],
+                $_POST['email'],
+                $_POST['phone'],
+                $_POST['password'],
+                $_POST['confirm_password'],
+                $_POST['admin_id']
+            );
+        } else {
+            echo json_encode(['error' => 'Required fields not provided']);
+        }
+        break;
+
+
         // Student Functions
     case 'deactivate_student':
         if (isset($_POST['student_id'])) {

@@ -108,39 +108,26 @@ if (isset($_POST['submit'])) {
         $stmt->execute();
         $existingImages = $stmt->fetchAll(PDO::FETCH_COLUMN);
 
-        $uploadedImages = handleFileUpload($_FILES['images'], $existingImages);
+        if (!empty($_FILES['images']['name'][0])) {
+            $uploadedImages = handleFileUpload($_FILES['images'], $existingImages);
 
-        $sql = "UPDATE Product SET product_name = :name, category_id = :subcategory, product_description = :description, 
-                    product_price = :price, stock_quantity = :stock_quantity, 
-                    color = :color, gender = :gender WHERE product_id = :product_id";
+            $stmtDeleteImages = $pdo->prepare("DELETE FROM Product_Image WHERE product_id = :product_id");
+            $stmtDeleteImages->bindParam(':product_id', $productId, PDO::PARAM_STR);
+            $stmtDeleteImages->execute();
 
-        $stmt = $pdo->prepare($sql);
-        $stmt->bindParam(':name', $name, PDO::PARAM_STR);
-        $stmt->bindParam(':subcategory', $subcategoryId, PDO::PARAM_STR);
-        $stmt->bindParam(':description', $description, PDO::PARAM_STR);
-        $stmt->bindParam(':price', $price, PDO::PARAM_STR);
-        $stmt->bindParam(':stock_quantity', $stockQuantity, PDO::PARAM_INT);
-        $stmt->bindParam(':color', $color, PDO::PARAM_STR);
-        $stmt->bindParam(':gender', $gender, PDO::PARAM_STR);
-        $stmt->bindParam(':product_id', $productId, PDO::PARAM_STR);
-        $stmt->execute();
-
-        $stmtDeleteImages = $pdo->prepare("DELETE FROM Product_Image WHERE product_id = :product_id");
-        $stmtDeleteImages->bindParam(':product_id', $productId, PDO::PARAM_STR);
-        $stmtDeleteImages->execute();
-
-        $sortOrder = 1;
-        foreach ($uploadedImages as $image) {
-            $imageId = generateImageId();
-            $sqlImage = "INSERT INTO Product_Image (image_id, product_id, image_url, sort_order) 
-                         VALUES (:image_id, :product_id, :image_url, :sort_order)";
-            $stmtImage = $pdo->prepare($sqlImage);
-            $stmtImage->bindParam(':image_id', $imageId, PDO::PARAM_STR);
-            $stmtImage->bindParam(':product_id', $productId, PDO::PARAM_STR);
-            $stmtImage->bindParam(':image_url', $image, PDO::PARAM_STR);
-            $stmtImage->bindParam(':sort_order', $sortOrder, PDO::PARAM_INT);
-            $stmtImage->execute();
-            $sortOrder++;
+            $sortOrder = 1;
+            foreach ($uploadedImages as $image) {
+                $imageId = generateImageId();
+                $sqlImage = "INSERT INTO Product_Image (image_id, product_id, image_url, sort_order) 
+                             VALUES (:image_id, :product_id, :image_url, :sort_order)";
+                $stmtImage = $pdo->prepare($sqlImage);
+                $stmtImage->bindParam(':image_id', $imageId, PDO::PARAM_STR);
+                $stmtImage->bindParam(':product_id', $productId, PDO::PARAM_STR);
+                $stmtImage->bindParam(':image_url', $image, PDO::PARAM_STR);
+                $stmtImage->bindParam(':sort_order', $sortOrder, PDO::PARAM_INT);
+                $stmtImage->execute();
+                $sortOrder++;
+            }
         }
 
         $stmtDeleteSizes = $pdo->prepare("DELETE FROM Product_Size WHERE product_id = :product_id");
@@ -238,6 +225,9 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                                     <div class="info-container">
                                         <h3><?php echo htmlspecialchars($product['product_name']); ?></h3>
                                         <p><?= number_format($product['product_price'], 2); ?></p>
+                                        <p><?= htmlspecialchars($product['stock_quantity']); ?> pieces available</p>
+                                        <p><?= htmlspecialchars($product['gender']); ?></p>
+                                        <p><?= htmlspecialchars($product['color']); ?></p>
                                     </div>
                                 </a>
                                 <div class="actions">
@@ -370,6 +360,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                         if (product.error) {
                             alert(product.error);
                         } else {
+                            // 填充产品的基本信息
                             document.querySelector('#add-edit-data [name="product_id"]').value = product.product_id;
                             document.querySelector('#add-edit-data [name="name"]').value = product.product_name;
                             document.querySelector('#add-edit-data [name="subcategory"]').value = product.category_id;
@@ -379,8 +370,14 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                             document.querySelector('#add-edit-data [name="color"]').value = product.color;
                             document.querySelector('#add-edit-data [name="gender"]').value = product.gender;
 
-                            document.querySelectorAll('#sizes input[type="checkbox"]').forEach(checkbox => {
-                                checkbox.checked = product.sizes.includes(parseInt(checkbox.value));
+                            document.querySelectorAll('#add-edit-data input[type="checkbox"]').forEach(checkbox => {
+                                checkbox.checked = false;
+                            });
+                            product.sizes.forEach(sizeId => {
+                                const checkbox = document.querySelector(`#add-edit-data input[type="checkbox"][value="${sizeId}"]`);
+                                if (checkbox) {
+                                    checkbox.checked = true;
+                                }
                             });
 
                             document.querySelector('#add-edit-data h1').textContent = "Edit Bookshop Product";
