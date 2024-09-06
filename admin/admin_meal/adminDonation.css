@@ -1,0 +1,578 @@
+.bigbox{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+.bigbox row{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+}
+.bigbox #row1{
+    margin-top: 20px;
+}
+.bigbox row h1{
+    margin-left: 40px;
+    margin-top: 10px;
+    color: #023163;
+}
+.bigbox #row1 i{
+    margin-left: 50px;
+    font-size: 70px;
+}
+.bigbox #row1 i:hover{
+    color: rgb(44, 118, 152);
+}
+/* Style for the scrollable container */
+.scroll-container {
+    display:flex;
+    flex-direction: row;
+    overflow-x: auto;
+    padding: 10px;
+    margin: 20px;
+    scroll-behavior: smooth;
+    gap: 15px;
+}
+/* .scroll-container::-webkit-scrollbar{
+    display: none;
+} */
+.scroll-container::-webkit-scrollbar-button{
+    display: none;
+}
+.scroll-container::-webkit-scrollbar-track{
+    background-color: transparent;
+    border-radius: 20px;
+}
+.scroll-container::-webkit-scrollbar-thumb{
+    background-color: #d6dee1;
+    border-radius: 20px;
+    border: 6px solid transparent;
+    background-clip: content-box;
+}
+.scroll-container::-webkit-scrollbar-thumb:hover{
+    background-color: #a8bbbf;
+}
+
+/* Style for individual boxes */
+.box {
+    position: relative;
+    width: 800px; /* Box width */
+    height: 450px; /* Box height */
+    max-width: 400px;
+    overflow: hidden; /* Hide overflow */
+    border-radius: 10px; /* Rounded corners */
+    background-color: #596772; /* Background color */
+    cursor: pointer; /* Pointer cursor on hover */
+}
+
+/* Essentials section */
+.essentials {
+    position: absolute; /* Positioning relative to container */
+    top: 0;
+    left: 0;
+    right: 0;
+    padding: 10px; /* Padding for spacing */
+    font-size: 16px; /* Font size */
+    z-index: 1; /* Place essentials below extra info */
+    transition: opacity 0.4s ease; /* Smooth opacity transition */
+}
+
+/* Extra info section */
+.extra-info {
+    position: absolute; /* Positioning relative to container */
+    bottom: 20px; /* Start at the bottom of the container */
+    left: 0;
+    right: 0;
+    padding: 10px; /* Padding for spacing */
+    background-color: rgba(0, 0, 0, 0.6); /* Background color for extra info */
+    color: white; /* Text color for extra info */
+    height: 100%; /* Full height for covering effect */
+    transform: translateY(70%); /* Partially visible initially */
+    transition: transform 0.4s ease; /* Smooth slide-up transition */
+    z-index: 2; /* Place extra info above essentials */
+    opacity: 80%;
+}
+.extra-info row p{
+    opacity: 100%;
+    color: white;
+    font-size: 15px;
+}
+
+/* Hover effect for container */
+.box:hover .extra-info {
+    transform: translateY(20px); /* Slide up to cover essentials */
+    opacity: 100%;
+    
+}
+
+.box:hover .essentials {
+    opacity: 0; /* Fade out essentials when extra info slides up */
+}
+.box .extra-info #desc{
+    opacity: 0;
+}
+.box:hover .extra-info #desc{
+    opacity: 1;
+    transition: ease-in 0.4s;
+}
+.box:hover{
+    cursor: pointer;
+}
+.extra-info #row1 h3{
+    margin-top: 0px;
+    font-size: 25px;
+    opacity: 100%;
+}
+.box row{
+    margin-top: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+}
+
+/* Basic button styling */
+.slide-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #0052aa; /* Button color */
+    color: whitesmoke;
+    border: none;
+    border-radius: 80px;
+    cursor: pointer;
+    overflow: hidden;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 60px; /* Initial width showing only icon */
+    height: 60px; /* Button height */
+    transition: width 0.4s ease; /* Smooth width transition */
+    z-index: 3;
+}
+
+/* Icon inside the button */
+.slide-button i {
+    font-size: 30px; /* Icon size */
+    transition: transform 0.4s ease; /* Icon moves with the button */
+}
+
+/* Text inside the button */
+.slide-button span {
+    font-size: 20px;
+    position: absolute;
+    left: 50px; /* Initial position to the right of the icon */
+    white-space: nowrap;
+    opacity: 0; /* Hidden initially */
+    transition: opacity 0.4s ease, left 0.4s ease; /* Smooth transition */
+}
+
+/* Hover effect */
+.slide-button:hover {
+    width: 150px; /* Expanded width to show text */
+}
+
+.slide-button:hover i {
+    transform: translateX(-50px); /* Move icon to the left */
+}
+
+.slide-button:hover span {
+    opacity: 1; /* Show text */
+    left: 50px; /* Move text to the visible area */
+}
+.btnbox{
+    margin-right: 50px;
+}
+
+
+
+
+/* This is for picture css */
+.slider {
+    position: relative;
+    max-width: 900px; /* Adjust the width as needed */
+    margin: auto;
+    overflow: hidden;
+}
+.slides-wrapper {
+    overflow: hidden;
+}
+
+.slides {
+    display: flex;
+    transition: transform 0.5s ease; /* Smooth transition for sliding effect */
+}
+
+.slide {
+    min-width: 100%;
+    box-sizing: border-box;
+}
+
+.slide img {
+    width: 100%;
+    display: block;
+}
+
+/* Arrow icons styling */
+.prev, .next {
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    width: auto;
+    padding: 16px;
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+    transition: background-color 0.6s ease;
+    border-radius: 0 3px 3px 0;
+    user-select: none;
+    background-color: rgba(0, 0, 0, 0.5); /* Visible background for arrows */
+    transform: translateY(-50%); /* Centers the arrows vertically */
+}
+
+.next {
+    right: 0;
+    border-radius: 3px 0 0 3px;
+}
+
+.prev {
+    left: 0;
+}
+
+.prev:hover, .next:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+
+.bigbox #row2{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    margin-top: 100px;
+}
+.bigbox row1{
+    margin-top: -15px;
+    margin-left: 18%;
+    margin-right: 29%;
+}
+.bigbox #row2 #edit i{
+    font-size: 30px;
+}
+.bigbox #row2 #edit i:hover{
+    color: #0052aa;
+}
+.bigbox #row3 {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    margin-left: 20%;
+}
+.bigbox #row3 i{
+    font-size: 40px;
+    margin-right: 10px;
+    margin-top: 3px;
+}
+.bigbox #row3 p{
+    font-size: 25px;
+    margin-top: 10px;
+}
+.bigbox #row4 {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    margin-left: 20%;
+}
+.bigbox #row4 i{
+    font-size: 40px;
+    margin-right: 10px;
+    margin-top: 3px;
+}
+.bigbox #row4 p{
+    font-size: 25px;
+    margin-top: 10px;
+}
+.bigbox #row5 {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    margin-left: 20%;
+    margin-right: 20%;
+}
+.bigbox #row5 p{
+    font-size: 20px;
+    margin-top: 30px;
+}
+.bigbox #row6 {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    margin-left: 20%;
+    margin-right: 20%;
+    color: #596772;
+    margin-top: 20px;
+}
+
+.bigbox column1{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    margin-left: 20%;
+    font-size: 50px;
+}
+.bigbox column1 h2 {
+    margin-top: 30px;
+    font-size: 25px;
+    color: #596772;
+}
+.bigbox column1 p{
+    margin-top: 20px;
+    font-size: 20px;
+    color: #596772;
+}
+.bigbox column1 row a {
+    margin-right: 10%;
+    text-decoration: underline;
+}
+.bigbox column1 row #first, #second{
+    text-decoration: underline;
+    padding: 10px 40px 10px 40px;
+    border-radius: 20px;
+    transition : 0.2s;
+}
+.bigbox column1 row #first:hover , #second:hover{
+    background-color: #004085;
+    text-decoration: none;
+    color: whitesmoke;
+    cursor: pointer;
+}
+.bigbox column1 row #first:active , #second:active{
+    opacity: 80%;
+}
+.bigbox .delete{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    margin-right: 20%;
+    margin-bottom: 20px;
+    font-size: 45px;
+    color: rgb(203, 2, 2);}
+.bigbox .delete p{
+    font-size: 25px;
+    margin-top: 5px;
+    color: rgb(203, 2, 2);
+}
+.bigbox .delete:hover{
+    color: rgba(203, 2, 2, 0.699);
+    cursor: pointer;
+}
+.bigbox .delete p:hover{
+    color: rgba(203, 2, 2, 0.699);
+    cursor: pointer;
+}
+
+
+
+/* This is for meal slider */
+.slider-container1 {
+    width: 100%;
+    max-width: 900px; /* Adjust this max-width as needed */
+    margin: 0 auto; /* Center the slider horizontally */
+    overflow: hidden;
+    position: relative;
+    border-radius: 10px;
+    margin-top: 30px;
+    margin-bottom: 20px;
+}
+
+.slides1 {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+}
+
+.slide1 {
+    flex: 0 0 calc(33.33% - 1px); /* Show 3 slides at once with 1px space */
+    box-sizing: border-box;
+    padding: 20px;
+    margin-right: 1px; /* Add 1px space between slides */
+    background-color: #004e82;
+    color: rgb(231, 231, 231);
+    border-radius: 5px;
+    text-align: center;
+    flex-grow: 1; /* Allow the slides to grow if there are fewer than 3 */
+}
+
+.slider-controls1 {
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    transform: translateY(-50%);
+}
+
+.slider-controls1 p {
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    padding: 10px;
+    text-decoration: none;
+    border-radius: 50%;
+    cursor: pointer;
+    user-select: none;
+}
+
+.bigbox1{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+.bigbox1 row{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+}
+.bigbox1 #row1{
+    margin-top: 20px;
+}
+.bigbox1 row h1{
+    margin-left: 40px;
+    margin-top: 10px;
+    color: #023163;
+}
+
+.bigbox1 #row1 a i{
+    margin-left: 50px;
+    font-size: 70px;
+}
+.bigbox1 #row1 i:hover{
+    color: rgb(44, 118, 152);
+}
+.bigbox1 #row2{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+}
+.bigbox1 #row2 div{
+    width: 200px;
+    height: 200px;
+    margin-left: 20%;
+}
+
+.bigbox1 #row2 #column1 row i{
+    font-size: 40px;
+    margin-left: 34px;
+    margin-right: 10px;
+}
+.bigbox1 #row2 #column1 #row1{
+    margin-top: 10px;
+}
+.bigbox1 #row2 #column1 row p{
+    font-size: 20px;
+    margin-top: 10px;
+}
+.bigbox1 #row3 h2{
+    margin-left: 20%;
+    margin-top: 20px;
+    font-size: 27px;
+    color: #023163;
+}
+.bigbox1 #row4 button{
+    background-color: transparent;
+    border-radius: 10px;
+    color:#023163;
+    font-size: 20px;
+    padding: 10px 30px 10px 30px;
+    margin-top: 20px;
+    text-decoration: underline;
+}
+.bigbox1 #row4 button:hover{
+    background-color: #0052aa;
+    color: whitesmoke;
+    transition: 0.2s;
+    text-decoration: none;
+}
+.bigbox1 #row4 button:active{
+    opacity: 80%;
+}
+.bigbox1 #row4 #btn1{
+    margin-left: 20%;
+    margin-right: 20px;
+}
+.bigbox1 #row4 #btn2{
+    padding: 10px 40px 10px 40px;
+}
+@media only screen and (max-width: 1200px){
+    .bigbox1 #row4 #btn2{
+        padding: 10px 40px 10px 40px;
+        margin-left: 40%;
+    }    
+}
+.bigbox1 a .row5{
+    margin-left: 20%;
+    margin-right: 20%;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    color: #004e82;
+    border-bottom: 2px solid rgba(0, 0, 0, 0.226);
+    padding-bottom: 20px;
+}
+.bigbox1 a .row5 h3{
+    font-size: 25px;
+}
+.bigbox1 a .row5 p{
+    font-size: 20px;
+}
+.bigbox1 #row6 #addbtn{
+    margin: 0 auto;
+    margin-top: 20px;
+    margin-bottom: 50px;
+    color: #0052aa;
+    font-size: 30px;
+}
+.bigbox1 #row6 #addbtn:hover{
+    opacity: 80%;
+}
+
+.bigbox2{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+.bigbox2 row{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+}
+.bigbox2 #row1{
+    margin-top: 20px;
+}
+.bigbox2 #row1 a i{
+    margin-left: 50px;
+    font-size: 70px;
+}
+.bigbox2 #row1 i:hover{
+    color: rgb(44, 118, 152);
+}
+
+/* .addEvent{
+    z-index: 4;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+} */
+.addEvent i{
+    display: flex;
+    justify-content: flex-end;
+    font-size: 50px;
+    cursor: pointer;
+}
+.addEvent i:hover{
+    color: #0052aa;
+}
+.addMeal i{
+    display: flex;
+    justify-content: flex-end;
+    font-size: 50px;
+    cursor: pointer;
+}
+.addMeal i:hover{
+    color: #0052aa;
+}
