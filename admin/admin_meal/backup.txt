@@ -1,0 +1,29 @@
+ This is for the first slider for event (javascript)
+    <script>
+        let slideIndex = 0;
+
+        function showSlides(n) {
+            const slides = document.querySelectorAll('.slide');
+            const slidesContainer = document.querySelector('.slides');
+            const totalSlides = slides.length;
+            
+            if (n >= totalSlides) {
+                slideIndex = 0;
+            } else if (n < 0) {
+                slideIndex = totalSlides - 1;
+            } else {
+                slideIndex = n;
+            }
+
+            // Apply sliding effect by translating the slides container
+            slidesContainer.style.transform = `translateX(-${slideIndex * 100}%)`;
+        }
+
+        function plusSlides(n) {
+            showSlides(slideIndex + n);
+        }
+
+        // Initialize the slider
+        showSlides(slideIndex);
+
+    </script>

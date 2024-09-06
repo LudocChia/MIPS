@@ -1,6 +1,13 @@
 <?php
     session_start();
     include "../../components/db_connect.php";
+    if (!isset($_SESSION['admin_id'])) {
+        header('Location: /mips/admin/login.php');
+        exit();
+    }
+
+    $stmt = $pdo->query("SELECT * FROM `event` where DATE(date) > DATE(now())");
+    $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -19,10 +26,123 @@
     <link rel="stylesheet" href="../admin_for_meal/base.css">
     <link rel="stylesheet" href="../admin_for_meal/common.css">
     <link rel="stylesheet" href="../admin_for_meal/admin.css">
+    <link rel="stylesheet" href="../admin_meal/adminDonation.css">
 </head>
 <body>
     <?php include "../admin_for_meal/header.php";  ?>
     <script src="../admin_for_meal/admin.js"></script>
+    <div class="bigbox">
+        <row id="row1">
+            <a href="../index.php"><i class='bx bx-arrow-back' ></i></a>
+            <h1>Upcoming Event</h1>
+        </row>
+    </div>
+    
+
+    <div class="scroll-container">
+    <?php if (!empty($rows)): ?>
+        <?php foreach ($rows as $row): ?>
+            <?php 
+                // Construct the URL for the next page with just the 'event_id' parameter
+                $nextPageUrl = 'event.php?' . http_build_query([
+                    'event_id' => $row['event_id']
+                ]); 
+
+                // Debug: Output the URL for verification
+                // Uncomment the line below to see the URLs being generated
+                // echo '<p>Generated URL: ' . htmlspecialchars($nextPageUrl) . '</p>';
+            ?>
+            <!-- Wrap the box in an anchor tag -->
+            <a href="<?= htmlspecialchars($nextPageUrl) ?>" style="text-decoration: none; color: inherit;">
+                <div class="box">
+                    <!-- Essentials section -->
+                    <div class="essentials">
+                        <p></p>
+                    </div>
+                    <!-- Extra info section -->
+                    <div class="extra-info">
+                        <row id="row1">
+                            <h3><?= htmlspecialchars($row['name']) ?></h3>
+                        </row>
+                        <row class="row">
+                            <i class='bx bx-current-location'></i>
+                            <p><?= htmlspecialchars($row['place']) ?></p>
+                        </row>
+                        <row class="row">
+                            <i class='bx bx-time-five'></i>
+                            <p><?= htmlspecialchars($row['time']) ?></p>
+                        </row>
+                        <row class="row">
+                            <i class='bx bx-calendar'></i>
+                            <p><?= htmlspecialchars($row['date']) ?></p>
+                        </row>
+                        <row class="row">
+                            <p id="desc"><?= htmlspecialchars($row['description']) ?></p>
+                        </row>
+                    </div>
+                </div>
+            </a>
+        <?php endforeach; ?>
+    <?php else: ?>
+        <p>No records found.</p>
+    <?php endif; ?>
+</div>
+    <a href="#">
+        <div class="btnbox">
+            <button class="slide-button">
+            <i class='bx bx-add-to-queue' ></i>
+            <span>Add Event</span>
+            </button>
+        </div>
+    </a>
+
+    
+
+
+    <dialog  class="addEvent" >
+        <i class='bx bx-x' id="xbtn"></i>
+        <form method="POST" action="dialog">
+            <div>
+                <h1>Please fill in required credentials</h1>
+            </div>
+            <div>
+                <label for="name">Name :</label>
+                <input type="text" id="name" name="Name" required>
+            </div>
+            <div>
+                <label for="time">Time :</label>
+                <input type="text" id="time" name="Time" required>
+            </div>
+            <div>
+                <label for="date">Date :</label>
+                <input type="text" id="date" name="Date" required>
+            </div>
+            <div>
+                <label for="date">Date :</label>
+                <input type="text" id="date" name="Date" required>
+            </div>
+            <div>
+                <label for="date">Description :</label>
+                <textarea id="desc" name="Desc" rows="4" cols="5" required></textarea>
+            </div>
+            <div>
+                <input type="submit" value="Add" id="btn1" >
+            </div>
+        </form>
+    </dialog>
+    <script>
+        const modal = document.querySelector('.addEvent');
+        const openModal = document.querySelector('.btnbox');
+        const closeModal = document.querySelector('#xbtn');
+
+        openModal.addEventListener('click', () => {
+            modal.showModal();
+        })
+        closeModal.addEventListener('click', () => {
+            modal.close();
+        })
+    </script>
+
     
 </body>
 </html>
