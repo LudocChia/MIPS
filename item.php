@@ -98,7 +98,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/customer_header.php"; ?>
             </a>
         </li>
         <li>
-            <span class="material-symbols-outlined">navigate_next</span>
+            <i class="bi bi-chevron-right"></i>
         </li>
         <li>
             <a href="bookshop.php">
@@ -106,7 +106,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/customer_header.php"; ?>
             </a>
         </li>
         <li>
-            <span class="material-symbols-outlined">navigate_next</span>
+            <i class="bi bi-chevron-right"></i>
         </li>
         <li>
             <a href="#">
@@ -311,8 +311,8 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/customer_header.php"; ?>
         document.querySelector('.buy-now').addEventListener('click', function() {
             <?php if (!isset($_SESSION['user_id'])) : ?>
                 const productId = <?= json_encode($product_id) ?>;
-                document.getElementById('login-form').querySelector('form').action += `?pid=${productId}`;
-                document.getElementById('login-form').showModal();
+                document.querySelector('.login-form').querySelector('form').action += `?pid=${productId}`;
+                document.querySelector('.login-form').showModal();
             <?php else : ?>
                 const selectedSizeButton = document.querySelector('.size-button.selected');
                 if (!selectedSizeButton) {

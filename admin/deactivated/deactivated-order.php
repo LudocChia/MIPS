@@ -38,7 +38,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                         <h1>Bookshop Order Recycle Bin</h1>
                     </div>
                     <div class="right">
-                        <a href="/mips/admin/recycleBin.php"><i class="bi bi-arrow-return-left"></i>Recycle Bin Menu</a>
+                        <a href="/mips/admin/recycleBin.php"><i class="bi bi-arrow-90deg-up"></i>Recycle Bin Menu</a>
                     </div>
                 </div>
                 <div class="table-body">
@@ -74,7 +74,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                                     <td>MYR <?php echo htmlspecialchars($order['order_price']); ?></td>
                                     <td><?php echo htmlspecialchars($order['payment_status']); ?></td>
                                     <td>
-                                        <form action="" method="POST" style="display:inline;" onsubmit="return showDeleteConfirmDialog(event);">
+                                        <form method="POST" style="display:inline;" onsubmit="return showDeleteConfirmDialog(event);">
                                             <input type="hidden" name="order_id" value="<?= htmlspecialchars($order['order_id']); ?>">
                                             <input type="hidden" name="action" value="delete_order">
                                             <button type="submit" class="delete-order-btn"><i class="bi bi-x-square"></i></button>

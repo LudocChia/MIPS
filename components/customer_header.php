@@ -12,7 +12,7 @@
                     <a href="index.php"><span class="material-symbols-outlined icon-adjust">local_library</span></i>Meal Donation</a>
                 </li> -->
                 <li>
-                    <a href="meal.php"><span class="material-symbols-outlined icon-adjust">food_bank</span>Meal Donation</a>
+                    <a href="meal.php"><i class="fa fa-cutlery" aria-hidden="true"></i>Meal Donation</a>
                 </li>
                 <!-- <li>
                     <a href="event.php"><i class="bi bi-calendar4-event"></i>School Event</a>
@@ -95,58 +95,3 @@
         </div>
     </div>
 </header>
-<!-- <script src="/mips/javascript/customer.js"></script> -->
-<!-- <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const userBtn = document.querySelector("#user-btn");
-        const profileMenu = document.querySelector(".profile-menu");
-
-        if (userBtn && profileMenu) {
-            userBtn.addEventListener('click', function(event) {
-                event.stopPropagation();
-                profileMenu.classList.toggle('active');
-            });
-
-            document.addEventListener('click', function(event) {
-                if (isAutoSliding) return;
-                if (!profileMenu.contains(event.target) && !userBtn.contains(event.target)) {
-                    profileMenu.classList.remove('active');
-                }
-            });
-
-            window.addEventListener('resize', function() {
-                if (profileMenu.classList.contains('active')) {
-                    profileMenu.classList.remove('active');
-                }
-            });
-        }
-
-        const burgerMenu = document.getElementById("burger-menu");
-        const navMenu = document.getElementById("nav-menu");
-        const searchContainer = document.getElementById("search-container");
-
-        if (burgerMenu && navMenu && searchContainer) {
-            burgerMenu.addEventListener("click", function() {
-                navMenu.classList.toggle("active");
-                searchContainer.classList.toggle("active");
-            });
-        }
-
-        const menuIcon = document.getElementById("menuIcon");
-        const nav = document.getElementById("nav");
-
-        if (menuIcon && nav) {
-            menuIcon.addEventListener("click", function() {
-                console.log('menuIcon clicked');
-                nav.classList.toggle("navactive");
-                console.log('nav class list:', nav.classList);
-            });
-
-            document.addEventListener("click", function(event) {
-                if (!nav.contains(event.target) && !menuIcon.contains(event.target)) {
-                    nav.classList.remove("navactive");
-                }
-            });
-        }
-    });
-</script> -->

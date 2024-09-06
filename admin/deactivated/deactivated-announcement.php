@@ -31,7 +31,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                         <h1>Announcement Recycle Bin</h1>
                     </div>
                     <div class="right">
-                        <a href="/mips/admin/recycleBin.php"><i class="bi bi-arrow-return-left"></i>Recycle Bin Menu</a>
+                        <a href="/mips/admin/recycleBin.php"><i class="bi bi-arrow-90deg-up"></i>Recycle Bin Menu</a>
                     </div>
                 </div>
                 <div class="box-container">
@@ -52,7 +52,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                                     <button type="submit" class="recover-parent-btn"><i class="bi bi-arrow-clockwise"></i></button>
                                 </form>
                             </div>
-                            <div class="txt">
+                            <div class="info-container">
                                 <h3><?php echo htmlspecialchars($announcement['announcement_title']); ?></h3>
                                 <p><?php echo htmlspecialchars($announcement['announcement_message']); ?></p>
                             </div>

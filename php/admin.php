@@ -14,6 +14,19 @@ if ($_SESSION['admin_status'] == -1) {
     exit();
 }
 
+function getStatusLabel($status)
+{
+    switch ($status) {
+        case 0:
+            return "Active";
+        case -1:
+            return "Unactivated";
+        default:
+            return "Unknown";
+    }
+}
+
+
 $currentPage = basename($_SERVER['PHP_SELF']);
 
 $start = 0;

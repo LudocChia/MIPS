@@ -4,6 +4,8 @@ document.addEventListener('DOMContentLoaded', function () {
     const closeBtn = document.querySelector("#close-btn");
     // const userBtn = document.querySelector("#user-btn");
     // const profileMenu = document.querySelector(".profile-menu");
+    const pageCount = parseInt(document.body.dataset.pageCount, 10);
+    const currentPage = parseInt(document.body.dataset.currentPage, 10);
     const ConfirmDialog = document.querySelector('#confirm-dialog');
     let currentForm = null;
     // const themeToggler = document.querySelector(".theme-toggler");
@@ -30,42 +32,6 @@ document.addEventListener('DOMContentLoaded', function () {
             sideMenu.classList.remove("active"); // Ensure the sidebar stays hidden on large screens if closed
         }
     });
-
-    // // Show Profile Menu
-    // if (userBtn && profileMenu) {
-    //     userBtn.addEventListener('click', function (event) {
-    //         event.stopPropagation();
-    //         profileMenu.classList.toggle('active');
-    //     });
-
-    //     document.addEventListener('click', function (event) {
-    //         if (!profileMenu.contains(event.target) && !userBtn.contains(event.target)) {
-    //             profileMenu.classList.remove('active');
-    //         }
-    //     });
-
-    //     window.addEventListener('resize', function () {
-    //         if (profileMenu.classList.contains('active')) {
-    //             profileMenu.classList.remove('active');
-    //         }
-    //     });
-    // }
-
-    // // Sidebar active item logic
-    // const activeListItem = document.querySelector('.sidebar ul ul li a.active');
-    // if (activeListItem) {
-    //     const parentUl = activeListItem.closest('ul');
-    //     if (parentUl) {
-    //         parentUl.style.display = 'block';
-    //         const parentA = parentUl.previousElementSibling;
-    //         if (parentA) {
-    //             const icon = parentA.querySelector('i.bi.bi-chevron-down');
-    //             if (icon) {
-    //                 icon.classList.add('rotate');
-    //             }
-    //         }
-    //     }
-    // }
 
     document.querySelectorAll('.bookshop-btn, .user-btn, .deactivate-btn').forEach(button => {
         if (button) {
@@ -96,10 +62,11 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // Pagination
-    if (document.body.id) {
-        let links = document.querySelectorAll('.page-numbers > a');
-        let bodyId = parseInt(document.body.id) - 1;
-        links[bodyId].classList.add("active");
+    if (pageCount > 1) {
+        const links = document.querySelectorAll('.page-numbers > a');
+        if (links.length >= currentPage) {
+            links[currentPage - 1].classList.add("active");
+        }
     }
 
     document.querySelectorAll('#add-edit-data .cancel, #delete-confirm-dialog .cancel, #detail-dialog .cancel').forEach(button => {

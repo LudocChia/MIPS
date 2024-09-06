@@ -11,6 +11,7 @@ function getGrades($pdo, $start, $rows_per_page)
             g.grade_id, 
             g.grade_name, 
             g.grade_level, 
+            g.student_id_prefix, 
             (SELECT COUNT(*) FROM Class c WHERE c.grade_id = g.grade_id AND c.status = 0) AS total_classes,
             (SELECT COUNT(*) FROM Student s JOIN Class c ON s.class_id = c.class_id WHERE c.grade_id = g.grade_id AND s.status = 0) AS total_students
         FROM 
@@ -27,38 +28,43 @@ function getGrades($pdo, $start, $rows_per_page)
 
 $all_grades = getGrades($pdo, $start, $rows_per_page);
 
+function generateGradeId()
+{
+    return uniqid("GR");
+}
+
 $msg = [];
 if (isset($_POST["submit"])) {
+    $gradeId = isset($_POST["grade_id"]) && !empty($_POST["grade_id"]) ? $_POST["grade_id"] : generateGradeId();
     $gradeName = $_POST["grade_name"];
     $gradeLevel = $_POST["grade_level"];
-    $gradeId = isset($_POST["grade_id"]) ? $_POST["grade_id"] : null;
+    $studentIdPrefix = $_POST["student_id_prefix"];
 
-    if ($gradeId) {
-        $sql = "UPDATE Grade SET grade_name = :gradeName, grade_level = :gradeLevel WHERE grade_id = :gradeId";
+    if (isset($_POST['grade_id']) && !empty($_POST['grade_id'])) {
+        $sql = "UPDATE Grade SET grade_name = :gradeName, grade_level = :gradeLevel, student_id_prefix = :studentIdPrefix, admin_id = :adminId WHERE grade_id = :gradeId";
         $stmt = $pdo->prepare($sql);
-        $stmt->bindParam(':gradeName', $gradeName);
-        $stmt->bindParam(':gradeLevel', $gradeLevel);
         $stmt->bindParam(':gradeId', $gradeId);
-    } else {
-        $sql = "INSERT INTO Grade (grade_name, grade_level, status) VALUES (:gradeName, :gradeLevel, 0)";
-        $stmt = $pdo->prepare($sql);
         $stmt->bindParam(':gradeName', $gradeName);
         $stmt->bindParam(':gradeLevel', $gradeLevel);
+        $stmt->bindParam(':studentIdPrefix', $studentIdPrefix);
+        $stmt->bindParam(':adminId', $_SESSION['admin_id']);
+    } else {
+        $sql = "INSERT INTO Grade (grade_id, grade_name, grade_level, student_id_prefix, status, admin_id) VALUES (:gradeId, :gradeName, :gradeLevel, :studentIdPrefix, 0, :adminId)";
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindParam(':gradeId', $gradeId);
+        $stmt->bindParam(':gradeName', $gradeName);
+        $stmt->bindParam(':gradeLevel', $gradeLevel);
+        $stmt->bindParam(':studentIdPrefix', $studentIdPrefix);
+        $stmt->bindParam(':adminId', $_SESSION['admin_id']);
     }
 
-    try {
-        $stmt->execute();
-        header('Location: grade.php');
-        exit();
-    } catch (PDOException $e) {
-        echo "<script>alert('Database error: " . $e->getMessage() . "');</script>";
-    }
+    include $_SERVER['DOCUMENT_ROOT'] . "/mips/php/refresh_page.php";
 }
 
 $pageTitle = "Grade Management - MIPS";
 include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
 
-<body>
+<body id="<?php echo $id ?>">
     <?php include  $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_header.php"; ?>
     <div class="container">
         <?php include  $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_sidebar.php"; ?>
@@ -73,37 +79,45 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                     </div>
                 </div>
                 <div class="table-body">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Grade Name</th>
-                                <th>Grade Level</th>
-                                <th>Total Classes</th>
-                                <th>Total Students</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php foreach ($all_grades as $grade) : ?>
+                    <?php if (!empty($all_grades)) : ?>
+                        <table>
+                            <thead>
                                 <tr>
-                                    <td><?php echo htmlspecialchars($grade['grade_name']); ?></td>
-                                    <td><?php echo htmlspecialchars($grade['grade_level']); ?></td>
-                                    <td><?php echo htmlspecialchars($grade['total_classes']); ?></td>
-                                    <td><?php echo htmlspecialchars($grade['total_students']); ?></td>
-                                    <td>
-                                        <form action="" method="POST" style="display:inline;" onsubmit="return showDeactivateConfirmDialog(event);">
-                                            <input type="hidden" name="grade_id" value="<?= htmlspecialchars($grade['grade_id']); ?>">
-                                            <input type="hidden" name="action" value="deactivate_grade">
-                                            <button type="submit" class="delete-grade-btn"><i class="bi bi-x-square"></i></button>
-                                        </form>
-                                        <button type="button" class="edit-grade-btn" data-grade-id="<?= htmlspecialchars($grade['grade_id']); ?>"><i class="bi bi-pencil-square"></i></button>
-                                    </td>
+                                    <th>Grade Name</th>
+                                    <th>Grade Level</th>
+                                    <th>Student ID Prefix</th>
+                                    <th>Total Classes</th>
+                                    <th>Total Students</th>
+                                    <th>Actions</th>
                                 </tr>
-                            <?php endforeach; ?>
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($all_grades as $grade) : ?>
+                                    <tr>
+                                        <td><?php echo htmlspecialchars($grade['grade_name']); ?></td>
+                                        <td><?php echo htmlspecialchars($grade['grade_level']); ?></td>
+                                        <td><?php echo htmlspecialchars($grade['student_id_prefix']); ?></td>
+                                        <td><?php echo htmlspecialchars($grade['total_classes']); ?></td>
+                                        <td><?php echo htmlspecialchars($grade['total_students']); ?></td>
+                                        <td>
+                                            <form action="" method="POST" style="display:inline;" onsubmit="return showDeactivateConfirmDialog(event);">
+                                                <input type="hidden" name="grade_id" value="<?= htmlspecialchars($grade['grade_id']); ?>">
+                                                <input type="hidden" name="action" value="deactivate_grade">
+                                                <button type="submit" class="delete-grade-btn"><i class="bi bi-x-square"></i></button>
+                                            </form>
+                                            <button type="button" class="edit-grade-btn" data-grade-id="<?= htmlspecialchars($grade['grade_id']); ?>"><i class="bi bi-pencil-square"></i></button>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    <?php else : ?>
+                        <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/no_data_found.php"; ?>
+                    <?php endif; ?>
                 </div>
-                <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/pagination.php"; ?>
+                <?php if (!empty($all_grades)) : ?>
+                    <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/pagination.php"; ?>
+                <?php endif; ?>
             </div>
         </main>
     </div>
@@ -132,6 +146,13 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                 </div>
                 <p>Please enter the level of the grade.</p>
             </div>
+            <div class="input-container">
+                <h2>Student ID Prefix</h2>
+                <div class="input-field">
+                    <input type="text" name="student_id_prefix" value="<?php echo isset($_POST['student_id_prefix']) ? htmlspecialchars($_POST['student_id_prefix']) : ''; ?>">
+                </div>
+                <p>Please enter the student ID prefix.</p>
+            </div>
             <div class="input-container controls">
                 <button type="button" class="cancel">Cancel</button>
                 <button type="reset">Clear</button>
@@ -155,6 +176,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                             document.querySelector('#add-edit-data [name="grade_id"]').value = grade.grade_id;
                             document.querySelector('#add-edit-data [name="grade_name"]').value = grade.grade_name;
                             document.querySelector('#add-edit-data [name="grade_level"]').value = grade.grade_level;
+                            document.querySelector('#add-edit-data [name="student_id_prefix"]').value = grade.student_id_prefix;
                             document.querySelector('#add-edit-data h1').textContent = "Edit Grade";
                             document.getElementById('add-edit-data').showModal();
                         }
