@@ -176,29 +176,29 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/customer_header.php"; ?>
         </div>
     </div>
 </section>
-<section class="size-chart">
-    <div class="container">
-        <div class="wrapper">
-            <div class="title">
-                <div class="left">
-                    <h1>Apparel Size</h1>
+<?php if (!empty($get_apparel_sizes)) : ?>
+    <section class="size-chart">
+        <div class="container">
+            <div class="wrapper">
+                <div class="title">
+                    <div class="left">
+                        <h1>Apparel Size</h1>
+                    </div>
+                    <div class="right">
+                    </div>
                 </div>
-                <div class="right">
-                </div>
-            </div>
-            <div class="table-body">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Apparel Size Name</th>
-                            <th>Shoulder Width</th>
-                            <th>Bust</th>
-                            <th>Waist</th>
-                            <th>Length</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php if (!empty($get_apparel_sizes)) : ?>
+                <div class="table-body">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Apparel Size Name</th>
+                                <th>Shoulder Width</th>
+                                <th>Bust</th>
+                                <th>Waist</th>
+                                <th>Length</th>
+                            </tr>
+                        </thead>
+                        <tbody>
                             <?php foreach ($get_apparel_sizes as $size) : ?>
                                 <tr>
                                     <td><?= htmlspecialchars($size['size_name']); ?></td>
@@ -208,17 +208,13 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/customer_header.php"; ?>
                                     <td><?= htmlspecialchars($size['length'] === null || $size['length'] == 0 ? '-' : $size['length']); ?></td>
                                 </tr>
                             <?php endforeach; ?>
-                        <?php else : ?>
-                            <tr>
-                                <td colspan="6">No apparel sizes available.</td>
-                            </tr>
-                        <?php endif; ?>
-                    </tbody>
-                </table>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
+<?php endif; ?>
 <dialog id="add-edit-data">
     <div class="title">
         <div class="right">

@@ -12,9 +12,8 @@ class Action
 
     public function login($email, $password, $currentPage = null, $productId = null)
     {
-
         try {
-            $sqlParent = "SELECT * FROM Parent WHERE parent_email = :email AND status = 0";
+            $sqlParent = "SELECT * FROM Parent WHERE parent_email = :email AND status in(-1, 0)";
             $stmtParent = $this->db->prepare($sqlParent);
             $stmtParent->bindParam(':email', $email);
             $stmtParent->execute();
@@ -27,7 +26,12 @@ class Action
                 $_SESSION['user_name'] = $parent['parent_name'];
                 $_SESSION['user_phone'] = $parent['parent_phone'];
                 $_SESSION['user_email'] = $parent['parent_email'];
-                $_SESSION['user_image'] = !empty($parent['parent_image']) ? $parent['parent_image'] : './images/default_profile.png';
+                $_SESSION['user_status'] = $parent['status'];
+                $_SESSION['user_image'] = !empty($parent['parent_image']) ? $parent['parent_image'] : '/mips/images/default_profile.png';
+
+                if ($parent['status'] == -1) {
+                    return json_encode(['success' => true, 'redirect' => '/mips/new-password.php']);
+                }
 
                 $redirectUrl = $productId ? "item.php?pid=" . $productId : ($currentPage ?? '/mips');
                 return json_encode(['success' => true, 'redirect' => $redirectUrl]);
@@ -38,6 +42,7 @@ class Action
             return json_encode(['error' => 'Database error: ' . $e->getMessage()]);
         }
     }
+
 
     // Order Functions
     public function get_orders($parent_id, $status)

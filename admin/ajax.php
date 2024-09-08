@@ -1,9 +1,11 @@
 <?php
+// session_start();
 ob_start();
 date_default_timezone_set("Asia/Kuala_Lumpur");
 
 $action = $_GET['action'];
-include 'admin_class.php';
+include $_SERVER['DOCUMENT_ROOT'] . "/mips/admin/admin_class.php";
+
 $crud = new Action();
 
 switch ($action) {
@@ -80,7 +82,7 @@ switch ($action) {
 
     case 'get_parent':
         if (isset($_POST['parent_id'])) {
-            echo $crud->get_parent($_GET['parent_id']);
+            echo $crud->get_parent($_POST['parent_id']);
         } else {
             echo json_encode(['error' => 'Parent ID not provided']);
         }

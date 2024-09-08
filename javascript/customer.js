@@ -417,10 +417,6 @@ document.addEventListener('DOMContentLoaded', function () {
             scrollPosition = window.pageYOffset;
             const productId = new URLSearchParams(window.location.search).get('pid');
 
-            document.body.style.overflowY = 'hidden';
-            document.body.style.paddingRight = '15px';
-            document.body.style.backgroundColor = 'white';
-
             const loginForm = document.querySelector('.login-form');
             if (productId) {
                 loginForm.querySelector('form').action += `?pid=${encodeURIComponent(productId)}`;
@@ -434,10 +430,6 @@ document.addEventListener('DOMContentLoaded', function () {
             const dialog = document.querySelector('.login-form');
             dialog.close();
             dialog.querySelector('form').reset();
-
-            document.body.style.overflowY = '';
-            document.body.style.paddingRight = '';
-            document.body.style.backgroundColor = '';
 
             window.scrollTo(0, scrollPosition);
         });

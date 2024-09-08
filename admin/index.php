@@ -36,30 +36,29 @@ $totalCashIn = getTotalCashInAmount($pdo);
 
 function getRecentOrders($pdo, $limit = 5)
 {
-    $sqlRecentOrders = "
-        SELECT 
-            o.order_id, 
-            p.product_name, 
-            ps.student_id, 
-            s.student_name, 
-            oi.order_subtotal, 
-            py.payment_status
-        FROM 
-            Orders o
-        JOIN 
-            Order_Item oi ON o.order_id = oi.order_id
-        JOIN 
-            Product p ON oi.product_id = p.product_id
-        JOIN 
-            Parent_Student ps ON o.parent_student_id = ps.parent_student_id
-        JOIN 
-            Student s ON ps.student_id = s.student_id
-        JOIN 
-            Payment py ON o.order_id = py.order_id
-        ORDER BY 
-            o.order_datetime DESC
-        LIMIT :limit
-    ";
+    $sqlRecentOrders = "SELECT 
+                            o.order_id, 
+                            p.product_name, 
+                            ps.student_id, 
+                            s.student_name, 
+                            oi.order_subtotal, 
+                            py.payment_status
+                        FROM 
+                            Orders o
+                        JOIN 
+                            Order_Item oi ON o.order_id = oi.order_id
+                        JOIN 
+                            Product p ON oi.product_id = p.product_id
+                        JOIN 
+                            Parent_Student ps ON o.parent_student_id = ps.parent_student_id
+                        JOIN 
+                            Student s ON ps.student_id = s.student_id
+                        JOIN 
+                            Payment py ON o.order_id = py.order_id
+                        ORDER BY 
+                            o.order_datetime DESC
+                        LIMIT :limit
+                    ";
     $stmtRecentOrders = $pdo->prepare($sqlRecentOrders);
     $stmtRecentOrders->bindValue(':limit', (int)$limit, PDO::PARAM_INT);
     $stmtRecentOrders->execute();
@@ -73,10 +72,10 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
 ?>
 
 <body>
-    <?php include "../components/admin_header.php"; ?>
+    <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_header.php"; ?>
     <div class="container">
-        <?php include "../components/admin_sidebar.php"; ?>
-        <main>
+        <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_sidebar.php"; ?>
+        <main class="two-columns">
             <section class="middle">
                 <div class="insights">
                     <div class="wrapper">
@@ -152,31 +151,35 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
                                 <h2>Recent Orders</h2>
                             </div>
                             <div class="right">
-                                <a href="./order.php" class="more">View All<i class="bi bi-chevron-right"></i></a>
+                                <a href="/mips/admin/order.php" class="more">View All<i class="bi bi-chevron-right"></i></a>
                             </div>
                         </div>
                         <div class="table-body">
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>Product</th>
-                                        <th>Customer</th>
-                                        <th>Price</th>
-                                        <th>Status</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php foreach ($recentOrders as $order) { ?>
+                            <?php if (!empty($recentOrders)) : ?>
+                                <table>
+                                    <thead>
                                         <tr>
-                                            <td><?php echo htmlspecialchars($order['product_name']); ?></td>
-                                            <td><?php echo htmlspecialchars($order['student_name']); ?></td>
-                                            <td>MYR <?php echo number_format($order['order_subtotal'], 2); ?></td>
-                                            <td><span class="<?php echo $order['payment_status'] == 'completed' ? 'success' : 'pending'; ?>">
-                                                    <?php echo ucfirst($order['payment_status']); ?></span></td>
+                                            <th>Order ID</th>
+                                            <th>Parent Name</th>
+                                            <th>Total Price</th>
+                                            <th>Status</th>
                                         </tr>
-                                    <?php } ?>
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody>
+                                        <?php foreach ($recentOrders as $order) : ?>
+                                            <tr>
+                                                <td><?php echo htmlspecialchars($order['order_id']); ?></td>
+                                                <td><?php echo htmlspecialchars($order['parent_name']); ?></td>
+                                                <td>MYR <?php echo number_format($order['order_subtotal'], 2); ?></td>
+                                                <td><span class="<?php echo $order['payment_status'] == 'completed' ? 'success' : 'pending'; ?>">
+                                                        <?php echo ucfirst($order['payment_status']); ?></span></td>
+                                            </tr>
+                                        <?php endforeach; ?>
+                                    </tbody>
+                                </table>
+                            <?php else : ?>
+                                <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/no_data_found.php"; ?>
+                            <?php endif; ?>
                         </div>
                     </div>
                 </div>
@@ -199,8 +202,8 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
                                     <!-- <img src="../uploads/wangbingbing(2).jpg"> -->
                                 </div>
                                 <div class="message">
-                                    <p><b>Admin</b> received a new order</p>
-                                    <small class="text-muted">2 minutes ago</small>
+                                    <p style="color: white"><b>Admin</b> received a new order</p>
+                                    <small style="color: white" class="text-muted">2 minutes ago</small>
                                 </div>
                             </div>
                             <div class="update">
@@ -208,8 +211,8 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
                                     <!-- <img src="../uploads/wangbingbing(3).jpg"> -->
                                 </div>
                                 <div class="message">
-                                    <p><b>Admin</b> received a new order</p>
-                                    <small class="text-muted">2 minutes ago</small>
+                                    <p style="color: white"><b>Admin</b> received a new order</p>
+                                    <small style="color: white" class="text-muted">2 minutes ago</small>
                                 </div>
                             </div>
                             <div class="update">
@@ -217,8 +220,8 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
                                     <!-- <img src="../uploads/wangbingbing(4).png"> -->
                                 </div>
                                 <div class="message">
-                                    <p><b>Admin</b> received a new order</p>
-                                    <small class="text-muted">2 minutes ago</small>
+                                    <p style="color: white"><b>Admin</b> received a new order</p>
+                                    <small style="color: white" class="text-muted">2 minutes ago</small>
                                 </div>
                             </div>
                         </div>
@@ -240,8 +243,8 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
                                     <h3>Page Views</h3>
                                     <small class="text-muted">Last 24 Hours</small>
                                 </div>
-                                <h5 class="success">+1%</h5>
-                                <h3>1</h3>
+                                <h5 style="color: white" class="success">+1%</h5>
+                                <h3 style="color: white">1</h3>
                             </div>
                         </div>
                         <div class="item">
@@ -253,8 +256,8 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
                                     <h3>Unique Visitors</h3>
                                     <small class="text-muted">Last 24 Hours</small>
                                 </div>
-                                <h5 class="danger">0%</h5>
-                                <h3>1</h3>
+                                <h5 style="color: white" class="danger">0%</h5>
+                                <h3 style="color: white">1</h3>
                             </div>
                         </div>
                     </div>
@@ -263,7 +266,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
         </main>
     </div>
     <script src="/mips/javascript/common.js"></script>
-    <script src="../javascript/admin.js"></script>
+    <script src="/mips/javascript/admin.js"></script>
     <script>
         $(document).ready(function() {
             $.ajax({

@@ -165,7 +165,9 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
                         headers: {
                             'Content-Type': 'application/x-www-form-urlencoded'
                         },
-                        body: `parent_id=${encodeURIComponent(parentId)}`
+                        body: new URLSearchParams({
+                            parent_id: parentId
+                        })
                     })
                     .then(response => response.json())
                     .then(parent => {

@@ -142,7 +142,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                                     </form>
                                     <button type="button" class="edit-subcategory-btn" data-subcategory-id="<?= htmlspecialchars($subcategory['category_id']); ?>"><i class="bi bi-pencil-square"></i></button>
                                 </div>
-                                <div class="txt">
+                                <div class="info-container">
                                     <h3><?php echo htmlspecialchars($subcategory['category_name']); ?></h3>
                                 </div>
                             </div>
@@ -227,6 +227,12 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                         console.error('Error fetching subcategory data:', error);
                         alert('Failed to load subcategory data.');
                     });
+            });
+        });
+
+        document.querySelectorAll('#add-edit-data .cancel').forEach(button => {
+            button.addEventListener('click', function() {
+                document.querySelector('#add-edit-data h1').textContent = "Add Subcategory";
             });
         });
     </script>
