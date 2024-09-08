@@ -318,17 +318,38 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
             </div>
             <div class="input-container">
                 <h2>Product Sizes<sup>*</sup></h2>
-                <div class="input-field">
-                    <?php foreach ($all_sizes as $size) { ?>
-                        <label>
-                            <input type="checkbox" name="sizes[]" value="<?= htmlspecialchars($size['size_id']) ?>"
-                                <?php if (in_array($size['size_id'], $_POST['sizes'] ?? [])) echo 'checked'; ?>>
-                            <?= htmlspecialchars($size['size_name']) ?> (Shoulder: <?= htmlspecialchars($size['shoulder_width']) ?>, Bust: <?= htmlspecialchars($size['bust']) ?>, Waist: <?= htmlspecialchars($size['waist']) ?>, Length: <?= htmlspecialchars($size['length']) ?>)
-                        </label><br>
-                    <?php } ?>
+                <div class="add-edit-table-container">
+                    <table class="add-edit-table">
+                        <thead>
+                            <tr>
+                                <th>Select</th>
+                                <th>Size Name</th>
+                                <th>Shoulder Width</th>
+                                <th>Bust</th>
+                                <th>Waist</th>
+                                <th>Length</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($all_sizes as $size) { ?>
+                                <tr>
+                                    <td>
+                                        <input type="checkbox" name="sizes[]" value="<?= htmlspecialchars($size['size_id']) ?>"
+                                            <?php if (in_array($size['size_id'], $_POST['sizes'] ?? [])) echo 'checked'; ?>>
+                                    </td>
+                                    <td><?= htmlspecialchars($size['size_name']) ?></td>
+                                    <td><?= htmlspecialchars($size['shoulder_width']) ?></td>
+                                    <td><?= htmlspecialchars($size['bust']) ?></td>
+                                    <td><?= htmlspecialchars($size['waist']) ?></td>
+                                    <td><?= htmlspecialchars($size['length']) ?></td>
+                                </tr>
+                            <?php } ?>
+                        </tbody>
+                    </table>
                 </div>
                 <p>Please select one or more sizes for the product.</p>
             </div>
+
             <div class="input-container">
                 <h2>Stock Quantity<sup>*</sup></h2>
                 <div class="input-field">

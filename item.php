@@ -30,19 +30,16 @@ $product = getProductDetail($pdo, $product_id);
 
 function getApparelSizes($pdo, $product_id)
 {
-    $stmt = $pdo->prepare("
-        SELECT s.size_name, s.shoulder_width, s.bust, s.waist, s.length, ps.size_id
-        FROM Sizes s
-        JOIN Product_Size ps ON s.size_id = ps.size_id
-        JOIN Product p ON ps.product_id = p.product_id
-        WHERE p.product_id = :product_id
-        AND p.status = 0
-        ORDER BY s.size_name ASC
-    ");
-    $stmt->bindParam(':product_id', $product_id, PDO::PARAM_INT);
+    $stmt = $pdo->prepare("SELECT s.size_name, s.shoulder_width, s.bust, s.waist, s.length, ps.size_id
+                            FROM Sizes s
+                            JOIN Product_Size ps ON s.size_id = ps.size_id
+                            WHERE ps.product_id = :product_id
+                            ORDER BY s.size_name ASC");
+    $stmt->bindParam(':product_id', $product_id, PDO::PARAM_STR);
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
+
 
 $get_apparel_sizes = getApparelSizes($pdo, $product_id);
 
@@ -310,154 +307,160 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/customer_header.php"; ?>
                 document.querySelector('.login-form').querySelector('form').action += `?pid=${productId}`;
                 document.querySelector('.login-form').showModal();
             <?php else : ?>
-                const selectedSizeButton = document.querySelector('.size-button.selected');
-                if (!selectedSizeButton) {
-                    alert('Please select a size.');
-                    return;
+                const sizeButtons = document.querySelectorAll('.size-button');
+
+                if (sizeButtons.length > 0) {
+                    const selectedSizeButton = document.querySelector('.size-button.selected');
+                    if (!selectedSizeButton) {
+                        alert('Please select a size.');
+                        return;
+                    }
+                    const sizeId = selectedSizeButton.getAttribute('data-size-id');
+                    document.getElementById('size-id').value = sizeId;
+                    document.getElementById('selected-size-display').value = selectedSizeButton.textContent;
+                } else {
+                    document.getElementById('size-id').value = '';
+                    document.getElementById('selected-size-display').value = 'N/A';
                 }
 
-                const sizeId = selectedSizeButton.getAttribute('data-size-id');
                 const productName = '<?= htmlspecialchars($product['product_name']) ?>';
                 const productPrice = parseFloat('<?= number_format($product['product_price'], 2) ?>');
                 const quantity = parseInt(document.getElementById('qty').value);
                 const totalPrice = (productPrice * quantity).toFixed(2);
 
                 document.getElementById('product-id').value = '<?= $product_id ?>';
-                document.getElementById('size-id').value = sizeId;
                 document.getElementById('product-price').value = productPrice;
-
                 document.getElementById('product-name-display').value = productName;
-                document.getElementById('selected-size-display').value = selectedSizeButton.textContent;
                 document.getElementById('product-price-display').value = `${quantity} x MYR ${productPrice} = MYR ${totalPrice}`;
 
                 const dialog = document.getElementById('add-edit-data');
                 dialog.showModal();
             <?php endif; ?>
         });
+    });
 
-        const form = document.querySelector('#add-edit-data form');
-        const qtyInput = document.getElementById('qty');
-        const totalPriceInput = document.getElementById('total-price');
-        const productPrice = parseFloat('<?= $product['product_price'] ?>');
+    const form = document.querySelector('#add-edit-data form');
+    const qtyInput = document.getElementById('qty');
+    const totalPriceInput = document.getElementById('total-price');
+    const productPrice = parseFloat('<?= $product['product_price'] ?>');
 
-        function updateTotalPrice() {
-            const quantity = parseInt(qtyInput.value);
-            const totalPrice = (productPrice * quantity).toFixed(2);
-            document.getElementById('product-price-display').value = 'MYR ' + totalPrice;
-            totalPriceInput.value = totalPrice;
+    function updateTotalPrice() {
+        const quantity = parseInt(qtyInput.value);
+        const totalPrice = (productPrice * quantity).toFixed(2);
+        document.getElementById('product-price-display').value = 'MYR ' + totalPrice;
+        totalPriceInput.value = totalPrice;
+    }
+
+    qtyInput.addEventListener('input', updateTotalPrice);
+
+    form.addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const selectedSizeButton = document.querySelector('.size-button.selected');
+        if (!selectedSizeButton) {
+            alert('Please select a size.');
+            return;
         }
 
-        qtyInput.addEventListener('input', updateTotalPrice);
+        const selectedChildren = Array.from(document.querySelectorAll('input[name="child[]"]:checked')).map(el => el.value);
+        const paymentImage = document.querySelector('input[name="payment_image"]').files[0];
 
-        form.addEventListener('submit', function(event) {
-            event.preventDefault();
+        if (selectedChildren.length === 0) {
+            alert('Please select at least one child.');
+            return;
+        }
 
+        const formData = new FormData(form);
+        formData.append('size_id', selectedSizeButton.getAttribute('data-size-id'));
+        formData.append('children', selectedChildren.join(','));
+        formData.append('total_item_quantities', qtyInput.value);
+        formData.append('total_price_items', totalPriceInput.value);
+        formData.append('total_price', totalPriceInput.value);
+
+        fetch('/mips/ajax.php?action=purchase', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Purchase successful!');
+                    document.querySelector('#add-edit-data').close();
+                } else {
+                    alert('Failed to complete purchase: ' + data.error);
+                }
+            })
+            .catch(error => {
+                console.error('Error completing purchase:', error);
+                alert('An error occurred while processing your request.');
+            });
+    });
+
+    const thumbnails = document.querySelectorAll('.thumbnail');
+    const mainImage = document.querySelector('.product-image img');
+
+    if (thumbnails.length > 0) {
+        thumbnails[0].classList.add('active');
+        const firstImageSrc = thumbnails[0].getAttribute('data-src');
+        mainImage.setAttribute('src', firstImageSrc);
+        mainImage.setAttribute('alt', firstImageSrc);
+    }
+
+    thumbnails.forEach(thumbnail => {
+        thumbnail.addEventListener('click', function() {
+            thumbnails.forEach(thumb => thumb.classList.remove('active'));
+
+            this.classList.add('active');
+
+            const newSrc = this.getAttribute('data-src');
+            mainImage.setAttribute('src', newSrc);
+            mainImage.setAttribute('alt', newSrc);
+        });
+    });
+
+    document.querySelectorAll('.size-button').forEach(button => {
+        button.addEventListener('click', function() {
+            document.querySelectorAll('.size-button').forEach(btn => btn.classList.remove('selected'));
+            this.classList.add('selected');
+        });
+    });
+
+    document.querySelectorAll('.add-to-cart-btn').forEach(button => {
+        button.addEventListener('click', function() {
             const selectedSizeButton = document.querySelector('.size-button.selected');
             if (!selectedSizeButton) {
                 alert('Please select a size.');
                 return;
             }
+            const productId = button.dataset.productId;
+            const sizeId = selectedSizeButton.dataset.sizeId;
+            const qty = document.getElementById('qty').value;
 
-            const selectedChildren = Array.from(document.querySelectorAll('input[name="child[]"]:checked')).map(el => el.value);
-            const paymentImage = document.querySelector('input[name="payment_image"]').files[0];
-
-            if (selectedChildren.length === 0) {
-                alert('Please select at least one child.');
-                return;
-            }
-
-            const formData = new FormData(form);
-            formData.append('size_id', selectedSizeButton.getAttribute('data-size-id'));
-            formData.append('children', selectedChildren.join(','));
-            formData.append('total_item_quantities', qtyInput.value);
-            formData.append('total_price_items', totalPriceInput.value);
-            formData.append('total_price', totalPriceInput.value);
-
-            fetch('/mips/ajax.php?action=purchase', {
+            fetch('/mips/ajax.php?action=add_to_cart', {
                     method: 'POST',
-                    body: formData
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: new URLSearchParams({
+                        product_id: productId,
+                        qty: qty,
+                        customer_id: '<?php echo $_SESSION['user_id']; ?>',
+                        product_size_id: sizeId
+                    })
                 })
                 .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        alert('Purchase successful!');
-                        document.querySelector('#add-edit-data').close();
+                .then(result => {
+                    if (result.success) {
+                        alert('Product added to cart successfully!');
+                    } else if (result.error) {
+                        alert('Error: ' + result.error);
                     } else {
-                        alert('Failed to complete purchase: ' + data.error);
+                        alert('Unexpected error occurred.');
                     }
                 })
-                .catch(error => {
-                    console.error('Error completing purchase:', error);
-                    alert('An error occurred while processing your request.');
+                .catch(() => {
+                    alert('Failed to add product to cart. Please try again.');
                 });
-        });
-
-        const thumbnails = document.querySelectorAll('.thumbnail');
-        const mainImage = document.querySelector('.product-image img');
-
-        if (thumbnails.length > 0) {
-            thumbnails[0].classList.add('active');
-            const firstImageSrc = thumbnails[0].getAttribute('data-src');
-            mainImage.setAttribute('src', firstImageSrc);
-            mainImage.setAttribute('alt', firstImageSrc);
-        }
-
-        thumbnails.forEach(thumbnail => {
-            thumbnail.addEventListener('click', function() {
-                thumbnails.forEach(thumb => thumb.classList.remove('active'));
-
-                this.classList.add('active');
-
-                const newSrc = this.getAttribute('data-src');
-                mainImage.setAttribute('src', newSrc);
-                mainImage.setAttribute('alt', newSrc);
-            });
-        });
-
-        document.querySelectorAll('.size-button').forEach(button => {
-            button.addEventListener('click', function() {
-                document.querySelectorAll('.size-button').forEach(btn => btn.classList.remove('selected'));
-                this.classList.add('selected');
-            });
-        });
-
-        document.querySelectorAll('.add-to-cart-btn').forEach(button => {
-            button.addEventListener('click', function() {
-                const selectedSizeButton = document.querySelector('.size-button.selected');
-                if (!selectedSizeButton) {
-                    alert('Please select a size.');
-                    return;
-                }
-                const productId = button.dataset.productId;
-                const sizeId = selectedSizeButton.dataset.sizeId;
-                const qty = document.getElementById('qty').value;
-
-                fetch('/mips/ajax.php?action=add_to_cart', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded'
-                        },
-                        body: new URLSearchParams({
-                            product_id: productId,
-                            qty: qty,
-                            customer_id: '<?php echo $_SESSION['user_id']; ?>',
-                            product_size_id: sizeId
-                        })
-                    })
-                    .then(response => response.json())
-                    .then(result => {
-                        if (result.success) {
-                            alert('Product added to cart successfully!');
-                        } else if (result.error) {
-                            alert('Error: ' + result.error);
-                        } else {
-                            alert('Unexpected error occurred.');
-                        }
-                    })
-                    .catch(() => {
-                        alert('Failed to add product to cart. Please try again.');
-                    });
-            });
         });
     });
 </script>

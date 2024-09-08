@@ -6,7 +6,11 @@ function getPageCount($pdo, $rows_per_page, $database_table)
     $stmt = $pdo->prepare($sql);
     $stmt->execute();
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
-    return ceil($result['count'] / $rows_per_page);
+
+    $total_rows = $result['count'];
+    $total_pages = ceil($total_rows / $rows_per_page);
+
+    return $total_pages;
 }
 
 $pageCount = getPageCount($pdo, $rows_per_page, $database_table);

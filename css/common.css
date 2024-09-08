@@ -649,7 +649,7 @@ thead th {
     align-items: center;
 }
 
-.breadcrumbs ul span {
+.breadcrumbs ul i {
     width: 20px;
     vertical-align: middle;
     margin: 0 10px;
@@ -665,6 +665,41 @@ thead th {
     border: none;
     pointer-events: none;
 }
+
+/* .add-edit-table-container */
+.add-edit-table-container {
+    max-height: 200px;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    margin-top: 10px;
+}
+
+.add-edit-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.add-edit-table th,
+.size-table td {
+    padding: 8px 12px;
+    text-align: center;
+    border: 1px solid #ddd;
+    /* 表格的边框 */
+}
+
+.add-edit-table th {
+    background-color: #f2f2f2;
+    /* 表头的背景色 */
+    font-weight: bold;
+}
+
+.add-edit-table td {
+    white-space: nowrap;
+    /* 防止单元格内容换行 */
+}
+
+
 
 /* Category Box */
 .category .box-container {

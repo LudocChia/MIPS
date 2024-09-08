@@ -4,37 +4,25 @@
         if (!isset($_GET['page-nr'])) {
             $page = 1;
         } else {
-            $page = $_GET['page-nr'];
-        } ?>
+            $page = (int)$_GET['page-nr'];
+        }
+        ?>
         <p>Showing <?php echo $page; ?> of <?php echo $pageCount; ?></p>
     </div>
-    <a href="?page-nr=1">First</a>
 
-    <?php if (isset($_GET['page-nr']) && $_GET['page-nr'] > 1) { ?>
-        <a href="?page-nr=<?= $_GET['page-nr'] - 1 ?>">Previous</a>
-    <?php } else { ?>
-        <a>Previous</a>
-    <?php } ?>
+    <a href="?page-nr=1" class="<?php echo $page == 1 ? 'disabled' : ''; ?>">First</a>
+    <a href="?page-nr=<?= $page > 1 ? $page - 1 : 1 ?>" class="<?php echo $page == 1 ? 'disabled' : ''; ?>">Previous</a>
+
     <div class="page-numbers">
         <?php
-        for ($counter = 1; $counter <= $pageCount; $counter++) {
-        ?>
-
-            <a href="?page-nr=<?= $counter; ?>"><?= $counter; ?></a>
-
+        for ($counter = 1; $counter <= $pageCount; $counter++) { ?>
+            <a href="?page-nr=<?= $counter; ?>" class="<?= $counter == $page ? 'active' : ''; ?>"><?= $counter; ?></a>
         <?php
         }
         ?>
     </div>
 
-    <?php if (!isset($_GET['page-nr'])) { ?>
-        <a href="?page-nr=2">Next</a>
-        <?php } else {
-        if ($_GET['page-nr'] >= $pageCount) { ?>
-            <a>Next</a>
-        <?php } else { ?>
-            <a href="?page-nr=<?= $_GET['page-nr'] + 1 ?>">Next</a>
-        <?php } ?>
-        <a href="?page-nr=<?php echo $pageCount; ?>">Last</a>
-    <?php } ?>
+    <a href="?page-nr=<?= $page < $pageCount ? $page + 1 : $pageCount ?>" class="<?php echo $page == $pageCount ? 'disabled' : ''; ?>">Next</a>
+
+    <a href="?page-nr=<?= $pageCount ?>" class="<?php echo $page == $pageCount ? 'disabled' : ''; ?>">Last</a>
 </div>
