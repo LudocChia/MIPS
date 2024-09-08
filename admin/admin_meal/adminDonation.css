@@ -461,7 +461,7 @@
     margin-left: 34px;
     margin-right: 10px;
 }
-.bigbox1 #row2 #column1 #row1{
+.bigbox1 #row2 #column1 #rowF{
     margin-top: 10px;
 }
 .bigbox1 #row2 #column1 row p{
@@ -474,6 +474,7 @@
     font-size: 27px;
     color: #023163;
 }
+
 .bigbox1 #row4 button{
     background-color: transparent;
     border-radius: 10px;

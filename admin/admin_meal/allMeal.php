@@ -9,41 +9,127 @@ if (!isset($_SESSION['admin_id'])) {
 }
 
 
+
 // Check if the event_id and meal_type_id parameters are set in the URL
 if (isset($_GET['event_id']) && isset($_GET['meal_type_id'])) {
-    // Retrieve the event_id and meal_type_id values
+    // Retrieve the event_id and meal_type_id from the GET parameters
     $event_id = $_GET['event_id'];
     $meal_type_id = $_GET['meal_type_id'];
-        // Prepare and execute the query to search for meals based on meal_type_id
-        $stmt = $pdo->prepare("SELECT * FROM `event_meal` 
-                                INNER JOIN `meal_type` ON event_meal.meal_type_id = meal_type.meal_type_id
-                                INNER JOIN `meals` ON event_meal.event_meal_id = meals.event_meal_id
-                                INNER JOIN `event` ON event_meal.event_id = event.event_id
-                                WHERE event_meal.event_id = :event_id AND event_meal.meal_type_id = :meal_type_id");
 
-        // Bind the parameters
-        $stmt->bindParam(':event_id', $event_id);
-        $stmt->bindParam(':meal_type_id', $meal_type_id);
-        $stmt->execute();
+    // Prepare and execute the query to search for meals based on event_id and meal_type_id
+    $stmt = $pdo->prepare("SELECT * FROM `event_meal` 
+                            INNER JOIN `meal_type` ON event_meal.meal_type_id = meal_type.meal_type_id
+                            INNER JOIN `meals` ON event_meal.event_meal_id = meals.event_meal_id
+                            INNER JOIN `event` ON event_meal.event_id = event.event_id
+                            WHERE event_meal.event_id = :event_id AND event_meal.meal_type_id = :meal_type_id");
 
-        // Fetch the results
-        $meals = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    // Bind the parameters
+    $stmt->bindParam(':event_id', $event_id);
+    $stmt->bindParam(':meal_type_id', $meal_type_id);
+    $stmt->execute();
 
-        // Display the meals if available
-        if ($meals) {
-            // echo '<h2>Meal Information</h2>';
-            foreach ($meals as $meal) {
-                // echo '<p>Event_ID: ' . htmlspecialchars($meal['event_id']) . '</p>';
-                // echo '<p>Name: ' . htmlspecialchars($meal['name']) . '</p>';
-                // echo '<p><strong>Meal Name:</strong> ' . htmlspecialchars($meal['meal_name']) . '</p>';
-                // Uncomment below if you want to show descriptions too
-                // echo '<p><strong>Description:</strong> ' . htmlspecialchars($meal['description']) . '</p>';
-                // echo '<hr>';
+    // Fetch the results
+    $meals = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    $stmt2 = $pdo->prepare("SELECT * FROM `event` WHERE event_id = :event_id");
+    $stmt2->bindParam(':event_id', $event_id);
+    $stmt2->execute();
+
+    // Fetch the results of the second query
+    $datas = $stmt2->fetchAll(PDO::FETCH_ASSOC);
+
+    // Check if the result set is empty
+    if (empty($meals)) {
+        // If the result is empty, run another SQL command
+        $stmt2 = $pdo->prepare("SELECT * FROM `event` WHERE event_id = :event_id");
+        $stmt2->bindParam(':event_id', $event_id);
+        $stmt2->execute();
+
+        // Fetch the results of the second query
+        $datas = $stmt2->fetchAll(PDO::FETCH_ASSOC);
+
+        if (!empty($datas)) {
+            // Process and display results from the fallback query
+            foreach ($datas as $data) {
+                // echo "Name of event: " . htmlspecialchars($data['name']);
             }
         } else {
-            echo '<p>No meals found for this meal type.</p>';
+            echo "No results found in the fallback query.";
         }
+    } else {
+        // Process and display results from the primary query
+        foreach ($datas as $data) {
+            // echo "Meal Name: " . htmlspecialchars($data['meal_name']);
+            // Add additional processing if needed
+        }
+    }
 
+
+
+    // Display the meals if available
+    if ($meals) {
+        // echo '<h2>Meal Information</h2>';
+        foreach ($meals as $meal) {
+            // Uncomment these lines to display meal details
+            // echo '<p>Event_ID: ' . htmlspecialchars($meal['event_id']) . '</p>';
+            // echo '<p>Name: ' . htmlspecialchars($meal['name']) . '</p>';
+            // echo '<p><strong>Meal Name:</strong> ' . htmlspecialchars($meal['meal_name']) . '</p>';
+            // echo '<hr>';
+        }
+    } else {
+        echo '<p>No meals found for this meal type.</p>';
+    }
+
+    // Function to generate a unique ID
+    function generateID() {
+        return uniqid(); 
+    }
+
+    // Check if form is submitted
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        $meal_id = generateID();
+        $meal_name = $_POST['Name'];
+        $person_per_set = $_POST['Ppl'];
+        $sets = $_POST['Set'];
+
+        // Generate event_meal_id only once
+        $event_meal_id = generateID();
+
+        try {
+            // Start transaction
+            $pdo->beginTransaction();
+
+            // Insert into `event_meal` table
+            $stmt = $pdo->prepare("INSERT INTO event_meal (event_meal_id, event_id, meal_type_id) VALUES (:event_meal_id, :event_id, :meal_type_id)");
+            $stmt->execute([
+                ':event_meal_id' => $event_meal_id,
+                ':event_id' => $event_id,
+                ':meal_type_id' => $meal_type_id
+            ]);
+
+            // Insert into `meals` table
+            $stmt = $pdo->prepare("INSERT INTO meals (meal_id, meal_name, person_per_set, sets, event_meal_id) 
+                                   VALUES (:meal_id, :meal_name, :person_per_set, :sets, :event_meal_id)");
+            $stmt->execute([
+                ':meal_id' => $meal_id,
+                ':meal_name' => $meal_name,
+                ':person_per_set' => $person_per_set,
+                ':sets' => $sets,
+                ':event_meal_id' => $event_meal_id
+            ]);
+
+            // Commit transaction
+            $pdo->commit();
+
+            // Redirect back to the same page with event_id and meal_type_id in the URL
+            header("Location: /mips/admin/admin_meal/allMeal.php?event_id=$event_id&meal_type_id=$meal_type_id");
+            exit(); // Prevent further execution
+        } catch (Exception $e) {
+            // Rollback transaction if something goes wrong
+            $pdo->rollBack();
+            echo "Failed to insert data: " . $e->getMessage();
+        }
+    }
 } else {
     // Handle the case where the parameters are not set
     echo '<p>Error: Missing event_id or meal_type_id.</p>';
@@ -83,7 +169,7 @@ if (isset($_GET['event_id']) && isset($_GET['meal_type_id'])) {
         <?php 
             // Construct the URL for the next page with just the 'event_id' parameter
             $backPageUrl = 'event.php?' . http_build_query([
-                'event_id' => $meal['event_id']
+                'event_id' => $data['event_id']
             ]); 
 
             // Debug: Output the URL for verification
@@ -98,14 +184,14 @@ if (isset($_GET['event_id']) && isset($_GET['meal_type_id'])) {
         <row id="row2">
             <div ><img src="../admin_for_meal/pngwing.com.png" alt="Image 1"></div>
             <column id="column1">
-                <h1><?= htmlspecialchars($meal['name']) ?></h1>
-                <row id="row1">
+                <h1><?= htmlspecialchars($data['name']) ?></h1>
+                <row id="rowF)">
                     <i class='bx bx-time-five'></i>
-                    <p><?= htmlspecialchars($meal['time']) ?></p>
+                    <p><?= htmlspecialchars($data['time']) ?></p>
                 </row>
                 <row>
                     <i class='bx bx-calendar'></i>
-                    <p><?= htmlspecialchars($meal['date']) ?></p>
+                    <p><?= htmlspecialchars($data['date']) ?></p>
                 </row>
             </column>
         </row>
@@ -124,6 +210,7 @@ if (isset($_GET['event_id']) && isset($_GET['meal_type_id'])) {
             <?php 
                 // Construct the URL for the next page with 'event_id' and 'meal_type_id' parameters
                 $nextPageUrl = 'mealDesc.php?' . http_build_query([
+                    'meal_id' => $meal['meal_id'], 
                     'event_id' => $meal['event_id'],      // Add event_id
                     'meal_type_id' => $meal['meal_type_id']  // Add meal_type_id
                 ]); 
@@ -154,34 +241,26 @@ if (isset($_GET['event_id']) && isset($_GET['meal_type_id'])) {
 
     <dialog  class="addMeal"  >
         <i class='bx bx-x' id="xbtn"></i>
-        <form method="POST" action="dialog">
-            <div>
-                <h1>Please fill in required credentials</h1>
-            </div>
-            <div>
-                <label for="name">Name :</label>
-                <input type="text" id="name" name="Name" required>
-            </div>
-            <div>
-                <label for="time">Time :</label>
-                <input type="text" id="time" name="Time" required>
-            </div>
-            <div>
-                <label for="date">Date :</label>
-                <input type="text" id="date" name="Date" required>
-            </div>
-            <div>
-                <label for="date">Date :</label>
-                <input type="text" id="date" name="Date" required>
-            </div>
-            <div>
-                <label for="date">Description :</label>
-                <textarea id="desc" name="Desc" rows="4" cols="5" required></textarea>
-            </div>
-            <div>
-                <input type="submit" value="Add" id="btn1" >
-            </div>
-        </form>
+            <form method="POST" action="">
+                <div>
+                    <h1>Please fill in required credentials</h1>
+                </div>
+                <div>
+                    <label for="name">Name :</label>
+                    <input type="text" id="name" name="Name">
+                </div>
+                <div>
+                    <label for="ppl">People per set (Portion):</label>
+                    <input type="text" id="ppl" name="Ppl">
+                </div>
+                <div>
+                    <label for="set">Set :</label>
+                    <input type="text" id="set" name="Set">
+                </div>
+                <div>
+                    <input type="submit" value="Add" id="btn1">
+                </div>
+            </form>
     </dialog>
     <script>
         const modal = document.querySelector('.addMeal');

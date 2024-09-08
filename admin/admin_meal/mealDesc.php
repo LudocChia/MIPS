@@ -12,6 +12,7 @@ if (!isset($_SESSION['admin_id'])) {
 // Check if the event_id and meal_type_id parameters are set in the URL
 if (isset($_GET['event_id']) && isset($_GET['meal_type_id'])) {
     // Retrieve the event_id and meal_type_id values
+    $meal_id = $_GET['meal_id'];
     $event_id = $_GET['event_id'];
     $meal_type_id = $_GET['meal_type_id'];
         // Prepare and execute the query to search for meals based on meal_type_id
@@ -19,9 +20,10 @@ if (isset($_GET['event_id']) && isset($_GET['meal_type_id'])) {
                                 INNER JOIN `meal_type` ON event_meal.meal_type_id = meal_type.meal_type_id
                                 INNER JOIN `meals` ON event_meal.event_meal_id = meals.event_meal_id
                                 INNER JOIN `event` ON event_meal.event_id = event.event_id
-                                WHERE event_meal.event_id = :event_id AND event_meal.meal_type_id = :meal_type_id");
+                                WHERE event_meal.event_id = :event_id AND event_meal.meal_type_id = :meal_type_id AND meals.meal_id = :meal_id");
 
         // Bind the parameters
+        $stmt->bindParam(':meal_id', $meal_id);
         $stmt->bindParam(':event_id', $event_id);
         $stmt->bindParam(':meal_type_id', $meal_type_id);
         $stmt->execute();
@@ -35,9 +37,10 @@ if (isset($_GET['event_id']) && isset($_GET['meal_type_id'])) {
             foreach ($meals as $meal) {
                 echo '<p>Event_ID: ' . htmlspecialchars($meal['event_id']) . '</p>';
                 echo '<p>Name: ' . htmlspecialchars($meal['name']) . '</p>';
-                echo '<p><strong>Meal Name:</strong> ' . htmlspecialchars($meal['meal_name']) . '</p>';
-                // Uncomment below if you want to show descriptions too
                 echo '<p><strong>Description:</strong> ' . htmlspecialchars($meal['description']) . '</p>';
+                echo '<p><strong>Meal Name:</strong> ' . htmlspecialchars($meal['meal_name']) . '</p>';
+                echo '<p>Meal_ID: ' . htmlspecialchars($meal['meal_id']) . '</p>';
+                // Uncomment below if you want to show descriptions too
                 // echo '<hr>';
             }
         } else {
