@@ -21,8 +21,8 @@ if ($event_id) {
 
         // Display data
         if ($row) {
-            echo '<p>Event_ID: ' . htmlspecialchars($row['event_id']) . '</p>';
-            echo '<p>Name: ' . htmlspecialchars($row['name']) . '</p>';
+            // echo '<p>Event_ID: ' . htmlspecialchars($row['event_id']) . '</p>';
+            // echo '<p>Name: ' . htmlspecialchars($row['name']) . '</p>';
         } else {
             echo 'No data found';
         }
@@ -121,6 +121,10 @@ try {
         <row id="row4">
             <i class='bx bx-calendar'></i>
             <p><?= htmlspecialchars($row['date']) ?></p>
+        </row>
+        <row id="row4">
+            <i class='bx bx-current-location' ></i>
+            <p><?= htmlspecialchars($row['place']) ?></p>
         </row>
         <row id="row5">
             <p id="desc"><?= htmlspecialchars($row['description']) ?></p>

@@ -8,6 +8,49 @@
 
     $stmt = $pdo->query("SELECT * FROM `event` where DATE(date) > DATE(now())");
     $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    try {
+        function generateID() {
+            return uniqid(); // Function to generate a unique ID
+        }    
+        // Check if form data is submitted
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            // Get the form values
+            $id = generateID();
+            $name = $_POST['Name'];
+            $place = $_POST['Place'];
+            $time = $_POST['Time'];
+            $date = $_POST['Date'];
+            $desc = $_POST['Desc'];
+            $pic = $_POST['Pic'];
+    
+            // Prepare SQL statement to insert data
+            $sql = "INSERT INTO `event` (`event_id`, `name`, `time`, `date`, `place`, `description`, `picture`) 
+                                VALUES (:id, :name, :time, :date, :place, :description, :picture)";
+    
+            // Prepare the statement
+            $stmt = $pdo->prepare($sql);
+    
+            // Bind parameters
+            $stmt->bindParam(':id', $id);
+            $stmt->bindParam(':name', $name);
+            $stmt->bindParam(':time', $time);
+            $stmt->bindParam(':date', $date);
+            $stmt->bindParam(':place', $place);
+            $stmt->bindParam(':description', $desc);
+            $stmt->bindParam(':picture', $pic);
+    
+            // Execute the query
+            if ($stmt->execute()) {
+                echo "New event added successfully!";
+            } else {
+                echo "Error adding event.";
+            }
+        }
+    } catch (PDOException $e) {
+        // Catch any errors and display an appropriate message
+        echo "Connection failed: " . $e->getMessage();
+    }
 ?>
 
 <!DOCTYPE html>
@@ -101,7 +144,7 @@
 
     <dialog  class="addEvent" >
         <i class='bx bx-x' id="xbtn"></i>
-        <form method="POST" action="dialog">
+        <form method="POST" action="">
             <div>
                 <h1>Please fill in required credentials</h1>
             </div>
@@ -114,16 +157,20 @@
                 <input type="text" id="time" name="Time" required>
             </div>
             <div>
-                <label for="date">Date :</label>
-                <input type="text" id="date" name="Date" required>
+                <label for="place">Place :</label>
+                <input type="text" id="place" name="Place" required>
             </div>
             <div>
                 <label for="date">Date :</label>
-                <input type="text" id="date" name="Date" required>
+                <input type="date" id="date" name="Date" required>
             </div>
             <div>
-                <label for="date">Description :</label>
+                <label for="desc">Description :</label>
                 <textarea id="desc" name="Desc" rows="4" cols="5" required></textarea>
+            </div>
+            <div>
+                <label for="pic">Picture :</label>
+                <input type="file" id="pic" name="Pic">
             </div>
             <div>
                 <input type="submit" value="Add" id="btn1" >
