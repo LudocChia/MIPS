@@ -20,6 +20,20 @@ function getProducts($pdo)
 
 $all_products = getProducts($pdo);
 
+function getProductsQuantity($pdo)
+{
+    $sql = "SELECT p.product_id, p.product_name, p.product_description, p.product_price, p.stock_quantity, p.color, p.gender, 
+                   pi.image_url AS primary_image
+            FROM Product p
+            LEFT JOIN Product_Image pi ON p.product_id = pi.product_id AND pi.sort_order = 1
+            WHERE p.status = 0";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute();
+    return $stmt->rowCount();
+}
+
+$count = getProductsQuantity($pdo);
+
 $pageTitle = "Bookshop - MIPS";
 include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/customer_head.php";
 ?>
@@ -35,7 +49,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/customer_head.php";
                             <h1>MIPS Bookshop</h1>
                         </div>
                         <div class="right">
-                            <p>Total <b id="count"><?= count($all_products) ?></b> products</p>
+                            <p>Total <b id="count"><?= $count ?></b> products</p>
                         </div>
                     </div>
                     <?php if (!empty($all_products)) : ?>
@@ -44,7 +58,6 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/customer_head.php";
                                 <div class="box">
                                     <a href="/mips/item.php?pid=<?= htmlspecialchars($product['product_id']); ?>">
                                         <div class="image-container">
-
                                             <img src="<?= htmlspecialchars(!empty($product['primary_image']) ? "uploads/product/" . $product['primary_image'] : 'images/defaultproductimage.png'); ?>" alt="Product Image" class="primary-image">
                                         </div>
                                         <div class="info-container">
