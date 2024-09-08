@@ -133,7 +133,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                                     </form>
                                     <button type="button" class="edit-category-btn" data-category-id="<?= htmlspecialchars($category['category_id']); ?>"><i class="bi bi-pencil-square"></i></button>
                                 </div>
-                                <div class="txt">
+                                <div class="info-container">
                                     <h3><?php echo htmlspecialchars($category['category_name']); ?></h3>
                                 </div>
                             </div>

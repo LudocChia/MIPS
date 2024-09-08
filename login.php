@@ -9,19 +9,6 @@ $email = '';
 
 <head>
     <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
-    <style>
-        .login-alert {
-            padding: 10px;
-            background-color: rgba(128, 128, 128, 0.9);
-            color: white;
-            opacity: 1;
-            transition: opacity 0.6s;
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            z-index: 9999;
-        }
-    </style>
 </head>
 
 <div id="login-form">
@@ -84,10 +71,10 @@ $email = '';
         });
 
         function showAlert(message) {
-            const alertHtml = `<div class="login-alert">${message}</div>`;
+            const alertHtml = `<div class="mini-alert">${message}</div>`;
             $('#alert-container').html(alertHtml);
             setTimeout(function() {
-                $('.login-alert').fadeOut('slow', function() {
+                $('.mini-alert').fadeOut('slow', function() {
                     $(this).remove();
                 });
             }, 3000);

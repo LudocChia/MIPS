@@ -143,7 +143,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
             <div class="input-container">
                 <h2>Waist (cm)</h2>
                 <div class="input-field">
-                    <input type="number" step="0.01" name="waist">
+                    <input type="text" step="0.01" name="waist">
                 </div>
             </div>
             <div class="input-container">
@@ -153,9 +153,9 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                 </div>
             </div>
             <div class="controls">
-                <button type="button" class="cancel">Cancel</button>
-                <button type="reset">Clear</button>
-                <button type="submit" name="submit">Publish</button>
+                <button type="button" class="btn btn-outline-gray cancel">Cancel</button>
+                <button type="reset" class="btn btn-outline-primary">Clear</button>
+                <button type="submit" name="submit" class="btn btn-primary">Publish</button>
             </div>
         </form>
     </dialog>

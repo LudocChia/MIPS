@@ -73,6 +73,7 @@
     margin: 0 auto;
     gap: 1.8rem;
     grid-template-columns: 20rem auto;
+    overflow-y: auto;
 }
 
 /* LOGIN */
@@ -226,12 +227,16 @@ aside .sidebar h4 {
 
 main {
     display: grid;
+    grid-template-columns: 1fr;
     gap: 1.8rem;
     margin-top: 2rem;
-    grid-template-columns: 1fr auto;
     height: 80vh;
-    overflow-y: scroll;
+    overflow-y: auto;
+}
 
+
+main.two-columns {
+    grid-template-columns: 3fr 1fr;
 }
 
 main .insights {
@@ -517,10 +522,6 @@ main .recent-orders a {
         grid-template-columns: 1fr;
     }
 
-    header .profile-area {
-        gap: 2rem;
-    }
-
     header .profile-area button.menu-btn {
         display: block;
         background: transparent;
@@ -537,21 +538,9 @@ main .recent-orders a {
         grid-template-columns: 1fr;
     }
 
-    main {
+    main.two-columns {
         grid-template-columns: 1fr;
     }
-
-    /* aside {
-        display: block;
-        margin: 0;
-        position: fixed;
-        top: 0;
-        left: 0;
-        z-index: 3;
-        background-color: var(--color-white);
-        width: 22rem;
-        height: 100vh;
-    } */
 
     aside {
         display: block;
@@ -619,20 +608,21 @@ main .recent-orders a {
         gap: 1rem;
     }
 
+    /* 
     main .recent-orders {
-        display: none;
-        width: 94%;
-        position: absolute;
-        left: 50%;
-        transform: translateX(-50%);
-        margin: 2rem 0 0 8.8rem;
-    }
+        display: block;
+        width: 100%;
+        position: relative;
+        left: 0;
+        transform: none;
+        margin: 2rem 0 0 0;
+    } */
 
-    main .recent-orders table {
+    /* main .recent-orders table {
         width: 83vw;
-    }
+    } */
 
-    main table thead tr th:last-child,
+    /* main table thead tr th:last-child,
     main table thead tr th:first-child {
         display: none;
     }
@@ -640,7 +630,7 @@ main .recent-orders a {
     main table tbody tr td:last-child,
     main table tbody tr td:first-child {
         display: none;
-    }
+    } */
 }
 
 @media screen and (max-width: 768px) {
@@ -653,7 +643,8 @@ main .recent-orders a {
         grid-template-columns: 1fr;
     }
 
-    .main {
+    .main,
+    .two-columns {
         grid-template-columns: 1fr;
     }
 
@@ -728,6 +719,7 @@ main .recent-orders a {
         padding: 0 1rem;
     }
 
+    /* 
     main .recent-orders {
         position: relative;
         margin: 3rem 0 0 0;
@@ -737,7 +729,7 @@ main .recent-orders a {
     main .recent-orders table {
         width: 100%;
         margin: 0;
-    }
+    } */
 
     /* 
     .right {

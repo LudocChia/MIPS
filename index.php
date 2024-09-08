@@ -1,10 +1,6 @@
 <?php
 
-session_start();
-
-include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/db_connect.php";
-include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/customer_login.php";
-
+include $_SERVER['DOCUMENT_ROOT'] . "/mips/php/customer.php";
 
 function getAnnouncements($pdo)
 {

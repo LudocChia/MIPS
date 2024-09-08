@@ -49,7 +49,7 @@ dialog {
 
 dialog form {
     text-align: left;
-    /* margin-left: 10%; */
+    margin-left: 5%;
     position: relative;
 }
 
@@ -89,7 +89,7 @@ textarea {
     background: #fff;
     outline: none;
     padding: .6rem;
-    box-shadow: var(--box-shadow);
+    /* box-shadow: var(--box-shadow); */
     border: 1px solid #ddd;
     width: 85%;
     transition: border 0.3s ease;
@@ -187,6 +187,15 @@ dialog form textarea {
     padding: auto 50px;
 }
 
+.controls {
+    text-align: center;
+}
+
+.controls .btn {
+    display: inline-block;
+    margin: 0 10px;
+}
+
 .controls .deactivate {
     margin-left: 20px;
     background: var(--color-danger);
@@ -201,15 +210,6 @@ dialog form textarea {
 .controls .deactivate:hover {
     transition: .5s;
     background: #e60000;
-}
-
-.controls {
-    text-align: center;
-}
-
-.controls .btn {
-    display: inline-block;
-    margin: 0 10px;
 }
 
 /* LOGIN */
@@ -261,6 +261,11 @@ dialog form textarea {
     border-radius: 5px;
     border: 1px solid var(--color-gray-light);
     font-size: 16px;
+}
+
+.login-form .input-field input:focus,
+.set-new-password-form .input-field input:focus {
+    border: 1px solid var(--color-primary);
 }
 
 .login-form .input-field i,
@@ -700,21 +705,21 @@ thead th {
     height: 100%;
 }
 
-.category .txt {
+.category .info-container {
     padding: 10px;
     text-align: center;
 }
 
-.category .txt h4 {
+/* .category .info-container h4 {
     font-size: 18px;
     color: #333;
     margin-bottom: 5px;
-}
+} */
 
-.category .txt p {
+/* .category .info-container p {
     font-size: 16px;
     color: #666;
-}
+} */
 
 /* Empty Message */
 .empty {
@@ -731,7 +736,7 @@ thead th {
 
 .empty img {
     width: 30%;
-    max-width: 350px;
+    max-width: 300px;
 }
 
 

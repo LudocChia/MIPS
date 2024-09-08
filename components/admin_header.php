@@ -41,7 +41,7 @@
         <div class="mobile-navbar">
             <ul>
                 <li>
-                    <a href="javascript:void(0);"><span class="material-symbols-outlined icon-adjust">food_bank</span></a>
+                    <a href="javascript:void(0);"><i class="fa fa-cutlery" aria-hidden="true"></i></a>
                 </li>
                 <li>
                     <a href="javascript:void(0);"><i class="bi bi-calendar4-event"></i></a>

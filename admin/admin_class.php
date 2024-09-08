@@ -10,6 +10,7 @@ class Action
         $this->db = $pdo;
     }
 
+
     private function execute_statement($stmt)
     {
         try {
@@ -32,15 +33,15 @@ class Action
 
             if ($admin && password_verify($password, $admin['admin_password'])) {
                 session_start();
+                $_SESSION['admin_type'] = 'admin';
                 $_SESSION['admin_id'] = $admin['admin_id'];
                 $_SESSION['admin_name'] = $admin['admin_name'];
-                $_SESSION['admin_type'] = $admin['admin_type'];
                 $_SESSION['admin_email'] = $admin['admin_email'];
                 $_SESSION['admin_status'] = $admin['status'];
                 $_SESSION['admin_image'] = $admin['admin_image'] ?? '/mips/images/default_profile.png';
 
                 if ($admin['status'] == -1) {
-                    return json_encode(['new_user' => true, 'redirect' => '/mips/admin/new-password.php']);
+                    return json_encode(['new_user' => true, 'redirect' => '/mips/components/new-password.php']);
                 }
 
                 return json_encode(['success' => true, 'redirect' => '/mips/admin']);
@@ -139,9 +140,9 @@ class Action
     public function get_parent($parent_id)
     {
         $sql = "
-            SELECT parent_id, parent_name, parent_email
+            SELECT parent_id, parent_name, parent_email, parent_phone
             FROM Parent
-            WHERE parent_id = :parent_id AND status = 0
+            WHERE parent_id = :parent_id AND status in (-1, 0)
         ";
 
         $stmt = $this->db->prepare($sql);
