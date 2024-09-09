@@ -187,6 +187,19 @@ class Action
         return $this->execute_statement($stmt);
     }
 
+    public function search_parent($query)
+    {
+        $sql = "SELECT parent_id, parent_name FROM Parent WHERE parent_name LIKE :query OR parent_id LIKE :query LIMIT 5";
+        $stmt = $this->db->prepare($sql);
+        $searchQuery = "%$query%";
+        $stmt->bindParam(':query', $searchQuery);
+        $stmt->execute();
+        $parents = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        return json_encode($parents);
+    }
+
+
 
     // Product Category Functions
     public function deactivate_product_category($category_id)
@@ -490,6 +503,22 @@ class Action
     public function deactivate_student($student_id)
     {
         $sql = "UPDATE Student SET status = 1 WHERE student_id = :student_id";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':student_id', $student_id);
+        return $this->execute_statement($stmt);
+    }
+
+    public function delete_student($student_id)
+    {
+        $sql = "DELETE FROM Student WHERE student_id = :student_id";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':student_id', $student_id);
+        return $this->execute_statement($stmt);
+    }
+
+    public function recover_student($student_id)
+    {
+        $sql = "UPDATE Student SET status = 0 WHERE student_id = :student_id";
         $stmt = $this->db->prepare($sql);
         $stmt->bindParam(':student_id', $student_id);
         return $this->execute_statement($stmt);

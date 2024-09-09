@@ -1,83 +1,106 @@
 <?php
 
 session_start();
+
 include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/db_connect.php";
-$product_id = $_GET['pid'] ?? null;
+
+if (isset($_SESSION['parent_id'])) {
+    header('Location: /mips/login.php');
+    exit();
+}
+
 $email = '';
+$product_id = $_GET['pid'] ?? null;
+$currentPage = basename($_SERVER['PHP_SELF']);
 
-?>
+$pageTitle = "Login Page - MIPS";
+include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
 
-<head>
-    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
-</head>
-
-<div id="login-form">
-    <div class="logo-container">
-        <img src="/mips/images/MIPS_icon.png" alt="MIPS_Logo">
-    </div>
-    <div id="alert-container"></div>
-    <form id="login-form-ajax" method="POST">
-        <div class="input-container">
-            <div class="input-field">
-                <i class="fas fa-user"></i>
-                <input type="text" name="email" placeholder="Email" value="<?php echo htmlspecialchars($email); ?>" required>
+<body>
+    <main class="login-form">
+        <div class="container">
+            <div class="wrapper">
+                <div class="logo-container">
+                    <img src="/mips/images/MIPS_logo.png" alt="MIPS_Logo">
+                </div>
+                <div class="title">
+                    <h1>MIPS System</h1>
+                </div>
+                <div id="alert-container"></div>
+                <form id="login-form-ajax" method="POST">
+                    <div class="input-container">
+                        <div class="input-field">
+                            <i class="fas fa-user"></i>
+                            <input type="text" name="email" placeholder="Email" value="<?php echo htmlspecialchars($email); ?>" required>
+                        </div>
+                        <p>Please enter your email</p>
+                    </div>
+                    <div class="input-container">
+                        <div class="input-field">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" name="password" placeholder="Password" required>
+                        </div>
+                        <p>Please enter your password</p>
+                    </div>
+                    <!-- <div class="pass">
+                        <a href="#">Forgot password?</a>
+                    </div> -->
+                    <div class="controls">
+                        <button type="submit" class="btn">Login</button>
+                    </div>
+                </form>
             </div>
-            <p>Please enter your email</p>
         </div>
-        <div class="input-container">
-            <div class="input-field">
-                <i class="fas fa-lock"></i>
-                <input type="password" name="password" placeholder="Password" required>
-            </div>
-            <p>Please enter your password</p>
-        </div>
-        <div class="pass">
-            <a href="#">Forgot password?</a>
-        </div>
-        <div class="controls">
-            <button type="button" class="btn btn-outline-gray cancel">Cancel</button>
-            <button type="submit" name="login" class="btn btn-outline-primary login">Login</button>
-        </div>
-    </form>
-</div>
-<script>
-    $(document).ready(function() {
-        $('#login-form-ajax').on('submit', function(e) {
-            e.preventDefault();
+    </main>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const loginForm = document.getElementById('login-form-ajax');
 
-            const email = $('input[name="email"]').val();
-            const password = $('input[name="password"]').val();
+            loginForm.addEventListener('submit', function(e) {
+                e.preventDefault();
 
-            $.ajax({
-                type: 'POST',
-                url: '/mips/ajax.php?action=login',
-                data: $.param({
-                    email: email,
-                    password: password
-                }),
-                contentType: 'application/x-www-form-urlencoded',
-                success: function(response) {
-                    const result = JSON.parse(response);
-                    if (result.success) {
-                        window.location.href = result.redirect;
-                    } else {
-                        showAlert(result.error);
-                    }
-                },
-                error: function() {
-                    showAlert('An error occurred while processing the request.');
-                }
+                const email = document.querySelector('input[name="email"]').value;
+                const password = document.querySelector('input[name="password"]').value;
+                const productId = "<?php echo $product_id; ?>";
+
+                fetch('/mips/ajax.php?action=login', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded'
+                        },
+                        body: new URLSearchParams({
+                            email: email,
+                            password: password,
+                            pid: productId
+                        })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            window.location.href = '/mips/';
+                        } else {
+                            showAlert(data.error);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        showAlert('An error occurred while processing the request.');
+                    });
             });
-        });
 
-        function showAlert(message) {
-            const alertHtml = `<div class="mini-alert">${message}</div>`;
-            $('#alert-container').html(alertHtml);
-            setTimeout(function() {
-                $('.mini-alert').fadeOut('slow', function() {
-                    $(this).remove();
-                });
-            }, 3000);
-        }
-    });
-</script>
+            function showAlert(message) {
+                const alertHtml = `<div class="mini-alert">${message}</div>`;
+                document.getElementById('alert-container').innerHTML = alertHtml;
+                setTimeout(function() {
+                    const alertElement = document.querySelector('.mini-alert');
+                    if (alertElement) {
+                        alertElement.style.opacity = '0';
+                        setTimeout(() => alertElement.remove(), 600);
+                    }
+                }, 3000);
+            }
+        });
+    </script>
+</body>
+
+</html>

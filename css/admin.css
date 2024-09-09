@@ -458,7 +458,7 @@ main .recent-orders a {
 
 }
 
-.actions {
+.box .actions {
     position: absolute;
     right: 10px;
     top: 10px;
@@ -642,6 +642,18 @@ main .recent-orders a {
         width: 100%;
         grid-template-columns: 1fr;
     }
+
+    .login-form .container,
+    .set-new-password-form .container {
+        width: 100%;
+    }
+
+    .login-form .wrapper,
+    .set-new-password-form .wrapper {
+        width: 100%;
+        /* margin: 0 auto; */
+    }
+
 
     .main,
     .two-columns {

@@ -3,7 +3,7 @@
 $database_table = "Parent";
 $rows_per_page = 12;
 include $_SERVER['DOCUMENT_ROOT'] . "/mips/php/admin.php";
-include $_SERVER['DOCUMENT_ROOT'] . "/mips/php/activate_pagination.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/mips/php/deactivated_pagination.php";
 
 function getDeactivatedParents($pdo, $start, $rows_per_page)
 {
@@ -40,10 +40,10 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
             <div class="wrapper">
                 <div class="title">
                     <div class="left">
-                        <h1>Student Parent Accounts Recycle Bin</h1>
+                        <h1>Deactivated Student Parent Accounts</h1>
                     </div>
                     <div class="right">
-                        <a href="/mips/admin/recycleBin.php"><i class="bi bi-arrow-90deg-up"></i></i>Recycle Bin Menu</a>
+                        <a href="/mips/admin/deactivated/user/"><i class="bi bi-arrow-90deg-up"></i></i>Deactivated User Menu</a>
                     </div>
                 </div>
                 <div class="table-body">
@@ -69,6 +69,11 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                                         <td><?= htmlspecialchars($parent['register_datetime']); ?></td>
                                         <td>
                                             <button type="button" class="view-order-detail-btn" data-order-id="<?= htmlspecialchars($order['order_id']); ?>"><i class="bi bi-info-circle-fill"></i></button>
+                                            <form action="" method="POST" style="display:inline;" onsubmit="return showDeleteConfirmDialog(event);">
+                                                <input type="hidden" name="parent_id" value="<?= htmlspecialchars($parent['parent_id']); ?>">
+                                                <input type="hidden" name="action" value="delete_parent">
+                                                <button type="submit" class="delete-parent-btn"><i class="bi bi-trash-fill"></i></button>
+                                            </form>
                                             <form action="" method="POST" style="display:inline;" onsubmit="return showRecoverConfirmDialog(event);">
                                                 <input type="hidden" name="parent_id" value="<?= htmlspecialchars($parent['parent_id']); ?>">
                                                 <input type="hidden" name="action" value="recover_parent">
