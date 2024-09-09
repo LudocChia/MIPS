@@ -3,6 +3,7 @@
     --color-white: #ffffff;
     --color-light: #f0eff5;
     --color-gray-light: #ccc;
+    --color-gray-dark: #56555e;
     --color-gray-super-light: #e5e5e5;
     --color-dark: #27282f;
     --color-primary: rgb(0, 52, 85);
@@ -42,7 +43,7 @@ dialog {
     width: calc(100% - 1em);
     max-width: 50rem;
     max-height: 50rem;
-    border-radius: 0.5em;
+    border-radius: 1em;
     text-align: center;
     padding: 0.8em 1.5em 1em;
 }
@@ -66,10 +67,11 @@ dialog form .input-container {
 }
 
 dialog form p {
-    color: #999;
+    margin-top: 0.5rem;
 }
 
 dialog form h2 {
+    margin-bottom: 0.5rem;
     text-transform: capitalize;
 }
 
@@ -87,10 +89,9 @@ dialog form input[type="password"],
 textarea {
     font-size: 1.2rem;
     background: #fff;
-    outline: none;
+    /* outline: none; */
     padding: .6rem;
-    /* box-shadow: var(--box-shadow); */
-    border: 1px solid #ddd;
+    border: 1px solid var(--color-gray-light);
     width: 85%;
     transition: border 0.3s ease;
 }
@@ -212,6 +213,10 @@ dialog form textarea {
 }
 
 /* LOGIN */
+.login-form form {
+    margin-left: 0;
+}
+
 .login-form .wrapper,
 .set-new-password-form .wrapper {
     width: 90%;
@@ -258,7 +263,7 @@ dialog form textarea {
     outline: none;
     padding-left: 60px;
     border-radius: 5px;
-    border: 1px solid var(--color-gray-light);
+    border: 1px solid var(--color-gray-dark);
     font-size: 16px;
 }
 

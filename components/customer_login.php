@@ -17,6 +17,9 @@ $currentPage = basename($_SERVER['PHP_SELF']);
         <img src="/mips/images/MIPS_icon.png" alt="MIPS_Logo">
     </div>
     <div id="alert-container"></div>
+    <div class="title">
+        <h1>MIPS System</h1>
+    </div>
     <form id="login-form-ajax" method="POST">
         <div class="input-container">
             <div class="input-field">

@@ -62,12 +62,14 @@ try {
 // echo '<pre>';
 // var_dump($mealrows);
 // echo '</pre>';
-// ?>
+// 
+?>
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Meal Donation</title>
     <link rel="icon" type="image/x-icon" href="../../images/MIPS_icon.png">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
@@ -81,12 +83,13 @@ try {
     <link rel="stylesheet" href="../admin_for_meal/admin.css">
     <link rel="stylesheet" href="../admin_meal/adminDonation.css">
 </head>
+
 <body>
     <?php include "../admin_for_meal/header.php";  ?>
     <script src="../admin_for_meal/admin.js"></script>
     <div class="bigbox">
         <row id="row1">
-            <a href="adminMain.php"><i class='bx bx-arrow-back' ></i></a>
+            <a href="adminMain.php"><i class='bx bx-arrow-back'></i></a>
         </row>
         <pic>
             <div class="slider">
@@ -109,7 +112,7 @@ try {
                 <?php endif; ?>
             </row1>
             <row2>
-                <button id="edit">
+                <button id="edit-event-btn">
                     <i class='bx bx-edit'>edit</i>
                 </button>
             </row2>
@@ -123,7 +126,7 @@ try {
             <p><?= htmlspecialchars($row['date']) ?></p>
         </row>
         <row id="row4">
-            <i class='bx bx-current-location' ></i>
+            <i class='bx bx-current-location'></i>
             <p><?= htmlspecialchars($row['place']) ?></p>
         </row>
         <row id="row5">
@@ -133,20 +136,20 @@ try {
             <h2>Food and beverage</h2>
             <p>Meal provided:</p>
             <row>
-                <?php 
-                    // Base URL for the next page with the event_id parameter
-                    $baseUrl = 'allMeal.php?' . http_build_query([
-                        'event_id' => $row['event_id']
-                    ]); 
+                <?php
+                // Base URL for the next page with the event_id parameter
+                $baseUrl = 'allMeal.php?' . http_build_query([
+                    'event_id' => $row['event_id']
+                ]);
 
-                    // URLs for each button, including both event_id and meal_type_id
-                    $breakfastUrl = $baseUrl . '&' . http_build_query(['meal_type_id' => 1]);
-                    $lunchUrl = $baseUrl . '&' . http_build_query(['meal_type_id' => 2]);
+                // URLs for each button, including both event_id and meal_type_id
+                $breakfastUrl = $baseUrl . '&' . http_build_query(['meal_type_id' => 1]);
+                $lunchUrl = $baseUrl . '&' . http_build_query(['meal_type_id' => 2]);
 
-                    // Debug: Output the URLs for verification
-                    // Uncomment the lines below to see the URLs being generated
-                    // echo '<p>Breakfast URL: ' . htmlspecialchars($breakfastUrl) . '</p>';
-                    // echo '<p>Lunch URL: ' . htmlspecialchars($lunchUrl) . '</p>';
+                // Debug: Output the URLs for verification
+                // Uncomment the lines below to see the URLs being generated
+                // echo '<p>Breakfast URL: ' . htmlspecialchars($breakfastUrl) . '</p>';
+                // echo '<p>Lunch URL: ' . htmlspecialchars($lunchUrl) . '</p>';
                 ?>
                 <a href="<?= htmlspecialchars($breakfastUrl) ?>" style="text-decoration: none; color: inherit;">
                     <p id="first">Breakfast</p>
@@ -185,50 +188,72 @@ try {
 
     </div>
 
-    <dialog  class="addEvent" >
+    <dialog class="add-edit-data">
         <i class='bx bx-x' id="xbtn"></i>
-        <form method="POST" action="">
+        <form action="" method="POST" enctype="multipart/form-data">
             <div>
                 <h1>Please fill in required credentials</h1>
             </div>
             <div>
                 <label for="name">Name :</label>
-                <input type="text" id="name" name="Name" required>
+                <input type="text" id="name" name="Name" value="<?php echo htmlspecialchars($row['name']); ?>" required>
             </div>
             <div>
                 <label for="time">Time :</label>
-                <input type="text" id="time" name="Time" required>
+                <input type="text" id="time" name="Time" value="<?php echo htmlspecialchars($row['time']); ?>" required>
             </div>
             <div>
                 <label for="place">Place :</label>
-                <input type="text" id="place" name="Place" required>
+                <input type="text" id="place" name="Place" value="<?php echo htmlspecialchars($row['time']) ?>" required>
             </div>
             <div>
                 <label for="date">Date :</label>
-                <input type="date" id="date" name="Date" required>
+                <input type="date" id="date" name="Date" value="<?php echo htmlspecialchars($row['date']) ?>" required>
             </div>
             <div>
                 <label for="desc">Description :</label>
-                <textarea id="desc" name="Desc" rows="4" cols="5" required></textarea>
+                <textarea id="desc" name="Desc" rows="4" cols="5" value="<?php echo htmlspecialchars($row['description']) ?>" required></textarea>
             </div>
             <div>
                 <label for="pic">Picture :</label>
                 <input type="file" id="pic" name="Pic">
             </div>
             <div>
-                <input type="submit" value="Add" id="btn1" >
+                <button type="submit" name="submit">Publish</button>
             </div>
         </form>
     </dialog>
 
     <script>
+        document.querySelectorAll('.edit-event-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const eventId = this.dataset.gradeId;
+                fetch(`/mips/admin/ajax.php?action=get_event&event_id=${eventId}`)
+                    .then(response => response.json())
+                    .then(grade => {
+                        if (grade.error) {
+                            alert(grade.error);
+                        } else {
+                            document.querySelector('#add-edit-data [name="event_id"]').value = grade.grade_id;
+                            document.querySelector('#add-edit-data [name="event_name"]').value = grade.grade_name;
+                            document.querySelector('#add-edit-data [name="_level"]').value = grade.grade_level;
+                            document.querySelector('#add-edit-data [name=""]').value = grade.student_id_prefix;
+                            document.getElementById('add-edit-data').showModal();
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching grade data:', error);
+                        alert('Failed to load grade data.');
+                    });
+            });
+        });
         // let slideIndex = 0;
 
         // function showSlides(n) {
         //     const slides = document.querySelectorAll('.slide');
         //     const slidesContainer = document.querySelector('.slides');
         //     const totalSlides = slides.length;
-            
+
         //     if (n >= totalSlides) {
         //         slideIndex = 0;
         //     } else if (n < 0) {
@@ -249,55 +274,55 @@ try {
         // showSlides(slideIndex);
 
         (function() {
-        function Slider(containerSelector, slidesSelector, controlsSelector, slidesToShow) {
-            this.container = document.querySelector(containerSelector);
-            this.slides = document.querySelectorAll(slidesSelector);
-            this.controls = document.querySelector(controlsSelector);
-            this.slideIndex = 0;
-            this.slidesToShow = slidesToShow || 3;
-
-            this.init();
-        }
-
-        Slider.prototype.init = function() {
-            const self = this;
-            this.updateSlideWidth();
-            window.addEventListener('resize', function() {
-                self.updateSlideWidth();
-                self.showSlides(self.slideIndex);
-            });
-            this.showSlides(this.slideIndex);
-        };
-
-        Slider.prototype.updateSlideWidth = function() {
-            const slideWidth = (this.container.clientWidth - (this.slidesToShow - 1)) / this.slidesToShow;
-            this.slides.forEach(slide => {
-                slide.style.width = `${slideWidth}px`;
-            });
-        };
-
-        Slider.prototype.showSlides = function(index) {
-            const totalSlides = this.slides.length;
-
-            // Ensure slideIndex is within range
-            if (index >= totalSlides - this.slidesToShow + 1) {
+            function Slider(containerSelector, slidesSelector, controlsSelector, slidesToShow) {
+                this.container = document.querySelector(containerSelector);
+                this.slides = document.querySelectorAll(slidesSelector);
+                this.controls = document.querySelector(controlsSelector);
                 this.slideIndex = 0;
-            } else if (index < 0) {
-                this.slideIndex = totalSlides - this.slidesToShow;
-            } else {
-                this.slideIndex = index;
+                this.slidesToShow = slidesToShow || 3;
+
+                this.init();
             }
 
-            const slideWidth = (this.container.clientWidth - (this.slidesToShow - 1)) / this.slidesToShow;
-            this.container.querySelector('.slides1').style.transform = `translateX(-${this.slideIndex * (slideWidth + 1)}px)`;
-        };
+            Slider.prototype.init = function() {
+                const self = this;
+                this.updateSlideWidth();
+                window.addEventListener('resize', function() {
+                    self.updateSlideWidth();
+                    self.showSlides(self.slideIndex);
+                });
+                this.showSlides(this.slideIndex);
+            };
 
-        Slider.prototype.plusSlides = function(n) {
-            this.showSlides(this.slideIndex + n);
-        };
+            Slider.prototype.updateSlideWidth = function() {
+                const slideWidth = (this.container.clientWidth - (this.slidesToShow - 1)) / this.slidesToShow;
+                this.slides.forEach(slide => {
+                    slide.style.width = `${slideWidth}px`;
+                });
+            };
 
-        // Initialize the specific slider instance
-        window.slider1 = new Slider('.slider-container1', '.slide1', '.slider-controls1', 3);
+            Slider.prototype.showSlides = function(index) {
+                const totalSlides = this.slides.length;
+
+                // Ensure slideIndex is within range
+                if (index >= totalSlides - this.slidesToShow + 1) {
+                    this.slideIndex = 0;
+                } else if (index < 0) {
+                    this.slideIndex = totalSlides - this.slidesToShow;
+                } else {
+                    this.slideIndex = index;
+                }
+
+                const slideWidth = (this.container.clientWidth - (this.slidesToShow - 1)) / this.slidesToShow;
+                this.container.querySelector('.slides1').style.transform = `translateX(-${this.slideIndex * (slideWidth + 1)}px)`;
+            };
+
+            Slider.prototype.plusSlides = function(n) {
+                this.showSlides(this.slideIndex + n);
+            };
+
+            // Initialize the specific slider instance
+            window.slider1 = new Slider('.slider-container1', '.slide1', '.slider-controls1', 3);
         })();
 
 
@@ -311,7 +336,7 @@ try {
         closeModal.addEventListener('click', () => {
             modal.close();
         })
-
     </script>
 </body>
+
 </html>

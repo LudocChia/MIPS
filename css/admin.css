@@ -76,6 +76,10 @@
     overflow-y: auto;
 }
 
+.container::-webkit-scrollbar-thumb:active {
+    background-color: var(--color-primary);
+}
+
 /* LOGIN */
 .login-form,
 .set-new-password-form {
