@@ -514,6 +514,25 @@ class Action
         return $student ? json_encode($student) : json_encode(['error' => 'Student not found']);
     }
 
+    public function get_student_prefix($class_id)
+    {
+        $sql = "SELECT g.student_id_prefix 
+                FROM Class c
+                LEFT JOIN Grade g ON c.grade_id = g.grade_id 
+                WHERE c.class_id = :class_id AND c.status = 0";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':class_id', $class_id);
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($result) {
+            return json_encode(['prefix' => $result['student_id_prefix']]);
+        } else {
+            return json_encode(['error' => 'Prefix not found for the selected class']);
+        }
+    }
+
+
     // Retrieve class data
     public function get_class($class_id)
     {

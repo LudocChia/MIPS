@@ -856,9 +856,4 @@ header img.logo {
     .products .box-container {
         grid-template-columns: repeat(auto-fit, 165px);
     }
-
-    .products .box-container .box .image-container {
-        margin: -5px;
-    }
-
 }

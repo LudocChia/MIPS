@@ -1,9 +1,34 @@
 <?php
 
-$database_table = "Product Category";
 $rows_per_page = 10;
 include $_SERVER['DOCUMENT_ROOT'] . "/mips/php/admin.php";
-include $_SERVER['DOCUMENT_ROOT'] . "/mips/php/activate_pagination.php";
+
+function getPageCount($pdo, $rows_per_page)
+{
+    $sql = "SELECT COUNT(*) AS count FROM product_category WHERE parent_id IS NOT NULL AND status = 0";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute();
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    $total_rows = $result['count'];
+    $total_pages = ceil($total_rows / $rows_per_page);
+
+    return $total_pages;
+}
+
+$pageCount = getPageCount($pdo, $rows_per_page);
+
+if (isset($_GET['page-nr'])) {
+    $page = $_GET['page-nr'] - 1;
+    $start = $page * $rows_per_page;
+}
+
+if (isset($_GET['page-nr'])) {
+    $id = $_GET['page-nr'];
+} else {
+    $id = 1;
+}
+
 
 function getSubcategories($pdo, $start, $rows_per_page)
 {

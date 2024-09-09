@@ -413,7 +413,7 @@ main .recent-orders a {
 
 /* PRODUCTS */
 .products .box-container {
-    grid-template-columns: repeat(auto-fit, 190px);
+    grid-template-columns: repeat(auto-fit, 220px);
 }
 
 .deactivate-product {

@@ -649,7 +649,7 @@ thead th {
     align-items: center;
 }
 
-.breadcrumbs ul span {
+.breadcrumbs ul i {
     width: 20px;
     vertical-align: middle;
     margin: 0 10px;
@@ -665,6 +665,41 @@ thead th {
     border: none;
     pointer-events: none;
 }
+
+/* .add-edit-table-container */
+.add-edit-table-container {
+    max-height: 200px;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    margin-top: 10px;
+}
+
+.add-edit-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.add-edit-table th,
+.size-table td {
+    padding: 8px 12px;
+    text-align: center;
+    border: 1px solid #ddd;
+    /* 表格的边框 */
+}
+
+.add-edit-table th {
+    background-color: #f2f2f2;
+    /* 表头的背景色 */
+    font-weight: bold;
+}
+
+.add-edit-table td {
+    white-space: nowrap;
+    /* 防止单元格内容换行 */
+}
+
+
 
 /* Category Box */
 .category .box-container {
@@ -869,6 +904,42 @@ thead th {
 
 .product-info {
     padding: 1.2em;
+}
+
+/* Select */
+.select-field {
+    display: flex;
+    justify-content: center;
+    position: relative;
+    width: 300px;
+    height: 45px;
+    margin-bottom: 0.5rem;
+}
+
+.select-box {
+    border: none;
+    appearance: none;
+    padding: 0 30px 0 15px;
+    width: 100%;
+    color: white;
+    background-color: #001a4a;
+    font-size: 20px;
+}
+
+.select-field .icon-container {
+    width: 50px;
+    height: 100%;
+    position: absolute;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #023ca9;
+}
+
+.icon-container i {
+    font-size: 1.5rem;
+    color: white;
 }
 
 @media screen and (max-width: 1200px) {

@@ -129,6 +129,14 @@ switch ($action) {
         }
         break;
 
+    case 'get_student_prefix':
+        if (isset($_POST['class_id'])) {
+            echo $crud->get_student_prefix($_POST['class_id']);
+        } else {
+            echo json_encode(['error' => 'Class ID not provided']);
+        }
+        break;
+
         // Order Functions
         // case 'deactivate_order':
         //     if (isset($_POST['order_id'])) {

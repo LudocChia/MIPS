@@ -1,7 +1,7 @@
 <?php
 
 $database_table = "Product";
-$rows_per_page = 10;
+$rows_per_page = 12;
 include $_SERVER['DOCUMENT_ROOT'] . "/mips/php/admin.php";
 include $_SERVER['DOCUMENT_ROOT'] . "/mips/php/activate_pagination.php";
 
@@ -92,113 +92,125 @@ function generateProductSizeId()
 }
 
 if (isset($_POST['submit'])) {
-    $productId = isset($_POST['product_id']) && !empty($_POST['product_id']) ? $_POST['product_id'] : generateProductId();
-    $name = htmlspecialchars(trim($_POST['name']));
-    $subcategoryId = htmlspecialchars(trim($_POST['subcategory']));
-    $description = !empty($_POST['description']) ? htmlspecialchars(trim($_POST['description'])) : null;
-    $price = htmlspecialchars(trim($_POST['price']));
-    $stockQuantity = htmlspecialchars(trim($_POST['stock_quantity']));
-    $color = !empty($_POST['color']) ? htmlspecialchars(trim($_POST['color'])) : null;
-    $gender = htmlspecialchars(trim($_POST['gender']));
+    $pdo->beginTransaction();
+    try {
+        $productId = isset($_POST['product_id']) && !empty($_POST['product_id']) ? $_POST['product_id'] : generateProductId();
+        $name = htmlspecialchars(trim($_POST['name']));
+        $subcategoryId = htmlspecialchars(trim($_POST['subcategory']));
+        $description = !empty($_POST['description']) ? htmlspecialchars(trim($_POST['description'])) : null;
+        $price = htmlspecialchars(trim($_POST['price']));
+        $stockQuantity = htmlspecialchars(trim($_POST['stock_quantity']));
+        $color = !empty($_POST['color']) ? htmlspecialchars(trim($_POST['color'])) : null;
+        $gender = htmlspecialchars(trim($_POST['gender']));
 
-    if (isset($_POST['product_id']) && !empty($_POST['product_id'])) {
-        $sql = "SELECT image_url FROM Product_Image WHERE product_id = :product_id ORDER BY sort_order ASC";
-        $stmt = $pdo->prepare($sql);
-        $stmt->bindParam(':product_id', $productId, PDO::PARAM_STR);
-        $stmt->execute();
-        $existingImages = $stmt->fetchAll(PDO::FETCH_COLUMN);
+        if (isset($_POST['product_id']) && !empty($_POST['product_id'])) {
+            $sql = "UPDATE Product SET product_name = :name, category_id = :subcategory, product_description = :description, product_price = :price, stock_quantity = :stock_quantity, color = :color, gender = :gender
+                    WHERE product_id = :product_id";
+            $stmt = $pdo->prepare($sql);
+            $stmt->bindParam(':product_id', $productId);
+            $stmt->bindParam(':name', $name);
+            $stmt->bindParam(':subcategory', $subcategoryId);
+            $stmt->bindParam(':description', $description);
+            $stmt->bindParam(':price', $price);
+            $stmt->bindParam(':stock_quantity', $stockQuantity);
+            $stmt->bindParam(':color', $color);
+            $stmt->bindParam(':gender', $gender);
+            $stmt->execute();
 
-        if (!empty($_FILES['images']['name'][0])) {
-            $uploadedImages = handleFileUpload($_FILES['images'], $existingImages);
+            if (!empty($_FILES['images']['name'][0])) {
+                $uploadedImages = handleFileUpload($_FILES['images']);
 
-            $stmtDeleteImages = $pdo->prepare("DELETE FROM Product_Image WHERE product_id = :product_id");
-            $stmtDeleteImages->bindParam(':product_id', $productId, PDO::PARAM_STR);
-            $stmtDeleteImages->execute();
+                $stmtDeleteImages = $pdo->prepare("DELETE FROM Product_Image WHERE product_id = :product_id");
+                $stmtDeleteImages->bindParam(':product_id', $productId);
+                $stmtDeleteImages->execute();
 
-            $sortOrder = 1;
-            foreach ($uploadedImages as $image) {
-                $imageId = generateImageId();
-                $sqlImage = "INSERT INTO Product_Image (image_id, product_id, image_url, sort_order) 
-                             VALUES (:image_id, :product_id, :image_url, :sort_order)";
-                $stmtImage = $pdo->prepare($sqlImage);
-                $stmtImage->bindParam(':image_id', $imageId, PDO::PARAM_STR);
-                $stmtImage->bindParam(':product_id', $productId, PDO::PARAM_STR);
-                $stmtImage->bindParam(':image_url', $image, PDO::PARAM_STR);
-                $stmtImage->bindParam(':sort_order', $sortOrder, PDO::PARAM_INT);
-                $stmtImage->execute();
-                $sortOrder++;
+                $sortOrder = 1;
+                foreach ($uploadedImages as $image) {
+                    $imageId = generateImageId();
+                    $sqlImage = "INSERT INTO Product_Image (image_id, product_id, image_url, sort_order) 
+                                 VALUES (:image_id, :product_id, :image_url, :sort_order)";
+                    $stmtImage = $pdo->prepare($sqlImage);
+                    $stmtImage->bindParam(':image_id', $imageId);
+                    $stmtImage->bindParam(':product_id', $productId);
+                    $stmtImage->bindParam(':image_url', $image);
+                    $stmtImage->bindParam(':sort_order', $sortOrder);
+                    $stmtImage->execute();
+                    $sortOrder++;
+                }
             }
-        }
 
-        $stmtDeleteSizes = $pdo->prepare("DELETE FROM Product_Size WHERE product_id = :product_id");
-        $stmtDeleteSizes->bindParam(':product_id', $productId, PDO::PARAM_STR);
-        $stmtDeleteSizes->execute();
+            $stmtDeleteSizes = $pdo->prepare("DELETE FROM Product_Size WHERE product_id = :product_id");
+            $stmtDeleteSizes->bindParam(':product_id', $productId);
+            $stmtDeleteSizes->execute();
 
-        if (!empty($_POST['sizes'])) {
-            $stmtInsertSize = $pdo->prepare("INSERT INTO Product_Size (product_size_id, product_id, size_id) VALUES (:product_size_id, :product_id, :size_id)");
-            foreach ($_POST['sizes'] as $sizeId) {
-                $productSizeId = generateProductSizeId();
-                $stmtInsertSize->bindParam(':product_size_id', $productSizeId, PDO::PARAM_STR);
-                $stmtInsertSize->bindParam(':product_id', $productId, PDO::PARAM_STR);
-                $stmtInsertSize->bindParam(':size_id', $sizeId, PDO::PARAM_STR);
-                $stmtInsertSize->execute();
+            if (!empty($_POST['sizes'])) {
+                $stmtInsertSize = $pdo->prepare("INSERT INTO Product_Size (product_size_id, product_id, size_id) VALUES (:product_size_id, :product_id, :size_id)");
+                foreach ($_POST['sizes'] as $sizeId) {
+                    $productSizeId = generateProductSizeId();
+                    $stmtInsertSize->bindParam(':product_size_id', $productSizeId);
+                    $stmtInsertSize->bindParam(':product_id', $productId);
+                    $stmtInsertSize->bindParam(':size_id', $sizeId);
+                    $stmtInsertSize->execute();
+                }
             }
-        }
-    } else {
-        $uploadedImages = handleFileUpload($_FILES['images']);
+        } else {
+            $sql = "INSERT INTO Product (product_id, product_name, category_id, product_description, product_price, 
+                                          stock_quantity, color, gender, admin_id) 
+                    VALUES (:product_id, :name, :subcategory, :description, :price, :stock_quantity, :color, :gender, :admin_id)";
+            $stmt = $pdo->prepare($sql);
+            $stmt->bindParam(':product_id', $productId);
+            $stmt->bindParam(':name', $name);
+            $stmt->bindParam(':subcategory', $subcategoryId);
+            $stmt->bindParam(':description', $description);
+            $stmt->bindParam(':price', $price);
+            $stmt->bindParam(':stock_quantity', $stockQuantity);
+            $stmt->bindParam(':color', $color);
+            $stmt->bindParam(':gender', $gender);
+            $stmt->bindParam(':admin_id', $_SESSION['admin_id']);
+            $stmt->execute();
 
-        $sql = "INSERT INTO Product (product_id, product_name, category_id, product_description, product_price, 
-                                      stock_quantity, color, gender, admin_id) 
-                VALUES (:product_id, :name, :subcategory, :description, :price, :stock_quantity, :color, :gender, :admin_id)";
-        $stmt = $pdo->prepare($sql);
-        $stmt->bindParam(':product_id', $productId, PDO::PARAM_STR);
-        $stmt->bindParam(':name', $name, PDO::PARAM_STR);
-        $stmt->bindParam(':subcategory', $subcategoryId, PDO::PARAM_STR);
-        $stmt->bindParam(':description', $description, PDO::PARAM_STR);
-        $stmt->bindParam(':price', $price, PDO::PARAM_STR);
-        $stmt->bindParam(':stock_quantity', $stockQuantity, PDO::PARAM_INT);
-        $stmt->bindParam(':color', $color, PDO::PARAM_STR);
-        $stmt->bindParam(':gender', $gender, PDO::PARAM_STR);
-        $stmt->bindParam(':admin_id', $_SESSION['admin_id'], PDO::PARAM_STR);
-        $stmt->execute();
+            if (!empty($_FILES['images']['name'][0])) {
+                $uploadedImages = handleFileUpload($_FILES['images']);
 
-        if ($stmt->rowCount() > 0) {
-
-            $sortOrder = 1;
-            foreach ($uploadedImages as $image) {
-                $imageId = generateImageId();
-                $sqlImage = "INSERT INTO Product_Image (image_id, product_id, image_url, sort_order) 
-                             VALUES (:image_id, :product_id, :image_url, :sort_order)";
-                $stmtImage = $pdo->prepare($sqlImage);
-                $stmtImage->bindParam(':image_id', $imageId, PDO::PARAM_STR);
-                $stmtImage->bindParam(':product_id', $productId, PDO::PARAM_STR);
-                $stmtImage->bindParam(':image_url', $image, PDO::PARAM_STR);
-                $stmtImage->bindParam(':sort_order', $sortOrder, PDO::PARAM_INT);
-                $stmtImage->execute();
-                $sortOrder++;
+                $sortOrder = 1;
+                foreach ($uploadedImages as $image) {
+                    $imageId = generateImageId();
+                    $sqlImage = "INSERT INTO Product_Image (image_id, product_id, image_url, sort_order) 
+                                 VALUES (:image_id, :product_id, :image_url, :sort_order)";
+                    $stmtImage = $pdo->prepare($sqlImage);
+                    $stmtImage->bindParam(':image_id', $imageId);
+                    $stmtImage->bindParam(':product_id', $productId);
+                    $stmtImage->bindParam(':image_url', $image);
+                    $stmtImage->bindParam(':sort_order', $sortOrder);
+                    $stmtImage->execute();
+                    $sortOrder++;
+                }
             }
 
             if (!empty($_POST['sizes'])) {
                 $stmtInsertSize = $pdo->prepare("INSERT INTO Product_Size (product_size_id, product_id, size_id) VALUES (:product_size_id, :product_id, :size_id)");
                 foreach ($_POST['sizes'] as $sizeId) {
                     $productSizeId = generateProductSizeId();
-                    $stmtInsertSize->bindParam(':product_size_id', $productSizeId, PDO::PARAM_STR);
-                    $stmtInsertSize->bindParam(':product_id', $productId, PDO::PARAM_STR);
-                    $stmtInsertSize->bindParam(':size_id', $sizeId, PDO::PARAM_STR);
+                    $stmtInsertSize->bindParam(':product_size_id', $productSizeId);
+                    $stmtInsertSize->bindParam(':product_id', $productId);
+                    $stmtInsertSize->bindParam(':size_id', $sizeId);
                     $stmtInsertSize->execute();
                 }
             }
-        } else {
-            echo "<script>alert('Failed to insert product.');</script>";
         }
-    }
 
-    include $_SERVER['DOCUMENT_ROOT'] . "/mips/php/refresh_page.php";
+        $pdo->commit();
+        header('Location: /mips/admin/bookshop/product.php');
+        exit();
+    } catch (Exception $e) {
+        $pdo->rollBack();
+        echo "<script>alert('Database error: " . $e->getMessage() . "');</script>";
+    }
 }
 
-
 $pageTitle = "Bookshop Products - MIPS";
-include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
+include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
+?>
 
 <body id="<?php echo $id ?>">
     <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_header.php"; ?>
@@ -260,7 +272,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
             </div>
         </div>
         <form method="post" enctype="multipart/form-data">
-            <input type="hidden" name="product_id" value="">
+            <input type="text" name="product_id" value="">
             <div class="input-container">
                 <h2>Product Name<sup>*</sup></h2>
                 <div class="input-field">
@@ -270,13 +282,16 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
             </div>
             <div class="input-container">
                 <h2>Product Category<sup>*</sup></h2>
-                <div class="input-field">
-                    <select name="subcategory" id="subcategory" required>
+                <div class="select-field">
+                    <select class="select-box" name="subcategory" id="subcategory" required>
                         <option value="">Select a category</option>
                         <?php foreach ($all_subcategories as $subcategory) { ?>
                             <option value="<?= $subcategory['category_id'] ?>"><?= $subcategory['category_name'] ?></option>
                         <?php } ?>
                     </select>
+                    <div class="icon-container">
+                        <i class="bi bi-caret-down-fill"></i>
+                    </div>
                 </div>
                 <p>Please select a product category.</p>
             </div>
@@ -303,17 +318,38 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
             </div>
             <div class="input-container">
                 <h2>Product Sizes<sup>*</sup></h2>
-                <div class="input-field">
-                    <?php foreach ($all_sizes as $size) { ?>
-                        <label>
-                            <input type="checkbox" name="sizes[]" value="<?= htmlspecialchars($size['size_id']) ?>"
-                                <?php if (in_array($size['size_id'], $_POST['sizes'] ?? [])) echo 'checked'; ?>>
-                            <?= htmlspecialchars($size['size_name']) ?> (Shoulder: <?= htmlspecialchars($size['shoulder_width']) ?>, Bust: <?= htmlspecialchars($size['bust']) ?>, Waist: <?= htmlspecialchars($size['waist']) ?>, Length: <?= htmlspecialchars($size['length']) ?>)
-                        </label><br>
-                    <?php } ?>
+                <div class="add-edit-table-container">
+                    <table class="add-edit-table">
+                        <thead>
+                            <tr>
+                                <th>Select</th>
+                                <th>Size Name</th>
+                                <th>Shoulder Width</th>
+                                <th>Bust</th>
+                                <th>Waist</th>
+                                <th>Length</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($all_sizes as $size) { ?>
+                                <tr>
+                                    <td>
+                                        <input type="checkbox" name="sizes[]" value="<?= htmlspecialchars($size['size_id']) ?>"
+                                            <?php if (in_array($size['size_id'], $_POST['sizes'] ?? [])) echo 'checked'; ?>>
+                                    </td>
+                                    <td><?= htmlspecialchars($size['size_name']) ?></td>
+                                    <td><?= htmlspecialchars($size['shoulder_width']) ?></td>
+                                    <td><?= htmlspecialchars($size['bust']) ?></td>
+                                    <td><?= htmlspecialchars($size['waist']) ?></td>
+                                    <td><?= htmlspecialchars($size['length']) ?></td>
+                                </tr>
+                            <?php } ?>
+                        </tbody>
+                    </table>
                 </div>
                 <p>Please select one or more sizes for the product.</p>
             </div>
+
             <div class="input-container">
                 <h2>Stock Quantity<sup>*</sup></h2>
                 <div class="input-field">
@@ -360,7 +396,6 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                         if (product.error) {
                             alert(product.error);
                         } else {
-                            // 填充产品的基本信息
                             document.querySelector('#add-edit-data [name="product_id"]').value = product.product_id;
                             document.querySelector('#add-edit-data [name="name"]').value = product.product_name;
                             document.querySelector('#add-edit-data [name="subcategory"]').value = product.category_id;
