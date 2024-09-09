@@ -72,7 +72,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
                                         <td><?php echo htmlspecialchars($admin['admin_name']); ?></td>
                                         <td><?php echo htmlspecialchars($admin['admin_email']); ?></td>
                                         <td><?php echo htmlspecialchars($admin['created_at']); ?></td>
-                                        <td><?php echo getStatusLabel($admin['status']); ?></td>
+                                        <td style="text-align: center;"><?php echo getStatusLabel($admin['status']); ?></td>
                                         <td>
                                             <div class="actions">
                                                 <form action="" method="POST" style="display:inline;" onsubmit="return showDeactivateConfirmDialog(event);">

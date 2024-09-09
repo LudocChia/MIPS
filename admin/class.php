@@ -93,9 +93,9 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                             <tbody>
                                 <?php foreach ($all_classes as $class) : ?>
                                     <tr>
-                                        <td><?php echo htmlspecialchars($class['class_name']); ?></td>
+                                        <td style="text-align: center;"><?php echo htmlspecialchars($class['class_name']); ?></td>
                                         <td><?php echo htmlspecialchars($class['grade_name']); ?></td>
-                                        <td><?php echo htmlspecialchars($class['student_count']); ?></td>
+                                        <td style="text-align: center;"><?php echo htmlspecialchars($class['student_count']); ?></td>
                                         <td>
                                             <div class="actions">
                                                 <form action="" method="POST" style="display:inline;" onsubmit="return showDeactivateConfirmDialog(event);">

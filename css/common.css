@@ -684,18 +684,15 @@ thead th {
     padding: 8px 12px;
     text-align: center;
     border: 1px solid #ddd;
-    /* 表格的边框 */
 }
 
 .add-edit-table th {
     background-color: #f2f2f2;
-    /* 表头的背景色 */
     font-weight: bold;
 }
 
 .add-edit-table td {
     white-space: nowrap;
-    /* 防止单元格内容换行 */
 }
 
 

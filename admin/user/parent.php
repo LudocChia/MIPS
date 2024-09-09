@@ -74,7 +74,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
                                         <td><?php echo htmlspecialchars($parent['parent_id']); ?></td>
                                         <td><?php echo htmlspecialchars($parent['parent_name']); ?></td>
                                         <td><?php echo htmlspecialchars($parent['parent_email']); ?></td>
-                                        <td><?php echo htmlspecialchars($parent['parent_phone']) ? htmlspecialchars($parent['parent_phone']) : '-'; ?></td>
+                                        <td style="text-align: center;"><?php echo htmlspecialchars($parent['parent_phone']) ? htmlspecialchars($parent['parent_phone']) : '-'; ?></td>
                                         <td><?php echo htmlspecialchars($parent['created_at']); ?></td>
                                         <td><?php echo getStatusLabel($parent['status']); ?></td>
                                         <td>

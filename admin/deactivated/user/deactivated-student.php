@@ -69,7 +69,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
                                             <form action="" method="POST" style="display:inline;" onsubmit="return showDeleteConfirmDialog(event);">
                                                 <input type="hidden" name="student_id" value="<?= htmlspecialchars($student['student_id']); ?>">
                                                 <input type="hidden" name="action" value="delete_student">
-                                                <button type="submit" class="delete-student-btn"><i class="bi bi-trash"></i></button>
+                                                <button type="submit" class="delete-student-btn"><i class="bi bi-x-square"></i></button>
                                             </form>
                                             <form action="" method="POST" style="display:inline;" onsubmit="return showRecoverConfirmDialog(event);">
                                                 <input type="hidden" name="student_id" value="<?= htmlspecialchars($student['student_id']); ?>">

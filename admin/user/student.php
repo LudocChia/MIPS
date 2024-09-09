@@ -66,7 +66,7 @@ if (isset($_POST["submit"])) {
     $studentId = $_POST["student_id"];
     $classId = $_POST["class_id"];
     $name = $_POST["name"];
-    $parentId = $_POST['selected_parent_id'] ?? null; // 检查是否存在 parent_id
+    $parentId = $_POST['selected_parent_id'] ?? null;
     $relationship = 'father';
     $existingStudentId = isset($_POST['existing_student_id']) ? $_POST['existing_student_id'] : null;
 
@@ -116,8 +116,35 @@ $pageTitle = "Student Management - MIPS";
 include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
 ?>
 
-
 <body>
+    <style>
+        .parent-result {
+            padding: 10px;
+            background-color: #f9f9f9;
+            border: 1px solid #ccc;
+            margin-bottom: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+            border-radius: 5px;
+        }
+
+        .parent-result span {
+            font-size: 1rem;
+            color: #333;
+        }
+
+        .parent-result:hover {
+            background-color: #e6e6e6;
+            border-color: #888;
+        }
+
+        @media screen and (max-width: 768px) {
+            .parent-result {
+                padding: 8px;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
     <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_header.php"; ?>
     <div class="container">
         <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_sidebar.php"; ?>
@@ -150,7 +177,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
                                         <td><?= htmlspecialchars($student['student_id']) ?></td>
                                         <td><?= htmlspecialchars($student['student_name']) ?></td>
                                         <td><?= htmlspecialchars($student['parent_name'] ?? '-') ?></td>
-                                        <td><?= htmlspecialchars($student['class_name']) ?></td>
+                                        <td style="text-align: center;"><?= htmlspecialchars($student['class_name']) ?></td>
                                         <td><?= htmlspecialchars($student['created_at']) ?></td>
                                         <td>
                                             <div class="actions">
@@ -183,7 +210,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
                 <h1>Add New Student</h1>
             </div>
             <div class="right">
-                <button class="cancel"><i class="bi bi-x-circle"></i></button>
+                <div class="actions"><button class="cancel"><i class="bi bi-x-circle"></i></button></div>
             </div>
         </div>
 
