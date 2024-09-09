@@ -8,8 +8,6 @@ if (!isset($_SESSION['admin_id'])) {
     exit();
 }
 
-
-
 // Check if the event_id and meal_type_id parameters are set in the URL
 if (isset($_GET['event_id']) && isset($_GET['meal_type_id'])) {
     // Retrieve the event_id and meal_type_id from the GET parameters
@@ -81,8 +79,9 @@ if (isset($_GET['event_id']) && isset($_GET['meal_type_id'])) {
     }
 
     // Function to generate a unique ID
-    function generateID() {
-        return uniqid(); 
+    function generateID()
+    {
+        return uniqid();
     }
 
     // Check if form is submitted
@@ -147,6 +146,7 @@ if (isset($_GET['event_id']) && isset($_GET['meal_type_id'])) {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <title>Meal Donation</title>
     <link rel="icon" type="image/x-icon" href="../../images/MIPS_icon.png">
@@ -162,27 +162,28 @@ if (isset($_GET['event_id']) && isset($_GET['meal_type_id'])) {
     <link rel="stylesheet" href="../admin_meal/adminDonation.css">
 
 </head>
+
 <body>
     <?php include "../admin_for_meal/header.php";  ?>
     <script src="../admin_for_meal/admin.js"></script>
     <div class="bigbox1">
-        <?php 
-            // Construct the URL for the next page with just the 'event_id' parameter
-            $backPageUrl = 'event.php?' . http_build_query([
-                'event_id' => $data['event_id']
-            ]); 
+        <?php
+        // Construct the URL for the next page with just the 'event_id' parameter
+        $backPageUrl = 'event.php?' . http_build_query([
+            'event_id' => $data['event_id']
+        ]);
 
-            // Debug: Output the URL for verification
-            // Uncomment the line below to see the URLs being generated
-            // echo '<p>Generated URL: ' . htmlspecialchars($nextPageUrl) . '</p>';
+        // Debug: Output the URL for verification
+        // Uncomment the line below to see the URLs being generated
+        // echo '<p>Generated URL: ' . htmlspecialchars($nextPageUrl) . '</p>';
         ?>
         <row id="row1">
             <a href="<?= htmlspecialchars($backPageUrl) ?>" style="text-decoration: none; color: inherit;">
-                <i class='bx bx-arrow-back' ></i>
+                <i class='bx bx-arrow-back'></i>
             </a>
         </row>
         <row id="row2">
-            <div ><img src="../admin_for_meal/pngwing.com.png" alt="Image 1"></div>
+            <div><img src="../admin_for_meal/pngwing.com.png" alt="Image 1"></div>
             <column id="column1">
                 <h1><?= htmlspecialchars($data['name']) ?></h1>
                 <row id="rowF)">
@@ -206,31 +207,31 @@ if (isset($_GET['event_id']) && isset($_GET['meal_type_id'])) {
             </row>
         </form>
         <?php if (!empty($meals)): ?>
-        <?php foreach ($meals as $meal): ?>
-            <?php 
+            <?php foreach ($meals as $meal): ?>
+                <?php
                 // Construct the URL for the next page with 'event_id' and 'meal_type_id' parameters
                 $nextPageUrl = 'mealDesc.php?' . http_build_query([
-                    'meal_id' => $meal['meal_id'], 
+                    'meal_id' => $meal['meal_id'],
                     'event_id' => $meal['event_id'],      // Add event_id
                     'meal_type_id' => $meal['meal_type_id']  // Add meal_type_id
-                ]); 
+                ]);
 
                 // Debug: Output the URL for verification
                 // Uncomment the line below to see the URLs being generated
                 // echo '<p>Generated URL: ' . htmlspecialchars($nextPageUrl) . '</p>';
-            ?>
-            <!-- Wrap the box in an anchor tag -->
-            <a href="<?= htmlspecialchars($nextPageUrl) ?>" style="text-decoration: none; color: inherit;">
-                <div class="row5">
-                    <h3><?= htmlspecialchars($meal['meal_name']) ?></h3> 
-                    <p><?= htmlspecialchars($meal['sets']) ?>  set needed </p>
-                    <p><?= htmlspecialchars($meal['person_per_set']) ?>  person per set</p>
-                </div>
-            </a>
-        <?php endforeach; ?>
-    <?php else: ?>
-        <p id="nRecord">No records found.</p>
-    <?php endif; ?>
+                ?>
+                <!-- Wrap the box in an anchor tag -->
+                <a href="<?= htmlspecialchars($nextPageUrl) ?>" style="text-decoration: none; color: inherit;">
+                    <div class="row5">
+                        <h3><?= htmlspecialchars($meal['meal_name']) ?></h3>
+                        <p><?= htmlspecialchars($meal['sets']) ?> set needed </p>
+                        <p><?= htmlspecialchars($meal['person_per_set']) ?> person per set</p>
+                    </div>
+                </a>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <p id="nRecord">No records found.</p>
+        <?php endif; ?>
 
 
         <row id="row6">
@@ -239,28 +240,28 @@ if (isset($_GET['event_id']) && isset($_GET['meal_type_id'])) {
         </row>
     </div>
 
-    <dialog  class="addMeal"  >
+    <dialog class="addMeal">
         <i class='bx bx-x' id="xbtn"></i>
-            <form method="POST" action="">
-                <div>
-                    <h1>Please fill in required credentials</h1>
-                </div>
-                <div>
-                    <label for="name">Name :</label>
-                    <input type="text" id="name" name="Name">
-                </div>
-                <div>
-                    <label for="ppl">People per set (Portion):</label>
-                    <input type="text" id="ppl" name="Ppl">
-                </div>
-                <div>
-                    <label for="set">Set :</label>
-                    <input type="text" id="set" name="Set">
-                </div>
-                <div>
-                    <input type="submit" value="Add" id="btn1">
-                </div>
-            </form>
+        <form method="POST" action="">
+            <div>
+                <h1>Please fill in required credentials</h1>
+            </div>
+            <div>
+                <label for="name">Name :</label>
+                <input type="text" id="name" name="Name">
+            </div>
+            <div>
+                <label for="ppl">People per set (Portion):</label>
+                <input type="text" id="ppl" name="Ppl">
+            </div>
+            <div>
+                <label for="set">Set :</label>
+                <input type="text" id="set" name="Set">
+            </div>
+            <div>
+                <input type="submit" value="Add" id="btn1">
+            </div>
+        </form>
     </dialog>
     <script>
         const modal = document.querySelector('.addMeal');
@@ -276,4 +277,5 @@ if (isset($_GET['event_id']) && isset($_GET['meal_type_id'])) {
     </script>
 
 </body>
+
 </html>

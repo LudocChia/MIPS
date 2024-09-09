@@ -118,14 +118,17 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
 
 <body>
     <style>
+        #parent-search-results {
+            margin-top: 0.5rem;
+            width: 85%;
+            border: 1px solid #ccc;
+        }
+
         .parent-result {
             padding: 10px;
             background-color: #f9f9f9;
-            border: 1px solid #ccc;
-            margin-bottom: 5px;
             cursor: pointer;
             transition: background-color 0.3s ease, border-color 0.3s ease;
-            border-radius: 5px;
         }
 
         .parent-result span {

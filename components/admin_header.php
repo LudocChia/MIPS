@@ -7,9 +7,9 @@
             <button class="menu-btn">
                 <i class="bi bi-list"></i>
             </button>
-            <div class="message-btn">
+            <!-- <div class="message-btn">
                 <a href="notification.php"><i class="bi bi-bell-fill"></i></a>
-            </div>
+            </div> -->
             <div class="profile">
                 <img src="<?= htmlspecialchars($_SESSION['admin_image']) ?>" alt="Admin Image" class="user-img" id="user-btn">
                 <div class="profile-menu">

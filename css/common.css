@@ -328,7 +328,7 @@ dialog form textarea {
 /* sup */
 sup {
     color: var(--color-primary);
-    font-size: 1rem;
+    font-size: 2rem;
 }
 
 /* NAV BAR */
@@ -911,7 +911,7 @@ thead th {
     display: flex;
     justify-content: center;
     position: relative;
-    width: 300px;
+    width: 85%;
     height: 45px;
     margin-bottom: 0.5rem;
 }
@@ -1039,7 +1039,12 @@ thead th {
         display: none;
     }
 
+    header .profile-area i {
+        display: none;
+    }
+
     header .mobile-wrapper {
+        margin-top: 10px;
         display: flex;
     }
 
@@ -1047,6 +1052,5 @@ thead th {
         padding: 5px 10px;
         margin-left: 3%;
     }
-
 
 }

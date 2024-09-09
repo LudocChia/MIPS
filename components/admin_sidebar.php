@@ -1,17 +1,21 @@
 <?php
-function isActive($pageName, $currentPage)
+function isActive($targetPage, $currentPage)
 {
-    return $pageName === $currentPage ? 'active' : '';
+    return $currentPage === $targetPage ? 'active' : '';
 }
+
+
 ?>
 <aside>
-    <button id="close-btn">
-        <i class="bi bi-layout-sidebar-inset"></i>
-    </button>
+    <div class="actions">
+        <button id="close-btn">
+            <i class="bi bi-layout-sidebar-inset"></i>
+        </button>
+    </div>
     <div class="sidebar">
         <ul>
             <li>
-                <a href="/mips/admin" class="<?= isActive('index.php', $currentPage); ?>"><i class="bi bi-grid-1x2-fill"></i>
+                <a href="/mips/admin" class="<?= isActive('/mips/admin/', $currentPage); ?>"><i class="bi bi-grid-1x2-fill"></i>
                     <h4>Dashboard</h4>
                 </a>
             </li>
@@ -41,32 +45,32 @@ function isActive($pageName, $currentPage)
                 </ul>
             </li>
             <li>
-                <a href="/mips/admin/order.php" class="<?= isActive('order.php', $currentPage); ?>">
+                <a href="/mips/admin/order.php" class="<?= isActive('/mips/admin/order.php', $currentPage); ?>">
                     <i class="bi bi-receipt"></i>
                     <h4>Order</h4>
                     <span class="count" id="pending-order-count"></span>
                 </a>
             </li>
             <li>
-                <a href="/mips/admin/grade.php" class="<?= isActive('grade.php', $currentPage); ?>">
+                <a href="/mips/admin/grade.php" class="<?= isActive('/mips/admin/grade.php', $currentPage); ?>">
                     <i class="bi bi-mortarboard-fill"></i>
                     <h4>Grade</h4>
                 </a>
             </li>
             <li>
-                <a href="/mips/admin/class.php" class="<?= isActive('class.php', $currentPage); ?>">
+                <a href="/mips/admin/class.php" class="<?= isActive('/mips/admin/class.php', $currentPage); ?>">
                     <i class="bi bi-easel2-fill"></i>
                     <h4>Class</h4>
                 </a>
             </li>
             <li>
-                <a href="/mips/admin/announcement.php" class="<?= isActive('announcement.php', $currentPage); ?>">
+                <a href="/mips/admin/announcement.php" class="<?= isActive('/mips/admin/announcement.php', $currentPage); ?>">
                     <i class="bi bi-megaphone-fill"></i>
                     <h4>Announment</h4>
                 </a>
             </li>
             <li>
-                <a href="/mips/admin/admin_meal/adminMain.php" class="<?= isActive('donationMain.php', $currentPage); ?>">
+                <a href="/mips/admin/admin_meal/adminMain.php" class="<?= isActive('/mips/admin/admin_meal/adminMain.php', $currentPage); ?>">
                     <i class="fa fa-cutlery" aria-hidden="true"></i>
                     <h4>Meal Donation</h4>
                 </a>
@@ -79,7 +83,7 @@ function isActive($pageName, $currentPage)
                 </a>
                 <ul class="user-show" style="display: <?= strpos($currentPage, 'admin') !== false || strpos($currentPage, 'teacher') !== false || strpos($currentPage, 'parent') !== false ? 'block' : 'none'; ?>">
                     <li>
-                        <a href="/mips/admin/user/admin.php" class="<?= isActive('admin.php', $currentPage); ?>"><i class="bi bi-person-fill-gear"></i>
+                        <a href="/mips/admin/user/admin.php" class="<?= isActive('/mips/admin/user/admin.php', $currentPage); ?>"><i class="bi bi-person-fill-gear"></i>
                             <h4>All Admin</h4>
                         </a>
                     </li>
@@ -93,19 +97,19 @@ function isActive($pageName, $currentPage)
                         </a>
                     </li> -->
                     <li>
-                        <a href="/mips/admin/user/parent.php" class="<?= isActive('parent.php', $currentPage); ?>"><i class="bi bi-people-fill"></i>
+                        <a href="/mips/admin/user/parent.php" class="<?= isActive('/mips/admin/user/parent.php', $currentPage); ?>"><i class="bi bi-people-fill"></i>
                             <h4>All Parent</h4>
                         </a>
                     </li>
                     <li>
-                        <a href="/mips/admin/user/student.php" class="<?= isActive('student.php', $currentPage); ?>"><i class='bx bxs-book-reader'></i>
+                        <a href="/mips/admin/user/student.php" class="<?= isActive('/mips/admin/user/student.php', $currentPage); ?>"><i class='bx bxs-book-reader'></i>
                             <h4>All Student</h4>
                         </a>
                     </li>
                 </ul>
             </li>
             <li>
-                <a href="/mips/admin/deactivated.php" class="<?= isActive('deactivated.php', $currentPage); ?>">
+                <a href="/mips/admin/deactivated.php" class="<?= isActive('/mips/admin/deactivated.php', $currentPage); ?>">
                     <i class="bi bi-trash2-fill"></i>
                     <h4>Deactivated</h4>
                 </a>
