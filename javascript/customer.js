@@ -85,7 +85,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         data.forEach(function (item, index) {
             const totalPriceItem = (item.product_price * item.product_quantity).toFixed(2);
-            const isDeleted = item.status === 1;
+            const isDeleted = item.is_deleted === 1;
 
             let childrenHtml = '';
             if (item.children) {
@@ -194,7 +194,7 @@ document.addEventListener('DOMContentLoaded', function () {
         all.addEventListener('change', function () {
             const isChecked = this.checked;
             data.forEach((item, index) => {
-                if (!item.status) {
+                if (!item.is_deleted) {
                     item.state = isChecked;
                     document.querySelector(`#ckh-${index}`).checked = isChecked;
                 }
@@ -205,7 +205,7 @@ document.addEventListener('DOMContentLoaded', function () {
         selectAll.addEventListener('change', function () {
             const isChecked = this.checked;
             data.forEach((item, index) => {
-                if (!item.status) {
+                if (!item.is_deleted) {
                     item.state = isChecked;
                     document.querySelector(`#ckh-${index}`).checked = isChecked;
                 }
@@ -274,13 +274,10 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    if (form) {
-        form.addEventListener('submit', function (event) {
-            event.preventDefault();
-            handlePurchase();
-        });
-    }
-
+    form.addEventListener('submit', function (event) {
+        event.preventDefault();
+        handlePurchase();
+    });
 
     function handlePurchase() {
         const selectedItems = data.filter(item => item.state);
@@ -334,7 +331,7 @@ document.addEventListener('DOMContentLoaded', function () {
             document.querySelector('#total-price-display').value = totalAmount;
         }
 
-        const allSelected = data.every(item => item.state || item.status);
+        const allSelected = data.every(item => item.state || item.is_deleted);
         document.querySelector('#all').checked = allSelected;
         document.querySelector('#selectAll').checked = allSelected;
     }
@@ -410,26 +407,18 @@ document.addEventListener('DOMContentLoaded', function () {
 
             reloadSlider();
         }
+
     }
 
-    if (document.querySelector("#login-btn")) {
-        document.querySelector("#login-btn").addEventListener("click", function () {
-            scrollPosition = window.pageYOffset;
-            const productId = new URLSearchParams(window.location.search).get('pid');
-
-            const loginForm = document.querySelector('.login-form');
-            if (productId) {
-                loginForm.querySelector('form').action += `?pid=${encodeURIComponent(productId)}`;
-            }
-            loginForm.showModal();
-        });
-    }
-
-    if (document.querySelector('.login-form')) {
-        document.querySelector('.login-form .cancel').addEventListener('click', function () {
-            const dialog = document.querySelector('.login-form');
+    if (document.getElementById('login-form')) {
+        document.querySelector('#login-form .cancel').addEventListener('click', function () {
+            const dialog = document.getElementById('login-form');
             dialog.close();
             dialog.querySelector('form').reset();
+
+            document.body.style.overflowY = '';
+            document.body.style.paddingRight = '';
+            document.body.style.backgroundColor = '';
 
             window.scrollTo(0, scrollPosition);
         });
@@ -449,4 +438,3 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 });
-

@@ -427,13 +427,19 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/customer_header.php"; ?>
 
     document.querySelectorAll('.add-to-cart-btn').forEach(button => {
         button.addEventListener('click', function() {
-            const selectedSizeButton = document.querySelector('.size-button.selected');
-            if (!selectedSizeButton) {
-                alert('Please select a size.');
-                return;
+            const sizeButtons = document.querySelectorAll('.size-button');
+
+            let sizeId = null;
+            if (sizeButtons.length > 0) {
+                const selectedSizeButton = document.querySelector('.size-button.selected');
+                if (!selectedSizeButton) {
+                    alert('Please select a size.');
+                    return;
+                }
+                sizeId = selectedSizeButton.dataset.sizeId;
             }
+
             const productId = button.dataset.productId;
-            const sizeId = selectedSizeButton.dataset.sizeId;
             const qty = document.getElementById('qty').value;
 
             fetch('/mips/ajax.php?action=add_to_cart', {

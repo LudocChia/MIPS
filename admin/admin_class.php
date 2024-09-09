@@ -177,6 +177,13 @@ class Action
             $stmt = $this->db->prepare($sql);
             $stmt->bindParam(':parent_id', $parent_id, PDO::PARAM_STR);
             $stmt->bindParam(':password', $hashed_password);
+
+            if ($this->execute_statement($stmt) === json_encode(['success' => true])) {
+                $this->create_shopping_cart($parent_id);
+                return json_encode(['success' => true]);
+            } else {
+                return json_encode(['error' => 'Failed to save parent.']);
+            }
         }
 
         $stmt->bindParam(':name', $parent_name, PDO::PARAM_STR);
@@ -186,6 +193,19 @@ class Action
 
         return $this->execute_statement($stmt);
     }
+
+
+    private function create_shopping_cart($parent_id)
+    {
+        $cart_id = uniqid("SC");
+        $sql = "INSERT INTO Cart (cart_id, parent_id, created_at) VALUES (:cart_id, :parent_id, NOW())";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':cart_id', $cart_id, PDO::PARAM_STR);
+        $stmt->bindParam(':parent_id', $parent_id, PDO::PARAM_STR);
+
+        return $this->execute_statement($stmt);
+    }
+
 
     public function search_parent($query)
     {
