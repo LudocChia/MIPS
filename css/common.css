@@ -942,6 +942,64 @@ thead th {
     color: white;
 }
 
+/* Confirm Dialog */
+#confirm-dialog {
+    width: 400px;
+    background: #f2f2f2;
+    padding: 30px;
+    border: 1px solid #b3b3b3;
+    z-index: 9999;
+}
+
+#confirm-dialog form {
+    margin-left: 0;
+    text-align: center;
+    align-items: center;
+}
+
+#confirm-dialog i {
+    font-size: 7rem;
+    color: #eb9447;
+    padding: 20px 40px;
+    border-radius: 50%;
+    margin: -10px 0 20px 0;
+}
+
+#confirm-dialog label {
+    font-size: 1.2rem;
+    color: #404040;
+}
+
+#confirm-dialog .controls {
+    margin: 40px 0 0 0;
+}
+
+#confirm-dialog .controls .cancel,
+#confirm-dialog .controls .confirm {
+    background: #999999;
+    color: white;
+    font-size: 18px;
+    border-radius: 5px;
+    border: 1px solid #808080;
+    padding: 10px 13px;
+}
+
+#confirm-dialog .controls .confirm {
+    margin-left: 20px;
+    background: #ff3333;
+    border: 1px solid #cc0000;
+}
+
+#confirm-dialog .controls .cancel:hover {
+    transition: .5s;
+    background: #8c8c8c;
+}
+
+#confirm-dialog .controls .confirm:hover {
+    transition: .5s;
+    background: #e60000;
+}
+
 @media screen and (max-width: 1200px) {
     /* .title {
         justify-content: space-between;

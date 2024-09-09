@@ -425,6 +425,12 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
                     });
             });
         });
+
+        document.querySelectorAll('#add-edit-data .cancel').forEach(button => {
+            button.addEventListener('click', function() {
+                document.querySelector('#add-edit-data h1').textContent = "Add Bookshop Product";
+            });
+        });
     </script>
 </body>
 

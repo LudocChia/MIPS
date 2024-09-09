@@ -112,6 +112,14 @@ switch ($action) {
         }
         break;
 
+    case 'search_parent':
+        if (isset($_POST['query'])) {
+            echo $crud->search_parent($_POST['query']);
+        } else {
+            echo json_encode(['error' => 'Search query not provided']);
+        }
+        break;
+
 
         // Student Functions
     case 'deactivate_student':
@@ -121,6 +129,23 @@ switch ($action) {
             echo json_encode(['error' => 'Student ID not provided']);
         }
         break;
+
+    case 'recover_student':
+        if (isset($_POST['student_id'])) {
+            echo $crud->recover_student($_POST['student_id']);
+        } else {
+            echo json_encode(['error' => 'Student ID not provided']);
+        }
+        break;
+
+    case 'delete_student':
+        if (isset($_POST['student_id'])) {
+            echo $crud->delete_student($_POST['student_id']);
+        } else {
+            echo json_encode(['error' => 'Student ID not provided']);
+        }
+        break;
+
     case 'get_student':
         if (isset($_POST['student_id'])) {
             echo $crud->get_student($_POST['student_id']);

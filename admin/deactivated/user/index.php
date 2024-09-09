@@ -21,7 +21,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                 <div class="box-container">
                     <div class="box">
                         <div class="image-container">
-                            <a href="/mips/admin/deactivated/user/parent.php"><img src="/mips/images/default_folder.png" alt="Deactivated Parent"></a>
+                            <a href="/mips/admin/deactivated/user/deactivated-admin.php"><img src="/mips/images/default_folder.png" alt="Deactivated Admin"></a>
                         </div>
                         <div class="info-container">
                             <h3>Admin</h3>
@@ -29,10 +29,18 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                     </div>
                     <div class="box">
                         <div class="image-container">
-                            <a href="/mips/admin/deactivated/user/parent.php"><img src="/mips/images/default_folder.png" alt="Deactivated Parent"></a>
+                            <a href="/mips/admin/deactivated/user/deactivated-parent.php"><img src="/mips/images/default_folder.png" alt="Deactivated Parent"></a>
                         </div>
                         <div class="info-container">
                             <h3>Parent</h3>
+                        </div>
+                    </div>
+                    <div class="box">
+                        <div class="image-container">
+                            <a href="/mips/admin/deactivated/user/deactivated-student.php"><img src="/mips/images/default_folder.png" alt="Deactivated Student"></a>
+                        </div>
+                        <div class="info-container">
+                            <h3>Student</h3>
                         </div>
                     </div>
                 </div>

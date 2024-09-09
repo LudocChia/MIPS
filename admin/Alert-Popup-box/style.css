@@ -13,7 +13,7 @@ body {
 }
 
 .click,
-.popup_box {
+#confirm-dialog {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -32,7 +32,7 @@ body {
   border: 1px solid #0059b3;
 }
 
-.popup_box {
+#confirm-dialog {
   width: 400px;
   background: #f2f2f2;
   text-align: center;
@@ -44,32 +44,31 @@ body {
   display: none;
 }
 
-.popup_box i {
+#confirm-dialog i {
   font-size: 60px;
   color: #eb9447;
-  border: 5px solid #eb9447;
   padding: 20px 40px;
   border-radius: 50%;
   margin: -10px 0 20px 0;
 }
 
-.popup_box h1 {
+#confirm-dialog h1 {
   font-size: 30px;
   color: #1b2631;
   margin-bottom: 5px;
 }
 
-.popup_box label {
+#confirm-dialog label {
   font-size: 23px;
   color: #404040;
 }
 
-.popup_box .btns {
+#confirm-dialog .controls {
   margin: 40px 0 0 0;
 }
 
-.btns .btn1,
-.btns .btn2 {
+#confirm-dialog .controls .cancel,
+#confirm-dialog .controls .comfirm {
   background: #999999;
   color: white;
   font-size: 18px;
@@ -78,18 +77,18 @@ body {
   padding: 10px 13px;
 }
 
-.btns .btn2 {
+#confirm-dialog .controls .comfirm {
   margin-left: 20px;
   background: #ff3333;
   border: 1px solid #cc0000;
 }
 
-.btns .btn1:hover {
+#confirm-dialog .controls .cancel:hover {
   transition: .5s;
   background: #8c8c8c;
 }
 
-.btns .btn2:hover {
+#confirm-dialog .controls .comfirm:hover {
   transition: .5s;
   background: #e60000;
 }
