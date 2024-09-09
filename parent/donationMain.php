@@ -72,8 +72,8 @@
     <link rel="stylesheet" href="../admin/admin_meal/adminDonation.css">
 </head>
 <body>
-    <?php include "header.php";  ?>
-    <script src="../admin/admin_for_meal/admin.js"></script>
+    <?php include "customer_header.php";  ?>
+    <script src="../javascript/common.js"></script>
     <div class="bigbox">
         <row id="row1">
             <a href="../index.php"><i class='bx bx-arrow-back' ></i></a>
@@ -130,19 +130,19 @@
         <p>No records found.</p>
     <?php endif; ?>
 </div>
-    <a href="#">
+    <!-- <a href="#">
         <div class="btnbox">
             <button class="slide-button">
             <i class='bx bx-add-to-queue' ></i>
             <span>Add Event</span>
             </button>
         </div>
-    </a>
+    </a> -->
 
     
 
 
-    <dialog  class="addEvent" >
+    <!-- <dialog  class="addEvent" >
         <i class='bx bx-x' id="xbtn"></i>
         <form method="POST" action="">
             <div>
@@ -188,7 +188,7 @@
         closeModal.addEventListener('click', () => {
             modal.close();
         })
-    </script>
+    </script> -->
 
     
 </body>

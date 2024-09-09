@@ -1,6 +1,6 @@
 <?php
 session_start();
-include "../../components/db_connect.php";
+include "../components/db_connect.php";
 
 // Check if user is logged in as admin
 if (!isset($_SESSION['admin_id'])) {
@@ -69,30 +69,30 @@ try {
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Meal Donation</title>
-    <link rel="icon" type="image/x-icon" href="../../images/MIPS_icon.png">
+    <link rel="icon" type="image/x-icon" href="../images/MIPS_icon.png">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <!-- Boxicons CSS -->
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <link rel="stylesheet" href="../admin_for_meal/base.css">
-    <link rel="stylesheet" href="../admin_for_meal/common.css">
-    <link rel="stylesheet" href="../admin_for_meal/admin.css">
-    <link rel="stylesheet" href="../admin_meal/adminDonation.css">
+    <link rel="stylesheet" href="../admin/admin_for_meal/base.css">
+    <link rel="stylesheet" href="../admin/admin_for_meal/common.css">
+    <link rel="stylesheet" href="../admin/admin_for_meal/admin.css">
+    <link rel="stylesheet" href="../admin/admin_meal/adminDonation.css">
 </head>
 <body>
-    <?php include "../admin_for_meal/header.php";  ?>
-    <script src="../admin_for_meal/admin.js"></script>
+    <?php include "customer_header.php";  ?>
+    <script src="../admin/admin_for_meal/admin.js"></script>
     <div class="bigbox">
         <row id="row1">
-            <a href="adminMain.php"><i class='bx bx-arrow-back' ></i></a>
+            <a href="donationMain.php"><i class='bx bx-arrow-back' ></i></a>
         </row>
         <pic>
             <div class="slider">
                 <div class="slides">
                     <!-- Slide 1 -->
-                    <div class="slide"><img src="../admin_for_meal/pngwing.com.png" alt="Image 1"></div>
+                    <div class="slide"><img src="../admin/admin_for_meal/pngwing.com.png" alt="Image 1"></div>
                     <!-- Add more slides as needed -->
                 </div>
                 <!-- Left and right controls -->
@@ -108,11 +108,11 @@ try {
                     <p>No data found</p>
                 <?php endif; ?>
             </row1>
-            <row2>
+            <!-- <row2>
                 <button id="edit">
                     <i class='bx bx-edit'>edit</i>
                 </button>
-            </row2>
+            </row2> -->
         </row>
         <row id="row3">
             <i class='bx bx-time-five'></i>
@@ -178,49 +178,12 @@ try {
             </div>
         </div>
 
-        <button class="delete">
+        <!-- <button class="delete">
             <i class='bx bx-comment-x'></i>
             <p>Delete Event</p>
-        </button>
+        </button> -->
 
     </div>
-
-    <dialog  class="addEvent" >
-        <i class='bx bx-x' id="xbtn"></i>
-        <form method="POST" action="">
-            <div>
-                <h1>Please fill in required credentials</h1>
-            </div>
-            <div>
-                <label for="name">Name :</label>
-                <input type="text" id="name" name="Name" required>
-            </div>
-            <div>
-                <label for="time">Time :</label>
-                <input type="text" id="time" name="Time" required>
-            </div>
-            <div>
-                <label for="place">Place :</label>
-                <input type="text" id="place" name="Place" required>
-            </div>
-            <div>
-                <label for="date">Date :</label>
-                <input type="date" id="date" name="Date" required>
-            </div>
-            <div>
-                <label for="desc">Description :</label>
-                <textarea id="desc" name="Desc" rows="4" cols="5" required></textarea>
-            </div>
-            <div>
-                <label for="pic">Picture :</label>
-                <input type="file" id="pic" name="Pic">
-            </div>
-            <div>
-                <input type="submit" value="Add" id="btn1" >
-            </div>
-        </form>
-    </dialog>
-
     <script>
         // let slideIndex = 0;
 
@@ -299,18 +262,6 @@ try {
         // Initialize the specific slider instance
         window.slider1 = new Slider('.slider-container1', '.slide1', '.slider-controls1', 3);
         })();
-
-
-        const modal = document.querySelector('.addEvent');
-        const openModal = document.querySelector('#edit');
-        const closeModal = document.querySelector('#xbtn');
-
-        openModal.addEventListener('click', () => {
-            modal.showModal();
-        })
-        closeModal.addEventListener('click', () => {
-            modal.close();
-        })
 
     </script>
 </body>

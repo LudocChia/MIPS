@@ -29,7 +29,7 @@
     flex-direction: row;
     overflow-x: auto;
     padding: 10px;
-    margin: 20px;
+    margin: 0px 0px 20px 30px;
     scroll-behavior: smooth;
     gap: 15px;
 }
@@ -380,7 +380,7 @@
     position: relative;
     border-radius: 10px;
     margin-top: 30px;
-    margin-bottom: 20px;
+    margin-bottom: 70px;
 }
 
 .slides1 {
@@ -509,7 +509,7 @@
 #nRecord{
     margin-left: 20%;
 }
-.bigbox1 a .row5{
+.bigbox1 .row5{
     margin-left: 20%;
     margin-right: 20%;
     margin-top: 20px;
@@ -518,10 +518,10 @@
     border-bottom: 2px solid rgba(0, 0, 0, 0.226);
     padding-bottom: 20px;
 }
-.bigbox1 a .row5 h3{
+.bigbox1 .row5 h3{
     font-size: 25px;
 }
-.bigbox1 a .row5 p{
+.bigbox1 .row5 p{
     font-size: 20px;
 }
 .bigbox1 #row6 #addbtn{
