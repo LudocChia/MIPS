@@ -41,7 +41,8 @@
                                 <h4><?= htmlspecialchars($_SESSION['user_name']); ?></h4>
                             </div>
                             <hr>
-                            <a href="/mips/account.php" class="profile-menu-link">
+                            <!-- <a href="/mips/account.php" class="profile-menu-link"> -->
+                            <a href="javascript:void(0)" class="profile-menu-link">
                                 <i class="bi bi-person-fill"></i>
                                 <p>My Account</p>
                                 <span>></span>

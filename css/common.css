@@ -562,6 +562,7 @@ table {
 
 thead th {
     position: sticky;
+    z-index: 1;
     top: 0;
     Left: 0;
 }

@@ -2,7 +2,7 @@
 :root {
     --color-white: #ffffff;
     --color-light: #f0eff5;
-    --color-gray-light: #ccc;
+    --color-gray-light: #86848c;
     --color-gray-super-light: #e5e5e5;
     --color-dark: #27282f;
     --color-primary: rgb(0, 52, 85);
@@ -720,6 +720,11 @@ header img.logo {
 
 .scrollable-tabs-container svg:hover {
     background: #333;
+}
+
+/* Purchase History */
+.purchase .wrapper {
+    background-color: white;
 }
 
 /* Media */

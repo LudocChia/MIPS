@@ -135,7 +135,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const idValue = currentForm.querySelector(`input[name="${idField}"]`).value;
 
             document.querySelector('#confirm-dialog h1').textContent = "This data will be deactivated!";
-            document.querySelector('.confirm').textContent = "Deactivate";
+            document.querySelector('.delete').textContent = "Deactivate";
             ConfirmDialog.showModal();
 
             ConfirmDialog.addEventListener('close', function () {
