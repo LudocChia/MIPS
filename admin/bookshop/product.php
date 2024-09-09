@@ -235,8 +235,13 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
                                         <img src="/mips/uploads/product/<?php echo htmlspecialchars($product['image_url']); ?>" alt="Icon for <?php echo htmlspecialchars($product['product_name']); ?>">
                                     </div>
                                     <div class="info-container">
-                                        <h3><?php echo htmlspecialchars($product['product_name']); ?></h3>
-                                        <p><?= number_format($product['product_price'], 2); ?></p>
+                                        <div class="name-field">
+                                            <h4 style="font-weight: bold"><?php echo htmlspecialchars($product['product_name']); ?></h4>
+                                        </div>
+                                        <div class="price-field">
+                                            <p><?= number_format($product['product_price'], 2); ?></p>
+                                        </div>
+
                                         <p><?= htmlspecialchars($product['stock_quantity']); ?> pieces available</p>
                                         <p><?= htmlspecialchars($product['gender']); ?></p>
                                         <p><?= htmlspecialchars($product['color']); ?></p>
@@ -268,11 +273,11 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
                 <h1>Add Bookshop Product</h1>
             </div>
             <div class="right">
-                <button class="cancel"><i class="bi bi-x-circle"></i></button>
+                <button class="actions cancel"><i class="bi bi-x-circle"></i></button>
             </div>
         </div>
         <form method="post" enctype="multipart/form-data">
-            <input type="text" name="product_id" value="">
+            <input type="hidden" name="product_id" value="">
             <div class="input-container">
                 <h2>Product Name<sup>*</sup></h2>
                 <div class="input-field">
@@ -365,21 +370,23 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
                 <p>Please enter the color of the product.</p>
             </div>
             <div class="input-container">
-                <h2>Gender<sup>*</sup></h2>
-                <div class="input-field">
-                    <select name="gender" id="gender" required>
+                <div class="select-field">
+                    <select class="select-box" name="gender" id="gender" required>
                         <option value="">Select gender</option>
                         <option value="Boy" <?= isset($_POST['gender']) && $_POST['gender'] == 'Boy' ? 'selected' : '' ?>>Boy</option>
                         <option value="Girl" <?= isset($_POST['gender']) && $_POST['gender'] == 'Girl' ? 'selected' : '' ?>>Girl</option>
                         <option value="Unisex" <?= isset($_POST['gender']) && $_POST['gender'] == 'Unisex' ? 'selected' : '' ?>>Unisex</option>
                     </select>
+                    <div class="icon-container">
+                        <i class="bi bi-caret-down-fill"></i>
+                    </div>
                 </div>
                 <p>Please select the gender for the product.</p>
             </div>
             <div class="controls">
                 <button type="button" class="cancel">Cancel</button>
-                <button type="reset">Clear</button>
-                <button type="submit" name="submit">Publish</button>
+                <button type="reset" class="delete">Clear</button>
+                <button type="submit" class="confirm" name="submit">Publish</button>
             </div>
         </form>
     </dialog>

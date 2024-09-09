@@ -5,7 +5,7 @@
         <label>Are you sure to proceed?</label>
         <div class="controls">
             <button value="cancel" class="cancel">Cancel</button>
-            <button value="confirm" class="confirm">Confirm</button>
+            <button value="confirm" class="delete">Confirm</button>
         </div>
     </form>
 </dialog>

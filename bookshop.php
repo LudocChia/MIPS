@@ -61,11 +61,13 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/customer_head.php";
                                             <img src="<?= htmlspecialchars(!empty($product['primary_image']) ? "uploads/product/" . $product['primary_image'] : 'images/defaultproductimage.png'); ?>" alt="Product Image" class="primary-image">
                                         </div>
                                         <div class="info-container">
-                                            <div class="name"><?= htmlspecialchars($product['product_name']); ?></div>
+                                            <div class="name-field">
+                                                <h3 style="font-weight: bold"><?= htmlspecialchars($product['product_name']); ?></h3>
+                                            </div>
                                             <div class="price-size-container">
                                                 <div class="price">MYR <?= number_format($product['product_price'], 2); ?></div>
                                             </div>
-                                            <div class="color-gender">
+                                            <div class="color-gender-container">
                                                 <span class="color">Color: <?= htmlspecialchars($product['color']); ?></span>
                                                 <span class="gender">Gender: <?= htmlspecialchars($product['gender']); ?></span>
                                             </div>

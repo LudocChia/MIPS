@@ -168,7 +168,10 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                                     <button type="button" class="edit-subcategory-btn" data-subcategory-id="<?= htmlspecialchars($subcategory['category_id']); ?>"><i class="bi bi-pencil-square"></i></button>
                                 </div>
                                 <div class="info-container">
-                                    <h3><?php echo htmlspecialchars($subcategory['category_name']); ?></h3>
+                                    <div class="name-field">
+                                        <h3><?php echo htmlspecialchars($subcategory['category_name']); ?></h3>
+                                    </div>
+
                                 </div>
                             </div>
                         <?php endforeach; ?>
@@ -223,8 +226,8 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
             </div>
             <div class="controls">
                 <button type="button" class="cancel">Cancel</button>
-                <button type="reset">Clear</button>
-                <button type="submit" name="submit">Publish</button>
+                <button type="reset" class="delete">Clear</button>
+                <button type="submit" class="confirm" name="submit">Publish</button>
             </div>
         </form>
     </dialog>

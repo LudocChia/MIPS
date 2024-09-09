@@ -46,6 +46,7 @@ dialog {
     border-radius: 1em;
     text-align: center;
     padding: 0.8em 1.5em 1em;
+    border: 1px solid var(--color-gray-light);
 }
 
 dialog form {
@@ -742,8 +743,11 @@ thead th {
 }
 
 .info-container .name-field {
+    margin: 0.5rem;
+}
+
+.category .info-container .name-field {
     text-align: center;
-    margin: 1rem;
 }
 
 .info-container {
@@ -820,14 +824,12 @@ thead th {
 .products .box-container .image-container img {
     background-color: var(--color-gray-light);
     object-fit: contain;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
 }
 
-.products .box-container .name {
+.products .info-container .name-field {
     margin: 1rem 0;
-    font-size: 1.5rem;
-    font-weight: bold;
     color: #333;
 }
 
@@ -917,7 +919,7 @@ thead th {
     justify-content: center;
     position: relative;
     width: 85%;
-    height: 45px;
+    height: 40px;
     margin-bottom: 0.5rem;
 }
 
@@ -926,9 +928,10 @@ thead th {
     appearance: none;
     padding: 0 30px 0 15px;
     width: 100%;
-    color: white;
-    background-color: #001a4a;
-    font-size: 20px;
+    /* color: white; */
+    border: 1px solid var(--color-gray-light);
+    /* background-color: #001a4a; */
+    /* font-size: 20px; */
 }
 
 .select-field .icon-container {
@@ -939,7 +942,7 @@ thead th {
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #023ca9;
+    background-color: var(--color-secondary);
 }
 
 .icon-container i {
@@ -952,7 +955,7 @@ thead th {
     width: 400px;
     background: #f2f2f2;
     padding: 30px;
-    border: 1px solid #b3b3b3;
+    border: 1px solid var(--color-gray-light);
     z-index: 9999;
 }
 
@@ -979,7 +982,19 @@ thead th {
     margin: 40px 0 0 0;
 }
 
+.controls .cancel,
+.controls .delete,
+.controls .confirm {
+    background: #999999;
+    color: white;
+    font-size: 18px;
+    border-radius: 5px;
+    border: 1px solid #808080;
+    padding: 10px 13px;
+}
+
 #confirm-dialog .controls .cancel,
+#confirm-dialog .controls .delete,
 #confirm-dialog .controls .confirm {
     background: #999999;
     color: white;
@@ -989,7 +1004,19 @@ thead th {
     padding: 10px 13px;
 }
 
-#confirm-dialog .controls .confirm {
+.controls .delete {
+    margin-left: 20px;
+    background: #ff3333;
+    border: 1px solid #cc0000;
+}
+
+.controls .confirm {
+    margin-left: 20px;
+    background: var(--color-primary);
+    border: 1px solid var(--color-primary);
+}
+
+#confirm-dialog .controls .delete {
     margin-left: 20px;
     background: #ff3333;
     border: 1px solid #cc0000;
