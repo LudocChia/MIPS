@@ -722,8 +722,6 @@ header img.logo {
     background: #333;
 }
 
-
-
 /* Media */
 @media screen and (max-width: 1200px) {
     header img.logo {

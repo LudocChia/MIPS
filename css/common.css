@@ -193,7 +193,6 @@ dialog form textarea {
 
 .controls .btn {
     display: inline-block;
-    margin: 0 10px;
 }
 
 .controls .deactivate {
@@ -740,9 +739,13 @@ thead th {
     height: 100%;
 }
 
-.category .info-container {
-    padding: 10px;
+.info-container .name-field {
     text-align: center;
+    margin: 1rem;
+}
+
+.info-container {
+    padding: 10px;
 }
 
 /* .category .info-container h4 {

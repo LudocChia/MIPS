@@ -137,10 +137,12 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                                     </form>
                                     <button type="button" class="edit-announcement-btn" data-announcement-id="<?= htmlspecialchars($announcement['announcement_id']); ?>"><i class="bi bi-pencil-square"></i></button>
                                 </div>
-                                <div class="txt">
-                                    <h3><?php echo htmlspecialchars($announcement['announcement_title']); ?></h3>
-                                    <h3>Updated at: <?php echo htmlspecialchars($announcement['updated_at']); ?></h3>
-                                    <h3>Created at: <?php echo htmlspecialchars($announcement['created_at']); ?></h3>
+                                <div class="info-container">
+                                    <div class="name-field">
+                                        <h3><?php echo htmlspecialchars($announcement['announcement_title']); ?></h3>
+                                    </div>
+                                    <h4>Updated at: <?php echo htmlspecialchars($announcement['updated_at']); ?></h3>
+                                        <h4>Created at: <?php echo htmlspecialchars($announcement['created_at']); ?></h3>
                                 </div>
                             </div>
                         <?php endforeach; ?>

@@ -100,12 +100,14 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                                         <td><?php echo htmlspecialchars($grade['total_classes']); ?></td>
                                         <td><?php echo htmlspecialchars($grade['total_students']); ?></td>
                                         <td>
-                                            <form action="" method="POST" style="display:inline;" onsubmit="return showDeactivateConfirmDialog(event);">
-                                                <input type="hidden" name="grade_id" value="<?= htmlspecialchars($grade['grade_id']); ?>">
-                                                <input type="hidden" name="action" value="deactivate_grade">
-                                                <button type="submit" class="delete-grade-btn"><i class="bi bi-x-square"></i></button>
-                                            </form>
-                                            <button type="button" class="edit-grade-btn" data-grade-id="<?= htmlspecialchars($grade['grade_id']); ?>"><i class="bi bi-pencil-square"></i></button>
+                                            <div class="actions">
+                                                <form action="" method="POST" style="display:inline;" onsubmit="return showDeactivateConfirmDialog(event);">
+                                                    <input type="hidden" name="grade_id" value="<?= htmlspecialchars($grade['grade_id']); ?>">
+                                                    <input type="hidden" name="action" value="deactivate_grade">
+                                                    <button type="submit" class="delete-grade-btn"><i class="bi bi-x-square"></i></button>
+                                                </form>
+                                                <button type="button" class="edit-grade-btn" data-grade-id="<?= htmlspecialchars($grade['grade_id']); ?>"><i class="bi bi-pencil-square"></i></button>
+                                            </div>
                                         </td>
                                     </tr>
                                 <?php endforeach; ?>

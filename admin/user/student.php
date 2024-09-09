@@ -153,12 +153,14 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
                                         <td><?= htmlspecialchars($student['class_name']) ?></td>
                                         <td><?= htmlspecialchars($student['created_at']) ?></td>
                                         <td>
-                                            <form action="" method="POST" style="display:inline;" onsubmit="return showDeactivateConfirmDialog(event);">
-                                                <input type="hidden" name="student_id" value="<?= htmlspecialchars($student['student_id']); ?>">
-                                                <input type="hidden" name="action" value="deactivate_student">
-                                                <button type="submit" class="delete-student-btn"><i class="bi bi-x-square"></i></button>
-                                            </form>
-                                            <button type="button" class="edit-student-btn" data-student-id="<?= htmlspecialchars($student['student_id']); ?>"><i class="bi bi-pencil-square"></i></button>
+                                            <div class="actions">
+                                                <form action="" method="POST" style="display:inline;" onsubmit="return showDeactivateConfirmDialog(event);">
+                                                    <input type="hidden" name="student_id" value="<?= htmlspecialchars($student['student_id']); ?>">
+                                                    <input type="hidden" name="action" value="deactivate_student">
+                                                    <button type="submit" class="delete-student-btn"><i class="bi bi-x-square"></i></button>
+                                                </form>
+                                                <button type="button" class="edit-student-btn" data-student-id="<?= htmlspecialchars($student['student_id']); ?>"><i class="bi bi-pencil-square"></i></button>
+                                            </div>
                                         </td>
                                     </tr>
                                 <?php } ?>
