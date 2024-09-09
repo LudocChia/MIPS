@@ -77,7 +77,7 @@ if (isset($_GET['event_id']) && isset($_GET['meal_type_id'])) {
             // echo '<hr>';
         }
     } else {
-        echo '<p>No meals found for this meal type.</p>';
+        // echo '<p>No meals found for this meal type.</p>';
     }
 
     // Function to generate a unique ID
@@ -229,7 +229,7 @@ if (isset($_GET['event_id']) && isset($_GET['meal_type_id'])) {
             </a>
         <?php endforeach; ?>
     <?php else: ?>
-        <p>No records found.</p>
+        <p id="nRecord">No records found.</p>
     <?php endif; ?>
 
 

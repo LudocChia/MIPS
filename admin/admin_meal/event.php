@@ -53,7 +53,7 @@ try {
         // echo '<p>Event_ID: ' . htmlspecialchars($mealrows['event_id']) . '</p>';
         // echo '<p>Meal_Type_ID: ' . htmlspecialchars($mealrows['meal_type_id']) . '</p>';
     } else {
-        echo 'No data found';
+        // echo 'No data found';
     }
 } catch (PDOException $e) {
     echo "Error: " . $e->getMessage();
@@ -168,7 +168,7 @@ try {
                         </div>
                     <?php endforeach; ?>
                 <?php else: ?>
-                    <p>No records found.</p>
+                    <p id="nRecord">No records found.</p>
                 <?php endif; ?>
             </div>
             <!-- Slider Controls -->
