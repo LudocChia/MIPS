@@ -39,6 +39,7 @@
             $stmt->bindParam(':place', $place);
             $stmt->bindParam(':description', $desc);
             $stmt->bindParam(':picture', $pic);
+            header("Location: /mips/admin/admin_meal/adminMain.php");
     
             // Execute the query
             if ($stmt->execute()) {

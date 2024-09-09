@@ -252,7 +252,7 @@
 .bigbox row1{
     margin-top: -15px;
     margin-left: 18%;
-    margin-right: 29%;
+    margin-right: 50%;
 }
 .bigbox #row2 #edit i{
     font-size: 30px;
@@ -505,6 +505,9 @@
         padding: 10px 40px 10px 40px;
         margin-left: 40%;
     }    
+}
+#nRecord{
+    margin-left: 20%;
 }
 .bigbox1 a .row5{
     margin-left: 20%;
