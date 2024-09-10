@@ -89,6 +89,33 @@ if (isset($_POST['submit'])) {
 }
 
 
+if (isset($_POST['delete-event'])) {
+    $event_id = htmlspecialchars($_POST['event_id']);
+
+    $pdo->beginTransaction();
+
+    $stmt = $pdo->prepare("DELETE FROM donator WHERE event_meal_id IN (SELECT event_meal_id FROM event_meal WHERE event_id = :event_id)");
+    $stmt->bindParam(':event_id', $event_id);
+    $stmt->execute();
+
+    $stmt = $pdo->prepare("DELETE FROM meals WHERE event_meal_id IN (SELECT event_meal_id FROM event_meal WHERE event_id = :event_id)");
+    $stmt->bindParam(':event_id', $event_id);
+    $stmt->execute();
+
+    $stmt = $pdo->prepare("DELETE FROM event_meal WHERE event_id = :event_id");
+    $stmt->bindParam(':event_id', $event_id);
+    $stmt->execute();
+
+    $stmt = $pdo->prepare("DELETE FROM event WHERE event_id = :event_id");
+    $stmt->bindParam(':event_id', $event_id);
+    $stmt->execute();
+
+    $pdo->commit();
+    header("Location: /mips/admin/admin_meal/adminMain.php");
+    exit();
+}
+
+
 ?>
 
 <!DOCTYPE html>
@@ -207,7 +234,8 @@ if (isset($_POST['submit'])) {
             </div>
         </div>
         <form method="POST">
-            <button id="delete-event-btn" data-event-id="<?= htmlspecialchars($row['event_id']) ?>">
+            <input type="hidden" name="event_id" value="<?= htmlspecialchars($row['event_id']) ?>">
+            <button type="submit" name="delete-event">
                 <i class='bx bx-comment-x'></i>
                 <p>Delete Event</p>
             </button>
