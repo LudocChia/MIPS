@@ -63,6 +63,30 @@ try {
 // var_dump($mealrows);
 // echo '</pre>';
 // 
+if (isset($_POST['submit'])) {
+    $name = htmlspecialchars($_POST['name']);
+    $time = htmlspecialchars($_POST['time']);
+    $place = htmlspecialchars($_POST['place']);
+    $date = htmlspecialchars($_POST['date']);
+    $description = htmlspecialchars($_POST['description']);
+
+    $sql = "UPDATE event 
+                SET name = :name, time = :time, place = :place, date = :date, description = :description 
+                WHERE event_id = :event_id";
+
+    $stmt = $pdo->prepare($sql);
+
+    $stmt->bindParam(':event_id', $event_id, PDO::PARAM_STR);
+    $stmt->bindParam(':name', $name, PDO::PARAM_STR);
+    $stmt->bindParam(':time', $time, PDO::PARAM_STR);
+    $stmt->bindParam(':place', $place, PDO::PARAM_STR);
+    $stmt->bindParam(':date', $date, PDO::PARAM_STR);
+    $stmt->bindParam(':description', $description, PDO::PARAM_STR);
+
+    $stmt->execute();
+
+    echo "<script>alert('Event updated successfully.');</script>";
+}
 ?>
 
 <!DOCTYPE html>
@@ -112,7 +136,7 @@ try {
                 <?php endif; ?>
             </row1>
             <row2>
-                <button id="edit-event-btn">
+                <button id="edit-event-btn" data-event-id="<?= htmlspecialchars($row['event_id']) ?>">
                     <i class='bx bx-edit'>edit</i>
                 </button>
             </row2>
@@ -187,36 +211,32 @@ try {
         </button>
 
     </div>
-
-    <dialog class="add-edit-data">
+    <dialog id="add-edit-data">
         <i class='bx bx-x' id="xbtn"></i>
-        <form action="" method="POST" enctype="multipart/form-data">
+        <form method="POST" enctype="multipart/form-data">
+            <input type="hidden" name="event_id" value="">
             <div>
                 <h1>Please fill in required credentials</h1>
             </div>
             <div>
-                <label for="name">Name :</label>
-                <input type="text" id="name" name="Name" value="<?php echo htmlspecialchars($row['name']); ?>" required>
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" required>
             </div>
             <div>
-                <label for="time">Time :</label>
-                <input type="text" id="time" name="Time" value="<?php echo htmlspecialchars($row['time']); ?>" required>
+                <label for="time">Time:</label>
+                <input type="text" id="time" name="time" required>
             </div>
             <div>
-                <label for="place">Place :</label>
-                <input type="text" id="place" name="Place" value="<?php echo htmlspecialchars($row['time']) ?>" required>
+                <label for="place">Place:</label>
+                <input type="text" id="place" name="place" required>
             </div>
             <div>
-                <label for="date">Date :</label>
-                <input type="date" id="date" name="Date" value="<?php echo htmlspecialchars($row['date']) ?>" required>
+                <label for="date">Date:</label>
+                <input type="date" id="date" name="date" required>
             </div>
             <div>
-                <label for="desc">Description :</label>
-                <textarea id="desc" name="Desc" rows="4" cols="5" value="<?php echo htmlspecialchars($row['description']) ?>" required></textarea>
-            </div>
-            <div>
-                <label for="pic">Picture :</label>
-                <input type="file" id="pic" name="Pic">
+                <label for="description">Description:</label>
+                <textarea id="description" name="description" rows="4" required></textarea>
             </div>
             <div>
                 <button type="submit" name="submit">Publish</button>
@@ -225,28 +245,6 @@ try {
     </dialog>
 
     <script>
-        document.querySelectorAll('.edit-event-btn').forEach(button => {
-            button.addEventListener('click', function() {
-                const eventId = this.dataset.gradeId;
-                fetch(`/mips/admin/ajax.php?action=get_event&event_id=${eventId}`)
-                    .then(response => response.json())
-                    .then(grade => {
-                        if (grade.error) {
-                            alert(grade.error);
-                        } else {
-                            document.querySelector('#add-edit-data [name="event_id"]').value = grade.grade_id;
-                            document.querySelector('#add-edit-data [name="event_name"]').value = grade.grade_name;
-                            document.querySelector('#add-edit-data [name="_level"]').value = grade.grade_level;
-                            document.querySelector('#add-edit-data [name=""]').value = grade.student_id_prefix;
-                            document.getElementById('add-edit-data').showModal();
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error fetching grade data:', error);
-                        alert('Failed to load grade data.');
-                    });
-            });
-        });
         // let slideIndex = 0;
 
         // function showSlides(n) {
@@ -273,69 +271,99 @@ try {
         // // Initialize the slider
         // showSlides(slideIndex);
 
-        (function() {
-            function Slider(containerSelector, slidesSelector, controlsSelector, slidesToShow) {
-                this.container = document.querySelector(containerSelector);
-                this.slides = document.querySelectorAll(slidesSelector);
-                this.controls = document.querySelector(controlsSelector);
-                this.slideIndex = 0;
-                this.slidesToShow = slidesToShow || 3;
+        // (function() {
+        //     function Slider(containerSelector, slidesSelector, controlsSelector, slidesToShow) {
+        //         this.container = document.querySelector(containerSelector);
+        //         this.slides = document.querySelectorAll(slidesSelector);
+        //         this.controls = document.querySelector(controlsSelector);
+        //         this.slideIndex = 0;
+        //         this.slidesToShow = slidesToShow || 3;
 
-                this.init();
+        //         this.init();
+        //     }
+
+        //     Slider.prototype.init = function() {
+        //         const self = this;
+        //         this.updateSlideWidth();
+        //         window.addEventListener('resize', function() {
+        //             self.updateSlideWidth();
+        //             self.showSlides(self.slideIndex);
+        //         });
+        //         this.showSlides(this.slideIndex);
+        //     };
+
+        //     Slider.prototype.updateSlideWidth = function() {
+        //         const slideWidth = (this.container.clientWidth - (this.slidesToShow - 1)) / this.slidesToShow;
+        //         this.slides.forEach(slide => {
+        //             slide.style.width = `${slideWidth}px`;
+        //         });
+        //     };
+
+        //     Slider.prototype.showSlides = function(index) {
+        //         const totalSlides = this.slides.length;
+
+        //         // Ensure slideIndex is within range
+        //         if (index >= totalSlides - this.slidesToShow + 1) {
+        //             this.slideIndex = 0;
+        //         } else if (index < 0) {
+        //             this.slideIndex = totalSlides - this.slidesToShow;
+        //         } else {
+        //             this.slideIndex = index;
+        //         }
+
+        //         const slideWidth = (this.container.clientWidth - (this.slidesToShow - 1)) / this.slidesToShow;
+        //         this.container.querySelector('.slides1').style.transform = `translateX(-${this.slideIndex * (slideWidth + 1)}px)`;
+        //     };
+
+        //     Slider.prototype.plusSlides = function(n) {
+        //         this.showSlides(this.slideIndex + n);
+        //     };
+
+        //     // Initialize the specific slider instance
+        //     window.slider1 = new Slider('.slider-container1', '.slide1', '.slider-controls1', 3);
+        // })();
+
+
+        // const modal = document.querySelector('.addEvent');
+        // const openModal = document.querySelector('#edit');
+        // const closeModal = document.querySelector('#xbtn');
+
+        // openModal.addEventListener('click', () => {
+        //     modal.showModal();
+        // })
+        // closeModal.addEventListener('click', () => {
+        //     modal.close();
+        // })
+
+        document.querySelector('#edit-event-btn').addEventListener('click', function() {
+            const eventId = this.dataset.eventId;
+            if (!eventId) {
+                alert('Event ID is missing');
+                return;
             }
 
-            Slider.prototype.init = function() {
-                const self = this;
-                this.updateSlideWidth();
-                window.addEventListener('resize', function() {
-                    self.updateSlideWidth();
-                    self.showSlides(self.slideIndex);
+            console.log(eventId);
+            fetch(`/mips/admin/ajax.php?action=get_event&event_id=${eventId}`)
+                .then(response => response.json())
+                .then(event => {
+                    if (event.error) {
+                        alert(event.error);
+                    } else {
+                        document.querySelector('#add-edit-data [name="event_id"]').value = event.event_id;
+                        document.querySelector('#add-edit-data [name="name"]').value = event.name;
+                        document.querySelector('#add-edit-data [name="time"]').value = event.time;
+                        document.querySelector('#add-edit-data [name="place"]').value = event.place;
+                        document.querySelector('#add-edit-data [name="date"]').value = event.date;
+                        document.querySelector('#add-edit-data [name="description"]').value = event.description;
+
+                        document.getElementById('add-edit-data').showModal();
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching event data:', error);
+                    alert('Failed to load event data.');
                 });
-                this.showSlides(this.slideIndex);
-            };
-
-            Slider.prototype.updateSlideWidth = function() {
-                const slideWidth = (this.container.clientWidth - (this.slidesToShow - 1)) / this.slidesToShow;
-                this.slides.forEach(slide => {
-                    slide.style.width = `${slideWidth}px`;
-                });
-            };
-
-            Slider.prototype.showSlides = function(index) {
-                const totalSlides = this.slides.length;
-
-                // Ensure slideIndex is within range
-                if (index >= totalSlides - this.slidesToShow + 1) {
-                    this.slideIndex = 0;
-                } else if (index < 0) {
-                    this.slideIndex = totalSlides - this.slidesToShow;
-                } else {
-                    this.slideIndex = index;
-                }
-
-                const slideWidth = (this.container.clientWidth - (this.slidesToShow - 1)) / this.slidesToShow;
-                this.container.querySelector('.slides1').style.transform = `translateX(-${this.slideIndex * (slideWidth + 1)}px)`;
-            };
-
-            Slider.prototype.plusSlides = function(n) {
-                this.showSlides(this.slideIndex + n);
-            };
-
-            // Initialize the specific slider instance
-            window.slider1 = new Slider('.slider-container1', '.slide1', '.slider-controls1', 3);
-        })();
-
-
-        const modal = document.querySelector('.addEvent');
-        const openModal = document.querySelector('#edit');
-        const closeModal = document.querySelector('#xbtn');
-
-        openModal.addEventListener('click', () => {
-            modal.showModal();
-        })
-        closeModal.addEventListener('click', () => {
-            modal.close();
-        })
+        });
     </script>
 </body>
 

@@ -383,6 +383,31 @@ switch ($action) {
         }
         break;
 
+        // Event Functions
+    case 'get_event':
+        if (isset($_GET['event_id'])) {
+            echo $crud->get_event($_GET['event_id']);
+        } else {
+            echo json_encode(['error' => 'Event ID is required']);
+        }
+        break;
+
+    case 'save_event':
+        if (isset($_POST['event_id'], $_POST['name'], $_POST['time'], $_POST['place'], $_POST['date'], $_POST['description'])) {
+            echo $crud->save_event($_POST['event_id'], $_POST['name'], $_POST['time'], $_POST['place'], $_POST['date'], $_POST['description']);
+        } else {
+            echo json_encode(['error' => 'Missing required event data']);
+        }
+        break;
+
+    case 'delete_event':
+        if (isset($_POST['event_id'])) {
+            echo $crud->delete_event($_POST['event_id']);
+        } else {
+            echo json_encode(['error' => 'Event ID is required']);
+        }
+        break;
+
     default:
         echo json_encode(['error' => 'Invalid action']);
         break;

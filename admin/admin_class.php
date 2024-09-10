@@ -219,8 +219,6 @@ class Action
         return json_encode($parents);
     }
 
-
-
     // Product Category Functions
     public function deactivate_product_category($category_id)
     {
@@ -604,11 +602,10 @@ class Action
     // Retrieve grade data
     public function get_grade($grade_id)
     {
-        $sql = "
-            SELECT grade_id, grade_name, grade_level, student_id_prefix
-            FROM Grade
-            WHERE grade_id = :grade_id AND status = 0
-        ";
+        $sql = "SELECT grade_id, grade_name, grade_level, student_id_prefix
+                FROM Grade
+                WHERE grade_id = :grade_id AND status = 0
+                ";
 
         $stmt = $this->db->prepare($sql);
         $stmt->bindParam(':grade_id', $grade_id);
@@ -722,7 +719,6 @@ class Action
         }
     }
 
-
     // Grade and Class Functions
     public function deactivate_class($class_id)
     {
@@ -753,6 +749,48 @@ class Action
         $sql = "UPDATE Grade SET status = 0 WHERE grade_id = :grade_id";
         $stmt = $this->db->prepare($sql);
         $stmt->bindParam(':grade_id', $grade_id);
+        return $this->execute_statement($stmt);
+    }
+
+    // Event functions
+    public function get_event($event_id)
+    {
+        $sql = "SELECT * FROM event WHERE event_id = :event_id";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':event_id', $event_id, PDO::PARAM_STR);
+        $stmt->execute();
+        $event = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        return $event ? json_encode($event) : json_encode(['error' => 'Event not found']);
+    }
+
+    public function save_event($event_id, $name, $time, $place, $date, $description)
+    {
+        if (!empty($event_id)) {
+            $sql = "UPDATE event SET name = :name, time = :time, place = :place, date = :date, description = :description WHERE event_id = :event_id";
+            $stmt = $this->db->prepare($sql);
+        } else {
+            $event_id = uniqid("EV");
+            $sql = "INSERT INTO event (event_id, name, time, place, date, description) VALUES (:event_id, :name, :time, :place, :date, :description)";
+            $stmt = $this->db->prepare($sql);
+        }
+
+        $stmt->bindParam(':event_id', $event_id);
+        $stmt->bindParam(':name', $name);
+        $stmt->bindParam(':time', $time);
+        $stmt->bindParam(':place', $place);
+        $stmt->bindParam(':date', $date);
+        $stmt->bindParam(':description', $description);
+
+        return $this->execute_statement($stmt);
+    }
+
+    public function delete_event($event_id)
+    {
+        $sql = "DELETE FROM event WHERE event_id = :event_id";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':event_id', $event_id);
+
         return $this->execute_statement($stmt);
     }
 }

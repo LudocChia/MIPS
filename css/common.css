@@ -440,7 +440,7 @@ header .profile-area i {
     border-radius: 50%;
 }
 
-/* 
+
 .profile-menu {
     position: absolute;
     background: #fff;
@@ -455,7 +455,7 @@ header .profile-area i {
     transform-origin: top right;
     line-height: 2;
     z-index: 999;
-} */
+}
 
 .profile-menu.active {
     transform: scale(1.0);
