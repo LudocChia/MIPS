@@ -6,7 +6,8 @@ document.addEventListener('DOMContentLoaded', function () {
     // const profileMenu = document.querySelector(".profile-menu");
     const pageCount = parseInt(document.body.dataset.pageCount, 10);
     const currentPage = parseInt(document.body.dataset.currentPage, 10);
-    const ConfirmDialog = document.querySelector('#confirm-dialog');
+    const ExclamationConfirmDialog = document.querySelector('#exclamation-confirm-dialog');
+    const CheckConfirmDialog = document.querySelector('#check-confirm-dialog');
     let currentForm = null;
     // const themeToggler = document.querySelector(".theme-toggler");
 
@@ -90,17 +91,17 @@ document.addEventListener('DOMContentLoaded', function () {
         event.preventDefault();
         currentForm = event.target;
 
-        if (currentForm && ConfirmDialog) {
+        if (currentForm && CheckConfirmDialog) {
             const actionType = currentForm.querySelector('input[name="action"]').value;
             const idField = currentForm.querySelector('input[name*="_id"]').name;
             const idValue = currentForm.querySelector(`input[name="${idField}"]`).value;
 
-            document.querySelector('#confirm-dialog h1').textContent = "This data will be recovered!";
+            document.querySelector('#check-confirm-dialog h1').textContent = "This data will be recovered!";
             document.querySelector('.confirm').textContent = "Recover";
-            ConfirmDialog.showModal();
+            CheckConfirmDialog.showModal();
 
-            ConfirmDialog.addEventListener('close', function () {
-                if (ConfirmDialog.returnValue === 'confirm' && currentForm) {
+            CheckConfirmDialog.addEventListener('close', function () {
+                if (CheckConfirmDialog.returnValue === 'confirm' && currentForm) {
                     fetch(`/mips/admin/ajax.php?action=${actionType}`, {
                         method: 'POST',
                         headers: {
@@ -129,17 +130,17 @@ document.addEventListener('DOMContentLoaded', function () {
         event.preventDefault();
         currentForm = event.target;
 
-        if (currentForm && ConfirmDialog) {
+        if (currentForm && ExclamationConfirmDialog) {
             const actionType = currentForm.querySelector('input[name="action"]').value;
             const idField = currentForm.querySelector('input[name*="_id"]').name;
             const idValue = currentForm.querySelector(`input[name="${idField}"]`).value;
 
-            document.querySelector('#confirm-dialog h1').textContent = "This data will be deactivated!";
+            document.querySelector('#exclamation-confirm-dialog h1').textContent = "This data will be deactivated!";
             document.querySelector('.confirm').textContent = "Deactivate";
-            ConfirmDialog.showModal();
+            ExclamationConfirmDialog.showModal();
 
-            ConfirmDialog.addEventListener('close', function () {
-                if (ConfirmDialog.returnValue === 'confirm' && currentForm) {
+            ExclamationConfirmDialog.addEventListener('close', function () {
+                if (ExclamationConfirmDialog.returnValue === 'confirm' && currentForm) {
                     fetch(`/mips/admin/ajax.php?action=${actionType}`, {
                         method: 'POST',
                         headers: {
@@ -168,16 +169,16 @@ document.addEventListener('DOMContentLoaded', function () {
         event.preventDefault();
         currentForm = event.target;
 
-        if (currentForm && ConfirmDialog) {
+        if (currentForm && ExclamationConfirmDialog) {
             const actionType = currentForm.querySelector('input[name="action"]').value;
             const idField = currentForm.querySelector('input[name*="_id"]').name;
             const idValue = currentForm.querySelector(`input[name="${idField}"]`).value;
 
-            document.querySelector('#confirm-dialog h1').textContent = "This data will be Deleted!";
+            document.querySelector('#exclamation-confirm-dialog h1').textContent = "This data will be Deleted!";
             document.querySelector('.confirm').textContent = "Delete";
-            ConfirmDialog.showModal();
+            ExclamationConfirmDialog.showModal();
 
-            ConfirmDialog.addEventListener('close', function () {
+            ExclamationConfirmDialog.addEventListener('close', function () {
                 if (ConfirmDialog.returnValue === 'confirm' && currentForm) {
                     fetch(`/mips/admin/ajax.php?action=${actionType}`, {
                         method: 'POST',

@@ -624,7 +624,7 @@ thead th {
 }
 
 /* Delete Confirm Dialog */
-#delete-confirm-dialog i {
+/* #exclamation-confirm-dialog i {
     font-size: 60px;
     color: #eb9447;
     border: 5px solid #eb9447;
@@ -633,14 +633,14 @@ thead th {
     margin: -10px 0 20px 0;
 }
 
-#delete-confirm-dialog label {
+#exclamation-confirm-dialog label {
     font-size: 23px;
     color: #404040;
 }
 
-#delete-confirm-dialog .controls {
+#exclamation-confirm-dialog .controls {
     margin: 40px 0 0 0;
-}
+} */
 
 .breadcrumbs {
     padding: 10px 25px;
@@ -959,7 +959,8 @@ thead th {
 }
 
 /* Confirm Dialog */
-#confirm-dialog {
+#exclamation-confirm-dialog,
+#check-confirm-dialog {
     width: 400px;
     background: #f2f2f2;
     padding: 30px;
@@ -967,26 +968,37 @@ thead th {
     z-index: 9999;
 }
 
-#confirm-dialog form {
+#exclamation-confirm-dialog form,
+#check-confirm-dialog form {
     margin-left: 0;
     text-align: center;
     align-items: center;
 }
 
-#confirm-dialog i {
+#exclamation-confirm-dialog i,
+#check-confirm-dialog i {
     font-size: 7rem;
-    color: #eb9447;
     padding: 20px 40px;
     border-radius: 50%;
     margin: -10px 0 20px 0;
 }
 
-#confirm-dialog label {
+#exclamation-confirm-dialog i {
+    color: #eb9447;
+}
+
+#check-confirm-dialog i {
+    color: #00cc00;
+}
+
+#exclamation-confirm-dialog label,
+#check-confirm-dialog label {
     font-size: 1.2rem;
     color: #404040;
 }
 
-#confirm-dialog .controls {
+#exclamation-confirm-dialog .controls,
+#check-confirm-dialog .controls {
     margin: 40px 0 0 0;
 }
 
