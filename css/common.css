@@ -214,14 +214,11 @@ dialog form textarea {
 }
 
 /* LOGIN */
-.login-form form {
-    margin-left: 0;
-}
-
 .login-form .wrapper,
 .set-new-password-form .wrapper {
     width: 90%;
     margin: 0 auto;
+    display: block;
 }
 
 .login-form .logo-container,
@@ -239,8 +236,17 @@ dialog form textarea {
     padding: 1rem;
 }
 
+.login-form .title,
+.set-new-password-form .title {
+    text-align: center;
+    margin-bottom: 0;
+    width: 90%;
+    display: inline-block;
+}
+
 .login-form form,
 .set-new-password-form form {
+    margin-left: 0;
     padding: 30px 25px 25px 25px;
 }
 

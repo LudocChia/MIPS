@@ -15,6 +15,7 @@ function getSubcategories($pdo)
 
 $all_subcategories = getSubcategories($pdo);
 
+
 function getAllProducts($pdo, $start, $rows_per_page)
 {
     $sql = "SELECT p.product_id, p.product_name, p.product_description, p.product_price,
