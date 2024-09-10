@@ -84,9 +84,11 @@ if (isset($_POST['submit'])) {
     $stmt->bindParam(':description', $description, PDO::PARAM_STR);
 
     $stmt->execute();
-
-    echo "<script>alert('Event updated successfully.');</script>";
+    header("Location: event.php?event_id=" . $event_id);
+    exit();
 }
+
+
 ?>
 
 <!DOCTYPE html>
@@ -204,11 +206,12 @@ if (isset($_POST['submit'])) {
                 <p class="next1" onclick="slider1.plusSlides(1)">&#10095;</p>
             </div>
         </div>
-
-        <button class="delete">
-            <i class='bx bx-comment-x'></i>
-            <p>Delete Event</p>
-        </button>
+        <form method="POST">
+            <button id="delete-event-btn" data-event-id="<?= htmlspecialchars($row['event_id']) ?>">
+                <i class='bx bx-comment-x'></i>
+                <p>Delete Event</p>
+            </button>
+        </form>
 
     </div>
     <dialog id="add-edit-data">
