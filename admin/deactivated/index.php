@@ -53,7 +53,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                     </div>
                     <div class="box">
                         <div class="image-container">
-                            <a href="/mips/admin/deactivated/grade"><img src="/mips/images/default_folder.png" alt="Deactivated Grade"></a>
+                            <a href="/mips/admin/deactivated/grade.php"><img src="/mips/images/default_folder.png" alt="Deactivated Grade"></a>
                         </div>
                         <div class="info-container">
                             <h3>Grade</h3>
@@ -61,7 +61,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                     </div>
                     <div class="box">
                         <div class="image-container">
-                            <a href="/mips/admin/deactivated/class"><img src="/mips/images/default_folder.png" alt="Deactivated Class"></a>
+                            <a href="/mips/admin/deactivated/class.php"><img src="/mips/images/default_folder.png" alt="Deactivated Class"></a>
                         </div>
                         <div class="info-container">
                             <h3>Class</h3>

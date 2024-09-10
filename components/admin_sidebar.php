@@ -109,7 +109,7 @@ function isActive($targetPage, $currentPage)
                 </ul>
             </li>
             <li>
-                <a href="/mips/admin/deactivated.php" class="<?= isActive('/mips/admin/deactivated.php', $currentPage); ?>">
+                <a href="/mips/admin/deactivated/" class="<?= isActive('/mips/admin/deactivated.php', $currentPage); ?>">
                     <i class="bi bi-trash2-fill"></i>
                     <h6>Deactivated</h6>
                 </a>
