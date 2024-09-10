@@ -233,7 +233,7 @@ if (isset($_POST['delete-event'])) {
                 <p class="next1" onclick="slider1.plusSlides(1)">&#10095;</p>
             </div>
         </div>
-        <form method="POST">
+        <form method="POST" style="display: inline;" onsubmit="return showDeleteConfirmDialog(event);">
             <input type="hidden" name="event_id" value="<?= htmlspecialchars($row['event_id']) ?>">
             <button type="submit" name="delete-event">
                 <i class='bx bx-comment-x'></i>
@@ -274,7 +274,8 @@ if (isset($_POST['delete-event'])) {
             </div>
         </form>
     </dialog>
-
+    <?php include  $_SERVER['DOCUMENT_ROOT'] . "/mips/components/confirm_dialog.php"; ?>
+    <script src="/mips/javascript/admin.js"></script>
     <script>
         // let slideIndex = 0;
 

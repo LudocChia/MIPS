@@ -39,8 +39,8 @@ $currentPage = basename($_SERVER['PHP_SELF']);
             <a href="#">Forgot password?</a>
         </div> -->
         <div class="controls">
-            <button type="button" class="btn btn-outline-gray cancel">Cancel</button>
-            <button type="submit" name="login" class="btn btn-outline-primary login">Login</button>
+            <button type="button" class="cancel">Cancel</button>
+            <button type="submit" name="login" class="confirm">Login</button>
         </div>
     </form>
 </dialog>

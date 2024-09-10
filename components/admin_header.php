@@ -18,12 +18,13 @@
                         <h4><?php echo $_SESSION['admin_name']; ?></h4>
                     </div>
                     <hr>
-                    <a href="/mips/admin/profile.php" class="profile-menu-link">
+                    <!-- <a href="/mips/admin/profile.php" class="profile-menu-link"> -->
+                    <a href="javascript:void(0);" class="profile-menu-link">
                         <i class="bi bi-person-fill"></i>
                         <p>My Account</p>
                         <span>></span>
                     </a>
-                    <a href="/mips/admin/order_history.php?filter=all" class="profile-menu-link">
+                    <a href="javascript:void(0);" class="profile-menu-link">
                         <i class="bi bi-calendar-check"></i>
                         <p>My Activities</p>
                         <span>></span>

@@ -239,10 +239,11 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
                                         <div class="name-field">
                                             <h4 style="font-weight: bold"><?php echo htmlspecialchars($product['product_name']); ?></h4>
                                         </div>
-                                        <div class="price-field">
-                                            <p><?= number_format($product['product_price'], 2); ?></p>
+                                        <div class="price-size-container">
+                                            <div class="price-field">
+                                                MYR <?= number_format($product['product_price'], 2); ?>
+                                            </div>
                                         </div>
-
                                         <p><?= htmlspecialchars($product['stock_quantity']); ?> pieces available</p>
                                         <p><?= htmlspecialchars($product['gender']); ?></p>
                                         <p><?= htmlspecialchars($product['color']); ?></p>
@@ -363,13 +364,13 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
                 </div>
                 <p>Please enter the stock quantity available.</p>
             </div>
-            <div class="input-container">
-                <h2>Color<sup>*</sup></h2>
-                <div class="input-field">
-                    <input type="text" name="color" value="<?php echo isset($_POST['color']) ? htmlspecialchars($_POST['color']) : ''; ?>">
-                </div>
-                <p>Please enter the color of the product.</p>
+            <!-- <div class="input-container"> -->
+            <!-- <h2>Color<sup>*</sup></h2> -->
+            <div class="input-field">
+                <input type="hidded" name="color" value="<?php echo isset($_POST['color']) ? htmlspecialchars($_POST['color']) : ''; ?>">
             </div>
+            <!-- <p>Please enter the color of the product.</p> -->
+            <!-- </div> -->
             <div class="input-container">
                 <div class="select-field">
                     <select class="select-box" name="gender" id="gender" required>

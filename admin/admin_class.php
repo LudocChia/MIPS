@@ -194,6 +194,20 @@ class Action
         return $this->execute_statement($stmt);
     }
 
+    public function get_default_parents()
+    {
+        try {
+            $sql = "SELECT parent_id, parent_name FROM Parent ORDER BY created_at DESC LIMIT 5";
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute();
+            $parents = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            return json_encode($parents);
+        } catch (PDOException $e) {
+            return json_encode(['error' => 'Error fetching parents: ' . $e->getMessage()]);
+        }
+    }
+
 
     private function create_shopping_cart($parent_id)
     {

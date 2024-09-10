@@ -80,6 +80,10 @@ switch ($action) {
         }
         break;
 
+    case 'get_default_parents':
+        echo $crud->get_default_parents();
+        break;
+
     case 'get_parent':
         if (isset($_POST['parent_id'])) {
             echo $crud->get_parent($_POST['parent_id']);
