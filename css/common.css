@@ -22,6 +22,8 @@
     --card-padding: 1.6rem;
     --padding-1: 1rem;
     --padding-2: 8px;
+    --marging-1: 1rem;
+    --marging-2: 2rem;
 
     --card-border-radius: 1rem;
     --border-radius-1: 1rem;
@@ -936,6 +938,7 @@ thead th {
     appearance: none;
     padding: 0 30px 0 15px;
     width: 100%;
+    cursor: pointer;
     /* color: white; */
     border: 1px solid var(--color-gray-light);
     /* background-color: #001a4a; */
@@ -950,12 +953,14 @@ thead th {
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: var(--color-secondary);
+    cursor: pointer;
+    border: 1px solid var(--color-gray-light);
+    /* background-color: var(--color-secondary); */
 }
 
 .icon-container i {
     font-size: 1.5rem;
-    color: white;
+    /* color: white; */
 }
 
 /* Confirm Dialog */
@@ -1024,6 +1029,10 @@ thead th {
     padding: 10px 13px;
 }
 
+.controls {
+    margin: var(--marging-2);
+}
+
 .controls .delete {
     margin-left: 20px;
     background: #ff3333;
@@ -1036,18 +1045,18 @@ thead th {
     border: 1px solid var(--color-primary);
 }
 
-#confirm-dialog .controls .delete {
+#exclamation-confirm-dialog .controls .delete {
     margin-left: 20px;
     background: #ff3333;
     border: 1px solid #cc0000;
 }
 
-#confirm-dialog .controls .cancel:hover {
+#exclamation-confirm-dialog .controls .cancel:hover {
     transition: .5s;
     background: #8c8c8c;
 }
 
-#confirm-dialog .controls .confirm:hover {
+#exclamation-confirm-dialog .controls .delete:hover {
     transition: .5s;
     background: #e60000;
 }

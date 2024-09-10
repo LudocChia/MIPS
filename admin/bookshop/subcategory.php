@@ -191,7 +191,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                 <h1>Add Subcategory</h1>
             </div>
             <div class="right">
-                <button class="cancel"><i class="bi bi-x-circle"></i></button>
+                <button class="actions cancel"><i class="bi bi-x-circle"></i></button>
             </div>
         </div>
         <form method="post" enctype="multipart/form-data">
@@ -212,8 +212,8 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
             </div>
             <div class="input-container">
                 <h2>Parent Category<sup>*</sup></h2>
-                <div class="input-field">
-                    <select name="parent_category" id="parent_category" required>
+                <div class="select-field">
+                    <select class="select-box" name="parent_category" id="parent_category" required>
                         <option value="">Select a main category</option>
                         <?php foreach ($all_main_categories as $mainCategory) : ?>
                             <option value="<?php echo $mainCategory['category_id']; ?>">
@@ -221,8 +221,11 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                             </option>
                         <?php endforeach; ?>
                     </select>
-                    <p>Select the main category for this subcategory.</p>
+                    <div class="icon-container">
+                        <i class="bi bi-caret-down-fill"></i>
+                    </div>
                 </div>
+                <p>Select the main category for this subcategory.</p>
             </div>
             <div class="controls">
                 <button type="button" class="cancel">Cancel</button>
