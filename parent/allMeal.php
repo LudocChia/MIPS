@@ -2,9 +2,9 @@
 session_start();
 include "../components/db_connect.php";
 
-// Check if user is logged in as admin
-if (!isset($_SESSION['admin_id'])) {
-    header('Location: /mips/admin/login.php');
+// Check if user is logged in as parent
+if (!isset($_SESSION['user_id'])) {
+    header('Location: /mips/index.php');
     exit();
 }
 
@@ -87,48 +87,51 @@ if (isset($_GET['event_id']) && isset($_GET['meal_type_id'])) {
 
     // Check if form is submitted
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        $meal_id = generateID();
-        $meal_name = $_POST['Name'];
-        $person_per_set = $_POST['Ppl'];
-        $sets = $_POST['Set'];
+        $donator_id = generateID();
+        $parent_id = $_SESSION['user_id'];
+        $meal_id = $meal['meal_id'];
+        $p_set = $_POST['Sets'];
+        $current_date = date('Y-m-d H:i:s'); // Current date and time
 
         // Generate event_meal_id only once
-        $event_meal_id = generateID();
+        $event_meal_id = $meal['event_meal_id'];
 
+
+    
         try {
             // Start transaction
             $pdo->beginTransaction();
 
-            // Insert into `event_meal` table
-            $stmt = $pdo->prepare("INSERT INTO event_meal (event_meal_id, event_id, meal_type_id) VALUES (:event_meal_id, :event_id, :meal_type_id)");
+            // Insert into `donation` table
+            $stmt = $pdo->prepare("INSERT INTO `donation`(`donator_id`, `parent_id`, `meal_id`, `p_set`, `date`, `event_meal_id`) 
+                                    VALUES (:donator_id, :parent_id, :meal_id, :p_set, :current_date, :event_meal_id)");
             $stmt->execute([
-                ':event_meal_id' => $event_meal_id,
-                ':event_id' => $event_id,
-                ':meal_type_id' => $meal_type_id
+                ':donator_id' => $donator_id,
+                ':parent_id' => $parent_id,
+                ':meal_id' => $meal_id,
+                ':p_set' => $p_set,
+                ':current_date' => $current_date,
+                ':event_meal_id' => $event_meal_id
             ]);
 
-            // Insert into `meals` table
-            $stmt = $pdo->prepare("INSERT INTO meals (meal_id, meal_name, person_per_set, sets, event_meal_id) 
-                                   VALUES (:meal_id, :meal_name, :person_per_set, :sets, :event_meal_id)");
+            // Update `meals` table, deduct sets
+            $stmt = $pdo->prepare("UPDATE `meals` SET `sets` = `sets` - :p_set WHERE `meal_id` = :meal_id");
             $stmt->execute([
-                ':meal_id' => $meal_id,
-                ':meal_name' => $meal_name,
-                ':person_per_set' => $person_per_set,
-                ':sets' => $sets,
-                ':event_meal_id' => $event_meal_id
+                ':p_set' => $p_set,
+                ':meal_id' => $meal_id
             ]);
 
             // Commit transaction
             $pdo->commit();
 
-            // Redirect back to the same page with event_id and meal_type_id in the URL
-            header("Location: /mips/admin/admin_meal/allMeal.php?event_id=$event_id&meal_type_id=$meal_type_id");
-            exit(); // Prevent further execution
+            // Redirect after successful transaction
+            header("Location: /mips/parent/allMeal.php?event_id=$event_id&meal_type_id=$meal_type_id");
+            exit();
         } catch (Exception $e) {
-            // Rollback transaction if something goes wrong
             $pdo->rollBack();
             echo "Failed to insert data: " . $e->getMessage();
         }
+        
     }
 } else {
     // Handle the case where the parameters are not set
@@ -205,60 +208,75 @@ if (isset($_GET['event_id']) && isset($_GET['meal_type_id'])) {
                 <input type="hidden" name="event_id" value="<?= htmlspecialchars($event_id); ?>">
             </row>
         </form>
-        <?php if (!empty($meals)): ?>
+<div class="test">
+    <?php if (!empty($meals)): ?>
         <?php foreach ($meals as $meal): ?>
-            <div class="row5">
-                <h3><?= htmlspecialchars($meal['meal_name']) ?></h3> 
-                <p><?= htmlspecialchars($meal['sets']) ?>  set needed </p>
-                <p><?= htmlspecialchars($meal['person_per_set']) ?>  person per set</p>
-            </div>
+            <?php if ($meal['sets'] > 0): // Only display meals with sets greater than 0 ?>
+                <div class="row5" data-meal-id="<?= htmlspecialchars($meal['meal_id']) ?>" data-max-sets="<?= htmlspecialchars($meal['sets']) ?>">
+                    <h3><?= htmlspecialchars($meal['meal_name']) ?></h3> 
+                    <p><?= htmlspecialchars($meal['sets']) ?> set needed</p>
+                    <p><?= htmlspecialchars($meal['person_per_set']) ?> person per set</p>
+                </div>
+            <?php endif; ?>
         <?php endforeach; ?>
     <?php else: ?>
         <p id="nRecord">No meals for now.</p>
     <?php endif; ?>
+</div>
 
 
-        <!-- <row id="row6">
-            <button id="addbtn">Add New Food</button>
-            <p></p>
-        </row>
-    </div>
+<!-- Modal for adding meals -->
+<dialog class="addMeal">
+    <i class='bx bx-x' id="xbtn"></i>
+    <form method="POST" action="">
+        <div>
+            <h1>How many sets will you donate?</h1>
+        </div>
+        <div>
+            <label for="sets">Sets:</label>
+            <input type="number" id="setsInput" name="Sets" value="1" min="1">
+            <p id="maxSetDisplay"></p>
+            <input type="hidden" id="mealIdInput" name="meal_id">
+        </div>
+        <div>
+            <input type="submit" value="Add" id="btn1">
+        </div>
+    </form>
+</dialog>
 
-    <dialog  class="addMeal"  >
-        <i class='bx bx-x' id="xbtn"></i>
-            <form method="POST" action="">
-                <div>
-                    <h1>Please fill in required credentials</h1>
-                </div>
-                <div>
-                    <label for="name">Name :</label>
-                    <input type="text" id="name" name="Name">
-                </div>
-                <div>
-                    <label for="ppl">People per set (Portion):</label>
-                    <input type="text" id="ppl" name="Ppl">
-                </div>
-                <div>
-                    <label for="set">Set :</label>
-                    <input type="text" id="set" name="Set">
-                </div>
-                <div>
-                    <input type="submit" value="Add" id="btn1">
-                </div>
-            </form>
-    </dialog>
-    <script>
-        const modal = document.querySelector('.addMeal');
-        const openModal = document.querySelector('#addbtn');
-        const closeModal = document.querySelector('#xbtn');
+<script>
+    const modal = document.querySelector('.addMeal');
+    const openModalBtns = document.querySelectorAll('.row5');
+    const closeModal = document.querySelector('#xbtn');
+    const setsInput = document.querySelector('#setsInput');
+    const maxSetDisplay = document.querySelector('#maxSetDisplay');
+    const mealIdInput = document.querySelector('#mealIdInput');
 
-        openModal.addEventListener('click', () => {
+    // Add event listener to each "Donate for this meal" button
+    openModalBtns.forEach(button => {
+        button.addEventListener('click', () => {
+            const maxSets = button.getAttribute('data-max-sets');
+            const mealId = button.getAttribute('data-meal-id');
+
+            // Set max value for the sets input
+            setsInput.setAttribute('max', maxSets);
+            setsInput.value = 1; // Reset the input to 1 on opening modal
+            maxSetDisplay.textContent = `Maximum sets: ${maxSets}`;
+
+            // Set meal ID in the hidden input field
+            mealIdInput.value = mealId;
+
+            // Show the modal
             modal.showModal();
-        })
-        closeModal.addEventListener('click', () => {
-            modal.close();
-        })
-    </script> -->
+        });
+    });
+
+    // Close modal when the close button is clicked
+    closeModal.addEventListener('click', () => {
+        modal.close();
+    });
+</script>
+
 
 </body>
 </html>

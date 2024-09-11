@@ -29,6 +29,19 @@ if (isset($_GET['event_id']) && isset($_GET['meal_type_id'])) {
     // Fetch the results
     $meals = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+
+    // Query to fetch the total sum of donations (P_set) for each meal
+    $donationStmt = $pdo->prepare("SELECT meal_id, SUM(p_set) as total_donations FROM donation GROUP BY meal_id");
+    $donationStmt->execute();
+    $donations = $donationStmt->fetchAll(PDO::FETCH_ASSOC);
+
+    // Create an array for quick lookup of total donations by meal_id
+    $donationTotals = [];
+    foreach ($donations as $donation) {
+        $donationTotals[$donation['meal_id']] = $donation['total_donations'];
+    }
+
+
     $stmt2 = $pdo->prepare("SELECT * FROM `event` WHERE event_id = :event_id");
     $stmt2->bindParam(':event_id', $event_id);
     $stmt2->execute();
@@ -136,6 +149,8 @@ if (isset($_GET['event_id']) && isset($_GET['meal_type_id'])) {
 
 
 
+
+
 // echo '<pre>';
 // var_dump($meals);
 // echo '</pre>';
@@ -219,19 +234,23 @@ if (isset($_GET['event_id']) && isset($_GET['meal_type_id'])) {
                 // Debug: Output the URL for verification
                 // Uncomment the line below to see the URLs being generated
                 // echo '<p>Generated URL: ' . htmlspecialchars($nextPageUrl) . '</p>';
-                ?>
-                <!-- Wrap the box in an anchor tag -->
-                <a href="<?= htmlspecialchars($nextPageUrl) ?>" style="text-decoration: none; color: inherit;">
-                    <div class="row5">
-                        <h3><?= htmlspecialchars($meal['meal_name']) ?></h3>
-                        <p><?= htmlspecialchars($meal['sets']) ?> set needed </p>
-                        <p><?= htmlspecialchars($meal['person_per_set']) ?> person per set</p>
-                    </div>
-                </a>
-            <?php endforeach; ?>
-        <?php else: ?>
-            <p id="nRecord">No records found.</p>
-        <?php endif; ?>
+            ?>
+            <!-- Wrap the box in an anchor tag -->
+            <a href="<?= htmlspecialchars($nextPageUrl) ?>" style="text-decoration: none; color: inherit;">
+                <div class="row5">
+                    <h3><?= htmlspecialchars($meal['meal_name']) ?></h3> 
+                    <p><?= htmlspecialchars($meal['sets']) ?>  set needed </p>
+                    <p><?= htmlspecialchars($meal['person_per_set']) ?>  person per set</p>
+                    <p>Total donations received: 
+                    <?= isset($donationTotals[$meal['meal_id']]) ? htmlspecialchars($donationTotals[$meal['meal_id']]) : '0'; ?>
+                    sets
+                </p>
+                </div>
+            </a>
+        <?php endforeach; ?>
+    <?php else: ?>
+        <p id="nRecord">No records found.</p>
+    <?php endif; ?>
 
 
         <row id="row6">

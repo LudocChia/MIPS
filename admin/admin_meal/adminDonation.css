@@ -623,6 +623,7 @@
     color: #004e82;
     border-bottom: 2px solid rgba(0, 0, 0, 0.226);
     padding-bottom: 20px;
+    cursor: pointer;
 }
 
 .bigbox1 .row5 h3 {
