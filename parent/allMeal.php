@@ -91,7 +91,14 @@ if (isset($_GET['event_id']) && isset($_GET['meal_type_id'])) {
         $parent_id = $_SESSION['user_id'];
         $meal_id = $_POST['meal_id'];
         $p_set = $_POST['Sets'];
-        $current_date = date('Y-m-d H:i:s'); // Current date and time
+        // Set the timezone to Kuala Lumpur
+        date_default_timezone_set('Asia/Kuala_Lumpur');
+
+        // Capture the current date and time
+        $current_date = date('Y-m-d H:i:s');
+
+        // Debug: Output the current date and time
+        echo $current_date;  
 
         // Generate event_meal_id only once
         $event_meal_id = $meal['event_meal_id'];
