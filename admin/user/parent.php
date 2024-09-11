@@ -17,6 +17,7 @@ function getAllParents($pdo, $start, $rows_per_page)
 
 $all_parents = getAllParents($pdo, $start, $rows_per_page);
 
+
 function generateParentId()
 {
     return uniqid("PR");
@@ -112,7 +113,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
         </div>
         <div id="alert-container"></div>
         <form id="parent-form-ajax" method="post">
-            <input type="hidden" name="parent_id" value="">
+            <input type="text" name="parent_id" value="">
             <div class="input-container">
                 <h2>Parent Name<sup>*</sup></h2>
                 <div class="input-field">

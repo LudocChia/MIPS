@@ -102,7 +102,7 @@ switch ($action) {
             isset($_POST['confirm_password']) &&
             isset($_POST['admin_id'])
         ) {
-            $parentId = $_POST['parent_id'] ?? null;
+            $parentId = $_POST['parent_id'] ?? '';
 
             echo $crud->save_parent(
                 $parentId,
