@@ -215,7 +215,7 @@ if (isset($_POST['delete-event'])) {
         <form method="POST" style="display: inline;" onsubmit="return showDeleteConfirmDialog(event);">
             <input type="hidden" name="event_id" value="<?= htmlspecialchars($row['event_id']) ?>">
             <input type="hidden" name="action" value="delete_event">
-            <button type="submit" class="delete" name="delete-event"><i class='bx bx-comment-x'></i>
+            <button type="submit" class="delete" name="delete-event"><i class='bx bx-message-square-x'></i>
                 <p>Delete Event</p>
             </button>
         </form>

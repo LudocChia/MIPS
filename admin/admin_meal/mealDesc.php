@@ -33,18 +33,28 @@ if (isset($_GET['event_id']) && isset($_GET['meal_type_id'])) {
 
         // Display the meals if available
         if ($meals) {
-            echo '<h2>Meal Information</h2>';
+            // echo '<h2>Meal Information</h2>';
             foreach ($meals as $meal) {
-                echo '<p>Event_ID: ' . htmlspecialchars($meal['event_id']) . '</p>';
-                echo '<p>Name: ' . htmlspecialchars($meal['name']) . '</p>';
-                echo '<p><strong>Description:</strong> ' . htmlspecialchars($meal['description']) . '</p>';
-                echo '<p><strong>Meal Name:</strong> ' . htmlspecialchars($meal['meal_name']) . '</p>';
-                echo '<p>Meal_ID: ' . htmlspecialchars($meal['meal_id']) . '</p>';
+                // echo '<p>Event_ID: ' . htmlspecialchars($meal['event_id']) . '</p>';
+                // echo '<p>Name: ' . htmlspecialchars($meal['name']) . '</p>';
+                // echo '<p><strong>Description:</strong> ' . htmlspecialchars($meal['description']) . '</p>';
+                // echo '<p><strong>Meal Name:</strong> ' . htmlspecialchars($meal['meal_name']) . '</p>';
+                // echo '<p>Meal_ID: ' . htmlspecialchars($meal['meal_id']) . '</p>';
                 // Uncomment below if you want to show descriptions too
                 // echo '<hr>';
             }
         } else {
             echo '<p>No meals found for this meal type.</p>';
+        }
+
+        $donatorStmt = $pdo->prepare("SELECT meal_id, SUM(p_set) as total_donators FROM donator GROUP BY meal_id");
+        $donatorStmt->execute();
+        $donators = $donatorStmt->fetchAll(PDO::FETCH_ASSOC);
+    
+        // Create an array for quick lookup of total donators by meal_id
+        $donatorTotals = [];
+        foreach ($donators as $donator) {
+            $donatorTotals[$donator['meal_id']] = $donator['total_donators'];
         }
 
         // Prepare and execute the query to search for donators based on event_meal_id
@@ -65,13 +75,13 @@ if (isset($_GET['event_id']) && isset($_GET['meal_type_id'])) {
 
         // Display the meals if available
         if ($donators) {
-            echo '<h2>Donator Information</h2>';
+            // echo '<h2>Donator Information</h2>';
             foreach ($donators as $donator) {
-                echo '<p>Donator_ID: ' . htmlspecialchars($donator['donator_id']) . '</p>';
-                echo '<p>Name: ' . htmlspecialchars($donator['parent_name']) . '</p>';
-                echo '<p>Time: ' . htmlspecialchars($donator['date']) . '</p>';
-                echo '<p>Meal Name: ' . htmlspecialchars($donator['meal_name']) . '</p>';
-                echo '<p>Quantity: ' . htmlspecialchars($donator['p_set']) . '</p>';
+                // echo '<p>Donator_ID: ' . htmlspecialchars($donator['donator_id']) . '</p>';
+                // echo '<p>Name: ' . htmlspecialchars($donator['parent_name']) . '</p>';
+                // echo '<p>Time: ' . htmlspecialchars($donator['date']) . '</p>';
+                // echo '<p>Meal Name: ' . htmlspecialchars($donator['meal_name']) . '</p>';
+                // echo '<p>Quantity: ' . htmlspecialchars($donator['p_set']) . '</p>';
                 // Uncomment below if you want to show descriptions too
                 // echo '<hr>';
             }
@@ -86,7 +96,7 @@ if (isset($_GET['event_id']) && isset($_GET['meal_type_id'])) {
 
 
 // echo '<pre>';
-var_dump($donators);
+// var_dump($donators);
 // echo '</pre>';
 
 
@@ -125,17 +135,50 @@ var_dump($donators);
             // Uncomment the line below to see the URLs being generated
             // echo '<p>Generated URL: ' . htmlspecialchars($backPageUrl) . '</p>';
         ?>
-        <row id="row1">
+        <div id="row1">
             <a href="<?= htmlspecialchars($backPageUrl) ?>" style="text-decoration: none; color: inherit;">
                 <i class='bx bx-arrow-back' ></i>
             </a>
         </row>
-        <row class="row2">
-
-        </row>
-        <row class="row3">
-
-        </row>
+        <div class="row2">
+            <?php if (!empty($meals)): ?>
+                <div class="mealBox">
+                    <row>
+                        <h3><?= htmlspecialchars($meal['meal_name']) ?></h3> 
+                        <i class='bx bx-edit'>Edit</i>
+                    </row>  
+                    <row>                  
+                        <p><?= htmlspecialchars($meal['sets']) ?> set needed</p>
+                        <i class='bx bx-message-square-x'>Delete</i>
+                    </row>
+                    <p><?= htmlspecialchars($meal['person_per_set']) ?> person per set</p>
+                    <p>Total donations received: 
+                    <?= isset($donatorTotals[$meal['meal_id']]) ? htmlspecialchars($donatorTotals[$meal['meal_id']]) : '0'; ?>
+                    sets
+                    </p>
+                </div>
+            <?php else: ?>
+                <p id="nRecord">No meals for now.</p>
+            <?php endif; ?>
+            </div>
+        <column class="row3">
+                <h3>Donation History</h3>
+            <table>
+                <?php if (!empty($donators)): ?>
+                    <?php foreach ($donators as $donator): ?>
+                            <div class="mealBox">
+                                <p><strong>Donator_ID:</strong>  <?=htmlspecialchars($donator['donator_id'])?></p>
+                                <p><strong>Name:</strong> <?=htmlspecialchars($donator['parent_name'])?> </p>
+                                <p><Strong>Time:</Strong> <?=htmlspecialchars($donator['date'])?></p>
+                                <p><Strong>Meal Name:</Strong> <?=htmlspecialchars($donator['meal_name'])?> </p>
+                                <p><strong>Quantity:</strong> <?=htmlspecialchars($donator['p_set'])?> </p>
+                            </div>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <p id="nRecord">No meals for now.</p>
+                <?php endif; ?>
+            </table>
+        </column>
 
     </div>
 

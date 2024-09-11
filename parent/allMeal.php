@@ -89,7 +89,7 @@ if (isset($_GET['event_id']) && isset($_GET['meal_type_id'])) {
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $donator_id = generateID();
         $parent_id = $_SESSION['user_id'];
-        $meal_id = $meal['meal_id'];
+        $meal_id = $_POST['meal_id'];
         $p_set = $_POST['Sets'];
         $current_date = date('Y-m-d H:i:s'); // Current date and time
 
@@ -245,25 +245,24 @@ if (isset($_GET['event_id']) && isset($_GET['meal_type_id'])) {
 </dialog>
 
 <script>
-    const modal = document.querySelector('.addMeal');
+    // Select all meal boxes with sets > 0
     const openModalBtns = document.querySelectorAll('.row5');
+    const modal = document.querySelector('.addMeal');
     const closeModal = document.querySelector('#xbtn');
     const setsInput = document.querySelector('#setsInput');
     const maxSetDisplay = document.querySelector('#maxSetDisplay');
     const mealIdInput = document.querySelector('#mealIdInput');
 
-    // Add event listener to each "Donate for this meal" button
+    // Add event listener to each meal box
     openModalBtns.forEach(button => {
         button.addEventListener('click', () => {
             const maxSets = button.getAttribute('data-max-sets');
             const mealId = button.getAttribute('data-meal-id');
 
-            // Set max value for the sets input
+            // Update the modal's hidden input and max sets
             setsInput.setAttribute('max', maxSets);
-            setsInput.value = 1; // Reset the input to 1 on opening modal
+            setsInput.value = 1; // Reset to default value
             maxSetDisplay.textContent = `Maximum sets: ${maxSets}`;
-
-            // Set meal ID in the hidden input field
             mealIdInput.value = mealId;
 
             // Show the modal
@@ -271,10 +270,11 @@ if (isset($_GET['event_id']) && isset($_GET['meal_type_id'])) {
         });
     });
 
-    // Close modal when the close button is clicked
+    // Close modal when the 'x' button is clicked
     closeModal.addEventListener('click', () => {
         modal.close();
     });
+
 </script>
 
 
