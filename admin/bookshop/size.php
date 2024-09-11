@@ -113,15 +113,15 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
         </main>
     </div>
     <dialog id="add-edit-data">
-        <div class="title">
-            <div class="left">
-                <h1>Add Apparel Size</h1>
-            </div>
-            <div class="right">
-                <button class="actions cancel"><i class="bi bi-x-circle"></i></button>
-            </div>
-        </div>
         <form method="post">
+            <div class="title">
+                <div class="left">
+                    <h1>Add Apparel Size</h1>
+                </div>
+                <div class="right">
+                    <button class="actions cancel"><i class="bi bi-x-circle"></i></button>
+                </div>
+            </div>
             <input type="hidden" name="product_size_id" value="">
             <div class="input-container">
                 <h2>Product Size Name<sup>*</sup></h2>

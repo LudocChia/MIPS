@@ -108,24 +108,12 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                         <table>
                             <thead>
                                 <tr>
-                                    <th>
-                                        <h3>Order ID</h3>
-                                    </th>
-                                    <th>
-                                        <h3>Parent Name</h3>
-                                    </th>
-                                    <th>
-                                        <h3>Order Date</h3>
-                                    </th>
-                                    <th>
-                                        <h3>Order Amount</h3>
-                                    </th>
-                                    <th>
-                                        <h3>Status</h3>
-                                    </th>
-                                    <th>
-                                        <h3>Actions</h3>
-                                    </th>
+                                    <th>Order ID</th>
+                                    <th>Parent Name</th>
+                                    <th>Order Date</th>
+                                    <th>Order Amount</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -173,7 +161,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
         </main>
     </div>
     <dialog id="add-edit-data">
-        <h1>Add/Edit Order</h1>
+        <h1>Add Order</h1>
         <form action="" method="post" enctype="multipart/form-data">
             <div class="input-container">
                 <h2>Parent ID<sup>*</sup></h2>
@@ -230,78 +218,80 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
         </form>
     </dialog>
     <dialog id="detail-dialog">
-        <div class="title">
-            <div class="right">
-                <h1>Order Details</h1>
+        <form>
+            <div class="title">
+                <div class="right">
+                    <h1>Order Details</h1>
+                </div>
+                <div class="left">
+                    <button class="actions cancel"><i class="bi bi-x-circle"></i></button>
+                </div>
             </div>
-            <div class="left">
-                <button class="actions cancel"><i class="bi bi-x-circle"></i></button>
-            </div>
-        </div>
-        <div class="order-details-content">
-            <table class="two-column">
-                <tr>
-                    <td style="width: 40%">
-                        <h3>Order ID :<h3>
-                    </td>
-                    <td style="width: 60%;">
-                        <h3 id="order-id"></h3>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <h3>Parent Name :<h3>
-                    </td>
-                    <td>
-                        <h3 id="parent-name"></h3>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <h3>Order Date :<h3>
-                    </td>
-                    <td>
-                        <h3 id="order-date"></h3>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <h3>Order Amount :<h3>
-                    </td>
-                    <td>
-                        <h3 id="order-amount"></h3>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <h3>Order Status :<h3>
-                    </td>
-                    <td>
-                        <h3 id="order-status"></h3>
-                    </td>
-                </tr>
-            </table>
-            <h2>Payment Receipt</h2>
-            <img id="payment-image" src="" alt="Payment Image">
-            <div class="order-items">
-                <h2>Order Items</h2>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Product ID</th>
-                            <th>Product Name</th>
-                            <th>Quantity</th>
-                            <th>Subtotal</th>
-                        </tr>
-                    </thead>
-                    <tbody id="order-items-list">
-                    </tbody>
+            <div class="order-details-content">
+                <table class="two-column-table">
+                    <tr>
+                        <td style="width: 30%">
+                            <h4>Order ID :<h4>
+                        </td>
+                        <td style="width: 70%;">
+                            <h4 id="order-id"></h4>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <h4>Parent Name :<h4>
+                        </td>
+                        <td>
+                            <h4 id="parent-name"></h4>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <h4>Order Date :<h4>
+                        </td>
+                        <td>
+                            <h4 id="order-date"></h4>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <h4>Order Amount :<h4>
+                        </td>
+                        <td>
+                            <h4 id="order-amount"></h4>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <h4>Order Status :<h4>
+                        </td>
+                        <td>
+                            <h4 id="order-status"></h4>
+                        </td>
+                    </tr>
                 </table>
+                <h2>Payment Receipt</h2>
+                <img id="payment-image" src="" alt="Payment Image">
+                <div class="order-items">
+                    <h2>Order Items</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Product ID</th>
+                                <th>Product Name</th>
+                                <th>Quantity</th>
+                                <th>Subtotal</th>
+                            </tr>
+                        </thead>
+                        <tbody id="order-items-list">
+                        </tbody>
+                    </table>
+                </div>
+                <div class="controls">
+                    <button type="button" class="cancel">Close</button>
+                </div>
             </div>
-        </div>
-        <div class="controls">
-            <button type="button" class="cancel">Close</button>
-        </div>
+        </form>
     </dialog>
     <?php include  $_SERVER['DOCUMENT_ROOT'] . "/mips/components/confirm_dialog.php"; ?>
     <script src="/mips/javascript/common.js"></script>

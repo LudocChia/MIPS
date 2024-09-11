@@ -113,6 +113,50 @@ dialog form textarea {
     resize: vertical;
 }
 
+/* 
+dialog {
+    overflow-y: auto;
+} */
+/* 
+dialog::-webkit-scrollbar {
+    width: 8px;
+}
+
+dialog::-webkit-scrollbar-track {
+    background: #f0f0f0;
+    border-radius: 4px;
+}
+
+dialog::-webkit-scrollbar-thumb {
+    background-color: #888;
+    border-radius: 4px;
+    border: 2px solid #f0f0f0;
+}
+
+dialog::-webkit-scrollbar-thumb:hover {
+    background-color: #555;
+}
+
+dialog::-webkit-scrollbar-button {
+    background-color: #ccc;
+    display: none;
+}
+
+dialog::-webkit-scrollbar-corner {
+    background-color: #f0f0f0;
+} */
+
+dialog form {
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+/* 
+dialog {
+    scroll-behavior: smooth;
+} */
+
+
 .size-button {
     padding: 10px 15px;
     margin: 5px;
@@ -132,7 +176,7 @@ dialog form textarea {
 }
 
 /* Column */
-.two-column td {
+.two-columns-table td {
     padding: 0.5rem;
 
 }
@@ -681,30 +725,24 @@ thead th {
     pointer-events: none;
 }
 
-/* .add-edit-table-container */
-.add-edit-table-container {
+/* .dialog-table-container */
+.dialog-table-container {
     max-height: 200px;
     overflow-y: auto;
-    border: 1px solid #ddd;
+    border: 1px solid var(--color-gray-dark);
     margin-top: 10px;
 }
 
 .add-edit-table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 10px;
+    /* margin-top: 10px; */
 }
 
 .add-edit-table th,
 .size-table td {
     padding: 8px 12px;
     text-align: center;
-    border: 1px solid #ddd;
-}
-
-.add-edit-table th {
-    background-color: #f2f2f2;
-    font-weight: bold;
 }
 
 .add-edit-table td {

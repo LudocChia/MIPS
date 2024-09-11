@@ -272,9 +272,9 @@ main .insights>div .middle {
     justify-content: space-between;
 }
 
-main .insights h3 {
+main .insights h4 {
     margin: 1rem 0 0.6rem;
-    font-size: 1rem;
+    /* font-size: 1rem; */
 }
 
 main .insights .progress {
@@ -364,7 +364,6 @@ main .recent-orders a {
     text-align: center;
     display: block;
     margin: 1rem auto;
-    color: var(--color-primary);
 }
 
 /* RIGHT */

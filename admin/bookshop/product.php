@@ -270,15 +270,15 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
         </main>
     </div>
     <dialog id="add-edit-data">
-        <div class="title">
-            <div class="left">
-                <h1>Add Bookshop Product</h1>
-            </div>
-            <div class="right">
-                <button class="actions cancel"><i class="bi bi-x-circle"></i></button>
-            </div>
-        </div>
         <form method="post" enctype="multipart/form-data">
+            <div class="title">
+                <div class="left">
+                    <h1>Add Bookshop Product</h1>
+                </div>
+                <div class="right">
+                    <button class="actions cancel"><i class="bi bi-x-circle"></i></button>
+                </div>
+            </div>
             <input type="hidden" name="product_id" value="">
             <div class="input-container">
                 <h2>Product Name<sup>*</sup></h2>
@@ -325,7 +325,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
             </div>
             <div class="input-container">
                 <h2>Product Sizes<sup>*</sup></h2>
-                <div class="add-edit-table-container">
+                <div class="dialog-table-container">
                     <table class="add-edit-table">
                         <thead>
                             <tr>
