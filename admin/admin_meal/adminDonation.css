@@ -254,10 +254,10 @@
     margin-left: 18%;
     margin-right: 50%;
 }
-.bigbox #row2 #edit i{
+.bigbox #row2 #edit-event-btn i{
     font-size: 30px;
 }
-.bigbox #row2 #edit i:hover{
+.bigbox #row2 #edit-event-btn i:hover{
     color: #0052aa;
 }
 .bigbox #row3 {
