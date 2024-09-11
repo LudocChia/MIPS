@@ -30,15 +30,15 @@ if (isset($_GET['event_id']) && isset($_GET['meal_type_id'])) {
     $meals = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 
-    // Query to fetch the total sum of donations (P_set) for each meal
-    $donationStmt = $pdo->prepare("SELECT meal_id, SUM(p_set) as total_donations FROM donation GROUP BY meal_id");
-    $donationStmt->execute();
-    $donations = $donationStmt->fetchAll(PDO::FETCH_ASSOC);
+    // Query to fetch the total sum of donators (P_set) for each meal
+    $donatorStmt = $pdo->prepare("SELECT meal_id, SUM(p_set) as total_donators FROM donator GROUP BY meal_id");
+    $donatorStmt->execute();
+    $donators = $donatorStmt->fetchAll(PDO::FETCH_ASSOC);
 
-    // Create an array for quick lookup of total donations by meal_id
-    $donationTotals = [];
-    foreach ($donations as $donation) {
-        $donationTotals[$donation['meal_id']] = $donation['total_donations'];
+    // Create an array for quick lookup of total donators by meal_id
+    $donatorTotals = [];
+    foreach ($donators as $donator) {
+        $donatorTotals[$donator['meal_id']] = $donator['total_donators'];
     }
 
 
@@ -242,7 +242,7 @@ if (isset($_GET['event_id']) && isset($_GET['meal_type_id'])) {
                     <p><?= htmlspecialchars($meal['sets']) ?>  set needed </p>
                     <p><?= htmlspecialchars($meal['person_per_set']) ?>  person per set</p>
                     <p>Total donations received: 
-                    <?= isset($donationTotals[$meal['meal_id']]) ? htmlspecialchars($donationTotals[$meal['meal_id']]) : '0'; ?>
+                    <?= isset($donatorTotals[$meal['meal_id']]) ? htmlspecialchars($donatorTotals[$meal['meal_id']]) : '0'; ?>
                     sets
                 </p>
                 </div>

@@ -102,8 +102,8 @@ if (isset($_GET['event_id']) && isset($_GET['meal_type_id'])) {
             // Start transaction
             $pdo->beginTransaction();
 
-            // Insert into `donation` table
-            $stmt = $pdo->prepare("INSERT INTO `donation`(`donator_id`, `parent_id`, `meal_id`, `p_set`, `date`, `event_meal_id`) 
+            // Insert into `donator` table
+            $stmt = $pdo->prepare("INSERT INTO `donator`(`donator_id`, `parent_id`, `meal_id`, `p_set`, `date`, `event_meal_id`) 
                                     VALUES (:donator_id, :parent_id, :meal_id, :p_set, :current_date, :event_meal_id)");
             $stmt->execute([
                 ':donator_id' => $donator_id,
