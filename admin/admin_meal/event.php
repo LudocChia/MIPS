@@ -114,7 +114,6 @@ if (isset($_POST['delete-event'])) {
     <link rel="stylesheet" href="../admin_for_meal/common.css">
     <link rel="stylesheet" href="../admin_for_meal/admin.css">
     <link rel="stylesheet" href="../admin_meal/adminDonation.css">
-    <link rel="stylesheet" href="../../css/common.css">
 </head>
 
 <body>

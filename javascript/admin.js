@@ -190,7 +190,12 @@ document.addEventListener('DOMContentLoaded', function () {
                         .then(response => response.json())
                         .then(result => {
                             if (result.success) {
-                                location.reload();
+                                // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!如果 actionType 是 delete_event，则重定向到 adminMain.php Kai Long
+                                if (actionType === 'delete_event') {
+                                    window.location.href = '/mips/admin/admin_meal/adminMain.php';
+                                } else {
+                                    location.reload();
+                                }
                             } else {
                                 alert('Error deleting: ' + result.error);
                             }
