@@ -228,7 +228,7 @@ if (isset($_POST['delete-event'])) {
             <div>
                 <h1>Please fill in required credentials</h1>
             </div>
-            <div>
+            <div input-conta>
                 <label for="name">Name:</label>
                 <input type="text" id="name" name="name" required>
             </div>

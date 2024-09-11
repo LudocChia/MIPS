@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', function () {
     if (menuBtn && sideMenu) {
         menuBtn.forEach(button => {
             button.addEventListener("click", () => {
-                sideMenu.classList.toggle("active"); // Toggle the 'active' class
+                sideMenu.classList.toggle("active");
             });
         });
     }
@@ -23,14 +23,14 @@ document.addEventListener('DOMContentLoaded', function () {
     // Close Sidebar
     if (closeBtn && sideMenu) {
         closeBtn.addEventListener("click", () => {
-            sideMenu.classList.remove("active"); // Ensure the 'active' class is removed
+            sideMenu.classList.remove("active");
         });
     }
 
     // Close Sidebar on Resize
     window.addEventListener("resize", () => {
         if (window.innerWidth > 1200) {
-            sideMenu.classList.remove("active"); // Ensure the sidebar stays hidden on large screens if closed
+            sideMenu.classList.remove("active");
         }
     });
 
@@ -190,7 +190,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         .then(response => response.json())
                         .then(result => {
                             if (result.success) {
-                                // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!如果 actionType 是 delete_event，则重定向到 adminMain.php Kai Long
+                                // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!如果 actionType 是 delete_event，则重定向到 adminMain.php - Kai Long
                                 if (actionType === 'delete_event') {
                                     window.location.href = '/mips/admin/admin_meal/adminMain.php';
                                 } else {

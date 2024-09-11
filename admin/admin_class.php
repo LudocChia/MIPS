@@ -177,6 +177,10 @@ class Action
             $stmt = $this->db->prepare($sql);
             $stmt->bindParam(':parent_id', $parent_id, PDO::PARAM_STR);
             $stmt->bindParam(':password', $hashed_password);
+            $stmt->bindParam(':name', $parent_name, PDO::PARAM_STR);
+            $stmt->bindParam(':email', $parent_email, PDO::PARAM_STR);
+            $stmt->bindParam(':phone', $parent_phone, PDO::PARAM_STR);
+            $stmt->bindParam(':admin_id', $admin_id, PDO::PARAM_STR);
 
             if ($this->execute_statement($stmt) === json_encode(['success' => true])) {
                 $this->create_shopping_cart($parent_id);
@@ -194,6 +198,20 @@ class Action
         return $this->execute_statement($stmt);
     }
 
+    private function create_shopping_cart($parent_id)
+    {
+        $cart_id = uniqid("SC");
+        $sql = "INSERT INTO Cart (cart_id, parent_id, created_at) VALUES (:cart_id, :parent_id, NOW())";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':cart_id', $cart_id, PDO::PARAM_STR);
+        $stmt->bindParam(':parent_id', $parent_id, PDO::PARAM_STR);
+
+        return $this->execute_statement($stmt);
+    }
+
+
+
+
     public function get_default_parents()
     {
         try {
@@ -207,19 +225,6 @@ class Action
             return json_encode(['error' => 'Error fetching parents: ' . $e->getMessage()]);
         }
     }
-
-
-    private function create_shopping_cart($parent_id)
-    {
-        $cart_id = uniqid("SC");
-        $sql = "INSERT INTO Cart (cart_id, parent_id, created_at) VALUES (:cart_id, :parent_id, NOW())";
-        $stmt = $this->db->prepare($sql);
-        $stmt->bindParam(':cart_id', $cart_id, PDO::PARAM_STR);
-        $stmt->bindParam(':parent_id', $parent_id, PDO::PARAM_STR);
-
-        return $this->execute_statement($stmt);
-    }
-
 
     public function search_parent($query)
     {
