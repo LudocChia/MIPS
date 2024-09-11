@@ -801,10 +801,31 @@ class Action
 
     public function delete_event($event_id)
     {
-        $sql = "DELETE FROM event WHERE event_id = :event_id";
-        $stmt = $this->db->prepare($sql);
-        $stmt->bindParam(':event_id', $event_id);
+        try {
+            $this->db->beginTransaction();
 
-        return $this->execute_statement($stmt);
+            $stmt = $this->db->prepare("DELETE FROM donator WHERE event_meal_id IN (SELECT event_meal_id FROM event_meal WHERE event_id = :event_id)");
+            $stmt->bindParam(':event_id', $event_id);
+            $stmt->execute();
+
+            $stmt = $this->db->prepare("DELETE FROM meals WHERE event_meal_id IN (SELECT event_meal_id FROM event_meal WHERE event_id = :event_id)");
+            $stmt->bindParam(':event_id', $event_id);
+            $stmt->execute();
+
+            $stmt = $this->db->prepare("DELETE FROM event_meal WHERE event_id = :event_id");
+            $stmt->bindParam(':event_id', $event_id);
+            $stmt->execute();
+
+            $stmt = $this->db->prepare("DELETE FROM event WHERE event_id = :event_id");
+            $stmt->bindParam(':event_id', $event_id);
+            $stmt->execute();
+
+            $this->db->commit();
+
+            return json_encode(['success' => 'Event and related data deleted successfully.']);
+        } catch (PDOException $e) {
+            $this->db->rollBack();
+            return json_encode(['error' => 'Error deleting event: ' . $e->getMessage()]);
+        }
     }
 }

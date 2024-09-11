@@ -66,16 +66,18 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
                                         <td><?= htmlspecialchars($student['class_name']); ?></td>
                                         <td><?= htmlspecialchars($student['created_at']); ?></td>
                                         <td>
-                                            <form action="" method="POST" style="display:inline;" onsubmit="return showDeleteConfirmDialog(event);">
-                                                <input type="hidden" name="student_id" value="<?= htmlspecialchars($student['student_id']); ?>">
-                                                <input type="hidden" name="action" value="delete_student">
-                                                <button type="submit" class="delete-student-btn"><i class="bi bi-x-square"></i></button>
-                                            </form>
-                                            <form action="" method="POST" style="display:inline;" onsubmit="return showRecoverConfirmDialog(event);">
-                                                <input type="hidden" name="student_id" value="<?= htmlspecialchars($student['student_id']); ?>">
-                                                <input type="hidden" name="action" value="recover_student">
-                                                <button type="submit" class="recover-student-btn"><i class="bi bi-arrow-clockwise"></i></button>
-                                            </form>
+                                            <div class="actions">
+                                                <form action="" method="POST" style="display:inline;" onsubmit="return showDeleteConfirmDialog(event);">
+                                                    <input type="hidden" name="student_id" value="<?= htmlspecialchars($student['student_id']); ?>">
+                                                    <input type="hidden" name="action" value="delete_student">
+                                                    <button type="submit" class="delete-student-btn"><i class="bi bi-x-square"></i></button>
+                                                </form>
+                                                <form action="" method="POST" style="display:inline;" onsubmit="return showRecoverConfirmDialog(event);">
+                                                    <input type="hidden" name="student_id" value="<?= htmlspecialchars($student['student_id']); ?>">
+                                                    <input type="hidden" name="action" value="recover_student">
+                                                    <button type="submit" class="recover-student-btn"><i class="bi bi-arrow-clockwise"></i></button>
+                                                </form>
+                                            </div>
                                         </td>
                                     </tr>
                                 <?php endforeach; ?>

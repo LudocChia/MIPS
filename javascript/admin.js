@@ -179,7 +179,7 @@ document.addEventListener('DOMContentLoaded', function () {
             ExclamationConfirmDialog.showModal();
 
             ExclamationConfirmDialog.addEventListener('close', function () {
-                if (ConfirmDialog.returnValue === 'confirm' && currentForm) {
+                if (ExclamationConfirmDialog.returnValue === 'confirm' && currentForm) {
                     fetch(`/mips/admin/ajax.php?action=${actionType}`, {
                         method: 'POST',
                         headers: {

@@ -14,7 +14,7 @@ $event_id = isset($_GET['event_id']) ? htmlspecialchars($_GET['event_id']) : nul
 if ($event_id) {
     try {
         // Prepare and execute SQL query with placeholders
-        $stmt = $pdo->prepare("SELECT * FROM `event` WHERE event_id = :event_id");
+        $stmt = $pdo->prepare("SELECT * FROM event WHERE event_id = :event_id");
         $stmt->bindParam(':event_id', $event_id);
         $stmt->execute();
         $row = $stmt->fetch();
@@ -35,9 +35,9 @@ if ($event_id) {
 }
 try {
     // Prepare the SQL statement with placeholders
-    $stmt = $pdo->prepare("SELECT * FROM `event_meal` 
-                            INNER JOIN `meal_type` ON event_meal.meal_type_id = meal_type.meal_type_id
-                            INNER JOIN `meals` ON event_meal.event_meal_id = meals.event_meal_id
+    $stmt = $pdo->prepare("SELECT * FROM event_meal 
+                            INNER JOIN meal_type ON event_meal.meal_type_id = meal_type.meal_type_id
+                            INNER JOIN meals ON event_meal.event_meal_id = meals.event_meal_id
                             WHERE event_meal.event_id = :event_id ");
 
     // Bind the event_id parameter
@@ -63,38 +63,6 @@ try {
 // var_dump($mealrows);
 // echo '</pre>';
 // 
-if (isset($_POST['submit'])) {
-    $name = htmlspecialchars($_POST['name']);
-    $time = htmlspecialchars($_POST['time']);
-    $place = htmlspecialchars($_POST['place']);
-    $date = htmlspecialchars($_POST['date']);
-    $description = htmlspecialchars($_POST['description']);
-
-    $sql = "UPDATE event 
-                SET name = :name, time = :time, place = :place, date = :date, description = :description 
-                WHERE event_id = :event_id";
-
-    $stmt = $pdo->prepare($sql);
-
-    $stmt->bindParam(':event_id', $event_id, PDO::PARAM_STR);
-    $stmt->bindParam(':name', $name, PDO::PARAM_STR);
-    $stmt->bindParam(':time', $time, PDO::PARAM_STR);
-    $stmt->bindParam(':place', $place, PDO::PARAM_STR);
-    $stmt->bindParam(':date', $date, PDO::PARAM_STR);
-    $stmt->bindParam(':description', $description, PDO::PARAM_STR);
-
-    $stmt->execute();
-    header("Location: event.php?event_id=" . $event_id);
-    exit();
-}
-
-
-if (isset($_POST['delete-event'])) {
-    header("Location: /mips/admin/admin_meal/adminMain.php");
-    exit();
-}
-
-
 ?>
 
 <!DOCTYPE html>
@@ -114,7 +82,6 @@ if (isset($_POST['delete-event'])) {
     <link rel="stylesheet" href="../admin_for_meal/common.css">
     <link rel="stylesheet" href="../admin_for_meal/admin.css">
     <link rel="stylesheet" href="../admin_meal/adminDonation.css">
-    <link rel="stylesheet" href="../../css/common.css">
 </head>
 
 <body>
@@ -145,7 +112,7 @@ if (isset($_POST['delete-event'])) {
                 <?php endif; ?>
             </row1>
             <row2>
-                <button id="edit-event-btn" data-event-id="<?= htmlspecialchars($row['event_id']) ?>">
+                <button id="edit">
                     <i class='bx bx-edit'>edit</i>
                 </button>
             </row2>
@@ -213,49 +180,50 @@ if (isset($_POST['delete-event'])) {
                 <p class="next1" onclick="slider1.plusSlides(1)">&#10095;</p>
             </div>
         </div>
-        <form method="POST" style="display: inline;" onsubmit="return showDeleteConfirmDialog(event);">
-            <input type="hidden" name="event_id" value="<?= htmlspecialchars($row['event_id']) ?>">
-            <input type="hidden" name="action" value="delete_event">
-            <button type="submit" class="delete" name="delete-event"><i class='bx bx-comment-x'></i>
-                <p>Delete Event</p>
-            </button>
-        </form>
+
+        <button class="delete">
+            <i class='bx bx-comment-x'></i>
+            <p>Delete Event</p>
+        </button>
 
     </div>
-    <dialog id="add-edit-data">
+
+    <dialog class="addEvent">
         <i class='bx bx-x' id="xbtn"></i>
-        <form method="POST" enctype="multipart/form-data">
-            <input type="hidden" name="event_id" value="">
+        <form method="POST" action="">
             <div>
                 <h1>Please fill in required credentials</h1>
             </div>
             <div>
-                <label for="name">Name:</label>
-                <input type="text" id="name" name="name" required>
+                <label for="name">Name :</label>
+                <input type="text" id="name" name="Name" required>
             </div>
             <div>
-                <label for="time">Time:</label>
-                <input type="text" id="time" name="time" required>
+                <label for="time">Time :</label>
+                <input type="text" id="time" name="Time" required>
             </div>
             <div>
-                <label for="place">Place:</label>
-                <input type="text" id="place" name="place" required>
+                <label for="place">Place :</label>
+                <input type="text" id="place" name="Place" required>
             </div>
             <div>
-                <label for="date">Date:</label>
-                <input type="date" id="date" name="date" required>
+                <label for="date">Date :</label>
+                <input type="date" id="date" name="Date" required>
             </div>
             <div>
-                <label for="description">Description:</label>
-                <textarea id="description" name="description" rows="4" required></textarea>
+                <label for="desc">Description :</label>
+                <textarea id="desc" name="Desc" rows="4" cols="5" required></textarea>
             </div>
             <div>
-                <button type="submit" name="submit">Publish</button>
+                <label for="pic">Picture :</label>
+                <input type="file" id="pic" name="Pic">
+            </div>
+            <div>
+                <input type="submit" value="Add" id="btn1">
             </div>
         </form>
     </dialog>
-    <?php include  $_SERVER['DOCUMENT_ROOT'] . "/mips/components/confirm_dialog.php"; ?>
-    <script src="/mips/javascript/admin.js"></script>
+
     <script>
         // let slideIndex = 0;
 
@@ -273,7 +241,7 @@ if (isset($_POST['delete-event'])) {
         //     }
 
         //     // Apply sliding effect by translating the slides container
-        //     slidesContainer.style.transform = `translateX(-${slideIndex * 100}%)`;
+        //     slidesContainer.style.transform = translateX(-${slideIndex * 100}%);
         // }
 
         // function plusSlides(n) {
@@ -307,7 +275,10 @@ if (isset($_POST['delete-event'])) {
             Slider.prototype.updateSlideWidth = function() {
                 const slideWidth = (this.container.clientWidth - (this.slidesToShow - 1)) / this.slidesToShow;
                 this.slides.forEach(slide => {
-                    slide.style.width = `${slideWidth}px`;
+                    slide.style.width = $ {
+                        slideWidth
+                    }
+                    px;
                 });
             };
 
@@ -324,7 +295,10 @@ if (isset($_POST['delete-event'])) {
                 }
 
                 const slideWidth = (this.container.clientWidth - (this.slidesToShow - 1)) / this.slidesToShow;
-                this.container.querySelector('.slides1').style.transform = `translateX(-${this.slideIndex * (slideWidth + 1)}px)`;
+                this.container.querySelector('.slides1').style.transform = translateX(-$ {
+                        this.slideIndex * (slideWidth + 1)
+                    }
+                    px);
             };
 
             Slider.prototype.plusSlides = function(n) {
@@ -335,42 +309,17 @@ if (isset($_POST['delete-event'])) {
             window.slider1 = new Slider('.slider-container1', '.slide1', '.slider-controls1', 3);
         })();
 
-        const modal = document.getElementById('add-edit-data');
+
+        const modal = document.querySelector('.addEvent');
+        const openModal = document.querySelector('#edit');
         const closeModal = document.querySelector('#xbtn');
 
+        openModal.addEventListener('click', () => {
+            modal.showModal();
+        })
         closeModal.addEventListener('click', () => {
             modal.close();
         })
-
-        document.querySelector('#edit-event-btn').addEventListener('click', function() {
-            const eventId = this.dataset.eventId;
-            if (!eventId) {
-                alert('Event ID is missing');
-                return;
-            }
-
-            console.log(eventId);
-            fetch(`/mips/admin/ajax.php?action=get_event&event_id=${eventId}`)
-                .then(response => response.json())
-                .then(event => {
-                    if (event.error) {
-                        alert(event.error);
-                    } else {
-                        document.querySelector('#add-edit-data [name="event_id"]').value = event.event_id;
-                        document.querySelector('#add-edit-data [name="name"]').value = event.name;
-                        document.querySelector('#add-edit-data [name="time"]').value = event.time;
-                        document.querySelector('#add-edit-data [name="place"]').value = event.place;
-                        document.querySelector('#add-edit-data [name="date"]').value = event.date;
-                        document.querySelector('#add-edit-data [name="description"]').value = event.description;
-
-                        document.getElementById('add-edit-data').showModal();
-                    }
-                })
-                .catch(error => {
-                    console.error('Error fetching event data:', error);
-                    alert('Failed to load event data.');
-                });
-        });
     </script>
 </body>
 
