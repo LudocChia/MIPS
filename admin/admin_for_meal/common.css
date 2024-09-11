@@ -626,6 +626,104 @@ thead th {
     color: #666;
 }
 
+/* Confirm Dialog */
+#exclamation-confirm-dialog,
+#check-confirm-dialog {
+    width: 400px;
+    background: #f2f2f2;
+    padding: 30px;
+    border: 1px solid var(--color-gray-light);
+    z-index: 9999;
+}
+
+#exclamation-confirm-dialog form,
+#check-confirm-dialog form {
+    margin-left: 0;
+    text-align: center;
+    align-items: center;
+}
+
+#exclamation-confirm-dialog i,
+#check-confirm-dialog i {
+    font-size: 7rem;
+    padding: 20px 40px;
+    border-radius: 50%;
+    margin: -10px 0 20px 0;
+}
+
+#exclamation-confirm-dialog i {
+    color: #eb9447;
+}
+
+#check-confirm-dialog i {
+    color: #00cc00;
+}
+
+#exclamation-confirm-dialog label,
+#check-confirm-dialog label {
+    font-size: 1.2rem;
+    color: #404040;
+}
+
+#exclamation-confirm-dialog .controls,
+#check-confirm-dialog .controls {
+    margin: 40px 0 0 0;
+}
+
+.controls .cancel,
+.controls .delete,
+.controls .confirm {
+    background: #999999;
+    color: white;
+    font-size: 18px;
+    border-radius: 5px;
+    border: 1px solid #808080;
+    padding: 10px 13px;
+}
+
+#confirm-dialog .controls .cancel,
+#confirm-dialog .controls .delete,
+#confirm-dialog .controls .confirm {
+    background: #999999;
+    color: white;
+    font-size: 18px;
+    border-radius: 5px;
+    border: 1px solid #808080;
+    padding: 10px 13px;
+}
+
+.controls {
+    margin: var(--marging-2);
+}
+
+.controls .delete {
+    margin-left: 20px;
+    background: #ff3333;
+    border: 1px solid #cc0000;
+}
+
+.controls .confirm {
+    margin-left: 20px;
+    background: var(--color-primary);
+    border: 1px solid var(--color-primary);
+}
+
+#exclamation-confirm-dialog .controls .delete {
+    margin-left: 20px;
+    background: #ff3333;
+    border: 1px solid #cc0000;
+}
+
+#exclamation-confirm-dialog .controls .cancel:hover {
+    transition: .5s;
+    background: #8c8c8c;
+}
+
+#exclamation-confirm-dialog .controls .delete:hover {
+    transition: .5s;
+    background: #e60000;
+}
+
 @media screen and (max-width: 1200px) {
     /* .title {
         justify-content: space-between;
