@@ -1,8 +1,9 @@
 <?php
     session_start();
     include "../components/db_connect.php";
-    if (!isset($_SESSION['admin_id'])) {
-        header('Location: /mips/admin/login.php');
+    // Check if user is logged in as parent
+    if (!isset($_SESSION['user_id'])) {
+        header('Location: /mips/index.php');
         exit();
     }
 

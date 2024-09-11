@@ -47,6 +47,37 @@ if (isset($_GET['event_id']) && isset($_GET['meal_type_id'])) {
             echo '<p>No meals found for this meal type.</p>';
         }
 
+        // Prepare and execute the query to search for donators based on event_meal_id
+        $event_meal_id = $meal['event_meal_id'];
+        $stmt2 = $pdo->prepare("SELECT * FROM `donation` 
+        INNER JOIN `parent` ON donation.parent_id = parent.parent_id
+        INNER JOIN `meals` ON donation.meal_id = meals.meal_id
+        INNER JOIN `event_meal` ON donation.event_meal_id = event_meal.event_meal_id
+        WHERE event_meal.event_id = :event_id AND event_meal.meal_type_id = :meal_type_id AND meals.meal_id = :meal_id");
+
+        // Bind the parameters
+        $stmt2->bindParam(':meal_id', $meal_id);
+        $stmt2->bindParam(':event_id', $event_id);
+        $stmt2->bindParam(':meal_type_id', $meal_type_id);
+        $stmt2->execute();
+
+        $donators = $stmt2->fetchAll(PDO::FETCH_ASSOC);
+
+        // Display the meals if available
+        if ($donators) {
+            echo '<h2>Donator Information</h2>';
+            foreach ($donators as $donator) {
+                echo '<p>Donator_ID: ' . htmlspecialchars($donator['donator_id']) . '</p>';
+                echo '<p>Name: ' . htmlspecialchars($donator['parent_name']) . '</p>';
+                echo '<p>Time: ' . htmlspecialchars($donator['date']) . '</p>';
+                echo '<p>Meal Name: ' . htmlspecialchars($donator['meal_name']) . '</p>';
+                echo '<p>Quantity: ' . htmlspecialchars($donator['p_set']) . '</p>';
+                // Uncomment below if you want to show descriptions too
+                // echo '<hr>';
+            }
+        } else {
+            echo '<p>No donators found for this meal type.</p>';
+        }
 } else {
     // Handle the case where the parameters are not set
     echo '<p>Error: Missing event_id or meal_type_id.</p>';
@@ -55,7 +86,7 @@ if (isset($_GET['event_id']) && isset($_GET['meal_type_id'])) {
 
 
 // echo '<pre>';
-// var_dump($meals);
+var_dump($donators);
 // echo '</pre>';
 
 
@@ -67,7 +98,7 @@ if (isset($_GET['event_id']) && isset($_GET['meal_type_id'])) {
 <html lang="en">
 <head>
     <title>Meal Donation</title>
-    <link rel="icon" type="image/x-icon" href="../../images/MIPS_icon.png">
+    <link rel="icon" type="image/x-icon" href="../images/MIPS_icon.png">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -99,6 +130,13 @@ if (isset($_GET['event_id']) && isset($_GET['meal_type_id'])) {
                 <i class='bx bx-arrow-back' ></i>
             </a>
         </row>
+        <row class="row2">
+
+        </row>
+        <row class="row3">
+
+        </row>
+
     </div>
 
 </body>
