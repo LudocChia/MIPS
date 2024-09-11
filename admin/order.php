@@ -148,13 +148,15 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                                             </form>
                                         </td>
                                         <td>
-                                            <form action="" method="POST" style="display:inline;" onsubmit="return showDeactivateConfirmDialog(event);">
-                                                <input type="hidden" name="order_id" value="<?= htmlspecialchars($order['order_id']); ?>">
-                                                <input type="hidden" name="action" value="deactivate_order">
-                                                <button type="submit" class="delete-order-btn"><i class="bi bi-x-square"></i></button>
-                                            </form>
-                                            <button type="button" class="view-order-detail-btn" data-order-id="<?= htmlspecialchars($order['order_id']); ?>"><i class="bi bi-info-circle-fill"></i></button>
-                                            <button type="button" class="edit-order-btn" data-order-id="<?= htmlspecialchars($order['order_id']); ?>"><i class="bi bi-pencil-square"></i></button>
+                                            <div class="actions">
+                                                <form action="" method="POST" style="display:inline;" onsubmit="return showDeactivateConfirmDialog(event);">
+                                                    <input type="hidden" name="order_id" value="<?= htmlspecialchars($order['order_id']); ?>">
+                                                    <input type="hidden" name="action" value="deactivate_order">
+                                                    <button type="submit" class="delete-order-btn"><i class="bi bi-x-square"></i></button>
+                                                </form>
+                                                <button type="button" class="view-order-detail-btn" data-order-id="<?= htmlspecialchars($order['order_id']); ?>"><i class="bi bi-info-circle-fill"></i></button>
+                                                <!-- <button type="button" class="edit-order-btn" data-order-id="<?= htmlspecialchars($order['order_id']); ?>"><i class="bi bi-pencil-square"></i></button> -->
+                                            </div>
                                         </td>
                                     </tr>
                                 <?php endforeach; ?>
@@ -233,14 +235,14 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                 <h1>Order Details</h1>
             </div>
             <div class="left">
-                <button class="cancel"><i class="bi bi-x-circle"></i></button>
+                <button class="actions cancel"><i class="bi bi-x-circle"></i></button>
             </div>
         </div>
         <div class="order-details-content">
             <table class="two-column">
                 <tr>
                     <td style="width: 40%">
-                        <h2>Order ID :<h2>
+                        <h3>Order ID :<h3>
                     </td>
                     <td style="width: 60%;">
                         <h3 id="order-id"></h3>
@@ -248,7 +250,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                 </tr>
                 <tr>
                     <td>
-                        <h2>Parent Name :<h2>
+                        <h3>Parent Name :<h3>
                     </td>
                     <td>
                         <h3 id="parent-name"></h3>
@@ -256,7 +258,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                 </tr>
                 <tr>
                     <td>
-                        <h2>Order Date :<h2>
+                        <h3>Order Date :<h3>
                     </td>
                     <td>
                         <h3 id="order-date"></h3>
@@ -264,7 +266,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                 </tr>
                 <tr>
                     <td>
-                        <h2>Order Amount :<h2>
+                        <h3>Order Amount :<h3>
                     </td>
                     <td>
                         <h3 id="order-amount"></h3>
@@ -272,17 +274,17 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                 </tr>
                 <tr>
                     <td>
-                        <h2>Order Status :<h2>
+                        <h3>Order Status :<h3>
                     </td>
                     <td>
                         <h3 id="order-status"></h3>
                     </td>
                 </tr>
             </table>
-            <h2>Payment Receipt:</h2>
+            <h2>Payment Receipt</h2>
             <img id="payment-image" src="" alt="Payment Image">
             <div class="order-items">
-                <h2>Ordered Items:</h2>
+                <h2>Order Items</h2>
                 <table>
                     <thead>
                         <tr>

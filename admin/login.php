@@ -22,6 +22,9 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                     <img src="/mips/images/MIPS_logo.png" alt="MIPS_Logo">
                 </div>
                 <div id="alert-container"></div>
+                <div class="title">
+                    <h1>MIPS System</h1>
+                </div>
                 <form id="login-form-ajax" method="POST">
                     <div class="input-container">
                         <div class="input-field">

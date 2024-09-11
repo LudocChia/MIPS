@@ -66,19 +66,21 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                                         <td><?= htmlspecialchars($parent['parent_id']); ?></td>
                                         <td><?= htmlspecialchars($parent['parent_name']); ?></td>
                                         <td><?= htmlspecialchars($parent['parent_email']); ?></td>
-                                        <td><?= htmlspecialchars($parent['register_datetime']); ?></td>
+                                        <td><?= htmlspecialchars($parent['created_at']); ?></td>
                                         <td>
-                                            <button type="button" class="view-order-detail-btn" data-order-id="<?= htmlspecialchars($order['order_id']); ?>"><i class="bi bi-info-circle-fill"></i></button>
-                                            <form action="" method="POST" style="display:inline;" onsubmit="return showDeleteConfirmDialog(event);">
-                                                <input type="hidden" name="parent_id" value="<?= htmlspecialchars($parent['parent_id']); ?>">
-                                                <input type="hidden" name="action" value="delete_parent">
-                                                <button type="submit" class="delete-parent-btn"><i class="bi bi-trash-fill"></i></button>
-                                            </form>
-                                            <form action="" method="POST" style="display:inline;" onsubmit="return showRecoverConfirmDialog(event);">
-                                                <input type="hidden" name="parent_id" value="<?= htmlspecialchars($parent['parent_id']); ?>">
-                                                <input type="hidden" name="action" value="recover_parent">
-                                                <button type="submit" class="recover-parent-btn"><i class="bi bi-arrow-clockwise"></i></button>
-                                            </form>
+                                            <div class="actions">
+                                                <form action="" method="POST" style="display:inline;" onsubmit="return showDeleteConfirmDialog(event);">
+                                                    <input type="hidden" name="parent_id" value="<?= htmlspecialchars($parent['parent_id']); ?>">
+                                                    <input type="hidden" name="action" value="delete_parent">
+                                                    <button type="submit" class="delete-parent-btn"><i class="bi bi-trash-fill"></i></button>
+                                                </form>
+                                                <button type="button" class="view-order-detail-btn" data-order-id="<?= htmlspecialchars($order['order_id']); ?>"><i class="bi bi-info-circle-fill"></i></button>
+                                                <form action="" method="POST" style="display:inline;" onsubmit="return showRecoverConfirmDialog(event);">
+                                                    <input type="hidden" name="parent_id" value="<?= htmlspecialchars($parent['parent_id']); ?>">
+                                                    <input type="hidden" name="action" value="recover_parent">
+                                                    <button type="submit" class="recover-parent-btn"><i class="bi bi-arrow-clockwise"></i></button>
+                                                </form>
+                                            </div>
                                         </td>
                                     </tr>
                                 <?php endforeach; ?>

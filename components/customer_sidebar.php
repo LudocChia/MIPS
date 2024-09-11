@@ -11,13 +11,19 @@ function isActive($pageName, $currentPage)
     <div class="sidebar">
         <ul>
             <li>
-                <a href="/mips/account.php" class="<?= isActive('account.php', $currentPage); ?>"><i class="bi bi-person-circle"></i>
-                    <h4>My Account</h4>
+                <!-- <a href="/mips/account.php" class="<?= isActive('account.php', $currentPage); ?>"><i class="bi bi-person-circle"></i> -->
+                <a href="javascript:void(0)" class="<?= isActive('account.php', $currentPage); ?>"><i class="bi bi-person-circle"></i>
+                    <h6>My Account</h6>
                 </a>
             </li>
             <li>
                 <a href="/mips/purchase.php" class="<?= isActive('purchase.php', $currentPage); ?>"><i class="bi bi-receipt"></i>
-                    <h4>My Purchase</h4>
+                    <h6>My Purchase</h6>
+                </a>
+            </li>
+            <li>
+                <a href="/mips/purchase.php" class="<?= isActive('donation.php', $currentPage); ?>"><i class="bi bi-wallet"></i></i>
+                    <h6>My Donation</h6>
                 </a>
             </li>
         </ul>

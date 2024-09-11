@@ -3,6 +3,7 @@
     --color-white: #ffffff;
     --color-light: #f0eff5;
     --color-gray-light: #ccc;
+    --color-gray-dark: #56555e;
     --color-gray-super-light: #e5e5e5;
     --color-dark: #27282f;
     --color-primary: rgb(0, 52, 85);
@@ -21,6 +22,8 @@
     --card-padding: 1.6rem;
     --padding-1: 1rem;
     --padding-2: 8px;
+    --marging-1: 1rem;
+    --marging-2: 2rem;
 
     --card-border-radius: 1rem;
     --border-radius-1: 1rem;
@@ -42,9 +45,10 @@ dialog {
     width: calc(100% - 1em);
     max-width: 50rem;
     max-height: 50rem;
-    border-radius: 0.5em;
+    border-radius: 1em;
     text-align: center;
     padding: 0.8em 1.5em 1em;
+    border: 1px solid var(--color-gray-light);
 }
 
 dialog form {
@@ -66,10 +70,11 @@ dialog form .input-container {
 }
 
 dialog form p {
-    color: #999;
+    margin-top: 0.5rem;
 }
 
 dialog form h2 {
+    margin-bottom: 0.5rem;
     text-transform: capitalize;
 }
 
@@ -87,10 +92,9 @@ dialog form input[type="password"],
 textarea {
     font-size: 1.2rem;
     background: #fff;
-    outline: none;
+    /* outline: none; */
     padding: .6rem;
-    /* box-shadow: var(--box-shadow); */
-    border: 1px solid #ddd;
+    border: 1px solid var(--color-gray-light);
     width: 85%;
     transition: border 0.3s ease;
 }
@@ -216,6 +220,7 @@ dialog form textarea {
 .set-new-password-form .wrapper {
     width: 90%;
     margin: 0 auto;
+    display: block;
 }
 
 .login-form .logo-container,
@@ -233,8 +238,17 @@ dialog form textarea {
     padding: 1rem;
 }
 
+.login-form .title,
+.set-new-password-form .title {
+    text-align: center;
+    margin-bottom: 0;
+    width: 90%;
+    display: inline-block;
+}
+
 .login-form form,
 .set-new-password-form form {
+    margin-left: 0;
     padding: 30px 25px 25px 25px;
 }
 
@@ -258,7 +272,7 @@ dialog form textarea {
     outline: none;
     padding-left: 60px;
     border-radius: 5px;
-    border: 1px solid var(--color-gray-light);
+    border: 1px solid var(--color-gray-dark);
     font-size: 16px;
 }
 
@@ -328,7 +342,7 @@ dialog form textarea {
 /* sup */
 sup {
     color: var(--color-primary);
-    font-size: 1rem;
+    font-size: 2rem;
 }
 
 /* NAV BAR */
@@ -427,6 +441,7 @@ header .profile-area i {
     padding: 1.2rem;
     border-radius: 50%;
 }
+
 
 .profile-menu {
     position: absolute;
@@ -556,6 +571,7 @@ table {
 
 thead th {
     position: sticky;
+    z-index: 1;
     top: 0;
     Left: 0;
 }
@@ -610,7 +626,7 @@ thead th {
 }
 
 /* Delete Confirm Dialog */
-#delete-confirm-dialog i {
+/* #exclamation-confirm-dialog i {
     font-size: 60px;
     color: #eb9447;
     border: 5px solid #eb9447;
@@ -619,14 +635,14 @@ thead th {
     margin: -10px 0 20px 0;
 }
 
-#delete-confirm-dialog label {
+#exclamation-confirm-dialog label {
     font-size: 23px;
     color: #404040;
 }
 
-#delete-confirm-dialog .controls {
+#exclamation-confirm-dialog .controls {
     margin: 40px 0 0 0;
-}
+} */
 
 .breadcrumbs {
     padding: 10px 25px;
@@ -695,8 +711,6 @@ thead th {
     white-space: nowrap;
 }
 
-
-
 /* Category Box */
 .category .box-container {
     display: grid;
@@ -737,8 +751,11 @@ thead th {
 }
 
 .info-container .name-field {
+    margin: 0.5rem;
+}
+
+.category .info-container .name-field {
     text-align: center;
-    margin: 1rem;
 }
 
 .info-container {
@@ -776,7 +793,6 @@ thead th {
 
 
 .empty button {
-    /* margin: ; */
     width: 50%;
 }
 
@@ -815,14 +831,12 @@ thead th {
 .products .box-container .image-container img {
     background-color: var(--color-gray-light);
     object-fit: contain;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
 }
 
-.products .box-container .name {
+.products .info-container .name-field {
     margin: 1rem 0;
-    font-size: 1.5rem;
-    font-weight: bold;
     color: #333;
 }
 
@@ -830,7 +844,7 @@ thead th {
     display: flex;
 }
 
-.products .box-container .price-size-container .price {
+.products .box-container .price-size-container .price-field {
     font-size: 1.2rem;
     font-weight: bold;
     color: #333;
@@ -864,7 +878,7 @@ thead th {
 
 .product-detail .product-container {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    grid-template-columns: 4fr 5fr;
     gap: .3em;
     padding: 0px;
     margin: 0;
@@ -887,12 +901,15 @@ thead th {
 }
 
 .thumbnails {
-    width: auto;
+    width: 120px;
     padding: 1rem 1rem 1rem 0.5rem;
+    overflow-y: auto;
+    max-height: 600px;
 }
 
 .thumbnails img {
     margin-bottom: 1rem;
+
     display: inline-block;
     border: 1px solid var(--color-gray-light);
 }
@@ -911,8 +928,8 @@ thead th {
     display: flex;
     justify-content: center;
     position: relative;
-    width: 300px;
-    height: 45px;
+    width: 85%;
+    height: 40px;
     margin-bottom: 0.5rem;
 }
 
@@ -921,9 +938,11 @@ thead th {
     appearance: none;
     padding: 0 30px 0 15px;
     width: 100%;
-    color: white;
-    background-color: #001a4a;
-    font-size: 20px;
+    cursor: pointer;
+    /* color: white; */
+    border: 1px solid var(--color-gray-light);
+    /* background-color: #001a4a; */
+    /* font-size: 20px; */
 }
 
 .select-field .icon-container {
@@ -934,47 +953,73 @@ thead th {
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #023ca9;
+    cursor: pointer;
+    border: 1px solid var(--color-gray-light);
+    /* background-color: var(--color-secondary); */
 }
 
 .icon-container i {
     font-size: 1.5rem;
-    color: white;
+    /* color: white; */
 }
 
 /* Confirm Dialog */
-#confirm-dialog {
+#exclamation-confirm-dialog,
+#check-confirm-dialog {
     width: 400px;
     background: #f2f2f2;
     padding: 30px;
-    border: 1px solid #b3b3b3;
+    border: 1px solid var(--color-gray-light);
     z-index: 9999;
 }
 
-#confirm-dialog form {
+#exclamation-confirm-dialog form,
+#check-confirm-dialog form {
     margin-left: 0;
     text-align: center;
     align-items: center;
 }
 
-#confirm-dialog i {
+#exclamation-confirm-dialog i,
+#check-confirm-dialog i {
     font-size: 7rem;
-    color: #eb9447;
     padding: 20px 40px;
     border-radius: 50%;
     margin: -10px 0 20px 0;
 }
 
-#confirm-dialog label {
+#exclamation-confirm-dialog i {
+    color: #eb9447;
+}
+
+#check-confirm-dialog i {
+    color: #00cc00;
+}
+
+#exclamation-confirm-dialog label,
+#check-confirm-dialog label {
     font-size: 1.2rem;
     color: #404040;
 }
 
-#confirm-dialog .controls {
+#exclamation-confirm-dialog .controls,
+#check-confirm-dialog .controls {
     margin: 40px 0 0 0;
 }
 
+.controls .cancel,
+.controls .delete,
+.controls .confirm {
+    background: #999999;
+    color: white;
+    font-size: 18px;
+    border-radius: 5px;
+    border: 1px solid #808080;
+    padding: 10px 13px;
+}
+
 #confirm-dialog .controls .cancel,
+#confirm-dialog .controls .delete,
 #confirm-dialog .controls .confirm {
     background: #999999;
     color: white;
@@ -984,29 +1029,50 @@ thead th {
     padding: 10px 13px;
 }
 
-#confirm-dialog .controls .confirm {
+.controls {
+    margin: var(--marging-2);
+}
+
+.controls .delete {
     margin-left: 20px;
     background: #ff3333;
     border: 1px solid #cc0000;
 }
 
-#confirm-dialog .controls .cancel:hover {
+.controls .confirm {
+    margin-left: 20px;
+    background: var(--color-primary);
+    border: 1px solid var(--color-primary);
+}
+
+#exclamation-confirm-dialog .controls .delete {
+    margin-left: 20px;
+    background: #ff3333;
+    border: 1px solid #cc0000;
+}
+
+#exclamation-confirm-dialog .controls .cancel:hover {
     transition: .5s;
     background: #8c8c8c;
 }
 
-#confirm-dialog .controls .confirm:hover {
+#exclamation-confirm-dialog .controls .delete:hover {
     transition: .5s;
     background: #e60000;
 }
 
 @media screen and (max-width: 1200px) {
+    .product-detail .product-container {
+        grid-template-columns: 1fr;
+    }
+
     /* .title {
         justify-content: space-between;
     } */
 }
 
 @media screen and (max-width: 768px) {
+
     /* .title {
         justify-content: space-between;
     } */
@@ -1039,7 +1105,12 @@ thead th {
         display: none;
     }
 
+    header .profile-area i {
+        display: none;
+    }
+
     header .mobile-wrapper {
+        margin-top: 10px;
         display: flex;
     }
 
@@ -1047,6 +1118,5 @@ thead th {
         padding: 5px 10px;
         margin-left: 3%;
     }
-
 
 }

@@ -107,7 +107,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
                 <h1>Add New Parent</h1>
             </div>
             <div class="right">
-                <button class="cancel"><i class="bi bi-x-lg"></i></button>
+                <button class="actions cancel"><i class="bi bi-x-circle"></i></button>
             </div>
         </div>
         <div id="alert-container"></div>
@@ -150,8 +150,8 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
             </div>
             <div class="controls">
                 <button type="button" class="cancel">Cancel</button>
-                <button type="reset">Clear</button>
-                <button type="submit" name="submit">Publish</button>
+                <button type="reset" class="delete">Clear</button>
+                <button type="submit" class="confirm" name="submit">Publish</button>
             </div>
         </form>
     </dialog>

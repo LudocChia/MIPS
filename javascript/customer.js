@@ -230,8 +230,22 @@ document.addEventListener('DOMContentLoaded', function () {
                     return;
                 }
 
-                form.reset();
+                // Check if any child is selected
+                let childSelected = false;
+                selectedItems.forEach(item => {
+                    if (item.selectedChildren && item.selectedChildren.length > 0) {
+                        childSelected = true;
+                    }
+                });
 
+                // If no child is selected, show alert
+                if (!childSelected) {
+                    alert('Please select at least one child to proceed with the purchase.');
+                    return;
+                }
+
+                // Continue with the normal checkout process if child is selected
+                form.reset();
                 const productIds = selectedItems.map(item => item.product_id).join(',');
                 const sizeIds = selectedItems.map(item => item.product_size_id).join(',');
                 const totalPrice = selectedItems.reduce((sum, item) => sum + (item.product_price * item.product_quantity), 0).toFixed(2);
@@ -271,6 +285,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 dialog.showModal();
             });
+
         }
     }
 

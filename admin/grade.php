@@ -157,8 +157,8 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
             </div>
             <div class="input-container controls">
                 <button type="button" class="cancel">Cancel</button>
-                <button type="reset">Clear</button>
-                <button type="submit" name="submit">Publish</button>
+                <button type="reset" class="clear">Clear</button>
+                <button type="submit" class="confirm">Publish</button>
             </div>
         </form>
     </dialog>
@@ -187,6 +187,12 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                         console.error('Error fetching grade data:', error);
                         alert('Failed to load grade data.');
                     });
+            });
+        });
+
+        document.querySelectorAll('#add-edit-data .cancel').forEach(button => {
+            button.addEventListener('click', function() {
+                document.querySelector('#add-edit-data h1').textContent = "Add New Grade";
             });
         });
     </script>

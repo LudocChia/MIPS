@@ -27,6 +27,6 @@ function getStatusLabel($status)
 }
 
 
-$currentPage = basename($_SERVER['PHP_SELF']);
+$currentPage = $_SERVER['REQUEST_URI'];
 
 $start = 0;

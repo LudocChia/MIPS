@@ -45,10 +45,26 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                     </div>
                     <div class="box">
                         <div class="image-container">
-                            <a href="/mips/admin/deactivated/bookshop/"><img src="/mips/images/default_folder.png" alt="Deactivated User"></a>
+                            <a href="/mips/admin/deactivated/bookshop/"><img src="/mips/images/default_folder.png" alt="Deactivated Bookshop"></a>
                         </div>
                         <div class="info-container">
                             <h3>Bookshop</h3>
+                        </div>
+                    </div>
+                    <div class="box">
+                        <div class="image-container">
+                            <a href="/mips/admin/deactivated/grade.php"><img src="/mips/images/default_folder.png" alt="Deactivated Grade"></a>
+                        </div>
+                        <div class="info-container">
+                            <h3>Grade</h3>
+                        </div>
+                    </div>
+                    <div class="box">
+                        <div class="image-container">
+                            <a href="/mips/admin/deactivated/class.php"><img src="/mips/images/default_folder.png" alt="Deactivated Class"></a>
+                        </div>
+                        <div class="info-container">
+                            <h3>Class</h3>
                         </div>
                     </div>
                 </div>

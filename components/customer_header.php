@@ -27,9 +27,9 @@
                 <?php
                 if (isset($_SESSION['user_id'])) {
                 ?>
-                    <a href="mailbox.php"><i class="bi bi-bell-fill"></i>
-                        <!-- <sup id="MessageCount"></?= $total_unread_messages > 0 ? $total_unread_messages : '0' ?></sup> -->
-                    </a>
+                    <!-- <a href="mailbox.php"><i class="bi bi-bell-fill"></i> -->
+                    <!-- <sup id="MessageCount"></?= $total_unread_messages > 0 ? $total_unread_messages : '0' ?></sup> -->
+                    <!-- </a> -->
                     <a href="cart.php"><i class="bi bi-basket3-fill"></i>
                         <!-- <sup id="cartCount"></?= $total_cart_items > 0 ? $total_cart_items : '0' ?></sup> -->
                     </a>
@@ -41,7 +41,8 @@
                                 <h4><?= htmlspecialchars($_SESSION['user_name']); ?></h4>
                             </div>
                             <hr>
-                            <a href="/mips/account.php" class="profile-menu-link">
+                            <!-- <a href="/mips/account.php" class="profile-menu-link"> -->
+                            <a href="javascript:void(0)" class="profile-menu-link">
                                 <i class="bi bi-person-fill"></i>
                                 <p>My Account</p>
                                 <span>></span>
@@ -74,22 +75,22 @@
         <div class="mobile-navbar">
             <ul>
                 <li>
-                    <a href="meal.php"><i class="fa fa-cutlery" aria-hidden="true"></i></a>
+                    <a href="/mips/meal.php"><i class="fa fa-cutlery" aria-hidden="true"></i></a>
                 </li>
                 <li>
-                    <a href="event.php"><i class="bi bi-calendar4-event"></i></a>
+                    <a href="javascript:void(0)"><i class="bi bi-calendar4-event"></i></a>
                 </li>
                 <li>
-                    <a href="bookshop.php"><i class="bi bi-shop-window"></i></a>
+                    <a href="/mips/bookshop.php"><i class="bi bi-shop-window"></i></a>
                 </li>
                 <li>
-                    <a href="mailbox.php"><i class="bi bi-bell-fill"></i></a>
+                    <a href="javascript:void(0)"><i class="bi bi-bell-fill"></i></a>
                 </li>
                 <li>
-                    <a href="cart.php"><i class="bi bi-basket3-fill"></i></a>
+                    <a href="/mips/cart.php"><i class="bi bi-basket3-fill"></i></a>
                 </li>
                 <li>
-                    <a href="menu.php"><i><i class="bi bi-list"></i></i></a>
+                    <a href="javascript:void(0)"><i><i class="bi bi-list"></i></i></a>
                 </li>
             </ul>
         </div>

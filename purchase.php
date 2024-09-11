@@ -10,7 +10,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/customer_head.php";
     <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/customer_header.php"; ?>
     <div class="container aside-main">
         <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/customer_sidebar.php"; ?>
-        <main class="profile">
+        <main class="purchase">
             <div class="wrapper">
                 <div class="title">
                     <div class="left">

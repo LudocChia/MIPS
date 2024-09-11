@@ -38,27 +38,21 @@ function getRecentOrders($pdo, $limit = 5)
 {
     $sqlRecentOrders = "SELECT 
                             o.order_id, 
-                            p.product_name, 
-                            ps.student_id, 
-                            s.student_name, 
-                            oi.order_subtotal, 
+                            p.parent_name, 
+                            py.payment_amount AS total_price,  -- 从 Payment 表直接获取付款金额
                             py.payment_status
                         FROM 
                             Orders o
                         JOIN 
-                            Order_Item oi ON o.order_id = oi.order_id
-                        JOIN 
-                            Product p ON oi.product_id = p.product_id
-                        JOIN 
                             Parent_Student ps ON o.parent_student_id = ps.parent_student_id
                         JOIN 
-                            Student s ON ps.student_id = s.student_id
+                            Parent p ON ps.parent_id = p.parent_id
                         JOIN 
                             Payment py ON o.order_id = py.order_id
                         ORDER BY 
                             o.order_datetime DESC
-                        LIMIT :limit
-                    ";
+                        LIMIT :limit";
+
     $stmtRecentOrders = $pdo->prepare($sqlRecentOrders);
     $stmtRecentOrders->bindValue(':limit', (int)$limit, PDO::PARAM_INT);
     $stmtRecentOrders->execute();
@@ -170,7 +164,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
                                             <tr>
                                                 <td><?php echo htmlspecialchars($order['order_id']); ?></td>
                                                 <td><?php echo htmlspecialchars($order['parent_name']); ?></td>
-                                                <td>MYR <?php echo number_format($order['order_subtotal'], 2); ?></td>
+                                                <td>MYR <?php echo number_format($order['total_price'], 2); ?></td>
                                                 <td><span class="<?php echo $order['payment_status'] == 'completed' ? 'success' : 'pending'; ?>">
                                                         <?php echo ucfirst($order['payment_status']); ?></span></td>
                                             </tr>

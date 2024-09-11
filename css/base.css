@@ -28,30 +28,30 @@ h1 {
 }
 
 h2 {
-    font-size: 1.5rem;
+    font-size: 1.7rem;
 }
 
 h3 {
     font-weight: normal;
-    font-size: 1.2rem;
+    font-size: 1.5rem;
 }
 
 h4 {
     font-weight: normal;
-    font-size: 1rem;
+    font-size: 1.4rem;
 }
 
 h5 {
-    font-size: 0.86rem;
-    font-weight: 500;
+    font-size: 1.2rem;
 }
 
 h6 {
-    font-size: 0.75rem;
+    font-size: 1rem;
+    font-weight: 500;
 }
 
 p {
-    font-size: 1.2rem;
+    font-size: 1.4rem;
     color: var(--color-gray-dark);
 }
 
@@ -132,6 +132,6 @@ a {
     }
 
     p {
-        font-size: 0.75rem;
+        font-size: 1rem;
     }
 }

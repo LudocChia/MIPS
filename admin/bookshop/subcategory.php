@@ -168,7 +168,10 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                                     <button type="button" class="edit-subcategory-btn" data-subcategory-id="<?= htmlspecialchars($subcategory['category_id']); ?>"><i class="bi bi-pencil-square"></i></button>
                                 </div>
                                 <div class="info-container">
-                                    <h3><?php echo htmlspecialchars($subcategory['category_name']); ?></h3>
+                                    <div class="name-field">
+                                        <h3><?php echo htmlspecialchars($subcategory['category_name']); ?></h3>
+                                    </div>
+
                                 </div>
                             </div>
                         <?php endforeach; ?>
@@ -188,7 +191,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                 <h1>Add Subcategory</h1>
             </div>
             <div class="right">
-                <button class="cancel"><i class="bi bi-x-circle"></i></button>
+                <button class="actions cancel"><i class="bi bi-x-circle"></i></button>
             </div>
         </div>
         <form method="post" enctype="multipart/form-data">
@@ -209,8 +212,8 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
             </div>
             <div class="input-container">
                 <h2>Parent Category<sup>*</sup></h2>
-                <div class="input-field">
-                    <select name="parent_category" id="parent_category" required>
+                <div class="select-field">
+                    <select class="select-box" name="parent_category" id="parent_category" required>
                         <option value="">Select a main category</option>
                         <?php foreach ($all_main_categories as $mainCategory) : ?>
                             <option value="<?php echo $mainCategory['category_id']; ?>">
@@ -218,13 +221,16 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                             </option>
                         <?php endforeach; ?>
                     </select>
-                    <p>Select the main category for this subcategory.</p>
+                    <div class="icon-container">
+                        <i class="bi bi-caret-down-fill"></i>
+                    </div>
                 </div>
+                <p>Select the main category for this subcategory.</p>
             </div>
             <div class="controls">
                 <button type="button" class="cancel">Cancel</button>
-                <button type="reset">Clear</button>
-                <button type="submit" name="submit">Publish</button>
+                <button type="reset" class="delete">Clear</button>
+                <button type="submit" class="confirm" name="submit">Publish</button>
             </div>
         </form>
     </dialog>

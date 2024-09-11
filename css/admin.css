@@ -36,7 +36,7 @@
     transition: all 300ms ease;
 }
 
-#delete-confirm-dialog {
+/* #delete-confirm-dialog {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -49,7 +49,7 @@
     padding: var(--padding-1);
     border: 1px solid #b3b3b3;
     box-shadow: var(--box-shadow);
-}
+} */
 
 .text-muted {
     color: var(--color-gray-light);
@@ -74,6 +74,10 @@
     gap: 1.8rem;
     grid-template-columns: 20rem auto;
     overflow-y: auto;
+}
+
+.container::-webkit-scrollbar-thumb:active {
+    background-color: var(--color-primary);
 }
 
 /* LOGIN */

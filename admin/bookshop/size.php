@@ -89,12 +89,14 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                                         <td><?= htmlspecialchars($size['waist'] === null ? '-' : $size['waist']); ?></td>
                                         <td><?= htmlspecialchars($size['length'] === null ? '-' : $size['length']); ?></td>
                                         <td>
-                                            <form action="" method="POST" style="display:inline;" onsubmit="return showDeactivateConfirmDialog(event);">
-                                                <input type="hidden" name="product_size_id" value="<?= htmlspecialchars($size['size_id']); ?>">
-                                                <input type="hidden" name="action" value="deactivate_product_size">
-                                                <button type="submit" class="delete-category-btn"><i class="bi bi-x-square"></i></button>
-                                            </form>
-                                            <button type="button" class="edit-size-btn" data-size-id="<?= htmlspecialchars($size['size_id']); ?>"><i class="bi bi-pencil-square"></i></button>
+                                            <div class="actions">
+                                                <form action="" method="POST" style="display:inline;" onsubmit="return showDeactivateConfirmDialog(event);">
+                                                    <input type="hidden" name="product_size_id" value="<?= htmlspecialchars($size['size_id']); ?>">
+                                                    <input type="hidden" name="action" value="deactivate_product_size">
+                                                    <button type="submit" class="delete-category-btn"><i class="bi bi-x-square"></i></button>
+                                                </form>
+                                                <button type="button" class="edit-size-btn" data-size-id="<?= htmlspecialchars($size['size_id']); ?>"><i class="bi bi-pencil-square"></i></button>
+                                            </div>
                                         </td>
                                     </tr>
                                 <?php } ?>
@@ -116,7 +118,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                 <h1>Add Apparel Size</h1>
             </div>
             <div class="right">
-                <button class="cancel"><i class="bi bi-x-circle"></i></button>
+                <button class="actions cancel"><i class="bi bi-x-circle"></i></button>
             </div>
         </div>
         <form method="post">
@@ -153,9 +155,9 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                 </div>
             </div>
             <div class="controls">
-                <button type="button" class="btn btn-outline-gray cancel">Cancel</button>
-                <button type="reset" class="btn btn-outline-primary">Clear</button>
-                <button type="submit" name="submit" class="btn btn-primary">Publish</button>
+                <button type="button" class="cancel">Cancel</button>
+                <button type="reset" class="delete">Clear</button>
+                <button type="submit" name="submit" class="confirm">Publish</button>
             </div>
         </form>
     </dialog>

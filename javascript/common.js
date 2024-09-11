@@ -37,4 +37,21 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }
     }
+
+    const menuIcon = document.getElementById("menuIcon");
+    const nav = document.getElementById("nav");
+
+    if (menuIcon && nav) {
+        menuIcon.addEventListener("click", function () {
+            console.log('menuIcon clicked');
+            nav.classList.toggle("navactive");
+            console.log('nav class list:', nav.classList);
+        });
+
+        document.addEventListener("click", function (event) {
+            if (!nav.contains(event.target) && !menuIcon.contains(event.target)) {
+                nav.classList.remove("navactive");
+            }
+        });
+    }
 });

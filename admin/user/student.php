@@ -118,28 +118,31 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
 
 <body>
     <style>
-        .parent-result {
-            padding: 10px;
-            background-color: #f9f9f9;
+        #add-edit-search-results {
+            margin-top: 0.5rem;
+            width: 85%;
             border: 1px solid #ccc;
-            margin-bottom: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s ease, border-color 0.3s ease;
-            border-radius: 5px;
         }
 
-        .parent-result span {
+        .search-result {
+            padding: 10px;
+            background-color: #f9f9f9;
+            cursor: pointer;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+
+        .search-result span {
             font-size: 1rem;
             color: #333;
         }
 
-        .parent-result:hover {
+        .search-result:hover {
             background-color: #e6e6e6;
             border-color: #888;
         }
 
         @media screen and (max-width: 768px) {
-            .parent-result {
+            .search-result {
                 padding: 8px;
                 font-size: 0.9rem;
             }
@@ -213,19 +216,20 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
                 <div class="actions"><button class="cancel"><i class="bi bi-x-circle"></i></button></div>
             </div>
         </div>
-
         <form action="" method="post" enctype="multipart/form-data">
             <input type="hidden" name="existing_student_id" id="existing_student_id" value="">
-
             <div class="input-container">
                 <h2>Class<sup>*</sup></h2>
-                <div class="input-field">
-                    <select name="class_id" id="class_id" required>
+                <div class="select-field">
+                    <select class="select-box" name="class_id" id="class_id" required>
                         <option value="">Select Class</option>
                         <?php foreach ($all_classes as $class) : ?>
                             <option value="<?= htmlspecialchars($class['class_id']) ?>"><?= htmlspecialchars($class['class_name']) ?></option>
                         <?php endforeach; ?>
                     </select>
+                    <div class="icon-container">
+                        <i class="bi bi-caret-down-fill"></i>
+                    </div>
                 </div>
                 <p>Please select the student's class.</p>
             </div>
@@ -251,7 +255,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
                 <div class="input-field">
                     <input type="text" id="search-parent" placeholder="Search by parent name or ID">
                 </div>
-                <div id="parent-search-results">
+                <div id="add-edit-search-results">
                 </div>
             </div>
 
@@ -267,8 +271,8 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
 
             <div class="input-container controls">
                 <button type="button" class="cancel">Cancel</button>
-                <button type="reset">Clear</button>
-                <button type="submit" name="submit">Publish</button>
+                <button type="reset" class="delete">Clear</button>
+                <button type="submit" class="confirm" name="submit">Publish</button>
             </div>
         </form>
     </dialog>
@@ -335,6 +339,33 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
             });
         });
 
+        function loadDefaultParents() {
+            fetch(`/mips/admin/ajax.php?action=get_default_parents`)
+                .then(response => response.json())
+                .then(parents => {
+                    let resultsContainer = document.getElementById('add-edit-search-results');
+                    resultsContainer.innerHTML = '';
+
+                    parents.forEach(parent => {
+                        let parentElement = document.createElement('div');
+                        parentElement.classList.add('search-result');
+                        parentElement.innerHTML = `<span>${parent.parent_id} - ${parent.parent_name}</span>`;
+                        parentElement.addEventListener('click', function() {
+                            document.getElementById('selected_parent_id').value = parent.parent_id;
+                            document.getElementById('search-parent').value = `${parent.parent_id} - ${parent.parent_name}`;
+                            resultsContainer.innerHTML = '';
+                        });
+                        resultsContainer.appendChild(parentElement);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching parent data:', error);
+                });
+        }
+
+        // 页面加载时加载默认家长列表
+        window.addEventListener('DOMContentLoaded', loadDefaultParents);
+
         document.getElementById('search-parent').addEventListener('input', function() {
             const query = this.value;
 
@@ -348,12 +379,12 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
                     })
                     .then(response => response.json())
                     .then(parents => {
-                        let resultsContainer = document.getElementById('parent-search-results');
+                        let resultsContainer = document.getElementById('add-edit-search-results');
                         resultsContainer.innerHTML = '';
 
                         parents.forEach(parent => {
                             let parentElement = document.createElement('div');
-                            parentElement.classList.add('parent-result');
+                            parentElement.classList.add('search-result');
                             parentElement.innerHTML = `<span>${parent.parent_id} - ${parent.parent_name}</span>`;
                             parentElement.addEventListener('click', function() {
                                 document.getElementById('selected_parent_id').value = parent.parent_id;

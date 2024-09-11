@@ -21,7 +21,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                 <div class="box-container">
                     <div class="box">
                         <div class="image-container">
-                            <a href="/mips/admin/deactivated/bookshop/deactivated-category.php"><img src="/mips/images/default_folder.png" alt="Deactivated Category"></a>
+                            <a href="/mips/admin/deactivated/bookshop/category.php"><img src="/mips/images/default_folder.png" alt="Deactivated Category"></a>
                         </div>
                         <div class="info-container">
                             <h3>Bookshop Category</h3>
@@ -29,7 +29,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                     </div>
                     <div class="box">
                         <div class="image-container">
-                            <a href="/mips/admin/deactivated/bookshop/deactivated-product.php"><img src="/mips/images/default_folder.png" alt="Deactivated Product"></a>
+                            <a href="/mips/admin/deactivated/bookshop/product.php"><img src="/mips/images/default_folder.png" alt="Deactivated Product"></a>
                         </div>
                         <div class="info-container">
                             <h3>Bookshop Product</h3>

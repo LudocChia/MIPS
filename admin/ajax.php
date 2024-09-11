@@ -80,6 +80,10 @@ switch ($action) {
         }
         break;
 
+    case 'get_default_parents':
+        echo $crud->get_default_parents();
+        break;
+
     case 'get_parent':
         if (isset($_POST['parent_id'])) {
             echo $crud->get_parent($_POST['parent_id']);
@@ -98,8 +102,10 @@ switch ($action) {
             isset($_POST['confirm_password']) &&
             isset($_POST['admin_id'])
         ) {
+            $parentId = $_POST['parent_id'] ?? null;
+
             echo $crud->save_parent(
-                $_POST['parent_id'],
+                $parentId,
                 $_POST['name'],
                 $_POST['email'],
                 $_POST['phone'],
@@ -378,6 +384,31 @@ switch ($action) {
             echo $crud->get_grade($_GET['grade_id']);
         } else {
             echo json_encode(['error' => 'Grade ID not provided']);
+        }
+        break;
+
+        // Event Functions
+    case 'get_event':
+        if (isset($_GET['event_id'])) {
+            echo $crud->get_event($_GET['event_id']);
+        } else {
+            echo json_encode(['error' => 'Event ID is required']);
+        }
+        break;
+
+    case 'save_event':
+        if (isset($_POST['event_id'], $_POST['name'], $_POST['time'], $_POST['place'], $_POST['date'], $_POST['description'])) {
+            echo $crud->save_event($_POST['event_id'], $_POST['name'], $_POST['time'], $_POST['place'], $_POST['date'], $_POST['description']);
+        } else {
+            echo json_encode(['error' => 'Missing required event data']);
+        }
+        break;
+
+    case 'delete_event':
+        if (isset($_POST['event_id'])) {
+            echo $crud->delete_event($_POST['event_id']);
+        } else {
+            echo json_encode(['error' => 'Event ID is required']);
         }
         break;
 

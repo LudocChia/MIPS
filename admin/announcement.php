@@ -162,7 +162,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                 <h1>Add New Announcement</h1>
             </div>
             <div class="right">
-                <button class="cancel"><i class="bi bi-x-circle"></i></button>
+                <div class="actions"><button class="cancel"><i class="bi bi-x-circle"></i></button></div>
             </div>
         </div>
         <form method="post" enctype="multipart/form-data">
@@ -219,6 +219,12 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                         console.error('Error fetching announcement data:', error);
                         alert('Failed to load announcement data.');
                     });
+            });
+        });
+
+        document.querySelectorAll('#add-edit-data .cancel').forEach(button => {
+            button.addEventListener('click', function() {
+                document.querySelector('#add-edit-data h1').textContent = "Add New Announcement";
             });
         });
     </script>
