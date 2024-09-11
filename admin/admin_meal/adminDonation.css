@@ -351,7 +351,8 @@
     display: flex;
     flex-direction: row;
     justify-content: flex-end;
-    margin-right: 20%;
+    margin-right: 0%;
+    margin-left: 65%;
     margin-bottom: 20px;
     font-size: 45px;
     color: rgb(203, 2, 2);}
@@ -541,11 +542,6 @@
     flex-direction: column;
     justify-content: flex-start;
 }
-.bigbox2 row{
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-}
 .bigbox2 #row1{
     margin-top: 20px;
 }
@@ -555,6 +551,40 @@
 }
 .bigbox2 #row1 i:hover{
     color: rgb(44, 118, 152);
+}
+.bigbox2 .mealBox{
+    margin-left: 20%;
+    margin-right: 20%;
+}
+.bigbox2 .mealBox row{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.bigbox2 .mealBox i{
+    font-size: 25px;
+}
+.bigbox2 .mealBox i:hover{
+    color: rgb(44, 118, 152);
+    cursor: pointer;
+}
+.bigbox2 .mealBox h3{
+    font-size: 30px;
+    color:#004e82;
+    margin-bottom: 5px;
+}
+.bigbox2 .mealBox p{
+    font-size: 20px;
+}
+.bigbox2 .row2{
+    margin-bottom: 50px;
+}
+.bigbox2 .row3 h3{
+    font-size: 30px;
+    color:#004e82;
+    margin-bottom: 5px;
+    margin-left: 20%;
+    margin-right: 20%;
 }
 
 /* .addEvent{
@@ -581,3 +611,5 @@
 .addMeal i:hover{
     color: #0052aa;
 }
+
+

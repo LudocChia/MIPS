@@ -244,7 +244,7 @@ if (isset($_GET['event_id']) && isset($_GET['meal_type_id'])) {
                     <p>Total donations received: 
                     <?= isset($donatorTotals[$meal['meal_id']]) ? htmlspecialchars($donatorTotals[$meal['meal_id']]) : '0'; ?>
                     sets
-                </p>
+                    </p>
                 </div>
             </a>
         <?php endforeach; ?>
