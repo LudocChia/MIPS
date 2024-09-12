@@ -21,6 +21,34 @@ class Action
         }
     }
 
+    private function check_email_exists($email, $table, $email_field, $id_field = null, $id_value = null)
+    {
+        $sql = "SELECT * FROM $table WHERE $email_field = :email";
+        if ($id_field && $id_value) {
+            $sql .= " AND $id_field != :id_value";
+        }
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':email', $email, PDO::PARAM_STR);
+        if ($id_field && $id_value) {
+            $stmt->bindParam(':id_value', $id_value, PDO::PARAM_STR);
+        }
+        $stmt->execute();
+
+        if ($stmt->rowCount() > 0) {
+            return json_encode(['error' => 'Email is already in use!']);
+        }
+
+        return json_encode(['success' => true]);
+    }
+
+    private function validate_password($password, $confirm_password)
+    {
+        if ($password !== $confirm_password) {
+            return json_encode(['error' => 'Passwords do not match!']);
+        }
+        return json_encode(['success' => true]);
+    }
+
     public function login($email, $password)
     {
         try {
@@ -88,8 +116,15 @@ class Action
 
     public function save_admin($admin_id, $admin_name, $admin_email, $admin_password, $confirm_password, $admin_type = 'admin')
     {
-        if ($admin_password !== $confirm_password) {
-            return json_encode(['error' => 'Passwords do not match!']);
+        // 调用 check_email_exists 函数时，传入 'admin_email' 作为字段名
+        $emailCheck = json_decode($this->check_email_exists($admin_email, 'Admin', 'admin_email', 'admin_id', $admin_id), true);
+        if (isset($emailCheck['error'])) {
+            return json_encode($emailCheck);
+        }
+
+        $passwordCheck = json_decode($this->validate_password($admin_password, $confirm_password), true);
+        if (isset($passwordCheck['error'])) {
+            return json_encode($passwordCheck);
         }
 
         $hashed_password = password_hash($admin_password, PASSWORD_DEFAULT);
@@ -118,6 +153,7 @@ class Action
 
         return $this->execute_statement($stmt);
     }
+
 
 
     // Parent Functions
@@ -155,8 +191,15 @@ class Action
 
     public function save_parent($parent_id, $parent_name, $parent_email, $parent_phone, $parent_password, $confirm_password, $admin_id)
     {
-        if ($parent_password !== $confirm_password) {
-            return json_encode(['error' => 'Passwords do not match!']);
+        // 调用 check_email_exists 函数时，传入 'parent_email' 作为字段名
+        $emailCheck = json_decode($this->check_email_exists($parent_email, 'Parent', 'parent_email', 'parent_id', $parent_id), true);
+        if (isset($emailCheck['error'])) {
+            return json_encode($emailCheck);
+        }
+
+        $passwordCheck = json_decode($this->validate_password($parent_password, $confirm_password), true);
+        if (isset($passwordCheck['error'])) {
+            return json_encode($passwordCheck);
         }
 
         $hashed_password = password_hash($parent_password, PASSWORD_DEFAULT);
@@ -637,29 +680,27 @@ class Action
     // Retrieve order data
     public function get_order($order_id)
     {
-        $sql = "
-            SELECT o.order_id, o.order_price, o.order_datetime, p.payment_status, p.payment_image,
-                   parent.parent_name
-            FROM Orders o
-            LEFT JOIN Payment p ON o.order_id = p.order_id
-            LEFT JOIN Parent_Student ps ON o.parent_student_id = ps.parent_student_id
-            LEFT JOIN Parent parent ON ps.parent_id = parent.parent_id
-            WHERE o.order_id = :order_id AND o.status = 0
-        ";
+        $sql = "SELECT o.order_id, o.order_price, o.order_datetime, p.payment_status, p.payment_image, parent.parent_name
+                FROM Orders o
+                LEFT JOIN Payment p ON o.order_id = p.order_id
+                LEFT JOIN Parent_Student ps ON o.parent_student_id = ps.parent_student_id
+                LEFT JOIN Parent parent ON ps.parent_id = parent.parent_id
+                WHERE o.order_id = :order_id AND o.status = 0";
 
         $stmt = $this->db->prepare($sql);
         $stmt->bindParam(':order_id', $order_id);
         $stmt->execute();
         $order = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        $sqlItems = "
-            SELECT oi.product_id, oi.product_quantity, oi.order_subtotal, 
-                   prod.product_name, prod_img.image_url AS product_image
-            FROM Order_Item oi
-            LEFT JOIN Product prod ON oi.product_id = prod.product_id
-            LEFT JOIN Product_Image prod_img ON prod.product_id = prod_img.product_id AND prod_img.sort_order = 1
-            WHERE oi.order_id = :order_id AND oi.status = 0
-        ";
+        $sqlItems = "SELECT oi.product_id, oi.product_quantity, oi.order_subtotal, prod.product_name, prod_img.image_url AS product_image,
+                        student.student_name, class.class_name
+                    FROM Order_Item oi
+                    LEFT JOIN Product prod ON oi.product_id = prod.product_id
+                    LEFT JOIN Product_Image prod_img ON prod.product_id = prod_img.product_id AND prod_img.sort_order = 1
+                    LEFT JOIN Order_Item_Student ois ON oi.order_item_id = ois.order_item_id
+                    LEFT JOIN Student student ON ois.student_id = student.student_id
+                    LEFT JOIN Class class ON student.class_id = class.class_id
+                    WHERE oi.order_id = :order_id AND oi.status = 0";
 
         $stmtItems = $this->db->prepare($sqlItems);
         $stmtItems->bindParam(':order_id', $order_id);
@@ -673,6 +714,7 @@ class Action
             return json_encode(['error' => 'Order not found']);
         }
     }
+
 
     // Product Functions
     public function deactivate_product($product_id)

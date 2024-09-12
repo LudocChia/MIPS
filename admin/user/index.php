@@ -45,24 +45,12 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
                         <table>
                             <thead>
                                 <tr>
-                                    <th>
-                                        <h3>Admin ID</h3>
-                                    </th>
-                                    <th>
-                                        <h3>Admin Name</h3>
-                                    </th>
-                                    <th>
-                                        <h3>Admin Email</h3>
-                                    </th>
-                                    <th>
-                                        <h3>Admin Register Date</h3>
-                                    </th>
-                                    <th>
-                                        <h3>Status</h3>
-                                    </th>
-                                    <th>
-                                        <h3>Actions</h3>
-                                    </th>
+                                    <th>Admin ID</th>
+                                    <th>Admin Name</th>
+                                    <th>Admin Email</th>
+                                    <th>Admin Register Date</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -98,16 +86,16 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
         </main>
     </div>
     <dialog id="add-edit-data">
-        <div class="title">
-            <div class="left">
-                <h1>Add New Admin</h1>
-            </div>
-            <div class="right">
-                <button class="cancel"><i class="bi bi-x-lg"></i></button>
-            </div>
-        </div>
-        <div id="alert-container"></div>
         <form id="admin-form-ajax" method="post">
+            <div class="title">
+                <div class="left">
+                    <h1>Add New Admin</h1>
+                </div>
+                <div class="right">
+                    <button class="actions cancel"><i class="bi bi-x-circle"></i></button>
+                </div>
+            </div>
+            <div id="alert-container"></div>
             <input type="hidden" name="admin_id" value="">
             <div class="input-container">
                 <h2>Admin Name<sup>*</sup></h2>
@@ -139,8 +127,8 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
             </div>
             <div class="controls">
                 <button type="button" class="cancel">Cancel</button>
-                <button type="reset">Clear</button>
-                <button type="submit" name="submit">Publish</button>
+                <button type="reset" class="delete">Clear</button>
+                <button type="submit" class="confirm" name="submit">Publish</button>
             </div>
         </form>
     </dialog>

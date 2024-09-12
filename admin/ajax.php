@@ -50,8 +50,10 @@ switch ($action) {
             isset($_POST['password']) &&
             isset($_POST['confirm_password'])
         ) {
+            $adminId = $_POST['admin_id'] ?? '';
+
             echo $crud->save_admin(
-                $_POST['admin_id'],
+                $adminId,
                 $_POST['name'],
                 $_POST['email'],
                 $_POST['password'],

@@ -36,21 +36,6 @@
     transition: all 300ms ease;
 }
 
-/* #delete-confirm-dialog {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    border-radius: 5px;
-    width: 450px;
-    background: #f2f2f2;
-    text-align: center;
-    align-items: center;
-    padding: var(--padding-1);
-    border: 1px solid #b3b3b3;
-    box-shadow: var(--box-shadow);
-} */
-
 .text-muted {
     color: var(--color-gray-light);
 }
@@ -646,18 +631,6 @@ main .recent-orders a {
         grid-template-columns: 1fr;
     }
 
-    .login-form .container,
-    .set-new-password-form .container {
-        width: 100%;
-    }
-
-    .login-form .wrapper,
-    .set-new-password-form .wrapper {
-        width: 100%;
-        /* margin: 0 auto; */
-    }
-
-
     .main,
     .two-columns {
         grid-template-columns: 1fr;
@@ -765,6 +738,17 @@ main .recent-orders a {
         z-index: 2;
         box-shadow: 0 1rem 1rem var(--color-light);
     } */
+
+    .login-form .container,
+    .set-new-password-form .container {
+        width: 100%;
+    }
+
+    .login-form .wrapper,
+    .set-new-password-form .wrapper {
+        width: 100%;
+        /* margin: 0 auto; */
+    }
 
     .container .right .profile .info {
         display: none;
