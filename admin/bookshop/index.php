@@ -201,7 +201,7 @@ if (isset($_POST['submit'])) {
         }
 
         $pdo->commit();
-        header('Location: /mips/admin/bookshop/product.php');
+        header('Location: /mips/admin/bookshop/');
         exit();
     } catch (Exception $e) {
         $pdo->rollBack();

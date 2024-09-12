@@ -272,15 +272,17 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                 </table>
                 <h2>Payment Receipt</h2>
                 <img id="payment-image" src="" alt="Payment Image">
-                <div class="order-items">
-                    <h2>Order Items</h2>
-                    <table>
+                <h2>Order Items</h2>
+                <div class="dialog-table-container">
+                    <table class="add-edit-table">
                         <thead>
                             <tr>
                                 <th>Product ID</th>
                                 <th>Product Name</th>
                                 <th>Quantity</th>
                                 <th>Subtotal</th>
+                                <th>Student</th>
+                                <th>Student Class</th>
                             </tr>
                         </thead>
                         <tbody id="order-items-list">
@@ -371,6 +373,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                                 document.getElementById('order-amount').textContent = `MYR ${data.order_price}`;
                                 document.getElementById('order-status').textContent = data.payment_status;
                                 document.getElementById('payment-image').src = '/mips/uploads/receipts/' + data.payment_image || '/mips/images/default_image_path.png';
+                                document.getElementById('')
 
                                 const itemsList = document.getElementById('order-items-list');
                                 itemsList.innerHTML = '';
@@ -382,9 +385,12 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                                         <td>${item.product_name}</td>
                                         <td>${item.product_quantity}</td>
                                         <td>MYR ${item.order_subtotal}</td>
-                                        `;
+                                        <td>${item.student_name}</td>
+                                        <td>${item.class_name}</td> <!-- Display student's class -->
+                                    `;
                                     itemsList.appendChild(row);
                                 });
+
 
                                 document.getElementById('detail-dialog').showModal();
                             } else {

@@ -38,7 +38,7 @@ function isActive($targetPage, $currentPage)
                             <h5>Product Size</h5>
                         </a>
                     </li>
-                    <li><a href="/mips/admin/bookshop/product.php" class="<?= isActive('/mips/admin/bookshop/product.php', $currentPage); ?>"><i class="bi bi-box-seam-fill"></i>
+                    <li><a href="/mips/admin/bookshop/" class="<?= isActive('/mips/admin/bookshop/', $currentPage); ?>"><i class="bi bi-box-seam-fill"></i>
                             <h5>All Product</h5>
                         </a>
                     </li>
@@ -83,7 +83,7 @@ function isActive($targetPage, $currentPage)
                 </a>
                 <ul class="user-show" style="display: <?= strpos($currentPage, 'admin') !== false || strpos($currentPage, 'teacher') !== false || strpos($currentPage, 'parent') !== false ? 'block' : 'none'; ?>">
                     <li>
-                        <a href="/mips/admin/user/admin.php" class="<?= isActive('/mips/admin/user/admin.php', $currentPage); ?>"><i class="bi bi-person-fill-gear"></i>
+                        <a href="/mips/admin/user/" class="<?= isActive('/mips/admin/user/', $currentPage); ?>"><i class="bi bi-person-fill-gear"></i>
                             <h5>All Admin</h5>
                         </a>
                     </li>

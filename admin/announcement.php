@@ -190,8 +190,8 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
             </div>
             <div class="controls">
                 <button type="button" class="cancel">Cancel</button>
-                <button type="reset">Clear</button>
-                <button type="submit" name="submit">Publish</button>
+                <button type="reset" class="delete">Clear</button>
+                <button type="submit" class="confirm" name="submit">Publish</button>
             </div>
         </form>
     </dialog>

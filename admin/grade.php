@@ -124,15 +124,15 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
         </main>
     </div>
     <dialog id="add-edit-data">
-        <div class="title">
-            <div class="left">
-                <h1>Add New Grade</h1>
-            </div>
-            <div class="right">
-                <button class="cancel"><i class="bi bi-x-circle"></i></button>
-            </div>
-        </div>
         <form action="" method="post" enctype="multipart/form-data">
+            <div class="title">
+                <div class="left">
+                    <h1>Add New Grade</h1>
+                </div>
+                <div class="right">
+                    <button class="cancel"><i class="bi bi-x-circle"></i></button>
+                </div>
+            </div>
             <input type="hidden" name="grade_id" value="">
             <div class="input-container">
                 <h2>Grade Name<sup>*</sup></h2>
@@ -157,7 +157,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
             </div>
             <div class="input-container controls">
                 <button type="button" class="cancel">Cancel</button>
-                <button type="reset" class="clear">Clear</button>
+                <button type="reset" class="delete">Clear</button>
                 <button type="submit" class="confirm">Publish</button>
             </div>
         </form>

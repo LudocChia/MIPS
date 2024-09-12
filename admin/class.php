@@ -121,15 +121,15 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
         </main>
     </div>
     <dialog id="add-edit-data">
-        <div class="title">
-            <div class="left">
-                <h1>Add New Class</h1>
+        <form method="post">
+            <div class="title">
+                <div class="left">
+                    <h1>Add New Class</h1>
+                </div>
+                <div class="right">
+                    <button class="actions cancel"><i class="bi bi-x-circle"></i></button>
+                </div>
             </div>
-            <div class="right">
-                <button class="cancel"><i class="bi bi-x-circle"></i></button>
-            </div>
-        </div>
-        <form action="" method="post">
             <input type="hidden" name="class_id" value="">
             <div class="input-container">
                 <h2>Class Name<sup>*</sup></h2>
@@ -140,20 +140,23 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
             </div>
             <div class="input-container">
                 <h2>Grade<sup>*</sup></h2>
-                <div class="input-field">
-                    <select name="grade_id" required>
+                <div class="select-field">
+                    <select class="select-box" name="grade_id" required>
                         <option value="">Select Grade</option>
                         <?php foreach ($all_grades as $grade) : ?>
                             <option value="<?= htmlspecialchars($grade['grade_id']) ?>"><?= htmlspecialchars($grade['grade_name']) ?></option>
                         <?php endforeach; ?>
                     </select>
+                    <div class="icon-container">
+                        <i class="bi bi-caret-down-fill"></i>
+                    </div>
                 </div>
                 <p>Please select the grade.</p>
             </div>
             <div class="input-container controls">
                 <button type="button" class="cancel">Cancel</button>
-                <button type="reset">Clear</button>
-                <button type="submit" name="submit">Publish</button>
+                <button type="reset" class="delete">Clear</button>
+                <button type="submit" class="confirm" name="submit">Publish</button>
             </div>
         </form>
     </dialog>

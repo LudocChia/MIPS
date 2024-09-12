@@ -61,16 +61,17 @@ function handleFileUpload($file, $studentId)
         return null;
     }
 }
-
 if (isset($_POST["submit"])) {
     $studentId = $_POST["student_id"];
     $classId = $_POST["class_id"];
     $name = $_POST["name"];
     $parentId = $_POST['selected_parent_id'] ?? null;
-    $relationship = 'father';
+    $relationship = $_POST['relationship'] ?? 'father';
     $existingStudentId = isset($_POST['existing_student_id']) ? $_POST['existing_student_id'] : null;
 
     try {
+        $pdo->beginTransaction();
+
         $studentImage = handleFileUpload($_FILES['student_image'], $studentId);
 
         if ($existingStudentId) {
@@ -92,21 +93,51 @@ if (isset($_POST["submit"])) {
         $stmt->execute();
 
         if ($parentId) {
-            $sql = "INSERT INTO Parent_Student (parent_student_id, parent_id, student_id, relationship) 
-                    VALUES (:parent_student_id, :parent_id, :student_id, :relationship)
-                    ON DUPLICATE KEY UPDATE parent_id = :parent_id, relationship = :relationship";
-            $stmt = $pdo->prepare($sql);
-            $parentStudentId = uniqid('PS');
-            $stmt->bindParam(':parent_student_id', $parentStudentId);
-            $stmt->bindParam(':parent_id', $parentId);
-            $stmt->bindParam(':student_id', $studentId);
-            $stmt->bindParam(':relationship', $relationship);
-            $stmt->execute();
+            $sqlCheck = "SELECT parent_student_id FROM Parent_Student WHERE student_id = :student_id";
+            $stmtCheck = $pdo->prepare($sqlCheck);
+            $stmtCheck->bindParam(':student_id', $studentId);
+            $stmtCheck->execute();
+            $oldParentStudent = $stmtCheck->fetch(PDO::FETCH_ASSOC);
+
+            $newParentStudentId = uniqid('PS');
+
+            $sqlInsert = "INSERT INTO Parent_Student (parent_student_id, parent_id, student_id, relationship) 
+                          VALUES (:parent_student_id, :parent_id, :student_id, :relationship)";
+            $stmtInsert = $pdo->prepare($sqlInsert);
+            $stmtInsert->bindParam(':parent_student_id', $newParentStudentId);
+            $stmtInsert->bindParam(':parent_id', $parentId);
+            $stmtInsert->bindParam(':student_id', $studentId);
+            $stmtInsert->bindParam(':relationship', $relationship);
+            $stmtInsert->execute();
+
+            if ($oldParentStudent) {
+                $oldParentStudentId = $oldParentStudent['parent_student_id'];
+
+                $sqlUpdateOrders = "UPDATE Orders SET parent_student_id = :new_parent_student_id WHERE parent_student_id = :old_parent_student_id";
+                $stmtUpdateOrders = $pdo->prepare($sqlUpdateOrders);
+                $stmtUpdateOrders->bindParam(':new_parent_student_id', $newParentStudentId);
+                $stmtUpdateOrders->bindParam(':old_parent_student_id', $oldParentStudentId);
+                $stmtUpdateOrders->execute();
+
+                $sqlUpdatePayment = "UPDATE Payment SET parent_student_id = :new_parent_student_id WHERE parent_student_id = :old_parent_student_id";
+                $stmtUpdatePayment = $pdo->prepare($sqlUpdatePayment);
+                $stmtUpdatePayment->bindParam(':new_parent_student_id', $newParentStudentId);
+                $stmtUpdatePayment->bindParam(':old_parent_student_id', $oldParentStudentId);
+                $stmtUpdatePayment->execute();
+
+                $sqlDeleteOldParent = "DELETE FROM Parent_Student WHERE parent_student_id = :old_parent_student_id";
+                $stmtDelete = $pdo->prepare($sqlDeleteOldParent);
+                $stmtDelete->bindParam(':old_parent_student_id', $oldParentStudentId);
+                $stmtDelete->execute();
+            }
         }
+
+        $pdo->commit();
 
         header('Location: /mips/admin/user/student.php');
         exit();
     } catch (PDOException $e) {
+        $pdo->rollBack();
         echo "<script>alert('Database error: " . $e->getMessage() . "');</script>";
     }
 }
@@ -117,37 +148,6 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
 ?>
 
 <body>
-    <style>
-        #add-edit-search-results {
-            margin-top: 0.5rem;
-            width: 85%;
-            border: 1px solid #ccc;
-        }
-
-        .search-result {
-            padding: 10px;
-            background-color: #f9f9f9;
-            cursor: pointer;
-            transition: background-color 0.3s ease, border-color 0.3s ease;
-        }
-
-        .search-result span {
-            font-size: 1rem;
-            color: #333;
-        }
-
-        .search-result:hover {
-            background-color: #e6e6e6;
-            border-color: #888;
-        }
-
-        @media screen and (max-width: 768px) {
-            .search-result {
-                padding: 8px;
-                font-size: 0.9rem;
-            }
-        }
-    </style>
     <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_header.php"; ?>
     <div class="container">
         <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_sidebar.php"; ?>
@@ -208,15 +208,15 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
     </div>
 
     <dialog id="add-edit-data">
-        <div class="title">
-            <div class="left">
-                <h1>Add New Student</h1>
+        <form method="post" enctype="multipart/form-data">
+            <div class="title">
+                <div class="left">
+                    <h1>Add New Student</h1>
+                </div>
+                <div class="right">
+                    <div class="actions"><button class="cancel"><i class="bi bi-x-circle"></i></button></div>
+                </div>
             </div>
-            <div class="right">
-                <div class="actions"><button class="cancel"><i class="bi bi-x-circle"></i></button></div>
-            </div>
-        </div>
-        <form action="" method="post" enctype="multipart/form-data">
             <input type="hidden" name="existing_student_id" id="existing_student_id" value="">
             <div class="input-container">
                 <h2>Class<sup>*</sup></h2>
@@ -258,9 +258,21 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
                 <div id="add-edit-search-results">
                 </div>
             </div>
-
+            <div class="input-container">
+                <h2>Relationship<sup>*</sup></h2>
+                <div class="select-field">
+                    <select class="select-box" name="relationship" id="relationship" required>
+                        <option value="father">Father</option>
+                        <option value="mother">Mother</option>
+                        <option value="guardian">Guardian</option>
+                    </select>
+                    <div class="icon-container">
+                        <i class="bi bi-caret-down-fill"></i>
+                    </div>
+                </div>
+                <p>Please select the relationship between the student and the parent.</p>
+            </div>
             <input type="hidden" name="selected_parent_id" id="selected_parent_id">
-
             <div class="input-container">
                 <h2>Student Image<sup>*</sup></h2>
                 <div class="input-field">
@@ -268,7 +280,6 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
                 </div>
                 <p>Please upload an image for the student.</p>
             </div>
-
             <div class="input-container controls">
                 <button type="button" class="cancel">Cancel</button>
                 <button type="reset" class="delete">Clear</button>

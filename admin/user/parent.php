@@ -46,27 +46,13 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
                         <table>
                             <thead>
                                 <tr>
-                                    <th>
-                                        <h3>Parent ID</h3>
-                                    </th>
-                                    <th>
-                                        <h3>Parent Name</h3>
-                                    </th>
-                                    <th>
-                                        <h3>Parent Email</h3>
-                                    </th>
-                                    <th>
-                                        <h3>Parent Phone</h3>
-                                    </th>
-                                    <th>
-                                        <h3>Register Date</h3>
-                                    </th>
-                                    <th>
-                                        <h3>Status</h3>
-                                    </th>
-                                    <th>
-                                        <h3>Actions</h3>
-                                    </th>
+                                    <th>Parent ID</th>
+                                    <th>Parent Name</th>
+                                    <th>Parent Email</th>
+                                    <th>Parent Phone</th>
+                                    <th>Register Date</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -77,7 +63,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
                                         <td><?php echo htmlspecialchars($parent['parent_email']); ?></td>
                                         <td style="text-align: center;"><?php echo htmlspecialchars($parent['parent_phone']) ? htmlspecialchars($parent['parent_phone']) : '-'; ?></td>
                                         <td><?php echo htmlspecialchars($parent['created_at']); ?></td>
-                                        <td><?php echo getStatusLabel($parent['status']); ?></td>
+                                        <td style="text-align: center;"><?php echo getStatusLabel($parent['status']); ?></td>
                                         <td>
                                             <div class="actions">
                                                 <form action="" method="POST" style="display:inline;" onsubmit="return showDeactivateConfirmDialog(event);">
@@ -103,17 +89,17 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
         </main>
     </div>
     <dialog id="add-edit-data">
-        <div class="title">
-            <div class="left">
-                <h1>Add New Parent</h1>
-            </div>
-            <div class="right">
-                <button class="actions cancel"><i class="bi bi-x-circle"></i></button>
-            </div>
-        </div>
-        <div id="alert-container"></div>
         <form id="parent-form-ajax" method="post">
-            <input type="text" name="parent_id" value="">
+            <div class="title">
+                <div class="left">
+                    <h1>Add New Parent</h1>
+                </div>
+                <div class="right">
+                    <button class="actions cancel"><i class="bi bi-x-circle"></i></button>
+                </div>
+            </div>
+            <div id="alert-container"></div>
+            <input type="hidden" name="parent_id" value="">
             <div class="input-container">
                 <h2>Parent Name<sup>*</sup></h2>
                 <div class="input-field">
