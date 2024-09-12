@@ -253,11 +253,14 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
             <div class="input-container">
                 <h2>Search Parent</h2>
                 <div class="input-field">
-                    <input type="text" id="search-parent" placeholder="Search by parent name or ID">
+                    <input type="text" id="search-parent" placeholder="Search by parent name or ID" value="<?= isset($parentId) ? htmlspecialchars($selected_parent_name) : '' ?>">
                 </div>
                 <div id="add-edit-search-results">
+                    <!-- Search results will be appended here -->
                 </div>
             </div>
+            <input type="hidden" name="selected_parent_id" id="selected_parent_id" value="<?= isset($parentId) ? htmlspecialchars($parentId) : '' ?>">
+
             <div class="input-container">
                 <h2>Relationship<sup>*</sup></h2>
                 <div class="select-field">
@@ -374,7 +377,6 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
                 });
         }
 
-        // 页面加载时加载默认家长列表
         window.addEventListener('DOMContentLoaded', loadDefaultParents);
 
         document.getElementById('search-parent').addEventListener('input', function() {

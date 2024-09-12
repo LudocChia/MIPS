@@ -14,5 +14,4 @@
     <link rel="stylesheet" href="/mips/css/base.css">
     <link rel="stylesheet" href="/mips/css/common.css">
     <link rel="stylesheet" href="/mips/css/customer.css">
-    <link rel="stylesheet" href="/mips/admin/admin_meal/adminDonation.css">
 </head>

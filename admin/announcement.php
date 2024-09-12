@@ -157,15 +157,15 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
         </main>
     </div>
     <dialog id="add-edit-data">
-        <div class="title">
-            <div class="left">
-                <h1>Add New Announcement</h1>
-            </div>
-            <div class="right">
-                <div class="actions"><button class="cancel"><i class="bi bi-x-circle"></i></button></div>
-            </div>
-        </div>
         <form method="post" enctype="multipart/form-data">
+            <div class="title">
+                <div class="left">
+                    <h1>Add New Announcement</h1>
+                </div>
+                <div class="right">
+                    <div class="actions"><button class="cancel"><i class="bi bi-x-circle"></i></button></div>
+                </div>
+            </div>
             <input type="hidden" name="announcement_id" value="">
             <div class="input-container">
                 <h2>Announcement Title<sup>*</sup></h2>

@@ -59,6 +59,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function deleteSelectedItems(cartItemIds) {
+        console.log(cartItemIds);
         fetchData('/mips/ajax.php?action=delete_selected', 'POST', {
             cart_item_ids: cartItemIds.join(',')
         }).then(result => {
@@ -116,7 +117,7 @@ document.addEventListener('DOMContentLoaded', function () {
                             </td>
                             <td class="product-total">RM ${totalPriceItem}</td>
                             <td class="child-selection">${childrenHtml}</td>
-                            <td class="product-action">
+                            <td class="actions">
                                 <a href="/mips/item.php?pid=${item.product_id}"><button class="details" data-cart-item-id="${item.cart_item_id}"><i class="bi bi-info-circle-fill"></i></button></a>
                                 <button class="delete" data-cart-item-id="${item.cart_item_id}"><i class="bi bi-trash3-fill"></i></button>
                             </td>

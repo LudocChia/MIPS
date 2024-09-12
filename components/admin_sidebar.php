@@ -7,8 +7,6 @@ function isActive($targetPage, $currentPage)
     return $currentPath === $targetPath ? 'active' : '';
 }
 
-
-
 ?>
 <aside>
     <div class="actions">

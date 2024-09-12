@@ -213,15 +213,15 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/customer_header.php"; ?>
     </section>
 <?php endif; ?>
 <dialog id="add-edit-data">
-    <div class="title">
-        <div class="right">
-            <h1>Purchase Product</h1>
+    <form method="post" enctype="multipart/form-data">
+        <div class="title">
+            <div class="right">
+                <h1>Purchase Product</h1>
+            </div>
+            <div class="left">
+                <button class="actions cancel"><i class="bi bi-x-circle"></i>
+            </div>
         </div>
-        <div class="left">
-            <button class="cancel"><i class="bi bi-x-circle"></i>
-        </div>
-    </div>
-    <form action="" method="post" enctype="multipart/form-data">
         <input type="hidden" name="product_id" id="product-id" value="">
         <input type="hidden" name="size_id" id="size-id" value="">
         <input type="hidden" name="product_price" id="product-price" value="">
@@ -291,8 +291,8 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/customer_header.php"; ?>
         </div>
         <div class="input-container controls">
             <button value="cancel" class="cancel">Cancel</button>
-            <button type="reset">Clear</button>
-            <button type="submit" name="submit">Purchase</button>
+            <button type="reset" class="delete">Clear</button>
+            <button type="submit" class="confirm" name="submit">Purchase</button>
         </div>
     </form>
 </dialog>
@@ -438,6 +438,8 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/customer_header.php"; ?>
                 }
                 sizeId = selectedSizeButton.dataset.sizeId;
             }
+
+            console.log(sizeId);
 
             const productId = button.dataset.productId;
             const qty = document.getElementById('qty').value;
