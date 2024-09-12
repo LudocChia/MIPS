@@ -1,8 +1,12 @@
 <?php
 function isActive($targetPage, $currentPage)
 {
-    return $currentPage === $targetPage ? 'active' : '';
+    $targetPath = parse_url($targetPage, PHP_URL_PATH);
+    $currentPath = parse_url($currentPage, PHP_URL_PATH);
+
+    return $currentPath === $targetPath ? 'active' : '';
 }
+
 
 
 ?>
