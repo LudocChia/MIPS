@@ -568,6 +568,14 @@
     color: rgb(44, 118, 152);
     cursor: pointer;
 }
+.bigbox2 .mealBox #delete{
+    font-size: 25px;
+    color:rgb(203, 2, 2) ;
+}
+.bigbox2 .mealBox #delete:hover{
+    color:rgba(203, 2, 2, 0.675) ;
+    cursor: pointer;
+}
 .bigbox2 .mealBox h3{
     font-size: 30px;
     color:#004e82;
@@ -610,6 +618,15 @@
 }
 .addMeal i:hover{
     color: #0052aa;
+}
+#donatorBox{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+}
+#tableRow{
+    flex-direction: column;
+    justify-content: flex-start;
 }
 
 

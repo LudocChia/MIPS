@@ -86,7 +86,7 @@ if (isset($_GET['event_id']) && isset($_GET['meal_type_id'])) {
                 // echo '<hr>';
             }
         } else {
-            echo '<p>No donators found for this meal type.</p>';
+            // echo '<p>No donators found for this meal type.</p>';
         }
 } else {
     // Handle the case where the parameters are not set
@@ -149,7 +149,7 @@ if (isset($_GET['event_id']) && isset($_GET['meal_type_id'])) {
                     </row>  
                     <row>                  
                         <p><?= htmlspecialchars($meal['sets']) ?> set needed</p>
-                        <i class='bx bx-message-square-x'>Delete</i>
+                        <i class='bx bx-message-square-x' id="delete">Delete</i>
                     </row>
                     <p><?= htmlspecialchars($meal['person_per_set']) ?> person per set</p>
                     <p>Total donations received: 
@@ -170,12 +170,12 @@ if (isset($_GET['event_id']) && isset($_GET['meal_type_id'])) {
                                 <p><strong>Donator_ID:</strong>  <?=htmlspecialchars($donator['donator_id'])?></p>
                                 <p><strong>Name:</strong> <?=htmlspecialchars($donator['parent_name'])?> </p>
                                 <p><Strong>Time:</Strong> <?=htmlspecialchars($donator['date'])?></p>
-                                <p><Strong>Meal Name:</Strong> <?=htmlspecialchars($donator['meal_name'])?> </p>
+                                <!-- <p><Strong>Meal Name:</Strong> <?=htmlspecialchars($donator['meal_name'])?> </p> -->
                                 <p><strong>Quantity:</strong> <?=htmlspecialchars($donator['p_set'])?> </p>
                             </div>
                     <?php endforeach; ?>
                 <?php else: ?>
-                    <p id="nRecord">No meals for now.</p>
+                    <p id="nRecord">No donators for now.</p>
                 <?php endif; ?>
             </table>
         </column>

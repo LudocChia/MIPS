@@ -170,7 +170,7 @@
                 <textarea id="desc" name="Desc" rows="4" cols="5" required></textarea>
             </div>
             <div>
-                <label for="pic">Picture :</label>
+                <label for="pic">Picture (Work in Progress) :</label>
                 <input type="file" id="pic" name="Pic">
             </div>
             <div>
