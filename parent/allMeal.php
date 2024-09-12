@@ -98,7 +98,7 @@ if (isset($_GET['event_id']) && isset($_GET['meal_type_id'])) {
         $current_date = date('Y-m-d H:i:s');
 
         // Debug: Output the current date and time
-        echo $current_date;  
+            // echo $current_date;  
 
         // Generate event_meal_id only once
         $event_meal_id = $meal['event_meal_id'];

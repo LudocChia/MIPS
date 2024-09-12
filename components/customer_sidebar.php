@@ -22,7 +22,7 @@ function isActive($pageName, $currentPage)
                 </a>
             </li>
             <li>
-                <a href="/mips/purchase.php" class="<?= isActive('donation.php', $currentPage); ?>"><i class="bi bi-wallet"></i></i>
+                <a href="/mips/parent/donationHistory.php" class="<?= isActive('donation.php', $currentPage); ?>"><i class="bi bi-wallet"></i></i>
                     <h6>My Donation</h6>
                 </a>
             </li>
