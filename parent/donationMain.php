@@ -3,7 +3,7 @@
     include "../components/db_connect.php";
     // Check if user is logged in as parent
     if (!isset($_SESSION['user_id'])) {
-        header('Location: /mips/index.php');
+        header('Location: /mips/login.php');
         exit();
     }
 

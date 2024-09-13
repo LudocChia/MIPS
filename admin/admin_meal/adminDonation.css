@@ -553,8 +553,8 @@
     color: rgb(44, 118, 152);
 }
 .bigbox2 .mealBox{
-    margin-left: 20%;
-    margin-right: 20%;
+    margin-left: 16%;
+    margin-right: 16%;
 }
 .bigbox2 .mealBox row{
     display: flex;
@@ -586,6 +586,19 @@
 }
 .bigbox2 .row2{
     margin-bottom: 50px;
+}
+.bigbox2 .row3 .donatorTable{
+    margin-left: 15%;
+    margin-right: 15%;
+}
+.donatorTable th{
+    font-size: 18px;
+}
+/* #tableRow{
+    border-bottom: 2px solid rgba(0, 0, 0, 0.226);
+} */
+#tableData p{
+    font-size: 16px;
 }
 .bigbox2 .row3 h3{
     font-size: 30px;

@@ -59,16 +59,14 @@ if (isset($_GET['event_id']) && isset($_GET['meal_type_id'])) {
 
         // Prepare and execute the query to search for donators based on event_meal_id
         $event_meal_id = $meal['event_meal_id'];
-        $stmt2 = $pdo->prepare("SELECT * FROM `donator` 
-        INNER JOIN `parent` ON donator.parent_id = parent.parent_id
-        INNER JOIN `meals` ON donator.meal_id = meals.meal_id
-        INNER JOIN `event_meal` ON donator.event_meal_id = event_meal.event_meal_id
-        WHERE event_meal.event_id = :event_id AND event_meal.meal_type_id = :meal_type_id AND meals.meal_id = :meal_id");
+        $stmt2 = $pdo->prepare("SELECT * FROM `event_meal` 
+        INNER JOIN `meal_type` ON event_meal.meal_type_id = meal_type.meal_type_id
+        INNER JOIN `meals` ON event_meal.event_meal_id = meals.event_meal_id
+        INNER JOIN `event` ON event_meal.event_id = event.event_id 
+        INNER JOIN `donator` ON event_meal.event_meal_id = donator.event_meal_id 
+        ");
 
-        // Bind the parameters
-        $stmt2->bindParam(':meal_id', $meal_id);
-        $stmt2->bindParam(':event_id', $event_id);
-        $stmt2->bindParam(':meal_type_id', $meal_type_id);
+
         $stmt2->execute();
 
         $donators = $stmt2->fetchAll(PDO::FETCH_ASSOC);
@@ -160,24 +158,49 @@ if (isset($_GET['event_id']) && isset($_GET['meal_type_id'])) {
             <?php else: ?>
                 <p id="nRecord">No meals for now.</p>
             <?php endif; ?>
-            </div>
+        </div>
         <column class="row3">
                 <h3>Donation History</h3>
-            <table>
-                <?php if (!empty($donators)): ?>
-                    <?php foreach ($donators as $donator): ?>
-                            <div class="mealBox">
-                                <p><strong>Donator_ID:</strong>  <?=htmlspecialchars($donator['donator_id'])?></p>
-                                <p><strong>Name:</strong> <?=htmlspecialchars($donator['parent_name'])?> </p>
-                                <p><Strong>Time:</Strong> <?=htmlspecialchars($donator['date'])?></p>
-                                <!-- <p><Strong>Meal Name:</Strong> <?=htmlspecialchars($donator['meal_name'])?> </p> -->
-                                <p><strong>Quantity:</strong> <?=htmlspecialchars($donator['p_set'])?> </p>
-                            </div>
-                    <?php endforeach; ?>
-                <?php else: ?>
-                    <p id="nRecord">No donators for now.</p>
-                <?php endif; ?>
-            </table>
+                <div class="donatorTable">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Donator ID</th>
+                                <th>Event</th>
+                                <th>Time</th>
+                                <th>Meal Name</th>
+                                <th>Quantity</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        <?php if (!empty($donators)): ?>
+                            <?php foreach ($donators as $donator): ?>
+                                    <div class="donatorBox">
+                                        <tr id="tableRow">
+                                            <td id="tableData">
+                                                <p>  <?=htmlspecialchars($donator['donator_id'])?></p>
+                                            </td>
+                                            <td id="tableData">
+                                                <p> <?=htmlspecialchars($donator['name'])?> </p>
+                                            </td>
+                                            <td id="tableData">
+                                                <p><?=htmlspecialchars($donator['date'])?></p>
+                                            </td>
+                                            <td id="tableData">
+                                                <p> <?=htmlspecialchars($donator['meal_name'])?> </p>
+                                            </td>
+                                            <td id="tableData">
+                                                <p> <?=htmlspecialchars($donator['p_set'])?> </p>
+                                            </td>
+                                        </tr>
+                                    </div>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <p id="nRecord">No donators for now.</p>
+                        <?php endif; ?>
+                        </tbody>
+                    </table>
+                </div>
         </column>
 
     </div>
