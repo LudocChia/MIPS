@@ -1,63 +1,65 @@
 <?php
-    session_start();
-    include "../../components/db_connect.php";
-    if (!isset($_SESSION['admin_id'])) {
-        header('Location: /mips/admin/login.php');
-        exit();
+session_start();
+include "../../components/db_connect.php";
+if (!isset($_SESSION['user_id'])) {
+    header('Location: /mips/admin/login.php');
+    exit();
+}
+
+$stmt = $pdo->query("SELECT * FROM `event` where DATE(date) > DATE(now())");
+$rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+try {
+    function generateID()
+    {
+        return uniqid(); // Function to generate a unique ID
     }
+    // Check if form data is submitted
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        // Get the form values
+        $id = generateID();
+        $name = $_POST['Name'];
+        $place = $_POST['Place'];
+        $time = $_POST['Time'];
+        $date = $_POST['Date'];
+        $desc = $_POST['Desc'];
+        $pic = $_POST['Pic'];
 
-    $stmt = $pdo->query("SELECT * FROM `event` where DATE(date) > DATE(now())");
-    $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-    try {
-        function generateID() {
-            return uniqid(); // Function to generate a unique ID
-        }    
-        // Check if form data is submitted
-        if ($_SERVER["REQUEST_METHOD"] == "POST") {
-            // Get the form values
-            $id = generateID();
-            $name = $_POST['Name'];
-            $place = $_POST['Place'];
-            $time = $_POST['Time'];
-            $date = $_POST['Date'];
-            $desc = $_POST['Desc'];
-            $pic = $_POST['Pic'];
-    
-            // Prepare SQL statement to insert data
-            $sql = "INSERT INTO `event` (`event_id`, `name`, `time`, `date`, `place`, `description`, `picture`) 
+        // Prepare SQL statement to insert data
+        $sql = "INSERT INTO `event` (`event_id`, `name`, `time`, `date`, `place`, `description`, `picture`) 
                                 VALUES (:id, :name, :time, :date, :place, :description, :picture)";
-    
-            // Prepare the statement
-            $stmt = $pdo->prepare($sql);
-    
-            // Bind parameters
-            $stmt->bindParam(':id', $id);
-            $stmt->bindParam(':name', $name);
-            $stmt->bindParam(':time', $time);
-            $stmt->bindParam(':date', $date);
-            $stmt->bindParam(':place', $place);
-            $stmt->bindParam(':description', $desc);
-            $stmt->bindParam(':picture', $pic);
-            header("Location: /mips/admin/admin_meal/adminMain.php");
-    
-            // Execute the query
-            if ($stmt->execute()) {
-                echo "New event added successfully!";
-            } else {
-                echo "Error adding event.";
-            }
+
+        // Prepare the statement
+        $stmt = $pdo->prepare($sql);
+
+        // Bind parameters
+        $stmt->bindParam(':id', $id);
+        $stmt->bindParam(':name', $name);
+        $stmt->bindParam(':time', $time);
+        $stmt->bindParam(':date', $date);
+        $stmt->bindParam(':place', $place);
+        $stmt->bindParam(':description', $desc);
+        $stmt->bindParam(':picture', $pic);
+        header("Location: /mips/admin/admin_meal/adminMain.php");
+
+        // Execute the query
+        if ($stmt->execute()) {
+            echo "New event added successfully!";
+        } else {
+            echo "Error adding event.";
         }
-    } catch (PDOException $e) {
-        // Catch any errors and display an appropriate message
-        echo "Connection failed: " . $e->getMessage();
     }
+} catch (PDOException $e) {
+    // Catch any errors and display an appropriate message
+    echo "Connection failed: " . $e->getMessage();
+}
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Meal Donation</title>
     <link rel="icon" type="image/x-icon" href="../../images/MIPS_icon.png">
@@ -72,78 +74,79 @@
     <link rel="stylesheet" href="../admin_for_meal/admin.css">
     <link rel="stylesheet" href="../admin_meal/adminDonation.css">
 </head>
+
 <body>
     <?php include "../admin_for_meal/header.php";  ?>
     <script src="../admin_for_meal/admin.js"></script>
     <div class="bigbox">
         <row id="row1">
-            <a href="../index.php"><i class='bx bx-arrow-back' ></i></a>
+            <a href="../index.php"><i class='bx bx-arrow-back'></i></a>
             <h1>Upcoming Event</h1>
         </row>
     </div>
-    
+
 
     <div class="scroll-container">
-    <?php if (!empty($rows)): ?>
-        <?php foreach ($rows as $row): ?>
-            <?php 
+        <?php if (!empty($rows)): ?>
+            <?php foreach ($rows as $row): ?>
+                <?php
                 // Construct the URL for the next page with just the 'event_id' parameter
                 $nextPageUrl = 'event.php?' . http_build_query([
                     'event_id' => $row['event_id']
-                ]); 
+                ]);
 
                 // Debug: Output the URL for verification
                 // Uncomment the line below to see the URLs being generated
                 // echo '<p>Generated URL: ' . htmlspecialchars($nextPageUrl) . '</p>';
-            ?>
-            <!-- Wrap the box in an anchor tag -->
-            <a href="<?= htmlspecialchars($nextPageUrl) ?>" style="text-decoration: none; color: inherit;">
-                <div class="box">
-                    <!-- Essentials section -->
-                    <div class="essentials">
-                        <p></p>
+                ?>
+                <!-- Wrap the box in an anchor tag -->
+                <a href="<?= htmlspecialchars($nextPageUrl) ?>" style="text-decoration: none; color: inherit;">
+                    <div class="box">
+                        <!-- Essentials section -->
+                        <div class="essentials">
+                            <p></p>
+                        </div>
+                        <!-- Extra info section -->
+                        <div class="extra-info">
+                            <row id="row1">
+                                <h3><?= htmlspecialchars($row['name']) ?></h3>
+                            </row>
+                            <row class="row">
+                                <i class='bx bx-current-location'></i>
+                                <p><?= htmlspecialchars($row['place']) ?></p>
+                            </row>
+                            <row class="row">
+                                <i class='bx bx-time-five'></i>
+                                <p><?= htmlspecialchars($row['time']) ?></p>
+                            </row>
+                            <row class="row">
+                                <i class='bx bx-calendar'></i>
+                                <p><?= htmlspecialchars($row['date']) ?></p>
+                            </row>
+                            <row class="row">
+                                <p id="desc"><?= htmlspecialchars($row['description']) ?></p>
+                            </row>
+                        </div>
                     </div>
-                    <!-- Extra info section -->
-                    <div class="extra-info">
-                        <row id="row1">
-                            <h3><?= htmlspecialchars($row['name']) ?></h3>
-                        </row>
-                        <row class="row">
-                            <i class='bx bx-current-location'></i>
-                            <p><?= htmlspecialchars($row['place']) ?></p>
-                        </row>
-                        <row class="row">
-                            <i class='bx bx-time-five'></i>
-                            <p><?= htmlspecialchars($row['time']) ?></p>
-                        </row>
-                        <row class="row">
-                            <i class='bx bx-calendar'></i>
-                            <p><?= htmlspecialchars($row['date']) ?></p>
-                        </row>
-                        <row class="row">
-                            <p id="desc"><?= htmlspecialchars($row['description']) ?></p>
-                        </row>
-                    </div>
-                </div>
-            </a>
-        <?php endforeach; ?>
-    <?php else: ?>
-        <p>No records found.</p>
-    <?php endif; ?>
-</div>
+                </a>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <p>No records found.</p>
+        <?php endif; ?>
+    </div>
     <a href="#">
         <div class="btnbox">
             <button class="slide-button">
-            <i class='bx bx-add-to-queue' ></i>
-            <span>Add Event</span>
+                <i class='bx bx-add-to-queue'></i>
+                <span>Add Event</span>
             </button>
         </div>
     </a>
 
-    
 
 
-    <dialog  class="addEvent" >
+
+    <dialog class="addEvent">
         <i class='bx bx-x' id="xbtn"></i>
         <form method="POST" action="">
             <div>
@@ -174,7 +177,7 @@
                 <input type="file" id="pic" name="Pic">
             </div>
             <div>
-                <input type="submit" value="Add" id="btn1" >
+                <input type="submit" value="Add" id="btn1">
             </div>
         </form>
     </dialog>
@@ -191,6 +194,7 @@
         })
     </script>
 
-    
+
 </body>
+
 </html>

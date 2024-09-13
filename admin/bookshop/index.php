@@ -167,7 +167,7 @@ if (isset($_POST['submit'])) {
             $stmt->bindParam(':stock_quantity', $stockQuantity);
             $stmt->bindParam(':color', $color);
             $stmt->bindParam(':gender', $gender);
-            $stmt->bindParam(':admin_id', $_SESSION['admin_id']);
+            $stmt->bindParam(':admin_id', $_SESSION['user_id']);
             $stmt->execute();
 
             if (!empty($_FILES['images']['name'][0])) {

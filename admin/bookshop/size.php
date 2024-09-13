@@ -45,7 +45,7 @@ if (isset($_POST["submit"])) {
     $stmt->bindParam(':bust', $bust);
     $stmt->bindParam(':waist', $waist);
     $stmt->bindParam(':length', $length);
-    $stmt->bindParam(':admin_id', $_SESSION['admin_id']);
+    $stmt->bindParam(':admin_id', $_SESSION['user_id']);
 
     include $_SERVER['DOCUMENT_ROOT'] . "/mips/php/refresh_page.php";
 }

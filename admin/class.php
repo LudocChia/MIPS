@@ -42,7 +42,7 @@ if (isset($_POST["submit"])) {
     $classId = isset($_POST["class_id"]) && !empty($_POST["class_id"]) ? $_POST["class_id"] : generateClassId();
     $className = $_POST["class_name"];
     $gradeId = $_POST["grade_id"];
-    $adminId = $_SESSION['admin_id'];
+    $adminId = $_SESSION['user_id'];
 
     if (isset($_POST['class_id']) && !empty($_POST['class_id'])) {
         $sql = "UPDATE Class SET class_name = :className, grade_id = :gradeId WHERE class_id = :classId";

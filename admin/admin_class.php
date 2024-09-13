@@ -61,12 +61,12 @@ class Action
 
             if ($admin && password_verify($password, $admin['admin_password'])) {
                 session_start();
-                $_SESSION['admin_type'] = 'admin';
-                $_SESSION['admin_id'] = $admin['admin_id'];
-                $_SESSION['admin_name'] = $admin['admin_name'];
-                $_SESSION['admin_email'] = $admin['admin_email'];
-                $_SESSION['admin_status'] = $admin['status'];
-                $_SESSION['admin_image'] = $admin['admin_image'] ?? '/mips/images/default_profile.png';
+                $_SESSION['user_type'] = 'admin';
+                $_SESSION['user_id'] = $admin['admin_id'];
+                $_SESSION['user_name'] = $admin['admin_name'];
+                $_SESSION['user_email'] = $admin['admin_email'];
+                $_SESSION['user_status'] = $admin['status'];
+                $_SESSION['user_image'] = $admin['admin_image'] ?? '/mips/images/default_profile.png';
 
                 if ($admin['status'] == -1) {
                     return json_encode(['new_user' => true, 'redirect' => '/mips/new-password.php']);

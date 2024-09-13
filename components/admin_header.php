@@ -11,11 +11,11 @@
                 <a href="notification.php"><i class="bi bi-bell-fill"></i></a>
             </div> -->
             <div class="profile">
-                <img src="<?= htmlspecialchars($_SESSION['admin_image']) ?>" alt="Admin Image" class="user-img" id="user-btn">
+                <img src="<?= htmlspecialchars($_SESSION['user_image']) ?>" alt="Admin Image" class="user-img" id="user-btn">
                 <div class="profile-menu">
                     <div class="user-info">
-                        <img src="<?= htmlspecialchars($_SESSION['admin_image']) ?>" alt="Admin Image">
-                        <h4><?php echo $_SESSION['admin_name']; ?></h4>
+                        <img src="<?= htmlspecialchars($_SESSION['user_image']) ?>" alt="Admin Image">
+                        <h4><?php echo $_SESSION['user_name']; ?></h4>
                     </div>
                     <hr>
                     <!-- <a href="/mips/admin/profile.php" class="profile-menu-link"> -->
