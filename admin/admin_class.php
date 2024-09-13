@@ -258,7 +258,7 @@ class Action
     public function get_default_parents()
     {
         try {
-            $sql = "SELECT parent_id, parent_name FROM Parent ORDER BY created_at DESC LIMIT 5";
+            $sql = "SELECT parent_id, parent_name FROM Parent WHERE status IN(0, -1) ORDER BY created_at DESC LIMIT 5";
             $stmt = $this->db->prepare($sql);
             $stmt->execute();
             $parents = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -271,7 +271,7 @@ class Action
 
     public function search_parent($query)
     {
-        $sql = "SELECT parent_id, parent_name FROM Parent WHERE parent_name LIKE :query OR parent_id LIKE :query LIMIT 5";
+        $sql = "SELECT parent_id, parent_name FROM Parent WHERE parent_name LIKE :query OR parent_id LIKE :query AND status IN(0, -1) ORDER BY created_at DESC LIMIT 5";
         $stmt = $this->db->prepare($sql);
         $searchQuery = "%$query%";
         $stmt->bindParam(':query', $searchQuery);

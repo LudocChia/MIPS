@@ -83,11 +83,11 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                             <tbody>
                                 <?php foreach ($all_product_sizes as $size) { ?>
                                     <tr>
-                                        <td><?= htmlspecialchars($size['size_name']); ?></td>
-                                        <td><?= htmlspecialchars($size['shoulder_width'] === null ? '-' : $size['shoulder_width']); ?></td>
-                                        <td><?= htmlspecialchars($size['bust'] === null ? '-' : $size['bust']); ?></td>
-                                        <td><?= htmlspecialchars($size['waist'] === null ? '-' : $size['waist']); ?></td>
-                                        <td><?= htmlspecialchars($size['length'] === null ? '-' : $size['length']); ?></td>
+                                        <td style="text-align: center;"><?= htmlspecialchars($size['size_name']); ?></td>
+                                        <td style="text-align: center;"><?= htmlspecialchars($size['shoulder_width'] === null ? '-' : $size['shoulder_width']); ?></td>
+                                        <td style="text-align: center;"><?= htmlspecialchars($size['bust'] === null ? '-' : $size['bust']); ?></td>
+                                        <td style="text-align: center;"><?= htmlspecialchars($size['waist'] === null ? '-' : $size['waist']); ?></td>
+                                        <td style="text-align: center;"><?= htmlspecialchars($size['length'] === null ? '-' : $size['length']); ?></td>
                                         <td>
                                             <div class="actions">
                                                 <form action="" method="POST" style="display:inline;" onsubmit="return showDeactivateConfirmDialog(event);">

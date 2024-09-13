@@ -58,7 +58,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/customer_head.php";
                                 <div class="box">
                                     <a href="/mips/item.php?pid=<?= htmlspecialchars($product['product_id']); ?>">
                                         <div class="image-container">
-                                            <img src="<?= htmlspecialchars(!empty($product['primary_image']) ? "uploads/product/" . $product['primary_image'] : 'images/defaultproductimage.png'); ?>" alt="Product Image" class="primary-image">
+                                            <img src="<?= htmlspecialchars(!empty($product['primary_image']) ? " /mips/uploads/product/" . $product['primary_image'] : 'images/defaultproductimage.png'); ?>" alt="Product Image" class="primary-image">
                                         </div>
                                         <div class="info-container">
                                             <div class="name-field">
