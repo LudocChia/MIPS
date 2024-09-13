@@ -228,23 +228,24 @@ if (isset($_POST['delete-event'])) {
             <div>
                 <h1>Please fill in required credentials</h1>
             </div>
-            <div input-conta>
+            <div class="input-container">
+                <h2></h2>
                 <label for="name">Name:</label>
                 <input type="text" id="name" name="name" required>
             </div>
-            <div>
+            <div class="input-container">
                 <label for="time">Time:</label>
                 <input type="text" id="time" name="time" required>
             </div>
-            <div>
+            <div class="input-container">
                 <label for="place">Place:</label>
                 <input type="text" id="place" name="place" required>
             </div>
-            <div>
+            <div class="input-container">
                 <label for="date">Date:</label>
                 <input type="date" id="date" name="date" required>
             </div>
-            <div>
+            <div class="input-container">
                 <label for="description">Description:</label>
                 <textarea id="description" name="description" rows="4" required></textarea>
             </div>
