@@ -12,7 +12,7 @@
                     <a href="index.php"><span class="material-symbols-outlined icon-adjust">local_library</span></i>Meal Donation</a>
                 </li> -->
                 <li>
-                    <a href="parent/donationMain.php"><i class="fa fa-cutlery" aria-hidden="true"></i>Meal Donation</a>
+                    <a href="donationMain.php"><i class="fa fa-cutlery" aria-hidden="true"></i>Meal Donation</a>
                 </li>
                 <!-- <li>
                     <a href="event.php"><i class="bi bi-calendar4-event"></i>School Event</a>
