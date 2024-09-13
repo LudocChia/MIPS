@@ -69,7 +69,7 @@ class Action
                 $_SESSION['user_image'] = $admin['admin_image'] ?? '/mips/images/default_profile.png';
 
                 if ($admin['status'] == -1) {
-                    return json_encode(['new_user' => true, 'redirect' => '/mips/new-password.php']);
+                    return json_encode(['new_user' => true, 'redirect' => '/mips/activate.php']);
                 }
 
                 return json_encode(['success' => true, 'redirect' => '/mips/admin']);
@@ -116,7 +116,6 @@ class Action
 
     public function save_admin($admin_id, $admin_name, $admin_email, $admin_password, $confirm_password, $admin_type = 'admin')
     {
-        // 调用 check_email_exists 函数时，传入 'admin_email' 作为字段名
         $emailCheck = json_decode($this->check_email_exists($admin_email, 'Admin', 'admin_email', 'admin_id', $admin_id), true);
         if (isset($emailCheck['error'])) {
             return json_encode($emailCheck);
@@ -153,8 +152,6 @@ class Action
 
         return $this->execute_statement($stmt);
     }
-
-
 
     // Parent Functions
     public function deactivate_parent($parent_id)

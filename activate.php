@@ -29,10 +29,17 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
                     <img src="/mips/images/MIPS_logo.png" alt="MIPS_Logo">
                 </div>
                 <div class="title">
-                    <h1>Set New Password</h1>
+                    <h1>Activate Account</h1>
                 </div>
-                <div id="alert-container"></div> <!-- Mini-alert container -->
-                <form method="POST">
+                <div id="alert-container"></div>
+                <form method="POST" id="activate-form">
+                    <div class="input-container">
+                        <div class="input-field">
+                            <i class="fas fa-user"></i>
+                            <input type="text" id="name" name="name" placeholder="Your Name" required>
+                        </div>
+                        <p>Please enter your name</p>
+                    </div>
                     <div class="input-container">
                         <div class="input-field">
                             <i class="fas fa-lock"></i>
@@ -72,18 +79,20 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
         </div>
     </main>
     <script>
-        document.querySelector('form').addEventListener('submit', function(e) {
+        document.querySelector('#activate-form').addEventListener('submit', function(e) {
             e.preventDefault();
 
+            const name = document.querySelector('#name').value;
             const newPassword = document.querySelector('#new_password').value;
             const confirmPassword = document.querySelector('#confirm_password').value;
 
-            fetch('/mips/php/ajax.php?action=update_password', {
+            fetch('/mips/php/ajax.php?action=activate_account', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded'
                     },
                     body: new URLSearchParams({
+                        name: name,
                         new_password: newPassword,
                         confirm_password: confirmPassword
                     })

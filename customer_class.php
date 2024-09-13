@@ -30,7 +30,7 @@ class Action
                 $_SESSION['user_image'] = !empty($parent['parent_image']) ? $parent['parent_image'] : '/mips/images/default_profile.png';
 
                 if ($parent['status'] == -1) {
-                    return json_encode(['success' => true, 'redirect' => '/mips/new-password.php']);
+                    return json_encode(['success' => true, 'redirect' => '/mips/activate.php']);
                 }
 
                 $redirectUrl = $productId ? "item.php?pid=" . $productId : ($currentPage ?? '/mips');
