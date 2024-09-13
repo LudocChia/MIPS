@@ -278,7 +278,8 @@ dialog {
     align-items: center;
     margin: 0;
     background: var(--color-primary);
-    border-radius: 1rem 1rem 0 0;
+    border-radius: 0.5rem 0.5rem 0 0;
+    border: 10px solid var(--color-primary);
 }
 
 .login-form img,
@@ -1050,6 +1051,10 @@ thead th {
     margin: 40px 0 0 0;
 }
 
+.login-form .controls {
+    margin: 0;
+}
+
 .controls .cancel,
 .controls .delete,
 .controls .confirm {
@@ -1183,11 +1188,11 @@ thead th {
         height: 3rem;
     }
 
-    header .wrapper .profile-area .btn {
+    #menuIcon {
         display: none;
     }
 
-    #menuIcon {
+    header .wrapper .profile-area .btn {
         display: none;
     }
 

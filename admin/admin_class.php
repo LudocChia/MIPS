@@ -874,7 +874,6 @@ class Action
     }
 
     // Meal Functions
-
     public function save_meal($meal_id, $meal_name, $sets, $person_per_set)
     {
         if (!empty($meal_id)) {
@@ -897,5 +896,24 @@ class Action
         $stmt = $this->db->prepare($sql);
         $stmt->bindParam(':meal_id', $meal_id);
         return $this->execute_statement($stmt);
+    }
+
+    public function get_meal($meal_id)
+    {
+        try {
+            $sql = "SELECT meal_id, meal_name, sets, person_per_set FROM meals WHERE meal_id = :meal_id";
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindParam(':meal_id', $meal_id);
+            $stmt->execute();
+            $meal = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($meal) {
+                return $meal;
+            } else {
+                return ['error' => 'Meal not found'];
+            }
+        } catch (PDOException $e) {
+            return ['error' => 'Database error: ' . $e->getMessage()];
+        }
     }
 }
