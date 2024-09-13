@@ -101,8 +101,8 @@ if (isset($_GET['event_id']) && isset($_GET['meal_type_id'])) {
             // echo $current_date;  
 
         // Generate event_meal_id only once
-        $event_meal_id = $meal['event_meal_id'];
-
+        $event_meal_id = $_POST['event_meal_id'];
+        
 
     
         try {
@@ -219,7 +219,7 @@ if (isset($_GET['event_id']) && isset($_GET['meal_type_id'])) {
     <?php if (!empty($meals)): ?>
         <?php foreach ($meals as $meal): ?>
             <?php if ($meal['sets'] > 0): // Only display meals with sets greater than 0 ?>
-                <div class="row5" data-meal-id="<?= htmlspecialchars($meal['meal_id']) ?>" data-max-sets="<?= htmlspecialchars($meal['sets']) ?>">
+                <div class="row5" data-meal-id="<?= htmlspecialchars($meal['meal_id']) ?>" data-max-sets="<?= htmlspecialchars($meal['sets']) ?>" data-event-meal-id="<?= htmlspecialchars($meal['event_meal_id']) ?>">
                     <h3><?= htmlspecialchars($meal['meal_name']) ?></h3> 
                     <p><?= htmlspecialchars($meal['sets']) ?> set needed</p>
                     <p><?= htmlspecialchars($meal['person_per_set']) ?> person per set</p>
@@ -230,7 +230,6 @@ if (isset($_GET['event_id']) && isset($_GET['meal_type_id'])) {
         <p id="nRecord">No meals for now.</p>
     <?php endif; ?>
 </div>
-
 
 <!-- Modal for adding meals -->
 <dialog class="addMeal">
@@ -244,6 +243,7 @@ if (isset($_GET['event_id']) && isset($_GET['meal_type_id'])) {
             <input type="number" id="setsInput" name="Sets" value="1" min="1">
             <p id="maxSetDisplay"></p>
             <input type="hidden" id="mealIdInput" name="meal_id">
+            <input type="hidden" id="eventMealIdInput" name="event_meal_id"> <!-- Hidden field for event_meal_id -->
         </div>
         <div>
             <input type="submit" value="Add" id="btn1">
@@ -259,18 +259,21 @@ if (isset($_GET['event_id']) && isset($_GET['meal_type_id'])) {
     const setsInput = document.querySelector('#setsInput');
     const maxSetDisplay = document.querySelector('#maxSetDisplay');
     const mealIdInput = document.querySelector('#mealIdInput');
+    const eventMealIdInput = document.querySelector('#eventMealIdInput'); // Reference to event_meal_id hidden input
 
     // Add event listener to each meal box
     openModalBtns.forEach(button => {
         button.addEventListener('click', () => {
             const maxSets = button.getAttribute('data-max-sets');
             const mealId = button.getAttribute('data-meal-id');
+            const eventMealId = button.getAttribute('data-event-meal-id'); // Get event_meal_id
 
             // Update the modal's hidden input and max sets
             setsInput.setAttribute('max', maxSets);
             setsInput.value = 1; // Reset to default value
             maxSetDisplay.textContent = `Maximum sets: ${maxSets}`;
             mealIdInput.value = mealId;
+            eventMealIdInput.value = eventMealId; // Set the event_meal_id
 
             // Show the modal
             modal.showModal();
@@ -281,7 +284,6 @@ if (isset($_GET['event_id']) && isset($_GET['meal_type_id'])) {
     closeModal.addEventListener('click', () => {
         modal.close();
     });
-
 </script>
 
 

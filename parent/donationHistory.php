@@ -8,27 +8,19 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/customer_head.php";
 
 
 
-$donatorStmt = $pdo->prepare("SELECT meal_id, SUM(p_set) as total_donators FROM donator GROUP BY meal_id");
-$donatorStmt->execute();
-$donators = $donatorStmt->fetchAll(PDO::FETCH_ASSOC);
-
-// Create an array for quick lookup of total donators by meal_id
-$donatorTotals = [];
-foreach ($donators as $donator) {
-    $donatorTotals[$donator['meal_id']] = $donator['total_donators'];
-}
 
 // Prepare and execute the query to search for donators based on event_meal_id
-
+$parent_id = $_SESSION['user_id'];
 $stmt2 = $pdo->prepare("SELECT * FROM `event_meal` 
                                 INNER JOIN `meal_type` ON event_meal.meal_type_id = meal_type.meal_type_id
                                 INNER JOIN `meals` ON event_meal.event_meal_id = meals.event_meal_id
                                 INNER JOIN `event` ON event_meal.event_id = event.event_id 
                                 INNER JOIN `donator` ON event_meal.event_meal_id = donator.event_meal_id 
+                                where donator.parent_id = :parent_id
                                 ");
 
 // Bind the parameters
-
+$stmt2->bindParam(':parent_id', $parent_id);
 $stmt2->execute();
 
 $donators = $stmt2->fetchAll(PDO::FETCH_ASSOC);
