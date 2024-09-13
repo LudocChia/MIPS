@@ -171,6 +171,7 @@ if (isset($_GET['event_id']) && isset($_GET['meal_type_id'])) {
             <?php if (!empty($meals)): ?>
                 <div class="mealBox">
                     <row>
+                        <h3><?= htmlspecialchars($meal['meal_name']) ?></h3>
                         <button type="button" class="edit-meal-btn" data-meal-id="<?= htmlspecialchars($meal['meal_id']); ?>">
                             <i class='bx bx-edit'>Edit</i>
                         </button>
@@ -222,7 +223,6 @@ if (isset($_GET['event_id']) && isset($_GET['meal_type_id'])) {
                                         </td>
                                         <td id="tableData">
                                             <p> <?= htmlspecialchars($donator['meal_name']) ?> </p>
-                                            <p> <?= htmlspecialchars($donator['meal_id']) ?> </p>
                                         </td>
                                         <td id="tableData">
                                             <p> <?= htmlspecialchars($donator['p_set']) ?> </p>
