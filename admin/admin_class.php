@@ -69,7 +69,7 @@ class Action
                 $_SESSION['admin_image'] = $admin['admin_image'] ?? '/mips/images/default_profile.png';
 
                 if ($admin['status'] == -1) {
-                    return json_encode(['new_user' => true, 'redirect' => '/mips/components/new-password.php']);
+                    return json_encode(['new_user' => true, 'redirect' => '/mips/new-password.php']);
                 }
 
                 return json_encode(['success' => true, 'redirect' => '/mips/admin']);

@@ -10,7 +10,7 @@ if (!isset($_SESSION['admin_id'])) {
 }
 
 if ($_SESSION['admin_status'] == -1) {
-    header('Location: /mips/admin/new-password.php');
+    header('Location: /mips/new-password.php');
     exit();
 }
 
