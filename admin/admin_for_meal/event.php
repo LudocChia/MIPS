@@ -3,35 +3,39 @@ session_start();
 include "../../components/db_connect.php";
 // include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/db_connect.php";
 
-if (!isset($_SESSION['admin_id'])) {
+if (!isset($_SESSION['user_id'])) {
     header('Location: /mips/admin/login.php');
     exit();
 }
-    // session_start();
-    include "../admin_for_meal/header.php"; 
+// session_start();
+include "../admin_for_meal/header.php";
 
-    function getAll($pdo){
-        // Query to fetch all users
-        $stmt = $pdo->query("SELECT * FROM `event`");
-        $visitors = $stmt->fetchAll();
-    }
-    function getByDate($pdo){
-        $stmt = $pdo->query("SELECT * FROM `event` where DATE(date) > DATE(now())");
-        $visitors = $stmt->fetchAll();
-    }
-    function generateID(){
-        uniqid();
-    }
-    $all = getByDate($pdo);
-    $sql = "SELECT * FROM `event` where DATE(date) > DATE(now())";
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute();
+function getAll($pdo)
+{
+    // Query to fetch all users
+    $stmt = $pdo->query("SELECT * FROM `event`");
+    $visitors = $stmt->fetchAll();
+}
+function getByDate($pdo)
+{
+    $stmt = $pdo->query("SELECT * FROM `event` where DATE(date) > DATE(now())");
+    $visitors = $stmt->fetchAll();
+}
+function generateID()
+{
+    uniqid();
+}
+$all = getByDate($pdo);
+$sql = "SELECT * FROM `event` where DATE(date) > DATE(now())";
+$stmt = $pdo->prepare($sql);
+$stmt->execute();
 
 
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -46,22 +50,25 @@ if (!isset($_SESSION['admin_id'])) {
     <link rel="stylesheet" href="../admin_for_meal/admin.css">
     <link rel="stylesheet" href="../admin_for_meal/donation.css">
     <style>
-        h1{
+        h1 {
             margin-top: 50px;
             margin-left: 350px;
         }
-        .eventBox{
+
+        .eventBox {
             padding: 0px;
         }
-        .eventBox p{
+
+        .eventBox p {
             margin: 0px;
         }
     </style>
 </head>
+
 <body>
     <script src="../admin_for_meal/admin.js"></script>
     <div class="top-bar">
-        <a href="../admin_for_meal/donationMain.php" ><img src="back-button.png" alt="back-button" style="width: 80px;px;height:80px;"></a>
+        <a href="../admin_for_meal/donationMain.php"><img src="back-button.png" alt="back-button" style="width: 80px;px;height:80px;"></a>
         <h1>Upcoming Event</h1>
         <a href="../admin_for_meal/addEvent.php"><button id="add">Add</button></a>
     </div>
@@ -93,34 +100,35 @@ if (!isset($_SESSION['admin_id'])) {
     }
     ?>
 
-<?php if (!empty($events)): ?>
-    <?php foreach ($events as $event): ?>
-        <?php 
-        // Construct the URL with the event_id parameter
-        $nextPageUrl = 'mealType.php?event_id=' . urlencode($event['event_id']); 
-        ?>
-        <!-- Wrap the event box in an anchor tag -->
-        <a href="<?= htmlspecialchars($nextPageUrl) ?>" style="text-decoration: none; color: inherit;">
-            <div class="eventBox">
-                <row id="row">
-                    <p id="date">Date: <?= htmlspecialchars($event['date']) ?></p>
-                </row>
-                <row>
-                    <p id="name"><?= htmlspecialchars($event['name']) ?></p>
-                </row>
-                <row id="row1">
-                    <p id="time">Time: <?= htmlspecialchars($event['time']) ?></p>
-                    <p id="place">Place: <?= htmlspecialchars($event['place']) ?></p>
-                </row>
-                <row>
-                    <p id="desc">Description: <?= htmlspecialchars($event['description']) ?></p>
-                </row>
-            </div>
-        </a>
-    <?php endforeach; ?>
-<?php endif; ?>
+    <?php if (!empty($events)): ?>
+        <?php foreach ($events as $event): ?>
+            <?php
+            // Construct the URL with the event_id parameter
+            $nextPageUrl = 'mealType.php?event_id=' . urlencode($event['event_id']);
+            ?>
+            <!-- Wrap the event box in an anchor tag -->
+            <a href="<?= htmlspecialchars($nextPageUrl) ?>" style="text-decoration: none; color: inherit;">
+                <div class="eventBox">
+                    <row id="row">
+                        <p id="date">Date: <?= htmlspecialchars($event['date']) ?></p>
+                    </row>
+                    <row>
+                        <p id="name"><?= htmlspecialchars($event['name']) ?></p>
+                    </row>
+                    <row id="row1">
+                        <p id="time">Time: <?= htmlspecialchars($event['time']) ?></p>
+                        <p id="place">Place: <?= htmlspecialchars($event['place']) ?></p>
+                    </row>
+                    <row>
+                        <p id="desc">Description: <?= htmlspecialchars($event['description']) ?></p>
+                    </row>
+                </div>
+            </a>
+        <?php endforeach; ?>
+    <?php endif; ?>
 
 
 
 </body>
+
 </html>

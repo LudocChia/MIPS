@@ -3,19 +3,20 @@ session_start();
 include "../../components/db_connect.php";
 // include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/db_connect.php";
 
-if (!isset($_SESSION['admin_id'])) {
+if (!isset($_SESSION['user_id'])) {
     header('Location: /mips/admin/login.php');
     exit();
 }
 
 
-    // session_start();
-    include "../admin_for_meal/header.php"; 
+// session_start();
+include "../admin_for_meal/header.php";
 
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -39,6 +40,7 @@ if (!isset($_SESSION['admin_id'])) {
         }
     </style>
 </head>
+
 <body>
     <script src="../admin_for_meal/admin.js"></script>
     <div class="mainbox">
@@ -47,4 +49,5 @@ if (!isset($_SESSION['admin_id'])) {
     </div>
 
 </body>
+
 </html>
