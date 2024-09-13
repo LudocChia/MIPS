@@ -414,6 +414,25 @@ switch ($action) {
         }
         break;
 
+        // Meal
+    case 'save_meal':
+        if (isset($_POST['meal_id'], $_POST['meal_name'], $_POST['sets'], $_POST['person_per_set'])) {
+            echo $crud->save_meal($_POST['meal_id'], $_POST['meal_name'], $_POST['sets'], $_POST['person_per_set']);
+        } else {
+            echo json_encode(['error' => 'Missing required meal data']);
+        }
+        break;
+
+    case 'delete_meal':
+        if (isset($_POST['meal_id'])) {
+            echo $crud->delete_meal($_POST['meal_id']);
+        } else {
+            echo json_encode(['error' => 'Meal ID is required']);
+        }
+        break;
+
+
+
     default:
         echo json_encode(['error' => 'Invalid action']);
         break;

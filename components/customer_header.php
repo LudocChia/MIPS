@@ -75,7 +75,7 @@
         <div class="mobile-navbar">
             <ul>
                 <li>
-                    <a href="/mips/meal.php"><i class="fa fa-cutlery" aria-hidden="true"></i></a>
+                    <a href="/mips/parent/donationMain.php"><i class="fa fa-cutlery" aria-hidden="true"></i></a>
                 </li>
                 <li>
                     <a href="javascript:void(0)"><i class="bi bi-calendar4-event"></i></a>

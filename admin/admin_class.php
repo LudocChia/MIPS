@@ -252,9 +252,6 @@ class Action
         return $this->execute_statement($stmt);
     }
 
-
-
-
     public function get_default_parents()
     {
         try {
@@ -874,5 +871,31 @@ class Action
             $this->db->rollBack();
             return json_encode(['error' => 'Error deleting event: ' . $e->getMessage()]);
         }
+    }
+
+    // Meal Functions
+
+    public function save_meal($meal_id, $meal_name, $sets, $person_per_set)
+    {
+        if (!empty($meal_id)) {
+            $sql = "UPDATE Meals SET meal_name = :meal_name, sets = :sets, person_per_set = :person_per_set WHERE meal_id = :meal_id";
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindParam(':meal_id', $meal_id);
+            $stmt->bindParam(':meal_name', $meal_name);
+            $stmt->bindParam(':sets', $sets);
+            $stmt->bindParam(':person_per_set', $person_per_set);
+        } else {
+            return json_encode(['error' => 'Meal ID is required for update']);
+        }
+
+        return $this->execute_statement($stmt);
+    }
+
+    public function delete_meal($meal_id)
+    {
+        $sql = "DELETE FROM Meals WHERE meal_id = :meal_id";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':meal_id', $meal_id);
+        return $this->execute_statement($stmt);
     }
 }

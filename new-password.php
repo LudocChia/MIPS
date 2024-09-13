@@ -47,6 +47,23 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
                         </div>
                         <p>Please confirm your new password</p>
                     </div>
+                    <div class="input-container">
+                        <h2>Password Criteria</h2>
+                        <table class="two-columns">
+                            <tr>
+                                <td style="width: 5%">1.</td>
+                                <td style="width: 95%">Password should include at least one number and one special symbol.</td>
+                            </tr>
+                            <tr>
+                                <td style="width: 5%">2.</td>
+                                <td style="width: 95%">Passwords cannot begin or end with a space.</td>
+                            </tr>
+                            <tr>
+                                <td style="width: 5%">3.</td>
+                                <td style="width: 95%">Passwords must be at least 6 characters long.</td>
+                            </tr>
+                        </table>
+                    </div>
                     <div class="controls">
                         <button type="submit" name="submit" class="btn">Update Password</button>
                     </div>

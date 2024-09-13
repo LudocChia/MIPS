@@ -259,7 +259,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/customer_header.php"; ?>
         <div class="input-container">
             <h2>Payment Method</h2>
             <h3>Kindly make payment via online banking. Bank details are as follows:</h3>
-            <table class="two-column">
+            <table class="two-columns">
                 <tr>
                     <td style="width: 40%"><strong>Beneficiary :</strong></td>
                     <td style="width: 60%">mips International Sdn Bhd</td>
