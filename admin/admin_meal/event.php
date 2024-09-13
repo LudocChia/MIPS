@@ -127,7 +127,7 @@ if (isset($_POST['delete-event'])) {
             <div class="slider">
                 <div class="slides">
                     <!-- Slide 1 -->
-                    <div class="slide"><img src="../admin_for_meal/pngwing.com.png" alt="Image 1"></div>
+                    <!-- <div class="slide"><img src="../admin_for_meal/pngwing.com.png" alt="Image 1"></div> -->
                     <!-- Add more slides as needed -->
                 </div>
                 <!-- Left and right controls -->
@@ -184,7 +184,7 @@ if (isset($_POST['delete-event'])) {
                 // echo '<p>Lunch URL: ' . htmlspecialchars($lunchUrl) . '</p>';
                 ?>
                 <a href="<?= htmlspecialchars($breakfastUrl) ?>" style="text-decoration: none; color: inherit;">
-                    <p id="first">Breakfast</p>
+                    <p id="first">Morning Tea</p>
                 </a>
                 <a href="<?= htmlspecialchars($lunchUrl) ?>" style="text-decoration: none; color: inherit;">
                     <p id="second">Lunch</p>

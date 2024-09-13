@@ -57,12 +57,6 @@ if (isset($_GET['event_id']) && isset($_GET['meal_type_id'])) {
     foreach ($donators as $donator) {
         $donatorTotals[$donator['meal_id']] = $donator['total_donators'];
     }
-    //use for tracking parent's name
-    $sql = $pdo->prepare("SELECT * FROM `parent` 
-    INNER JOIN `donator` ON donator.parent_id = parent.parent_id
-    ");
-    $sql->execute();
-    $parents = $sql->fetchAll(PDO::FETCH_ASSOC);
 
 
     // Prepare and execute the query to search for donators based on event_meal_id
@@ -94,6 +88,31 @@ if (isset($_GET['event_id']) && isset($_GET['meal_type_id'])) {
     } else {
         // echo '<p>No donators found for this meal type.</p>';
     }
+
+    
+    //use for tracking parent's name
+    $parent_id = $donator['parent_id'];
+    $sql = $pdo->prepare("SELECT * FROM `parent` 
+    INNER JOIN `donator` ON donator.parent_id = parent.parent_id
+    where donator.parent_id = :parent_id
+    ");
+    $sql->bindParam(':parent_id', $parent_id);
+    $sql->execute();
+    $parents = $sql->fetchAll(PDO::FETCH_ASSOC);
+    if ($parents) {
+        // echo '<h2>Donator Information</h2>';
+        foreach ($parents as $parent) {
+            // echo '<p> Parent ID: ' . htmlspecialchars($parent['parent_id']) . '</p>';
+            // echo '<p>Parent Name: ' . htmlspecialchars($parent['parent_name']) . '</p>';
+            // echo '<p>Meal Name: ' . htmlspecialchars($donator['meal_name']) . '</p>';
+            // echo '<p>Quantity: ' . htmlspecialchars($donator['p_set']) . '</p>';
+            // Uncomment below if you want to show descriptions too
+            // echo '<hr>';
+        }
+    } else {
+        // echo '<p>No donators found for this meal type.</p>';
+    }
+    
 } else {
     // Handle the case where the parameters are not set
     echo '<p>Error: Missing event_id or meal_type_id.</p>';
@@ -180,10 +199,10 @@ if (isset($_GET['event_id']) && isset($_GET['meal_type_id'])) {
                     <table>
                         <thead>
                             <tr>
+                                <th>Donator_ID</th>
                                 <th>Name</th>
-                                <th>Event</th>
                                 <th>Time</th>
-                                <th>Meal Name</th>
+                                <th>Event</th>
                                 <th>Quantity</th>
                             </tr>
                         </thead>
@@ -196,14 +215,13 @@ if (isset($_GET['event_id']) && isset($_GET['meal_type_id'])) {
                                                 <p> <?= htmlspecialchars($donator['donator_id']) ?></p>
                                             </td>
                                             <td id="tableData">
-                                                <p> <?= htmlspecialchars($donator['name']) ?> </p>
+                                                <p> <?= htmlspecialchars($parent['parent_name']) ?> </p>
                                             </td>
                                             <td id="tableData">
                                                 <p><?= htmlspecialchars($donator['date']) ?></p>
                                             </td>
                                             <td id="tableData">
-                                                <p> <?= htmlspecialchars($donator['meal_name']) ?> </p>
-                                                <p> <?= htmlspecialchars($donator['meal_id']) ?> </p>
+                                                <p> <?= htmlspecialchars($donator['name']) ?> </p>
                                             </td>
                                             <td id="tableData">
                                                 <p> <?= htmlspecialchars($donator['p_set']) ?> </p>
@@ -212,7 +230,7 @@ if (isset($_GET['event_id']) && isset($_GET['meal_type_id'])) {
                                     </div>
                                 <?php endforeach; ?>
                             <?php else: ?>
-                                <p id="nRecord">No donators for now.</p>
+                                <!-- <p id="nRecord">No donators for now.</p> -->
                             <?php endif; ?>
                         </tbody>
                     </table>

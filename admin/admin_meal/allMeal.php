@@ -216,7 +216,7 @@ if (isset($_GET['event_id']) && isset($_GET['meal_type_id'])) {
         </row>
         <form method="GET" action="allMeal.php">
             <row id="row4">
-                <button type="submit" name="meal_type_id" value="1" id="btn1">Breakfast</button>
+                <button type="submit" name="meal_type_id" value="1" id="btn1">Morning Tea</button>
                 <button type="submit" name="meal_type_id" value="2" id="btn2">Lunch</button>
                 <input type="hidden" name="event_id" value="<?= htmlspecialchars($event_id); ?>">
             </row>
