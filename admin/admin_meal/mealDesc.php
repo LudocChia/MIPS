@@ -219,137 +219,130 @@ if (isset($_GET['event_id']) && isset($_GET['meal_type_id'])) {
             </div>
         </column>
     </div>
-
-
     </div>
-    <<<<<<< HEAD
-        <dialog id="edit-meal-dialog">
+    <dialog id="edit-meal-dialog">
         <form method="POST" class="edit-meal-form" id="edit-meal-form">
-            =======
-            <dialog id="edit-meal-modal">
-                <form id="edit-meal-form">
-                    >>>>>>> 1423d6711dd7e935d6f11aeec38247fa76cde6a3
-                    <input type="hidden" name="meal_id" id="edit-meal-id">
-                    <div class="input-container">
-                        <h2>Meal Name</h2>
-                        <div class="input-field">
-                            <input type="text" name="meal_name" id="edit-meal-name" required>
-                        </div>
-                    </div>
-                    <div class="input-container">
-                        <h2>Sets Needed</h2>
-                        <div class="input-field">
-                            <input type="number" name="sets" id="edit-meal-sets" required>
-                        </div>
-                    </div>
-                    <div class="input-container">
-                        <h2>Person Per Set</h2>
-                        <div class="input-field">
-                            <input type="number" name="person_per_set" id="edit-meal-person-per-set" required>
-                        </div>
-                    </div>
-                    <div class="input-controls">
-                        <button type="button" class="cancel">Cancel</button>
-                        <button type="submit" class="confirm">Save</button>
-                    </div>
-                </form>
-            </dialog>
-            <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/confirm_dialog.php"; ?>
-            <script>
-                const ExclamationConfirmDialog = document.querySelector('#exclamation-confirm-dialog');
-                document.querySelectorAll('.edit-meal-btn').forEach(button => {
-                    button.addEventListener('click', function() {
-                        const mealId = this.dataset.mealId;
-                        fetch(`/mips/admin/ajax.php?action=get_meal&meal_id=${mealId}`)
+            <input type="hidden" name="meal_id" id="edit-meal-id">
+            <div class="input-container">
+                <h2>Meal Name</h2>
+                <div class="input-field">
+                    <input type="text" name="meal_name" id="edit-meal-name" required>
+                </div>
+            </div>
+            <div class="input-container">
+                <h2>Sets Needed</h2>
+                <div class="input-field">
+                    <input type="number" name="sets" id="edit-meal-sets" required>
+                </div>
+            </div>
+            <div class="input-container">
+                <h2>Person Per Set</h2>
+                <div class="input-field">
+                    <input type="number" name="person_per_set" id="edit-meal-person-per-set" required>
+                </div>
+            </div>
+            <div class="input-controls">
+                <button type="button" class="cancel">Cancel</button>
+                <button type="submit" class="confirm">Save</button>
+            </div>
+        </form>
+    </dialog>
+    <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/confirm_dialog.php"; ?>
+    <script>
+        const ExclamationConfirmDialog = document.querySelector('#exclamation-confirm-dialog');
+        document.querySelectorAll('.edit-meal-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const mealId = this.dataset.mealId;
+                fetch(`/mips/admin/ajax.php?action=get_meal&meal_id=${mealId}`)
+                    .then(response => response.json())
+                    .then(meal => {
+                        if (meal.error) {
+                            alert(meal.error);
+                        } else {
+                            document.querySelector('#edit-meal-dialog [name="meal_name"]').value = meal.meal_name;
+                            document.querySelector('#edit-meal-dialog [name="sets"]').value = meal.sets;
+                            document.querySelector('#edit-meal-dialog [name="person_per_set"]').value = meal.person_per_set;
+                            document.querySelector('#edit-meal-dialog [name="meal_id"]').value = meal.meal_id;
+                            document.getElementById('edit-meal-dialog').showModal();
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching meal data:', error);
+                        alert('Failed to load meal data.');
+                    });
+            });
+        });
+
+        document.querySelector('#edit-meal-dialog .cancel').addEventListener('click', function() {
+            document.getElementById('edit-meal-dialog').close();
+        });
+
+        document.querySelector('.edit-meal-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const formData = new FormData(this);
+
+            fetch('/mips/admin/ajax.php?action=save_meal', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(result => {
+                    if (result.success) {
+                        location.reload();
+                    } else {
+                        alert('Failed to update meal: ' + result.error);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error saving meal:', error);
+                    alert('An error occurred while saving the meal.');
+                });
+        });
+
+
+        window.showDeleteConfirmDialog = function(event) {
+            event.preventDefault();
+            currentForm = event.target;
+
+            if (currentForm && ExclamationConfirmDialog) {
+                const actionType = currentForm.querySelector('input[name="action"]').value;
+                const idField = currentForm.querySelector('input[name*="_id"]').name;
+                const idValue = currentForm.querySelector(`input[name="${idField}"]`).value;
+
+                const eventId = "<?= htmlspecialchars($event_id) ?>";
+                const mealTypeId = "<?= htmlspecialchars($meal_type_id) ?>";
+
+                document.querySelector('#exclamation-confirm-dialog h1').textContent = "This data will be Deleted!";
+                document.querySelector('.confirm').textContent = "Delete";
+                ExclamationConfirmDialog.showModal();
+
+                ExclamationConfirmDialog.addEventListener('close', function() {
+                    if (ExclamationConfirmDialog.returnValue === 'confirm' && currentForm) {
+                        fetch(`/mips/admin/ajax.php?action=${actionType}`, {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/x-www-form-urlencoded'
+                                },
+                                body: `${idField}=${idValue}`
+                            })
                             .then(response => response.json())
-                            .then(meal => {
-                                if (meal.error) {
-                                    alert(meal.error);
+                            .then(result => {
+                                if (result.success) {
+                                    window.location.href = `/mips/admin/admin_meal/allMeal.php?event_id=${eventId}&meal_type_id=${mealTypeId}`;
                                 } else {
-                                    document.querySelector('#edit-meal-dialog [name="meal_name"]').value = meal.meal_name;
-                                    document.querySelector('#edit-meal-dialog [name="sets"]').value = meal.sets;
-                                    document.querySelector('#edit-meal-dialog [name="person_per_set"]').value = meal.person_per_set;
-                                    document.querySelector('#edit-meal-dialog [name="meal_id"]').value = meal.meal_id;
-                                    document.getElementById('edit-meal-dialog').showModal();
+                                    alert('Error deleting: ' + result.error);
                                 }
                             })
                             .catch(error => {
-                                console.error('Error fetching meal data:', error);
-                                alert('Failed to load meal data.');
+                                console.error('Error:', error);
+                                alert('An error occurred while deleting.');
                             });
-                    });
-                });
-
-                document.querySelector('#edit-meal-dialog .cancel').addEventListener('click', function() {
-                    document.getElementById('edit-meal-dialog').close();
-                });
-
-                document.querySelector('.edit-meal-form').addEventListener('submit', function(e) {
-                    e.preventDefault();
-
-                    const formData = new FormData(this);
-
-                    fetch('/mips/admin/ajax.php?action=save_meal', {
-                            method: 'POST',
-                            body: formData
-                        })
-                        .then(response => response.json())
-                        .then(result => {
-                            if (result.success) {
-                                location.reload();
-                            } else {
-                                alert('Failed to update meal: ' + result.error);
-                            }
-                        })
-                        .catch(error => {
-                            console.error('Error saving meal:', error);
-                            alert('An error occurred while saving the meal.');
-                        });
-                });
-
-
-                window.showDeleteConfirmDialog = function(event) {
-                    event.preventDefault();
-                    currentForm = event.target;
-
-                    if (currentForm && ExclamationConfirmDialog) {
-                        const actionType = currentForm.querySelector('input[name="action"]').value;
-                        const idField = currentForm.querySelector('input[name*="_id"]').name;
-                        const idValue = currentForm.querySelector(`input[name="${idField}"]`).value;
-
-                        const eventId = "<?= htmlspecialchars($event_id) ?>";
-                        const mealTypeId = "<?= htmlspecialchars($meal_type_id) ?>";
-
-                        document.querySelector('#exclamation-confirm-dialog h1').textContent = "This data will be Deleted!";
-                        document.querySelector('.confirm').textContent = "Delete";
-                        ExclamationConfirmDialog.showModal();
-
-                        ExclamationConfirmDialog.addEventListener('close', function() {
-                            if (ExclamationConfirmDialog.returnValue === 'confirm' && currentForm) {
-                                fetch(`/mips/admin/ajax.php?action=${actionType}`, {
-                                        method: 'POST',
-                                        headers: {
-                                            'Content-Type': 'application/x-www-form-urlencoded'
-                                        },
-                                        body: `${idField}=${idValue}`
-                                    })
-                                    .then(response => response.json())
-                                    .then(result => {
-                                        if (result.success) {
-                                            window.location.href = `/mips/admin/admin_meal/allMeal.php?event_id=${eventId}&meal_type_id=${mealTypeId}`;
-                                        } else {
-                                            alert('Error deleting: ' + result.error);
-                                        }
-                                    })
-                                    .catch(error => {
-                                        console.error('Error:', error);
-                                        alert('An error occurred while deleting.');
-                                    });
-                            }
-                        });
                     }
-                }
-            </script>
+                });
+            }
+        }
+    </script>
 
 </body>
 
