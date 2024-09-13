@@ -81,7 +81,7 @@
                     <a href="javascript:void(0)"><i class="bi bi-calendar4-event"></i></a>
                 </li>
                 <li>
-                    <a href="/mips/bookshop.php"><i class="bi bi-shop-window"></i></a>
+                    <a href="javascript:void(0)"><i class="bi bi-shop-window"></i></a>
                 </li>
                 <li>
                     <a href="javascript:void(0)"><i class="bi bi-bell-fill"></i></a>

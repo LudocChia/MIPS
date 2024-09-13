@@ -36,9 +36,9 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
                     <div class="input-container">
                         <div class="input-field">
                             <i class="fas fa-user"></i>
-                            <input type="text" id="name" name="name" placeholder="Your Name" required>
+                            <input type="text" id="name" name="user_name" placeholder="Parent Name" required>
                         </div>
-                        <p>Please enter your name</p>
+                        <p>Please enter your English name as on your Identification Card (IC)</p>
                     </div>
                     <div class="input-container">
                         <div class="input-field">
@@ -46,6 +46,9 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
                             <input type="password" id="new_password" name="new_password" placeholder="New Password" required>
                         </div>
                         <p>Please enter your new password</p>
+                        <p>&bull; At least one number and one special symbol</p>
+                        <p>&bull; Must be at least 6 characters long</p>
+                        <p>&bull; Cannot begin or end with a space</p>
                     </div>
                     <div class="input-container">
                         <div class="input-field">
@@ -53,7 +56,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
                             <input type="password" id="confirm_password" name="confirm_password" placeholder="Confirm Password" required>
                         </div>
                         <p>Please confirm your new password</p>
-                    </div>
+                        <!-- </div>
                     <div class="input-container">
                         <h2>Password Criteria</h2>
                         <table class="two-columns">
@@ -70,10 +73,10 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
                                 <td style="width: 95%">Passwords must be at least 6 characters long.</td>
                             </tr>
                         </table>
-                    </div>
-                    <div class="controls">
-                        <button type="submit" name="submit" class="btn">Update Password</button>
-                    </div>
+                    </div> -->
+                        <div class="controls">
+                            <button type="submit" name="submit" class="btn">Activate Account</button>
+                        </div>
                 </form>
             </div>
         </div>
@@ -82,7 +85,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
         document.querySelector('#activate-form').addEventListener('submit', function(e) {
             e.preventDefault();
 
-            const name = document.querySelector('#name').value;
+            const userName = document.querySelector('#name').value;
             const newPassword = document.querySelector('#new_password').value;
             const confirmPassword = document.querySelector('#confirm_password').value;
 
@@ -92,7 +95,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
                         'Content-Type': 'application/x-www-form-urlencoded'
                     },
                     body: new URLSearchParams({
-                        name: name,
+                        user_name: userName,
                         new_password: newPassword,
                         confirm_password: confirmPassword
                     })

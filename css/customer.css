@@ -253,7 +253,7 @@ header img.logo {
 }
 
 .btn.login {
-    background-color: var(--color-gray-light);
+    background-color: var(--color-gray-super-light);
     color: black;
 }
 
