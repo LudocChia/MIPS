@@ -45,7 +45,7 @@ if (isset($_GET['event_id']) && isset($_GET['meal_type_id'])) {
         }
     } else {
         echo '<p>No meals found for this meal type.</p>';
-    }   
+    }
 
 
     $donatorStmt = $pdo->prepare("SELECT meal_id, SUM(p_set) as total_donators FROM donator GROUP BY meal_id");
@@ -142,82 +142,82 @@ if (isset($_GET['event_id']) && isset($_GET['meal_type_id'])) {
                 <i class='bx bx-arrow-back'></i>
             </a>
         </div>
-            <div class="row2">
-                <?php if (!empty($meals)): ?>
-                    <div class="mealBox">
-                        <row>
-                            <h3><?= htmlspecialchars($meal['meal_name']) ?></h3>
+        <div class="row2">
+            <?php if (!empty($meals)): ?>
+                <div class="mealBox">
+                    <row>
+                        <button type="button" class="edit-meal-btn" data-meal-id="<?= htmlspecialchars($meal['meal_id']); ?>">
                             <i class='bx bx-edit'>Edit</i>
-                        </row>
-                        <row>
-                            <p><?= htmlspecialchars($meal['sets']) ?> set needed</p>
-                                        <!-- Delete Button -->
-                            <form action="" method="POST" style="display:inline;" onsubmit="return showDeleteConfirmDialog(event);">
-                                <input type="hidden" name="meal_id" value="<?= htmlspecialchars($meal['meal_id']); ?>">
-                                <input type="hidden" name="action" value="delete_meal">
-                                <button type="submit" class="delete-meal-btn "><i class='bx bx-message-square-x'>Delete</i></button>
-                            </form>
-                        </row>
-                        <p><?= htmlspecialchars($meal['person_per_set']) ?> person per set</p>
-                        <p>Total donations received:
-                            <?= isset($donatorTotals[$meal['meal_id']]) ? htmlspecialchars($donatorTotals[$meal['meal_id']]) : '0'; ?>
-                            sets
-                        </p>
-                    </div>
-                <?php else: ?>
-                    <p id="nRecord">No meals for now.</p>
-                <?php endif; ?>
-            </div>
-            <column class="row3">
-                <h3>Donation History</h3>
-                <div class="donatorTable">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Donator ID</th>
-                                <th>Event</th>
-                                <th>Time</th>
-                                <th>Meal Name</th>
-                                <th>Quantity</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php if (!empty($donators)): ?>
-                                <?php foreach ($donators as $donator): ?>
-                                    <div class="donatorBox">
-                                        <tr id="tableRow">
-                                            <td id="tableData">
-                                                <p> <?= htmlspecialchars($donator['donator_id']) ?></p>
-                                            </td>
-                                            <td id="tableData">
-                                                <p> <?= htmlspecialchars($donator['name']) ?> </p>
-                                            </td>
-                                            <td id="tableData">
-                                                <p><?= htmlspecialchars($donator['date']) ?></p>
-                                            </td>
-                                            <td id="tableData">
-                                                <p> <?= htmlspecialchars($donator['meal_name']) ?> </p>
-                                                <p> <?= htmlspecialchars($donator['meal_id']) ?> </p>
-                                            </td>
-                                            <td id="tableData">
-                                                <p> <?= htmlspecialchars($donator['p_set']) ?> </p>
-                                            </td>
-                                        </tr>
-                                    </div>
-                                <?php endforeach; ?>
-                            <?php else: ?>
-                                <p id="nRecord">No donators for now.</p>
-                            <?php endif; ?>
-                        </tbody>
-                    </table>
+                        </button>
+                    </row>
+                    <row>
+                        <p><?= htmlspecialchars($meal['sets']) ?> set needed</p>
+                        <form action="" method="POST" style="display:inline;" onsubmit="return showDeleteConfirmDialog(event);">
+                            <input type="hidden" name="meal_id" value="<?= htmlspecialchars($meal['meal_id']); ?>">
+                            <input type="hidden" name="action" value="delete_meal">
+                            <button type="submit" class="delete-meal-btn "><i class='bx bx-message-square-x'>Delete</i></button>
+                        </form>
+                    </row>
+                    <p><?= htmlspecialchars($meal['person_per_set']) ?> person per set</p>
+                    <p>Total donations received:
+                        <?= isset($donatorTotals[$meal['meal_id']]) ? htmlspecialchars($donatorTotals[$meal['meal_id']]) : '0'; ?>
+                        sets
+                    </p>
                 </div>
-            </column>
+            <?php else: ?>
+                <p id="nRecord">No meals for now.</p>
+            <?php endif; ?>
+        </div>
+        <column class="row3">
+            <h3>Donation History</h3>
+            <div class="donatorTable">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Donator ID</th>
+                            <th>Event</th>
+                            <th>Time</th>
+                            <th>Meal Name</th>
+                            <th>Quantity</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php if (!empty($donators)): ?>
+                            <?php foreach ($donators as $donator): ?>
+                                <div class="donatorBox">
+                                    <tr id="tableRow">
+                                        <td id="tableData">
+                                            <p> <?= htmlspecialchars($donator['donator_id']) ?></p>
+                                        </td>
+                                        <td id="tableData">
+                                            <p> <?= htmlspecialchars($donator['name']) ?> </p>
+                                        </td>
+                                        <td id="tableData">
+                                            <p><?= htmlspecialchars($donator['date']) ?></p>
+                                        </td>
+                                        <td id="tableData">
+                                            <p> <?= htmlspecialchars($donator['meal_name']) ?> </p>
+                                            <p> <?= htmlspecialchars($donator['meal_id']) ?> </p>
+                                        </td>
+                                        <td id="tableData">
+                                            <p> <?= htmlspecialchars($donator['p_set']) ?> </p>
+                                        </td>
+                                    </tr>
+                                </div>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <p id="nRecord">No donators for now.</p>
+                        <?php endif; ?>
+                    </tbody>
+                </table>
+            </div>
+        </column>
     </div>
 
 
     </div>
-    <dialog id="edit-meal-modal" >
-        <form id="edit-meal-form">
+    <dialog id="edit-meal-dialog">
+        <form method="POST" class="edit-meal-form" id="edit-meal-form">
             <input type="hidden" name="meal_id" id="edit-meal-id">
             <div class="input-container">
                 <h2>Meal Name</h2>
@@ -237,7 +237,7 @@ if (isset($_GET['event_id']) && isset($_GET['meal_type_id'])) {
                     <input type="number" name="person_per_set" id="edit-meal-person-per-set" required>
                 </div>
             </div>
-            <div class="input-container controls">
+            <div class="input-controls">
                 <button type="button" class="cancel">Cancel</button>
                 <button type="submit" class="confirm">Save</button>
             </div>
@@ -246,48 +246,56 @@ if (isset($_GET['event_id']) && isset($_GET['meal_type_id'])) {
     <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/confirm_dialog.php"; ?>
     <script>
         const ExclamationConfirmDialog = document.querySelector('#exclamation-confirm-dialog');
-        document.addEventListener("DOMContentLoaded", function() {
-            const editModal = document.getElementById('edit-meal-modal');
-            const editForm = document.getElementById('edit-meal-form');
-
-            document.querySelectorAll('.edit-meal-btn').forEach(button => {
-                button.addEventListener('click', function() {
-                    const mealId = this.dataset.mealId;
-                    const mealName = this.dataset.mealName;
-                    const sets = this.dataset.mealSets;
-                    const personPerSet = this.dataset.mealPersonPerSet;
-
-                    document.getElementById('edit-meal-id').value = mealId;
-                    document.getElementById('edit-meal-name').value = mealName;
-                    document.getElementById('edit-meal-sets').value = sets;
-                    document.getElementById('edit-meal-person-per-set').value = personPerSet;
-
-                    editModal.showModal();
-                });
-            });
-
-            editForm.addEventListener('submit', function(event) {
-                event.preventDefault();
-
-                const formData = new FormData(editForm);
-                fetch('/mips/admin/ajax.php?action=save_meal', {
-                        method: 'POST',
-                        body: formData
-                    })
+        document.querySelectorAll('.edit-meal-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const mealId = this.dataset.mealId;
+                fetch(`/mips/admin/ajax.php?action=get_meal&meal_id=${mealId}`)
                     .then(response => response.json())
-                    .then(result => {
-                        if (result.success) {
-                            location.reload();
+                    .then(meal => {
+                        if (meal.error) {
+                            alert(meal.error);
                         } else {
-                            alert('Failed to update meal: ' + result.error);
+                            document.querySelector('#edit-meal-dialog [name="meal_name"]').value = meal.meal_name;
+                            document.querySelector('#edit-meal-dialog [name="sets"]').value = meal.sets;
+                            document.querySelector('#edit-meal-dialog [name="person_per_set"]').value = meal.person_per_set;
+                            document.querySelector('#edit-meal-dialog [name="meal_id"]').value = meal.meal_id;
+                            document.getElementById('edit-meal-dialog').showModal();
                         }
                     })
                     .catch(error => {
-                        console.error('Error updating meal:', error);
-                        alert('An error occurred while updating the meal.');
+                        console.error('Error fetching meal data:', error);
+                        alert('Failed to load meal data.');
                     });
             });
         });
+
+        document.querySelector('#edit-meal-dialog .cancel').addEventListener('click', function() {
+            document.getElementById('edit-meal-dialog').close();
+        });
+
+        document.querySelector('.edit-meal-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const formData = new FormData(this);
+
+            fetch('/mips/admin/ajax.php?action=save_meal', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(result => {
+                    if (result.success) {
+                        location.reload();
+                    } else {
+                        alert('Failed to update meal: ' + result.error);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error saving meal:', error);
+                    alert('An error occurred while saving the meal.');
+                });
+        });
+
 
         window.showDeleteConfirmDialog = function(event) {
             event.preventDefault();
@@ -298,8 +306,8 @@ if (isset($_GET['event_id']) && isset($_GET['meal_type_id'])) {
                 const idField = currentForm.querySelector('input[name*="_id"]').name;
                 const idValue = currentForm.querySelector(`input[name="${idField}"]`).value;
 
-                const eventId = "<?= htmlspecialchars($event_id) ?>"; // Dynamic event_id from PHP
-                const mealTypeId = "<?= htmlspecialchars($meal_type_id) ?>"; // Dynamic meal_type_id from PHP
+                const eventId = "<?= htmlspecialchars($event_id) ?>";
+                const mealTypeId = "<?= htmlspecialchars($meal_type_id) ?>";
 
                 document.querySelector('#exclamation-confirm-dialog h1').textContent = "This data will be Deleted!";
                 document.querySelector('.confirm').textContent = "Delete";

@@ -431,6 +431,15 @@ switch ($action) {
         }
         break;
 
+    case 'get_meal':
+        if (isset($_GET['meal_id'])) {
+            $mealId = $_GET['meal_id'];
+            $result = $crud->get_meal($mealId);
+            echo json_encode($result);
+        } else {
+            echo json_encode(['error' => 'Meal ID not provided']);
+        }
+        break;
 
 
     default:

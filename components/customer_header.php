@@ -5,7 +5,7 @@
                 <img src="/mips/images/MIPS_logo.png" class="logo" alt="Mahans International Primary School logo">
             </a>
         </div>
-        <span class="fas fa-bars" id="menuIcon" onclick="toggle()"></span>
+        <!-- <span class="fas fa-bars" id="menuIcon" onclick="toggle()"></span> -->
         <div class="navbar" id="nav">
             <ul>
                 <!-- <li>
@@ -17,9 +17,9 @@
                 <!-- <li>
                     <a href="event.php"><i class="bi bi-calendar4-event"></i>School Event</a>
                 </li> -->
-                <li>
+                <!-- <li>
                     <a href="bookshop.php"><i class="bi bi-shop-window"></i>Bookshop</a>
-                </li>
+                </li> -->
             </ul>
         </div>
         <div>
