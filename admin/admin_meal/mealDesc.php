@@ -57,15 +57,22 @@ if (isset($_GET['event_id']) && isset($_GET['meal_type_id'])) {
     foreach ($donators as $donator) {
         $donatorTotals[$donator['meal_id']] = $donator['total_donators'];
     }
+    //use for tracking parent's name
+    $sql = $pdo->prepare("SELECT * FROM `parent` 
+    INNER JOIN `donator` ON donator.parent_id = parent.parent_id
+    ");
+    $sql->execute();
+    $parents = $sql->fetchAll(PDO::FETCH_ASSOC);
+
 
     // Prepare and execute the query to search for donators based on event_meal_id
-    $event_meal_id = $meal['event_meal_id'];
+
     $stmt2 = $pdo->prepare("SELECT * FROM `event_meal` 
         INNER JOIN `meal_type` ON event_meal.meal_type_id = meal_type.meal_type_id
         INNER JOIN `meals` ON event_meal.event_meal_id = meals.event_meal_id
         INNER JOIN `event` ON event_meal.event_id = event.event_id 
         INNER JOIN `donator` ON event_meal.event_meal_id = donator.event_meal_id 
-        where meals.meal_id = :meal_id
+        where meals.meal_id = :meal_id 
         ");
     $stmt2->bindParam(':meal_id', $meal_id);
 
@@ -78,7 +85,6 @@ if (isset($_GET['event_id']) && isset($_GET['meal_type_id'])) {
         // echo '<h2>Donator Information</h2>';
         foreach ($donators as $donator) {
             // echo '<p>Donator_ID: ' . htmlspecialchars($donator['donator_id']) . '</p>';
-            // echo '<p>Name: ' . htmlspecialchars($donator['parent_name']) . '</p>';
             // echo '<p>Time: ' . htmlspecialchars($donator['date']) . '</p>';
             // echo '<p>Meal Name: ' . htmlspecialchars($donator['meal_name']) . '</p>';
             // echo '<p>Quantity: ' . htmlspecialchars($donator['p_set']) . '</p>';
@@ -174,7 +180,7 @@ if (isset($_GET['event_id']) && isset($_GET['meal_type_id'])) {
                     <table>
                         <thead>
                             <tr>
-                                <th>Donator ID</th>
+                                <th>Name</th>
                                 <th>Event</th>
                                 <th>Time</th>
                                 <th>Meal Name</th>
@@ -216,7 +222,7 @@ if (isset($_GET['event_id']) && isset($_GET['meal_type_id'])) {
 
 
     </div>
-    <dialog id="edit-meal-modal" >
+    <dialog id="edit-meal-modal"  >
         <form id="edit-meal-form">
             <input type="hidden" name="meal_id" id="edit-meal-id">
             <div class="input-container">
