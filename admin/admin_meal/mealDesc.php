@@ -45,11 +45,18 @@ if (isset($_GET['event_id']) && isset($_GET['meal_type_id'])) {
         }
     } else {
         echo '<p>No meals found for this meal type.</p>';
-    }
+    }   
+
 
     $donatorStmt = $pdo->prepare("SELECT meal_id, SUM(p_set) as total_donators FROM donator GROUP BY meal_id");
     $donatorStmt->execute();
     $donators = $donatorStmt->fetchAll(PDO::FETCH_ASSOC);
+
+    // Create an array for quick lookup of total donators by meal_id
+    $donatorTotals = [];
+    foreach ($donators as $donator) {
+        $donatorTotals[$donator['meal_id']] = $donator['total_donators'];
+    }
 
     // Prepare and execute the query to search for donators based on event_meal_id
     $event_meal_id = $meal['event_meal_id'];
@@ -58,8 +65,9 @@ if (isset($_GET['event_id']) && isset($_GET['meal_type_id'])) {
         INNER JOIN `meals` ON event_meal.event_meal_id = meals.event_meal_id
         INNER JOIN `event` ON event_meal.event_id = event.event_id 
         INNER JOIN `donator` ON event_meal.event_meal_id = donator.event_meal_id 
+        where meals.meal_id = :meal_id
         ");
-
+    $stmt2->bindParam(':meal_id', $meal_id);
 
     $stmt2->execute();
 
@@ -133,7 +141,7 @@ if (isset($_GET['event_id']) && isset($_GET['meal_type_id'])) {
             <a href="<?= htmlspecialchars($backPageUrl) ?>" style="text-decoration: none; color: inherit;">
                 <i class='bx bx-arrow-back'></i>
             </a>
-            </row>
+        </div>
             <div class="row2">
                 <?php if (!empty($meals)): ?>
                     <div class="mealBox">
@@ -143,7 +151,12 @@ if (isset($_GET['event_id']) && isset($_GET['meal_type_id'])) {
                         </row>
                         <row>
                             <p><?= htmlspecialchars($meal['sets']) ?> set needed</p>
-                            <i class='bx bx-message-square-x' id="delete">Delete</i>
+                                        <!-- Delete Button -->
+                            <form action="" method="POST" style="display:inline;" onsubmit="return showDeleteConfirmDialog(event);">
+                                <input type="hidden" name="meal_id" value="<?= htmlspecialchars($meal['meal_id']); ?>">
+                                <input type="hidden" name="action" value="delete_meal">
+                                <button type="submit" class="delete-meal-btn "><i class='bx bx-message-square-x'>Delete</i></button>
+                            </form>
                         </row>
                         <p><?= htmlspecialchars($meal['person_per_set']) ?> person per set</p>
                         <p>Total donations received:
@@ -184,6 +197,7 @@ if (isset($_GET['event_id']) && isset($_GET['meal_type_id'])) {
                                             </td>
                                             <td id="tableData">
                                                 <p> <?= htmlspecialchars($donator['meal_name']) ?> </p>
+                                                <p> <?= htmlspecialchars($donator['meal_id']) ?> </p>
                                             </td>
                                             <td id="tableData">
                                                 <p> <?= htmlspecialchars($donator['p_set']) ?> </p>
@@ -198,42 +212,11 @@ if (isset($_GET['event_id']) && isset($_GET['meal_type_id'])) {
                     </table>
                 </div>
             </column>
-
-            <!-- Delete Button -->
-            <form action="" method="POST" style="display:inline;" onsubmit="return showDeleteConfirmDialog(event);">
-                <input type="hidden" name="meal_id" value="<?= htmlspecialchars($meal['meal_id']); ?>">
-                <input type="hidden" name="action" value="delete_meal">
-                <button type="submit" class="delete-meal-btn "><i class='bx bx-message-square-x'>Delete</i></button>
-            </form>
-            </row>
-            <p><?= htmlspecialchars($meal['person_per_set']) ?> person per set</p>
-            <p>Total donations received:
-                <?= isset($donatorTotals[$meal['meal_id']]) ? htmlspecialchars($donatorTotals[$meal['meal_id']]) : '0'; ?>
-                sets
-            </p>
-        </div>
     </div>
-    <column class="row3">
-        <h3>Donation History</h3>
-        <table>
-            <?php if (!empty($donators)): ?>
-                <?php foreach ($donators as $donator): ?>
-                    <div class="mealBox">
-                        <p><strong>Donator_ID:</strong> <?= htmlspecialchars($donator['donator_id']) ?></p>
-                        <p><strong>Name:</strong> <?= htmlspecialchars($donator['parent_name']) ?> </p>
-                        <p><Strong>Time:</Strong> <?= htmlspecialchars($donator['date']) ?></p>
-                        <!-- <p><Strong>Meal Name:</Strong> <?= htmlspecialchars($donator['meal_name']) ?> </p> -->
-                        <p><strong>Quantity:</strong> <?= htmlspecialchars($donator['p_set']) ?> </p>
-                    </div>
-                <?php endforeach; ?>
-            <?php else: ?>
-                <p id="nRecord">No donators for now.</p>
-            <?php endif; ?>
-        </table>
-    </column>
+
 
     </div>
-    <dialog id="edit-meal-modal">
+    <dialog id="edit-meal-modal" >
         <form id="edit-meal-form">
             <input type="hidden" name="meal_id" id="edit-meal-id">
             <div class="input-container">
