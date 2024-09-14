@@ -23,24 +23,22 @@
             </ul>
         </div>
         <div class="profile-area">
-            <div class="profile-area">
-                <?php if (isset($_SESSION['user_id'])): ?>
-                    <!-- <a href="mailbox.php"><i class="bi bi-bell-fill"></i> -->
-                    <!-- <sup id="MessageCount"></?= $total_unread_messages > 0 ? $total_unread_messages : '0' ?></sup> -->
-                    <!-- </a> -->
-                    <!-- <a href="cart.php"><i class="bi bi-basket3-fill"></i> -->
-                    <!-- <sup id="cartCount"></?= $total_cart_items > 0 ? $total_cart_items : '0' ?></sup> -->
-                    <!-- </a> -->
-                    <div class="profile">
-                        <img src="<?= htmlspecialchars($_SESSION['user_image']) ?>" alt="User Image" class="user-img" id="user-btn">
-                    </div>
-                <?php else: ?>
-                    <button class="btn login" id="login-btn">Login</button>
-                    <a href="/mips/login.php">
-                        <img src="/mips/images/default_profile.png" alt="User Image" class="user-img login" id="user-btn">
-                    </a>
-                <?php endif; ?>
-            </div>
+            <?php if (isset($_SESSION['user_id'])): ?>
+                <!-- <a href="mailbox.php"><i class="bi bi-bell-fill"></i> -->
+                <!-- <sup id="MessageCount"></?= $total_unread_messages > 0 ? $total_unread_messages : '0' ?></sup> -->
+                <!-- </a> -->
+                <!-- <a href="cart.php"><i class="bi bi-basket3-fill"></i> -->
+                <!-- <sup id="cartCount"></?= $total_cart_items > 0 ? $total_cart_items : '0' ?></sup> -->
+                <!-- </a> -->
+                <div class="profile">
+                    <img src="<?= htmlspecialchars($_SESSION['user_image']) ?>" alt="User Image" class="user-img" id="user-btn">
+                </div>
+            <?php else: ?>
+                <button class="btn login" id="login-btn">Login</button>
+                <a href="/mips/login.php">
+                    <img src="/mips/images/default_profile.png" alt="User Image" class="user-img login" id="user-btn">
+                </a>
+            <?php endif; ?>
         </div>
         <?php if (isset($_SESSION['user_id'])): ?>
             <div class="profile-menu">

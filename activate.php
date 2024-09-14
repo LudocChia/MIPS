@@ -75,7 +75,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
                         </table>
                     </div> -->
                         <div class="controls">
-                            <button type="submit" name="submit" class="btn">Activate Account</button>
+                            <button type="submit" name="submit" class="btn">Activate</button>
                         </div>
                 </form>
             </div>
