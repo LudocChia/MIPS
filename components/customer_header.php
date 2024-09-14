@@ -22,11 +22,9 @@
                 </li> -->
             </ul>
         </div>
-        <div>
+        <div class="profile-area">
             <div class="profile-area">
-                <?php
-                if (isset($_SESSION['user_id'])) {
-                ?>
+                <?php if (isset($_SESSION['user_id'])): ?>
                     <!-- <a href="mailbox.php"><i class="bi bi-bell-fill"></i> -->
                     <!-- <sup id="MessageCount"></?= $total_unread_messages > 0 ? $total_unread_messages : '0' ?></sup> -->
                     <!-- </a> -->
@@ -34,18 +32,17 @@
                     <!-- <sup id="cartCount"></?= $total_cart_items > 0 ? $total_cart_items : '0' ?></sup> -->
                     <!-- </a> -->
                     <div class="profile">
-                        <img src="<?= htmlspecialchars($_SESSION['user_image']) ?>" alt="Admin Image" class="user-img" id="user-btn">
+                        <img src="<?= htmlspecialchars($_SESSION['user_image']) ?>" alt="User Image" class="user-img" id="user-btn">
                     </div>
-                <?php
-                } else {
-                ?>
+                <?php else: ?>
                     <button class="btn login" id="login-btn">Login</button>
-                    <!-- <button class="btn btn-outline-primary" id="signup-btn">Sign Up</button> -->
-                    <a href="/mips/login.php"><img src="/mips/images/default_profile.png" alt="User Image" class="user-img login" id="user-btn"></a>
-                <?php
-                }
-                ?>
+                    <a href="/mips/login.php">
+                        <img src="/mips/images/default_profile.png" alt="User Image" class="user-img login" id="user-btn">
+                    </a>
+                <?php endif; ?>
             </div>
+        </div>
+        <?php if (isset($_SESSION['user_id'])): ?>
             <div class="profile-menu">
                 <div class="user-info">
                     <img src="<?= htmlspecialchars($_SESSION['user_image']) ?>" alt="User Image">
@@ -68,7 +65,7 @@
                     <i class="bi bi-chevron-right"></i>
                 </a>
             </div>
-        </div>
+        <?php endif; ?>
     </div>
     <div class="mobile-wrapper">
         <div class="mobile-navbar">
@@ -77,19 +74,19 @@
                     <a href="/mips/parent/donationMain.php"><i class="fa fa-cutlery" aria-hidden="true"></i></a>
                 </li>
                 <li>
-                    <a href="javascript:void(0)"><i style="color:#003455" class="bi bi-calendar4-event"></i></a>
+                    <a href="javascript:void(0)"><i class="bi bi-calendar4-event"></i></a>
                 </li>
                 <li>
-                    <a href="javascript:void(0)"><i style="color:#003455" class="bi bi-shop-window"></i></a>
+                    <a href="javascript:void(0)"><i class="bi bi-shop-window"></i></a>
                 </li>
                 <li>
-                    <a href="javascript:void(0)"><i style="color:#003455" class="bi bi-bell-fill"></i></a>
+                    <a href="javascript:void(0)"><i class="bi bi-bell-fill"></i></a>
                 </li>
                 <li>
-                    <a href="/mips/cart.php"><i style="color:#003455" class="bi bi-basket3-fill"></i></a>
+                    <a href="javascript:void(0)"><i class="bi bi-basket3-fill"></i></a>
                 </li>
                 <li>
-                    <a href="javascript:void(0)"><i style="color:#003455" class="bi bi-list"></i></i></a>
+                    <a href="javascript:void(0)"><i class="bi bi-list"></i></a>
                 </li>
             </ul>
         </div>

@@ -376,6 +376,7 @@ dialog {
 }
 
 .mini-alert {
+    text-align: center;
     padding: 10px;
     background-color: rgba(128, 128, 128, 0.9);
     color: white;
@@ -433,28 +434,25 @@ header .mobile-wrapper {
     width: 100%;
 }
 
-.navbar ul li,
-.mobile-navbar ul li {
-    display: inline-block;
-    transition: all 0.5s ease;
-    cursor: pointer;
-    margin-right: 2rem;
-    overflow: hidden;
-}
-
-.navbar i,
-.navbar span {
-    color: var(--color-white);
-    margin-right: 1rem;
-}
-
-
 .navbar ul li a,
 .mobile-navbar ul li a {
     color: var(--color-white);
     text-decoration: none;
     font-size: 1.5rem;
-    margin-left: 10px;
+}
+
+.navbar ul li,
+.mobile-navbar ul li {
+    display: inline-block;
+    transition: all 0.5s ease;
+    cursor: pointer;
+    padding: 0 1.5rem 0 1.5rem;
+    /* overflow: hidden; */
+}
+
+.navbar i {
+    color: var(--color-white);
+    margin-right: 1rem;
 }
 
 #menuIcon {
