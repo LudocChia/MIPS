@@ -1,11 +1,9 @@
 <?php
-
 session_start();
-
 include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/db_connect.php";
 
 if (isset($_SESSION['user_id'])) {
-    header('Location: /mips/login.php');
+    header('Location: /mips/');
     exit();
 }
 
@@ -28,6 +26,8 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                 </div>
                 <div id="alert-container"></div>
                 <form id="login-form-ajax" method="POST">
+                    <!-- Hidden input for user_type -->
+                    <input type="hidden" name="user_type" value="parent">
                     <div class="input-container">
                         <div class="input-field">
                             <i class="fas fa-user"></i>
@@ -42,9 +42,6 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                         </div>
                         <p>Please enter your password</p>
                     </div>
-                    <!-- <div class="pass">
-                        <a href="#">Forgot password?</a>
-                    </div> -->
                     <div class="controls">
                         <button type="submit" class="btn">Login</button>
                     </div>
@@ -61,9 +58,11 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
 
                 const email = document.querySelector('input[name="email"]').value;
                 const password = document.querySelector('input[name="password"]').value;
+                const userType = 'parent'; // Set the user type
                 const productId = "<?php echo $product_id; ?>";
+                const currentPage = "<?php echo $currentPage; ?>";
 
-                fetch('/mips/ajax.php?action=login', {
+                fetch('/mips/php/ajax.php?action=login', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/x-www-form-urlencoded'
@@ -71,13 +70,15 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                         body: new URLSearchParams({
                             email: email,
                             password: password,
-                            pid: productId
+                            user_type: userType,
+                            pid: productId,
+                            current_page: currentPage
                         })
                     })
                     .then(response => response.json())
                     .then(data => {
                         if (data.success) {
-                            window.location.href = '/mips/';
+                            window.location.href = data.redirect;
                         } else {
                             showAlert(data.error);
                         }

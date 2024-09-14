@@ -4,7 +4,7 @@ session_start();
 
 include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/db_connect.php";
 
-if (!isset($_SESSION['user_id'])) {
+if (!isset($_SESSION['user_id']) || !isset($_SESSION['user_type']) || $_SESSION['user_type'] !== "admin") {
     header('Location: /mips/admin/login.php');
     exit();
 }

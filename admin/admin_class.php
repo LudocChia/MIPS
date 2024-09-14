@@ -49,37 +49,37 @@ class Action
         return json_encode(['success' => true]);
     }
 
-    public function login($email, $password)
-    {
-        try {
-            $sql = "SELECT * FROM Admin WHERE admin_email = :email AND status IN (0, -1)";
-            $stmt = $this->db->prepare($sql);
-            $stmt->bindParam(':email', $email);
-            $stmt->execute();
+    // public function login($email, $password)
+    // {
+    //     try {
+    //         $sql = "SELECT * FROM Admin WHERE admin_email = :email AND status IN (0, -1)";
+    //         $stmt = $this->db->prepare($sql);
+    //         $stmt->bindParam(':email', $email);
+    //         $stmt->execute();
 
-            $admin = $stmt->fetch(PDO::FETCH_ASSOC);
+    //         $admin = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            if ($admin && password_verify($password, $admin['admin_password'])) {
-                session_start();
-                $_SESSION['user_type'] = 'admin';
-                $_SESSION['user_id'] = $admin['admin_id'];
-                $_SESSION['user_name'] = $admin['admin_name'];
-                $_SESSION['user_email'] = $admin['admin_email'];
-                $_SESSION['user_status'] = $admin['status'];
-                $_SESSION['user_image'] = $admin['admin_image'] ?? '/mips/images/default_profile.png';
+    //         if ($admin && password_verify($password, $admin['admin_password'])) {
+    //             session_start();
+    //             $_SESSION['admin_type'] = 'admin';
+    //             $_SESSION['admin_id'] = $admin['admin_id'];
+    //             $_SESSION['admin_name'] = $admin['admin_name'];
+    //             $_SESSION['admin_email'] = $admin['admin_email'];
+    //             $_SESSION['admin_status'] = $admin['status'];
+    //             $_SESSION['admin_image'] = $admin['admin_image'] ?? '/mips/images/default_profile.png';
 
-                if ($admin['status'] == -1) {
-                    return json_encode(['new_user' => true, 'redirect' => '/mips/activate.php']);
-                }
+    //             if ($admin['status'] == -1) {
+    //                 return json_encode(['new_user' => true, 'redirect' => '/mips/activate.php']);
+    //             }
 
-                return json_encode(['success' => true, 'redirect' => '/mips/admin']);
-            } else {
-                return json_encode(['success' => false, 'error' => 'Invalid email or password.']);
-            }
-        } catch (PDOException $e) {
-            return json_encode(['error' => 'Database error: ' . $e->getMessage()]);
-        }
-    }
+    //             return json_encode(['success' => true, 'redirect' => '/mips/admin']);
+    //         } else {
+    //             return json_encode(['success' => false, 'error' => 'Invalid email or password.']);
+    //         }
+    //     } catch (PDOException $e) {
+    //         return json_encode(['error' => 'Database error: ' . $e->getMessage()]);
+    //     }
+    // }
 
     // Admin Functions
     public function deactivate_admin($admin_id)

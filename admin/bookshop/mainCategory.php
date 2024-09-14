@@ -83,7 +83,7 @@ if (isset($_POST["submit"])) {
             $stmt = $pdo->prepare($sql);
             $stmt->bindParam(':name', $name);
             $stmt->bindParam(':category_id', $categoryId);
-            $stmt->bindParam(':admin_id', $_SESSION['user_id']);
+            $stmt->bindParam(':admin_id', $_SESSION['admin_id']);
 
             if ($newImageName) {
                 $stmt->bindParam(':icon', $newImageName);
@@ -94,7 +94,7 @@ if (isset($_POST["submit"])) {
             $stmt->bindParam(':category_id', $categoryId);
             $stmt->bindParam(':name', $name);
             $stmt->bindParam(':icon', $newImageName);
-            $stmt->bindParam(':admin_id', $_SESSION['user_id']);
+            $stmt->bindParam(':admin_id', $_SESSION['admin_id']);
         }
 
         include $_SERVER['DOCUMENT_ROOT'] . "/mips/php/refresh_page.php";

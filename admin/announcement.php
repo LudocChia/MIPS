@@ -85,7 +85,7 @@ if (isset($_POST["submit"])) {
             $stmt->bindParam(':title', $announcementTitle);
             $stmt->bindParam(':message', $announcementMessage);
             $stmt->bindParam(':announcement_id', $announcementId);
-            $stmt->bindParam(':admin_id', $_SESSION['user_id']);
+            $stmt->bindParam(':admin_id', $_SESSION['admin_id']);
 
 
             if ($newImageName) {
@@ -98,7 +98,7 @@ if (isset($_POST["submit"])) {
             $stmt->bindParam(':title', $announcementTitle);
             $stmt->bindParam(':message', $announcementMessage);
             $stmt->bindParam(':image_url', $newImageName);
-            $stmt->bindParam(':admin_id', $_SESSION['user_id']);
+            $stmt->bindParam(':admin_id', $_SESSION['admin_id']);
         }
 
         include $_SERVER['DOCUMENT_ROOT'] . "/mips/php/refresh_page.php";

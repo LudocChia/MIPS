@@ -9,13 +9,13 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/admin/admin_class.php";
 $crud = new Action();
 
 switch ($action) {
-    case 'login':
-        if (isset($_POST['email']) && isset($_POST['password'])) {
-            echo $crud->login($_POST['email'], $_POST['password']);
-        } else {
-            echo json_encode(['error' => 'Email or password not provided']);
-        }
-        break;
+        // case 'login':
+        //     if (isset($_POST['email']) && isset($_POST['password'])) {
+        //         echo $crud->login($_POST['email'], $_POST['password']);
+        //     } else {
+        //         echo json_encode(['error' => 'Email or password not provided']);
+        //     }
+        //     break;
 
         // Admin Functions
     case 'get_admin':

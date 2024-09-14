@@ -192,7 +192,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
             const phone = document.querySelector('#add-edit-data [name="phone"]').value;
             const password = document.querySelector('#add-edit-data [name="password"]').value;
             const confirmPassword = document.querySelector('#add-edit-data [name="confirm_password"]').value;
-            const adminId = '<?php echo $_SESSION['user_id']; ?>';
+            const adminId = '<?php echo $_SESSION['admin_id']; ?>';
 
             if (password !== confirmPassword) {
                 showAlert('Passwords do not match!');

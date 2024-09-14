@@ -10,38 +10,38 @@ class Action
         $this->db = $pdo;
     }
 
-    public function login($email, $password, $currentPage = null, $productId = null)
-    {
-        try {
-            $sqlParent = "SELECT * FROM Parent WHERE parent_email = :email AND status in(-1, 0)";
-            $stmtParent = $this->db->prepare($sqlParent);
-            $stmtParent->bindParam(':email', $email);
-            $stmtParent->execute();
+    // public function login($email, $password, $currentPage = null, $productId = null)
+    // {
+    //     try {
+    //         $sqlParent = "SELECT * FROM Parent WHERE parent_email = :email AND status in(-1, 0)";
+    //         $stmtParent = $this->db->prepare($sqlParent);
+    //         $stmtParent->bindParam(':email', $email);
+    //         $stmtParent->execute();
 
-            $parent = $stmtParent->fetch(PDO::FETCH_ASSOC);
+    //         $parent = $stmtParent->fetch(PDO::FETCH_ASSOC);
 
-            if ($parent && password_verify($password, $parent['parent_password'])) {
-                $_SESSION['user_type'] = 'parent';
-                $_SESSION['user_id'] = $parent['parent_id'];
-                $_SESSION['user_name'] = $parent['parent_name'];
-                $_SESSION['user_phone'] = $parent['parent_phone'];
-                $_SESSION['user_email'] = $parent['parent_email'];
-                $_SESSION['user_status'] = $parent['status'];
-                $_SESSION['user_image'] = !empty($parent['parent_image']) ? $parent['parent_image'] : '/mips/images/default_profile.png';
+    //         if ($parent && password_verify($password, $parent['parent_password'])) {
+    //             $_SESSION['user_type'] = 'parent';
+    //             $_SESSION['user_id'] = $parent['parent_id'];
+    //             $_SESSION['user_name'] = $parent['parent_name'];
+    //             $_SESSION['user_phone'] = $parent['parent_phone'];
+    //             $_SESSION['user_email'] = $parent['parent_email'];
+    //             $_SESSION['user_status'] = $parent['status'];
+    //             $_SESSION['user_image'] = !empty($parent['parent_image']) ? $parent['parent_image'] : '/mips/images/default_profile.png';
 
-                if ($parent['status'] == -1) {
-                    return json_encode(['success' => true, 'redirect' => '/mips/activate.php']);
-                }
+    //             if ($parent['status'] == -1) {
+    //                 return json_encode(['success' => true, 'redirect' => '/mips/activate.php']);
+    //             }
 
-                $redirectUrl = $productId ? "item.php?pid=" . $productId : ($currentPage ?? '/mips');
-                return json_encode(['success' => true, 'redirect' => $redirectUrl]);
-            } else {
-                return json_encode(['success' => false, 'error' => 'Invalid email or password.']);
-            }
-        } catch (PDOException $e) {
-            return json_encode(['error' => 'Database error: ' . $e->getMessage()]);
-        }
-    }
+    //             $redirectUrl = $productId ? "item.php?pid=" . $productId : ($currentPage ?? '/mips');
+    //             return json_encode(['success' => true, 'redirect' => $redirectUrl]);
+    //         } else {
+    //             return json_encode(['success' => false, 'error' => 'Invalid email or password.']);
+    //         }
+    //     } catch (PDOException $e) {
+    //         return json_encode(['error' => 'Database error: ' . $e->getMessage()]);
+    //     }
+    // }
 
 
     // Order Functions

@@ -54,7 +54,7 @@
                     <p>My Account</p>
                     <i class="bi bi-chevron-right"></i>
                 </a>
-                <a href="purchase.php" class="profile-menu-link">
+                <a href="/mips/parent/donationHistory.php" class="profile-menu-link">
                     <i class="bi bi-calendar-check"></i>
                     <p>My Activities</p>
                     <i class="bi bi-chevron-right"></i>

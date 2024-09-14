@@ -47,7 +47,7 @@ if (isset($_POST["submit"])) {
         $stmt->bindParam(':gradeName', $gradeName);
         $stmt->bindParam(':gradeLevel', $gradeLevel);
         $stmt->bindParam(':studentIdPrefix', $studentIdPrefix);
-        $stmt->bindParam(':adminId', $_SESSION['user_id']);
+        $stmt->bindParam(':adminId', $_SESSION['admin_id']);
     } else {
         $sql = "INSERT INTO Grade (grade_id, grade_name, grade_level, student_id_prefix, status, admin_id) VALUES (:gradeId, :gradeName, :gradeLevel, :studentIdPrefix, 0, :adminId)";
         $stmt = $pdo->prepare($sql);
@@ -55,7 +55,7 @@ if (isset($_POST["submit"])) {
         $stmt->bindParam(':gradeName', $gradeName);
         $stmt->bindParam(':gradeLevel', $gradeLevel);
         $stmt->bindParam(':studentIdPrefix', $studentIdPrefix);
-        $stmt->bindParam(':adminId', $_SESSION['user_id']);
+        $stmt->bindParam(':adminId', $_SESSION['admin_id']);
     }
 
     include $_SERVER['DOCUMENT_ROOT'] . "/mips/php/refresh_page.php";

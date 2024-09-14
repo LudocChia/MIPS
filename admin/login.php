@@ -1,16 +1,13 @@
 <?php
-
 session_start();
-
 include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/db_connect.php";
 
-if (isset($_SESSION['user_id'])) {
-    header('Location: /mips/admin/login.php');
+if (isset($_SESSION['admin_id'])) {
+    header('Location: /mips/admin/');
     exit();
 }
 
 $email = '';
-
 $pageTitle = "Admin Login Page - MIPS";
 include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
 
@@ -26,6 +23,8 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                     <h1>MIPS System</h1>
                 </div>
                 <form id="login-form-ajax" method="POST">
+                    <!-- Hidden input for user_type -->
+                    <input type="hidden" name="user_type" value="admin">
                     <div class="input-container">
                         <div class="input-field">
                             <i class="fas fa-user"></i>
@@ -40,9 +39,6 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                         </div>
                         <p>Please enter your password</p>
                     </div>
-                    <!-- <div class="pass">
-                        <a href="#">Forgot password?</a>
-                    </div> -->
                     <div class="controls">
                         <button type="submit" class="btn">Login</button>
                     </div>
@@ -59,8 +55,9 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
 
                 const email = document.querySelector('input[name="email"]').value;
                 const password = document.querySelector('input[name="password"]').value;
+                const userType = 'admin';
 
-                fetch('/mips/admin/ajax.php?action=login', {
+                fetch('/mips/php/ajax.php?action=login', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/x-www-form-urlencoded'
@@ -68,6 +65,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                         body: new URLSearchParams({
                             email: email,
                             password: password,
+                            user_type: userType
                         })
                     })
                     .then(response => response.json())

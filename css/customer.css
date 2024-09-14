@@ -252,6 +252,11 @@ header img.logo {
     width: 35rem;
 }
 
+.btn.login {
+    background-color: var(--color-gray-super-light);
+    color: black;
+}
+
 /* Footer */
 .footer {
     padding: 2rem 0;
