@@ -184,7 +184,7 @@ if (isset($_POST['delete-event'])) {
                 // echo '<p>Lunch URL: ' . htmlspecialchars($lunchUrl) . '</p>';
                 ?>
                 <a href="<?= htmlspecialchars($breakfastUrl) ?>" style="text-decoration: none; color: inherit;">
-                    <p id="first">Morning Tea</p>
+                    <p id="first">Morning Snack</p>
                 </a>
                 <a href="<?= htmlspecialchars($lunchUrl) ?>" style="text-decoration: none; color: inherit;">
                     <p id="second">Lunch</p>
