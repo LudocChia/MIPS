@@ -89,7 +89,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
         </main>
     </div>
     <dialog id="add-edit-data">
-        <form id="parent-form-ajax" method="post">
+        <form id="form-ajax" method="post">
             <div class="title">
                 <div class="left">
                     <h1>Add New Parent</h1>
@@ -103,14 +103,14 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
             <div class="input-container">
                 <h2>Parent Name<sup>*</sup></h2>
                 <div class="input-field">
-                    <input type="text" name="name" required>
+                    <input type="text" name="name" value="<?php echo isset($_POST['name']) ? htmlspecialchars($_POST['name']) : ''; ?>" required novalidate>
                 </div>
                 <p>Please enter the parent's full name.</p>
             </div>
             <div class="input-container">
                 <h2>Parent Email<sup>*</sup></h2>
                 <div class="input-field">
-                    <input type="email" name="email" required>
+                    <input type="email" name="email" value="<?php echo isset($_POST['email']) ? htmlspecialchars($_POST['email']) : ''; ?>" required novalidate>
                 </div>
                 <p>Please enter the parent's email address.</p>
             </div>
@@ -124,14 +124,14 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
             <div class="input-container">
                 <h2>Password<sup>*</sup></h2>
                 <div class="input-field">
-                    <input type="password" name="password" required>
+                    <input type="password" name="password" required novalidate>
                 </div>
                 <p>Please enter a secure password.</p>
             </div>
             <div class="input-container">
                 <h2>Confirm Password<sup>*</sup></h2>
                 <div class="input-field">
-                    <input type="password" name="confirm_password" required>
+                    <input type="password" name="confirm_password" required novalidate>
                 </div>
                 <p>Please confirm the password.</p>
             </div>
@@ -154,15 +154,14 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
                         headers: {
                             'Content-Type': 'application/x-www-form-urlencoded'
                         },
-                        body: new URLSearchParams({
-                            parent_id: parentId
-                        })
+                        body: `parent_id=${encodeURIComponent(parentId)}`
                     })
                     .then(response => response.json())
                     .then(parent => {
                         if (parent.error) {
                             alert(parent.error);
                         } else {
+
                             document.querySelector('#add-edit-data [name="name"]').value = parent.parent_name;
                             document.querySelector('#add-edit-data [name="email"]').value = parent.parent_email;
                             document.querySelector('#add-edit-data [name="phone"]').value = parent.parent_phone;
@@ -182,7 +181,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
             });
         });
 
-        const parentForm = document.getElementById('parent-form-ajax');
+        const parentForm = document.getElementById('form-ajax');
 
         parentForm.addEventListener('submit', function(e) {
             e.preventDefault();
@@ -245,6 +244,8 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
         document.querySelectorAll('#add-edit-data .cancel').forEach(button => {
             button.addEventListener('click', function() {
                 document.querySelector('#add-edit-data h1').textContent = "Add New Parent";
+                dialog.querySelector('[name="password"]').setAttribute('required', 'required');
+                dialog.querySelector('[name="confirm_password"]').setAttribute('required', 'required');
             });
         });
     </script>

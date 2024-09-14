@@ -62,6 +62,16 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    const formAjax = document.getElementById('form-ajax');
+    if (formAjax) {
+        formAjax.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                document.querySelector('.confirm').click();
+            }
+        });
+    }
+
     // Pagination
     if (pageCount > 1) {
         const links = document.querySelectorAll('.page-numbers > a');

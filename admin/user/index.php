@@ -86,7 +86,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
         </main>
     </div>
     <dialog id="add-edit-data">
-        <form id="admin-form-ajax" method="post">
+        <form id="form-ajax" method="post">
             <div class="title">
                 <div class="left">
                     <h1>Add New Admin</h1>
@@ -102,28 +102,28 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
                 <div class="input-field">
                     <input type="text" name="name" value="<?php echo isset($_POST['name']) ? htmlspecialchars($_POST['name']) : ''; ?>" required>
                 </div>
-                <p>Please enter the admin's full name</p>
+                <p>Please enter the admin's full name.</p>
             </div>
             <div class="input-container">
                 <h2>Admin Email<sup>*</sup></h2>
                 <div class="input-field">
                     <input type="email" name="email" value="<?php echo isset($_POST['email']) ? htmlspecialchars($_POST['email']) : ''; ?>" required>
                 </div>
-                <p>Please enter the admin's email address</p>
+                <p>Please enter the admin's email address.</p>
             </div>
             <div class="input-container">
                 <h2>Password<sup>*</sup></h2>
                 <div class="input-field">
                     <input type="password" name="password" required>
                 </div>
-                <p>Please enter a secure password</p>
+                <p>Please enter a secure password.</p>
             </div>
             <div class="input-container">
                 <h2>Confirm Password<sup>*</sup></h2>
                 <div class="input-field">
                     <input type="password" name="confirm_password" required>
                 </div>
-                <p>Please confirm the password</p>
+                <p>Please confirm the password.</p>
             </div>
             <div class="controls">
                 <button type="button" class="cancel">Cancel</button>
@@ -169,7 +169,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
             });
         });
 
-        const adminForm = document.getElementById('admin-form-ajax');
+        const adminForm = document.getElementById('form-ajax');
 
         adminForm.addEventListener('submit', function(e) {
             e.preventDefault();
