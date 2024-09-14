@@ -333,7 +333,8 @@
     text-decoration: underline;
 }
 .bigbox column1 row #first, #second{
-    text-decoration: underline;
+    background-color:#0052aa;
+    color: whitesmoke;
     padding: 10px 40px 10px 40px;
     border-radius: 20px;
     transition : 0.2s;
@@ -507,6 +508,12 @@
         margin-left: 40%;
     }    
 }
+@media only screen and (max-width: 900px){
+    .bigbox1 #row4 #btn2{
+        padding: 10px 40px 10px 40px;
+        margin-left: 60%;
+    }    
+}
 #nRecord{
     margin-left: 20%;
 }
@@ -614,6 +621,15 @@
     flex-direction: column;
     justify-content: flex-start;
 } */
+.addEvent h1{
+    font-size: 25px;
+}
+.addEvent label{
+    font-size: 20px;
+}
+.addEvent div{
+    margin-bottom: 10px;
+}
 .addEvent i{
     display: flex;
     justify-content: flex-end;

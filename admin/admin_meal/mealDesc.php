@@ -201,9 +201,9 @@ if (isset($_GET['event_id']) && isset($_GET['meal_type_id'])) {
                     <thead>
                         <tr>
                             <th>Donator ID</th>
-                            <th>Event</th>
+                            <th>Name</th>
                             <th>Time</th>
-                            <th>Meal Name</th>
+                            <th>Event</th>
                             <th>Quantity</th>
                         </tr>
                     </thead>
@@ -216,13 +216,13 @@ if (isset($_GET['event_id']) && isset($_GET['meal_type_id'])) {
                                             <p> <?= htmlspecialchars($donator['donator_id']) ?></p>
                                         </td>
                                         <td id="tableData">
-                                            <p> <?= htmlspecialchars($donator['name']) ?> </p>
+                                            <p> <?= htmlspecialchars($parent['parent_name']) ?> </p>
                                         </td>
                                         <td id="tableData">
                                             <p><?= htmlspecialchars($donator['date']) ?></p>
                                         </td>
                                         <td id="tableData">
-                                            <p> <?= htmlspecialchars($donator['meal_name']) ?> </p>
+                                            <p> <?= htmlspecialchars($donator['name']) ?> </p>
                                         </td>
                                         <td id="tableData">
                                             <p> <?= htmlspecialchars($donator['p_set']) ?> </p>
