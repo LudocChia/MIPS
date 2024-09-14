@@ -86,7 +86,7 @@ $currentPage = basename($_SERVER['PHP_SELF']);
             const alertHtml = `<div class="mini-alert">${message}</div>`;
             document.getElementById('alert-container').innerHTML = alertHtml;
             setTimeout(function() {
-                const alertElement = document.querySelector('.login-alert');
+                const alertElement = document.querySelector('.mini-alert');
                 if (alertElement) {
                     alertElement.style.opacity = '0';
                     setTimeout(() => alertElement.remove(), 600);

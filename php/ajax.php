@@ -22,6 +22,21 @@ switch ($action) {
         }
         break;
 
+    case 'activate_account':
+        if (isset($_POST['user_name'], $_POST['new_password'], $_POST['confirm_password'])) {
+            $userName = $_POST['user_name'];
+            $newPassword = $_POST['new_password'];
+            $confirmPassword = $_POST['confirm_password'];
+            $userId = $_SESSION['user_id'];
+            $userType = $_SESSION['user_type'];
+
+            echo $crud->activate_account($userId, $userType, $userName, $newPassword, $confirmPassword);
+        } else {
+            echo json_encode(['error' => 'All fields are required']);
+        }
+        break;
+
+
     default:
         echo json_encode(['error' => 'Invalid action']);
 }

@@ -691,7 +691,7 @@ main .recent-orders a {
 
     main {
         margin-top: 2rem;
-        padding: 0 1rem;
+        /* padding: 0 1rem; */
     }
 
     /* 
@@ -728,14 +728,16 @@ main .recent-orders a {
 
     .login-form .container,
     .set-new-password-form .container {
-        width: 100%;
+        position: fixed;
+        width: auto;
+        margin: 1%;
     }
 
-    .login-form .wrapper,
+    /* .login-form .wrapper,
     .set-new-password-form .wrapper {
         width: 100%;
-        /* margin: 0 auto; */
-    }
+        margin: 0 auto;
+    } */
 
     .container .right .profile .info {
         display: none;

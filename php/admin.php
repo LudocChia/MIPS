@@ -10,7 +10,7 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 if ($_SESSION['user_status'] == -1) {
-    header('Location: /mips/new-password.php');
+    header('Location: /mips/activate.php');
     exit();
 }
 
