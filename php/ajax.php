@@ -41,18 +41,32 @@ switch ($action) {
             $userName = $_POST['user_name'];
             $newPassword = $_POST['new_password'];
             $confirmPassword = $_POST['confirm_password'];
-            $userId = $_SESSION['user_id'] ?? null;
+
             $userType = $_SESSION['user_type'] ?? null;
 
-            if ($userId && $userType) {
-                echo $crud->activate_account($userId, $userType, $userName, $newPassword, $confirmPassword);
+            if ($userType) {
+                if ($userType === 'admin') {
+                    $userId = $_SESSION['admin_id'] ?? null;
+                } elseif ($userType === 'parent') {
+                    $userId = $_SESSION['user_id'] ?? null;
+                } else {
+                    echo json_encode(['error' => 'Invalid user type.']);
+                    exit();
+                }
+
+                if ($userId) {
+                    echo $crud->activate_account($userId, $userType, $userName, $newPassword, $confirmPassword);
+                } else {
+                    echo json_encode(['error' => 'User not logged in.']);
+                }
             } else {
-                echo json_encode(['error' => 'User not logged in']);
+                echo json_encode(['error' => 'User type not found in session.']);
             }
         } else {
-            echo json_encode(['error' => 'All fields are required']);
+            echo json_encode(['error' => 'All fields are required.']);
         }
         break;
+
 
     default:
         echo json_encode(['error' => 'Invalid action']);

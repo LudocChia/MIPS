@@ -3,21 +3,20 @@ session_start();
 
 include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/db_connect.php";
 
-if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] !== 'parent') {
-    header('Location: /mips/login.php');
+if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] !== 'admin') {
+    header('Location: /mips/admin/login.php');
+    exit();
+}
+if (!isset($_SESSION['admin_id'])) {
+    header('Location: /mips/admin/login.php');
     exit();
 }
 
-if (!isset($_SESSION['user_id'])) {
-    header('Location: /mips/login.php');
-    exit();
-}
+$userId = $_SESSION['admin_id'];
+$userType = 'admin';
+$table = 'Admin';
 
-$userId = $_SESSION['user_id'];
-$userType = 'parent';
-$table = 'Parent';
-
-$pageTitle = "Activate Account - MIPS";
+$pageTitle = "Activate Account - MIPS Admin";
 include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
 ?>
 
@@ -29,14 +28,14 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
                     <img src="/mips/images/MIPS_logo.png" alt="MIPS_Logo">
                 </div>
                 <div class="title">
-                    <h1>Activate Account</h1>
+                    <h1>Activate Admin Account</h1>
                 </div>
                 <div id="alert-container"></div>
                 <form method="POST" id="activate-form">
                     <div class="input-container">
                         <div class="input-field">
                             <i class="fas fa-user"></i>
-                            <input type="text" id="name" name="user_name" placeholder="Parent Name" required>
+                            <input type="text" id="name" name="user_name" placeholder="Admin Name" required>
                         </div>
                         <p>Please enter your name as on your Identification Card (IC)</p>
                     </div>
@@ -71,6 +70,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
             const userName = document.querySelector('#name').value;
             const newPassword = document.querySelector('#new_password').value;
             const confirmPassword = document.querySelector('#confirm_password').value;
+            console.log(userName, newPassword, confirmPassword);
 
             fetch('/mips/php/ajax.php?action=activate_account', {
                     method: 'POST',

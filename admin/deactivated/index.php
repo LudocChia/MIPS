@@ -27,14 +27,14 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                             <h3>Announcement</h3>
                         </div>
                     </div>
-                    <div class="box">
+                    <!-- <div class="box">
                         <div class="image-container">
                             <a href="/mips/admin/deactivated/order.php"><img src="/mips/images/default_folder.png" alt="Deactivated Order"></a>
                         </div>
                         <div class="info-container">
                             <h3>Order</h3>
                         </div>
-                    </div>
+                    </div> -->
                     <div class="box">
                         <div class="image-container">
                             <a href="/mips/admin/deactivated/user/"><img src="/mips/images/default_folder.png" alt="Deactivated User"></a>
@@ -43,14 +43,14 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                             <h3>User</h3>
                         </div>
                     </div>
-                    <div class="box">
+                    <!-- <div class="box">
                         <div class="image-container">
                             <a href="/mips/admin/deactivated/bookshop/"><img src="/mips/images/default_folder.png" alt="Deactivated Bookshop"></a>
                         </div>
                         <div class="info-container">
                             <h3>Bookshop</h3>
                         </div>
-                    </div>
+                    </div> -->
                     <div class="box">
                         <div class="image-container">
                             <a href="/mips/admin/deactivated/grade.php"><img src="/mips/images/default_folder.png" alt="Deactivated Grade"></a>

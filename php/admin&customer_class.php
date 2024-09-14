@@ -50,12 +50,11 @@ class Action
                     $_SESSION['user_type'] = $userType;
                     $_SESSION['user_status'] = $user['status'];
 
-                    // Redirect for unactivated accounts
                     if ($user['status'] == -1) {
-                        return json_encode(['success' => true, 'redirect' => '/mips/activate.php']);
+                        $redirectUrl = ($userType === 'admin') ? '/mips/admin/activate.php' : '/mips/activate.php';
+                        return json_encode(['success' => true, 'redirect' => $redirectUrl]);
                     }
 
-                    // Redirect after successful login
                     $redirectUrl = ($userType === 'admin') ? '/mips/admin/' : ($productId ? "/mips/item.php?pid=" . $productId : ($currentPage ?? '/mips'));
                     return json_encode(['success' => true, 'redirect' => $redirectUrl]);
                 } else {
@@ -109,6 +108,10 @@ class Action
 
     public function activate_account($user_id, $user_type, $user_name, $new_password, $confirm_password)
     {
+        if (!preg_match("/^[a-zA-Z\s]+$/", $user_name)) {
+            return json_encode(['error' => 'Name must only contain alphabetic characters']);
+        }
+
         $passwordValidation = $this->validate_password($new_password, $confirm_password);
         if ($passwordValidation !== true) {
             return json_encode(['error' => $passwordValidation]);

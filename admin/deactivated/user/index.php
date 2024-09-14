@@ -17,6 +17,9 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                     <div class="left">
                         <h1>Deactivated User Menu</h1>
                     </div>
+                    <div class="right">
+                        <a href="/mips/admin/deactivated/"><i class="bi bi-arrow-90deg-up"></i>Deactivated Menu</a>
+                    </div>
                 </div>
                 <div class="box-container">
                     <div class="box">
