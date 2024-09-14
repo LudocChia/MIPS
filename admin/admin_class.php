@@ -162,6 +162,70 @@ class Action
         return $this->execute_statement($stmt);
     }
 
+    public function delete_parent($parent_id)
+    {
+        try {
+            $this->db->beginTransaction();
+
+            $sqlCartItems = "DELETE ci FROM Cart_Item ci
+                             INNER JOIN Cart c ON ci.cart_id = c.cart_id
+                             WHERE c.parent_id = :parent_id";
+            $stmtCartItems = $this->db->prepare($sqlCartItems);
+            $stmtCartItems->bindParam(':parent_id', $parent_id);
+            $stmtCartItems->execute();
+
+            $sqlCart = "DELETE FROM Cart WHERE parent_id = :parent_id";
+            $stmtCart = $this->db->prepare($sqlCart);
+            $stmtCart->bindParam(':parent_id', $parent_id);
+            $stmtCart->execute();
+
+            $sqlNotification = "DELETE FROM Notification WHERE parent_id = :parent_id";
+            $stmtNotification = $this->db->prepare($sqlNotification);
+            $stmtNotification->bindParam(':parent_id', $parent_id);
+            $stmtNotification->execute();
+
+            $sqlParentStudent = "DELETE FROM Parent_Student WHERE parent_id = :parent_id";
+            $stmtParentStudent = $this->db->prepare($sqlParentStudent);
+            $stmtParentStudent->bindParam(':parent_id', $parent_id);
+            $stmtParentStudent->execute();
+
+            $sqlOrders = "UPDATE Orders SET parent_id = NULL WHERE parent_id = :parent_id";
+            $stmtOrders = $this->db->prepare($sqlOrders);
+            $stmtOrders->bindParam(':parent_id', $parent_id);
+            $stmtOrders->execute();
+
+            $sqlPayment = "UPDATE Payment SET parent_id = NULL WHERE parent_id = :parent_id";
+            $stmtPayment = $this->db->prepare($sqlPayment);
+            $stmtPayment->bindParam(':parent_id', $parent_id);
+            $stmtPayment->execute();
+
+            $stmtGetImage = $this->db->prepare("SELECT parent_image FROM Parent WHERE parent_id = :parent_id");
+            $stmtGetImage->bindParam(':parent_id', $parent_id);
+            $stmtGetImage->execute();
+            $parentImage = $stmtGetImage->fetch(PDO::FETCH_ASSOC);
+
+            if ($parentImage && !empty($parentImage['parent_image'])) {
+                $imagePath = $_SERVER['DOCUMENT_ROOT'] . '/mips/uploads/parents/' . $parentImage['parent_image'];
+                if (file_exists($imagePath)) {
+                    unlink($imagePath);
+                }
+            }
+
+            $sqlParent = "DELETE FROM Parent WHERE parent_id = :parent_id";
+            $stmtParent = $this->db->prepare($sqlParent);
+            $stmtParent->bindParam(':parent_id', $parent_id);
+            $stmtParent->execute();
+
+            $this->db->commit();
+
+            return json_encode(['success' => 'Parent and associated data, including the profile image, deleted successfully.']);
+        } catch (PDOException $e) {
+            $this->db->rollBack();
+            return json_encode(['error' => 'Error deleting parent: ' . $e->getMessage()]);
+        }
+    }
+
+
     public function recover_parent($parent_id)
     {
         $sql = "UPDATE Parent SET status = 0 WHERE parent_id = :parent_id";

@@ -82,6 +82,8 @@ switch ($action) {
         }
         break;
 
+    case 'delete_parent':
+
     case 'get_default_parents':
         echo $crud->get_default_parents();
         break;

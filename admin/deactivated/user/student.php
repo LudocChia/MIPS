@@ -45,7 +45,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
                     </div>
                 </div>
                 <?php if (!empty($deactivated_students)) : ?>
-                    <div class="table-body">
+                    <div class="table-container">
                         <table>
                             <thead>
                                 <tr>

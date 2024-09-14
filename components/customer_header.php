@@ -30,34 +30,11 @@
                     <!-- <a href="mailbox.php"><i class="bi bi-bell-fill"></i> -->
                     <!-- <sup id="MessageCount"></?= $total_unread_messages > 0 ? $total_unread_messages : '0' ?></sup> -->
                     <!-- </a> -->
-                    <a href="cart.php"><i class="bi bi-basket3-fill"></i>
-                        <!-- <sup id="cartCount"></?= $total_cart_items > 0 ? $total_cart_items : '0' ?></sup> -->
-                    </a>
+                    <!-- <a href="cart.php"><i class="bi bi-basket3-fill"></i> -->
+                    <!-- <sup id="cartCount"></?= $total_cart_items > 0 ? $total_cart_items : '0' ?></sup> -->
+                    <!-- </a> -->
                     <div class="profile">
                         <img src="<?= htmlspecialchars($_SESSION['user_image']) ?>" alt="Admin Image" class="user-img" id="user-btn">
-                        <div class="profile-menu">
-                            <div class="user-info">
-                                <img src="<?= htmlspecialchars($_SESSION['user_image']) ?>" alt="User Image">
-                                <h4><?= htmlspecialchars($_SESSION['user_name']); ?></h4>
-                            </div>
-                            <hr>
-                            <!-- <a href="/mips/account.php" class="profile-menu-link"> -->
-                            <a href="javascript:void(0)" class="profile-menu-link">
-                                <i class="bi bi-person-fill"></i>
-                                <p>My Account</p>
-                                <span>></span>
-                            </a>
-                            <a href="purchase.php" class="profile-menu-link">
-                                <i class="bi bi-calendar-check"></i>
-                                <p>My Activities</p>
-                                <span>></span>
-                            </a>
-                            <a href="/mips/logout.php" class="profile-menu-link">
-                                <i class="bi bi-box-arrow-right"></i>
-                                <p>Logout</p>
-                                <span>></span>
-                            </a>
-                        </div>
                     </div>
                 <?php
                 } else {
@@ -69,6 +46,28 @@
                 }
                 ?>
             </div>
+            <div class="profile-menu">
+                <div class="user-info">
+                    <img src="<?= htmlspecialchars($_SESSION['user_image']) ?>" alt="User Image">
+                    <h4><?= htmlspecialchars($_SESSION['user_name']); ?></h4>
+                </div>
+                <hr>
+                <a href="javascript:void(0)" class="profile-menu-link">
+                    <i class="bi bi-person-fill"></i>
+                    <p>My Account</p>
+                    <i class="bi bi-chevron-right"></i>
+                </a>
+                <a href="purchase.php" class="profile-menu-link">
+                    <i class="bi bi-calendar-check"></i>
+                    <p>My Activities</p>
+                    <i class="bi bi-chevron-right"></i>
+                </a>
+                <a href="/mips/logout.php" class="profile-menu-link">
+                    <i class="bi bi-box-arrow-right"></i>
+                    <p>Logout</p>
+                    <i class="bi bi-chevron-right"></i>
+                </a>
+            </div>
         </div>
     </div>
     <div class="mobile-wrapper">
@@ -78,19 +77,19 @@
                     <a href="/mips/parent/donationMain.php"><i class="fa fa-cutlery" aria-hidden="true"></i></a>
                 </li>
                 <li>
-                    <a href="javascript:void(0)"><i class="bi bi-calendar4-event"></i></a>
+                    <a href="javascript:void(0)"><i style="color:#003455" class="bi bi-calendar4-event"></i></a>
                 </li>
                 <li>
-                    <a href="javascript:void(0)"><i class="bi bi-shop-window"></i></a>
+                    <a href="javascript:void(0)"><i style="color:#003455" class="bi bi-shop-window"></i></a>
                 </li>
                 <li>
-                    <a href="javascript:void(0)"><i class="bi bi-bell-fill"></i></a>
+                    <a href="javascript:void(0)"><i style="color:#003455" class="bi bi-bell-fill"></i></a>
                 </li>
                 <li>
-                    <a href="/mips/cart.php"><i class="bi bi-basket3-fill"></i></a>
+                    <a href="/mips/cart.php"><i style="color:#003455" class="bi bi-basket3-fill"></i></a>
                 </li>
                 <li>
-                    <a href="javascript:void(0)"><i><i class="bi bi-list"></i></i></a>
+                    <a href="javascript:void(0)"><i style="color:#003455" class="bi bi-list"></i></i></a>
                 </li>
             </ul>
         </div>

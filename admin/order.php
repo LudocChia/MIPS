@@ -9,8 +9,7 @@ function getAllOrders($pdo, $start, $rows_per_page)
 {
     $sql = "SELECT o.order_id, o.order_datetime, o.order_price, p.parent_name, pm.payment_status
             FROM Orders o
-            JOIN Parent_Student ps ON o.parent_student_id = ps.parent_student_id
-            JOIN Parent p ON ps.parent_id = p.parent_id
+            JOIN Parent p ON o.parent_id = p.parent_id
             JOIN Payment pm ON o.order_id = pm.order_id
             WHERE o.status = 0
             ORDER BY o.order_datetime DESC
@@ -30,33 +29,33 @@ function generateOrderId()
 }
 
 if (isset($_POST["submit"])) {
-    $parent_student_id = $_POST["parent_student_id"];
+    $parent_id = $_POST["parent_id"]; // Changed from parent_student_id to parent_id
     $order_price = $_POST["order_price"];
     $order_status = $_POST["order_status"];
     $order_id = generateOrderId();
     $product_ids = $_POST['product_id'];
     $quantities = $_POST['product_quantity'];
 
-    if (empty($parent_student_id) || empty($order_price) || empty($order_status) || empty($product_ids) || empty($quantities)) {
+    if (empty($parent_id) || empty($order_price) || empty($order_status) || empty($product_ids) || empty($quantities)) {
         echo "<script>alert('Please fill in all required fields.');</script>";
     } else {
         try {
             $pdo->beginTransaction();
 
-            $sqlOrder = "INSERT INTO Orders (order_id, parent_student_id, order_price, status) 
-                         VALUES (:orderId, :parent_student_id, :order_price, 0)";
+            $sqlOrder = "INSERT INTO Orders (order_id, parent_id, order_price, status) 
+                         VALUES (:orderId, :parent_id, :order_price, 0)";
             $stmtOrder = $pdo->prepare($sqlOrder);
             $stmtOrder->bindParam(':orderId', $order_id);
-            $stmtOrder->bindParam(':parent_student_id', $parent_student_id);
+            $stmtOrder->bindParam(':parent_id', $parent_id); // Updated from parent_student_id
             $stmtOrder->bindParam(':order_price', $order_price);
             $stmtOrder->execute();
 
-            $sqlPayment = "INSERT INTO Payment (payment_id, parent_student_id, order_id, payment_amount, payment_status, payment_image) 
-                           VALUES (:paymentId, :parent_student_id, :order_id, :payment_amount, :payment_status, '')";
+            $sqlPayment = "INSERT INTO Payment (payment_id, parent_id, order_id, payment_amount, payment_status, payment_image) 
+                           VALUES (:paymentId, :parent_id, :order_id, :payment_amount, :payment_status, '')";
             $payment_id = uniqid('PAY');
             $stmtPayment = $pdo->prepare($sqlPayment);
             $stmtPayment->bindParam(':paymentId', $payment_id);
-            $stmtPayment->bindParam(':parent_student_id', $parent_student_id);
+            $stmtPayment->bindParam(':parent_id', $parent_id); // Updated from parent_student_id
             $stmtPayment->bindParam(':order_id', $order_id);
             $stmtPayment->bindParam(':payment_amount', $order_price);
             $stmtPayment->bindParam(':payment_status', $order_status);
@@ -99,9 +98,6 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                     <div class="left">
                         <h1>Bookshop Order</h1>
                     </div>
-                    <div class="right">
-                        <!-- <button class="btn btn-outline-primary" id="open-popup"><i class="bi bi-plus-circle"></i>Add New Order</button> -->
-                    </div>
                 </div>
                 <div class="table-body">
                     <?php if (!empty($all_orders)) : ?>
@@ -143,7 +139,6 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                                                     <button type="submit" class="delete-order-btn"><i class="bi bi-x-square"></i></button>
                                                 </form>
                                                 <button type="button" class="view-order-detail-btn" data-order-id="<?= htmlspecialchars($order['order_id']); ?>"><i class="bi bi-info-circle-fill"></i></button>
-                                                <!-- <button type="button" class="edit-order-btn" data-order-id="<?= htmlspecialchars($order['order_id']); ?>"><i class="bi bi-pencil-square"></i></button> -->
                                             </div>
                                         </td>
                                     </tr>
@@ -165,7 +160,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
         <form action="" method="post" enctype="multipart/form-data">
             <div class="input-container">
                 <h2>Parent ID<sup>*</sup></h2>
-                <select name="parent_student_id" required>
+                <select name="parent_id" required> <!-- Changed from parent_student_id to parent_id -->
                 </select>
                 <p>Please select the parent.</p>
             </div>
@@ -217,85 +212,6 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
             </div>
         </form>
     </dialog>
-    <dialog id="detail-dialog">
-        <form>
-            <div class="title">
-                <div class="right">
-                    <h1>Order Details</h1>
-                </div>
-                <div class="left">
-                    <button class="actions cancel"><i class="bi bi-x-circle"></i></button>
-                </div>
-            </div>
-            <div class="order-details-content">
-                <table class="two-column-table">
-                    <tr>
-                        <td style="width: 30%">
-                            <h4>Order ID :<h4>
-                        </td>
-                        <td style="width: 70%;">
-                            <h4 id="order-id"></h4>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <h4>Parent Name :<h4>
-                        </td>
-                        <td>
-                            <h4 id="parent-name"></h4>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <h4>Order Date :<h4>
-                        </td>
-                        <td>
-                            <h4 id="order-date"></h4>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <h4>Order Amount :<h4>
-                        </td>
-                        <td>
-                            <h4 id="order-amount"></h4>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <h4>Order Status :<h4>
-                        </td>
-                        <td>
-                            <h4 id="order-status"></h4>
-                        </td>
-                    </tr>
-                </table>
-                <h2>Payment Receipt</h2>
-                <img id="payment-image" src="" alt="Payment Image">
-                <h2>Order Items</h2>
-                <div class="dialog-table-container">
-                    <table class="add-edit-table">
-                        <thead>
-                            <tr>
-                                <th>Product ID</th>
-                                <th>Product Name</th>
-                                <th>Quantity</th>
-                                <th>Subtotal</th>
-                                <th>Student</th>
-                                <th>Student Class</th>
-                            </tr>
-                        </thead>
-                        <tbody id="order-items-list">
-                        </tbody>
-                    </table>
-                </div>
-                <div class="controls">
-                    <button type="button" class="cancel">Close</button>
-                </div>
-            </div>
-        </form>
-    </dialog>
-    <?php include  $_SERVER['DOCUMENT_ROOT'] . "/mips/components/confirm_dialog.php"; ?>
     <script src="/mips/javascript/common.js"></script>
     <script src="/mips/javascript/admin.js"></script>
     <script>
@@ -373,7 +289,6 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                                 document.getElementById('order-amount').textContent = `MYR ${data.order_price}`;
                                 document.getElementById('order-status').textContent = data.payment_status;
                                 document.getElementById('payment-image').src = '/mips/uploads/receipts/' + data.payment_image || '/mips/images/default_image_path.png';
-                                document.getElementById('')
 
                                 const itemsList = document.getElementById('order-items-list');
                                 itemsList.innerHTML = '';
@@ -390,7 +305,6 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                                     `;
                                     itemsList.appendChild(row);
                                 });
-
 
                                 document.getElementById('detail-dialog').showModal();
                             } else {

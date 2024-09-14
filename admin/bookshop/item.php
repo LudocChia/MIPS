@@ -137,12 +137,12 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                                 <p>MYR <?php echo number_format($product['product_price'], 2); ?></p>
                             </div>
                             <div class="product-details-container">
-                                <h2>Quantity</h2>
+                                <!-- <h2>Quantity</h2>
                                 <div class="product-actions">
                                     <input type="number" id="qty" name="qty" min="1" max="<?php echo $stockQuantity; ?>" value="1">
                                     <button type="button" class="add-to-cart-btn btn btn-outline-primary" data-product-id="<?php echo $product['product_id']; ?>">Add to Cart</button>
                                     <button type="button" class="buy-now btn btn-full">Buy Now</button>
-                                </div>
+                                </div> -->
                             </div>
                         </div>
                     </div>

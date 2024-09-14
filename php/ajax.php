@@ -12,14 +12,11 @@ switch ($action) {
         $newPassword = $_POST['new_password'] ?? '';
         $confirmPassword = $_POST['confirm_password'] ?? '';
 
-        if ($newPassword === $confirmPassword) {
-            $userId = $_SESSION['user_id'];
-            $userType = $_SESSION['user_type'];
-            $result = $crud->update_password($userId, $userType, $newPassword);
-            echo json_encode($result);
-        } else {
-            echo json_encode(['error' => 'Passwords do not match']);
-        }
+        $userId = $_SESSION['user_id'];
+        $userType = $_SESSION['user_type'];
+
+        $result = $crud->update_password($userId, $userType, $newPassword, $confirmPassword);
+        echo json_encode($result);
         break;
 
     case 'activate_account':

@@ -68,7 +68,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                     </div>
                 </div>
                 <?php if (!empty($all_product_sizes)) : ?>
-                    <div class="table-body">
+                    <div class="table-container">
                         <table>
                             <thead>
                                 <tr>

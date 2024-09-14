@@ -41,7 +41,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
                         <button class="btn btn-outline-primary" id="open-popup"><i class="bi bi-person-fill-add"></i>Add New Parent</button>
                     </div>
                 </div>
-                <div class="table-body">
+                <div class="table-container">
                     <?php if (!empty($all_parents)) : ?>
                         <table>
                             <thead>

@@ -553,15 +553,21 @@ header .profile-area i {
     text-align: left;
 }
 
-.profile-menu-link i {
-    font-size: 20px;
-    display: inline-block;
-    background: #e5e5e5;
-    text-align: center;
-    line-height: 40px;
+header .profile-area i {
+    display: flex;
+    font-size: 1.7rem;
+    cursor: pointer;
+    background-color: var(--color-white);
+    padding: 1.2rem;
     border-radius: 50%;
-    margin-right: 20px;
-    margin-left: 20px;
+}
+
+.profile-menu-link i {
+    font-size: 1.5rem;
+    text-align: center;
+    /* line-height: 40px; */
+    /* border-radius: 50%; */
+    margin: 1rem 2rem 1rem 2rem;
 }
 
 .profile-menu-link span {
@@ -583,8 +589,13 @@ table {
     width: 100%;
 }
 
+table,
+th,
+td {
+    padding: 1rem;
+}
 
-table th {
+.table-container table th {
     color: var(--color-white);
     position: sticky;
     top: 0;
@@ -604,21 +615,15 @@ table th {
     background-color: black;
 } */
 
-tbody tr:hover {
+.table-container tbody tr:hover {
     background-color: #fff6;
 }
 
-table,
-th,
-td {
-    padding: 1rem;
-}
-
-table {
+.table-container table {
     padding-top: 0;
 }
 
-thead th {
+.table-container thead th {
     position: sticky;
     z-index: 1;
     top: 0;

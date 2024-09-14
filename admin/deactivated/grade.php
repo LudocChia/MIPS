@@ -45,7 +45,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                         <a href="/mips/admin/deactivated/"><i class="bi bi-arrow-90deg-up"></i>Deactivated Menu</a>
                     </div>
                 </div>
-                <div class="table-body">
+                <div class="table-container">
                     <?php if (!empty($all_grades)) : ?>
                         <table>
                             <thead>

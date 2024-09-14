@@ -39,14 +39,12 @@ function getRecentOrders($pdo, $limit = 5)
     $sqlRecentOrders = "SELECT 
                             o.order_id, 
                             p.parent_name, 
-                            py.payment_amount AS total_price,  -- 从 Payment 表直接获取付款金额
+                            py.payment_amount AS total_price,
                             py.payment_status
                         FROM 
                             Orders o
                         JOIN 
-                            Parent_Student ps ON o.parent_student_id = ps.parent_student_id
-                        JOIN 
-                            Parent p ON ps.parent_id = p.parent_id
+                            Parent p ON o.parent_id = p.parent_id
                         JOIN 
                             Payment py ON o.order_id = py.order_id
                         ORDER BY 
@@ -148,7 +146,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
                                 <a href="/mips/admin/order.php" class="more">View All<i class="bi bi-chevron-right"></i></a>
                             </div>
                         </div>
-                        <div class="table-body">
+                        <div class="table-container">
                             <?php if (!empty($recentOrders)) : ?>
                                 <table>
                                     <thead>
@@ -191,6 +189,24 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
                         </div>
                         </title>
                         <div class="updates">
+                            <div class="update">
+                                <div class="profile-photo">
+                                    <!-- <img src="../uploads/wangbingbing(2).jpg"> -->
+                                </div>
+                                <div class="message">
+                                    <p style="color: white"><b>Admin</b> received a new order</p>
+                                    <small style="color: white" class="text-muted">2 minutes ago</small>
+                                </div>
+                            </div>
+                            <div class="update">
+                                <div class="profile-photo">
+                                    <!-- <img src="../uploads/wangbingbing(2).jpg"> -->
+                                </div>
+                                <div class="message">
+                                    <p style="color: white"><b>Admin</b> received a new order</p>
+                                    <small style="color: white" class="text-muted">2 minutes ago</small>
+                                </div>
+                            </div>
                             <div class="update">
                                 <div class="profile-photo">
                                     <!-- <img src="../uploads/wangbingbing(2).jpg"> -->

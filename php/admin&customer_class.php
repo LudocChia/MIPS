@@ -9,37 +9,30 @@ class Action
         $this->db = $pdo;
     }
 
-    public function update_password($user_id, $user_type, $new_password)
+    public function update_password($user_id, $user_type, $new_password, $confirm_password)
     {
-        if (strlen($new_password) < 6) {
-            return ['error' => 'Password must be at least 6 characters long.'];
-        }
-        if (!preg_match('/[0-9]/', $new_password)) {
-            return ['error' => 'Password must contain at least one number.'];
-        }
-        if (!preg_match('/[!@#$%^&*(),.?":{}|<>]/', $new_password)) {
-            return ['error' => 'Password must contain at least one special character.'];
-        }
-        if (preg_match('/^\s|\s$/', $new_password)) {
-            return ['error' => 'Password cannot start or end with a space.'];
+        $passwordValidation = $this->validate_password($new_password, $confirm_password);
+        if ($passwordValidation !== true) {
+            return ['error' => $passwordValidation];
         }
 
         $table = ($user_type === 'admin') ? 'Admin' : 'Parent';
         $userIdColumn = ($user_type === 'admin') ? 'admin_id' : 'parent_id';
+        $passwordColumn = ($user_type === 'admin') ? 'admin_password' : 'parent_password';
 
-        $sql = "SELECT {$user_type}_password FROM $table WHERE $userIdColumn = :user_id";
+        $sql = "SELECT {$passwordColumn} FROM $table WHERE $userIdColumn = :user_id";
         $stmt = $this->db->prepare($sql);
         $stmt->bindParam(':user_id', $user_id);
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        if (password_verify($new_password, $result["{$user_type}_password"])) {
+        if (password_verify($new_password, $result[$passwordColumn])) {
             return ['error' => 'Cannot reuse previous passwords.'];
         }
 
         $hashedPassword = password_hash($new_password, PASSWORD_DEFAULT);
 
-        $sql = "UPDATE $table SET {$user_type}_password = :new_password, status = 0 WHERE $userIdColumn = :user_id";
+        $sql = "UPDATE $table SET $passwordColumn = :new_password, status = 0 WHERE $userIdColumn = :user_id";
         $stmt = $this->db->prepare($sql);
         $stmt->bindParam(':new_password', $hashedPassword);
         $stmt->bindParam(':user_id', $user_id);
@@ -53,6 +46,7 @@ class Action
             return ['error' => 'Failed to update password: ' . $e->getMessage()];
         }
     }
+
 
     public function activate_account($user_id, $user_type, $user_name, $new_password, $confirm_password)
     {

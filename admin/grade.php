@@ -78,7 +78,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                         <button id="open-popup" class="btn btn-outline-primary"><i class="bi bi-plus-circle"></i>Add New Grade</button>
                     </div>
                 </div>
-                <div class="table-body">
+                <div class="table-container">
                     <?php if (!empty($all_grades)) : ?>
                         <table>
                             <thead>
