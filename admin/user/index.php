@@ -48,7 +48,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
                                     <th>Admin ID</th>
                                     <th>Admin Name</th>
                                     <th>Admin Email</th>
-                                    <th>Admin Register Date</th>
+                                    <th>Activated Date</th>
                                     <th>Status</th>
                                     <th>Actions</th>
                                 </tr>
@@ -59,7 +59,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
                                         <td><?php echo htmlspecialchars($admin['admin_id']); ?></td>
                                         <td><?php echo htmlspecialchars($admin['admin_name']); ?></td>
                                         <td><?php echo htmlspecialchars($admin['admin_email']); ?></td>
-                                        <td><?php echo htmlspecialchars($admin['created_at']); ?></td>
+                                        <td style="text-align: center;"><?php echo htmlspecialchars($admin['created_at']) ? htmlspecialchars($admin['created_at']) : '-'; ?></td>
                                         <td style="text-align: center;"><?php echo getStatusLabel($admin['status']); ?></td>
                                         <td>
                                             <div class="actions">
@@ -138,6 +138,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
     <script>
         document.querySelectorAll('.edit-admin-btn').forEach(button => {
             button.addEventListener('click', function() {
+                document.querySelector('.confirm').textContent = "Publish";
                 const adminId = this.dataset.adminId;
                 fetch(`/mips/admin/ajax.php?action=get_admin`, {
                         method: 'POST',

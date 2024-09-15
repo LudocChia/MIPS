@@ -323,6 +323,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
         });
         document.querySelectorAll('.edit-student-btn').forEach(button => {
             button.addEventListener('click', function() {
+                document.querySelector('.confirm').textContent = "Publish";
                 const studentId = this.dataset.studentId;
 
                 fetch(`/mips/admin/ajax.php?action=get_student`, {

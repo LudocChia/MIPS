@@ -166,6 +166,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
     <script>
         document.querySelectorAll('.edit-class-btn').forEach(button => {
             button.addEventListener('click', function() {
+                document.querySelector('.confirm').textContent = "Publish";
                 const classId = this.dataset.classId;
 
                 fetch(`/mips/admin/ajax.php?action=get_class&class_id=${classId}`)

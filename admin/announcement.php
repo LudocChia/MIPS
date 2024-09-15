@@ -201,6 +201,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
     <script>
         document.querySelectorAll('.edit-announcement-btn').forEach(button => {
             button.addEventListener('click', function() {
+                document.querySelector('.confirm').textContent = "Publish";
                 const announcementId = this.dataset.announcementId;
                 fetch(`/mips/admin/ajax.php?action=get_announcement&announcement_id=${announcementId}`)
                     .then(response => response.json())

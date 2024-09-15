@@ -168,6 +168,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
     <script>
         document.querySelectorAll('.edit-grade-btn').forEach(button => {
             button.addEventListener('click', function() {
+                document.querySelector('.confirm').textContent = "Publish";
                 const gradeId = this.dataset.gradeId;
                 fetch(`/mips/admin/ajax.php?action=get_grade&grade_id=${gradeId}`)
                     .then(response => response.json())

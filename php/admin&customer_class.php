@@ -125,7 +125,9 @@ class Action
         $passwordColumn = ($user_type === 'admin') ? 'admin_password' : 'parent_password';
 
         try {
-            $sql = "UPDATE $table SET $userNameColumn = :user_name, $passwordColumn = :password, status = 0 WHERE $userIdColumn = :user_id";
+            $sql = "UPDATE $table 
+                    SET $userNameColumn = :user_name, $passwordColumn = :password, status = 0, created_at = NOW() 
+                    WHERE $userIdColumn = :user_id";
             $stmt = $this->db->prepare($sql);
             $stmt->bindParam(':user_name', $user_name);
             $stmt->bindParam(':password', $hashed_password);

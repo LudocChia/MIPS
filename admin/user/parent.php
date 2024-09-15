@@ -50,7 +50,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
                                     <th>Parent Name</th>
                                     <th>Parent Email</th>
                                     <th>Parent Phone</th>
-                                    <th>Register Date</th>
+                                    <th>Activated Date</th>
                                     <th>Status</th>
                                     <th>Actions</th>
                                 </tr>
@@ -62,7 +62,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
                                         <td><?php echo htmlspecialchars($parent['parent_name']); ?></td>
                                         <td><?php echo htmlspecialchars($parent['parent_email']); ?></td>
                                         <td style="text-align: center;"><?php echo htmlspecialchars($parent['parent_phone']) ? htmlspecialchars($parent['parent_phone']) : '-'; ?></td>
-                                        <td><?php echo htmlspecialchars($parent['created_at']); ?></td>
+                                        <td style="text-align: center;"><?php echo htmlspecialchars($parent['created_at']) ? htmlspecialchars($parent['created_at']) : '-'; ?></td>
                                         <td style="text-align: center;"><?php echo getStatusLabel($parent['status']); ?></td>
                                         <td>
                                             <div class="actions">
@@ -148,6 +148,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
     <script>
         document.querySelectorAll('.edit-parent-btn').forEach(button => {
             button.addEventListener('click', function() {
+                document.querySelector('.confirm').textContent = "Publish";
                 const parentId = this.dataset.parentId;
                 fetch(`/mips/admin/ajax.php?action=get_parent`, {
                         method: 'POST',
