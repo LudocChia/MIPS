@@ -120,7 +120,7 @@ if (isset($_GET['event_id']) && isset($_GET['meal_type_id'])) {
 
 
 // echo '<pre>';
-// var_dump($donators);
+// var_dump($parents);
 // echo '</pre>';
 
 
@@ -200,7 +200,7 @@ if (isset($_GET['event_id']) && isset($_GET['meal_type_id'])) {
                     <thead>
                         <tr>
                             <th>Donator ID</th>
-                            <th>Name</th>
+                            <th>Parent ID</th>
                             <th>Time</th>
                             <th>Event</th>
                             <th>Quantity</th>
@@ -215,7 +215,7 @@ if (isset($_GET['event_id']) && isset($_GET['meal_type_id'])) {
                                             <p> <?= htmlspecialchars($donator['donator_id']) ?></p>
                                         </td>
                                         <td id="tableData">
-                                            <p> <?= htmlspecialchars($parent['parent_name']) ?> </p>
+                                            <p> <?= htmlspecialchars($donator['parent_id']) ?> </p>
                                         </td>
                                         <td id="tableData">
                                             <p><?= htmlspecialchars($donator['date']) ?></p>

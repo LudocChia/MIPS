@@ -22,12 +22,12 @@
                         <h4><?php echo $_SESSION['admin_name']; ?></h4>
                     </div>
                     <hr>
-                    <a href="profile.php" class="profile-menu-link">
+                    <a href="account.php" class="profile-menu-link">
                         <i class="bi bi-person-fill"></i>
                         <p>My Account</p>
                         <span>></span>
                     </a>
-                    <a href="order_history.php?filter=all" class="profile-menu-link">
+                    <a href="purchase.php" class="profile-menu-link">
                         <i class="bi bi-calendar-check"></i>
                         <p>My Activities</p>
                         <span>></span>
