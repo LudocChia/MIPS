@@ -9,14 +9,6 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/admin/admin_class.php";
 $crud = new Action();
 
 switch ($action) {
-    case 'login':
-        if (isset($_POST['email']) && isset($_POST['password'])) {
-            echo $crud->login($_POST['email'], $_POST['password']);
-        } else {
-            echo json_encode(['error' => 'Email or password not provided']);
-        }
-        break;
-
         // Admin Functions
     case 'get_admin':
         if (isset($_POST['admin_id'])) {
@@ -29,6 +21,14 @@ switch ($action) {
     case 'deactivate_admin':
         if (isset($_POST['admin_id'])) {
             echo $crud->deactivate_admin($_POST['admin_id']);
+        } else {
+            echo json_encode(['error' => 'Admin ID not provided']);
+        }
+        break;
+
+    case 'delete_admin':
+        if (isset($_POST['admin_id'])) {
+            echo $crud->delete_admin($_POST['admin_id']);
         } else {
             echo json_encode(['error' => 'Admin ID not provided']);
         }
@@ -69,6 +69,14 @@ switch ($action) {
     case 'deactivate_parent':
         if (isset($_POST['parent_id'])) {
             echo $crud->deactivate_parent($_POST['parent_id']);
+        } else {
+            echo json_encode(['error' => 'Parent ID not provided']);
+        }
+        break;
+
+    case 'delete_parent':
+        if (isset($_POST['parent_id'])) {
+            echo $crud->delete_parent($_POST['parent_id']);
         } else {
             echo json_encode(['error' => 'Parent ID not provided']);
         }

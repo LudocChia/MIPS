@@ -9,37 +9,89 @@ class Action
         $this->db = $pdo;
     }
 
-    public function update_password($user_id, $user_type, $new_password)
+    public function login($email, $password, $userType, $currentPage = null, $productId = null)
     {
-        if (strlen($new_password) < 6) {
-            return ['error' => 'Password must be at least 6 characters long.'];
+        session_unset();
+        session_destroy();
+        session_start();
+
+        try {
+            if ($userType === 'admin') {
+                $sql = "SELECT * FROM Admin WHERE admin_email = :email AND status IN (0, -1)";
+                $stmt = $this->db->prepare($sql);
+            } else if ($userType === 'parent') {
+                $sql = "SELECT * FROM Parent WHERE parent_email = :email AND status IN (0, -1)";
+                $stmt = $this->db->prepare($sql);
+            } else {
+                return json_encode(['error' => 'Invalid user type']);
+            }
+
+            $stmt->bindParam(':email', $email);
+            $stmt->execute();
+
+            $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($user) {
+                $passwordColumn = ($userType === 'admin') ? 'admin_password' : 'parent_password';
+
+                if (password_verify($password, $user[$passwordColumn])) {
+                    if ($userType === 'admin') {
+                        $_SESSION['admin_id'] = $user['admin_id'];
+                        $_SESSION['admin_name'] = $user['admin_name'];
+                        $_SESSION['admin_email'] = $user['admin_email'];
+                        $_SESSION['admin_image'] = !empty($user['admin_image']) ? $user['admin_image'] : '/mips/images/default_profile.png';
+                    } else {
+                        $_SESSION['user_id'] = $user['parent_id'];
+                        $_SESSION['user_name'] = $user['parent_name'];
+                        $_SESSION['user_email'] = $user['parent_email'];
+                        $_SESSION['user_image'] = !empty($user['parent_image']) ? $user['parent_image'] : '/mips/images/default_profile.png';
+                    }
+
+                    $_SESSION['user_type'] = $userType;
+                    $_SESSION['user_status'] = $user['status'];
+
+                    if ($user['status'] == -1) {
+                        $redirectUrl = ($userType === 'admin') ? '/mips/admin/activate.php' : '/mips/activate.php';
+                        return json_encode(['success' => true, 'redirect' => $redirectUrl]);
+                    }
+
+                    $redirectUrl = ($userType === 'admin') ? '/mips/admin/' : ($productId ? "/mips/item.php?pid=" . $productId : ($currentPage ?? '/mips'));
+                    return json_encode(['success' => true, 'redirect' => $redirectUrl]);
+                } else {
+                    return json_encode(['success' => false, 'error' => 'Invalid email or password.']);
+                }
+            } else {
+                return json_encode(['success' => false, 'error' => 'Invalid email or password.']);
+            }
+        } catch (PDOException $e) {
+            return json_encode(['error' => 'Database error: ' . $e->getMessage()]);
         }
-        if (!preg_match('/[0-9]/', $new_password)) {
-            return ['error' => 'Password must contain at least one number.'];
-        }
-        if (!preg_match('/[!@#$%^&*(),.?":{}|<>]/', $new_password)) {
-            return ['error' => 'Password must contain at least one special character.'];
-        }
-        if (preg_match('/^\s|\s$/', $new_password)) {
-            return ['error' => 'Password cannot start or end with a space.'];
+    }
+
+    public function update_password($user_id, $user_type, $new_password, $confirm_password)
+    {
+        $passwordValidation = $this->validate_password($new_password, $confirm_password);
+        if ($passwordValidation !== true) {
+            return ['error' => $passwordValidation];
         }
 
         $table = ($user_type === 'admin') ? 'Admin' : 'Parent';
         $userIdColumn = ($user_type === 'admin') ? 'admin_id' : 'parent_id';
+        $passwordColumn = ($user_type === 'admin') ? 'admin_password' : 'parent_password';
 
-        $sql = "SELECT {$user_type}_password FROM $table WHERE $userIdColumn = :user_id";
+        $sql = "SELECT {$passwordColumn} FROM $table WHERE $userIdColumn = :user_id";
         $stmt = $this->db->prepare($sql);
         $stmt->bindParam(':user_id', $user_id);
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        if (password_verify($new_password, $result["{$user_type}_password"])) {
+        if (password_verify($new_password, $result[$passwordColumn])) {
             return ['error' => 'Cannot reuse previous passwords.'];
         }
 
         $hashedPassword = password_hash($new_password, PASSWORD_DEFAULT);
 
-        $sql = "UPDATE $table SET {$user_type}_password = :new_password, status = 0 WHERE $userIdColumn = :user_id";
+        $sql = "UPDATE $table SET $passwordColumn = :new_password, status = 0 WHERE $userIdColumn = :user_id";
         $stmt = $this->db->prepare($sql);
         $stmt->bindParam(':new_password', $hashedPassword);
         $stmt->bindParam(':user_id', $user_id);
@@ -56,6 +108,10 @@ class Action
 
     public function activate_account($user_id, $user_type, $user_name, $new_password, $confirm_password)
     {
+        if (!preg_match("/^[a-zA-Z\s]+$/", $user_name)) {
+            return json_encode(['error' => 'Name must only contain alphabetic characters']);
+        }
+
         $passwordValidation = $this->validate_password($new_password, $confirm_password);
         if ($passwordValidation !== true) {
             return json_encode(['error' => $passwordValidation]);
@@ -69,7 +125,9 @@ class Action
         $passwordColumn = ($user_type === 'admin') ? 'admin_password' : 'parent_password';
 
         try {
-            $sql = "UPDATE $table SET $userNameColumn = :user_name, $passwordColumn = :password, status = 0 WHERE $userIdColumn = :user_id";
+            $sql = "UPDATE $table 
+                    SET $userNameColumn = :user_name, $passwordColumn = :password, status = 0, created_at = NOW() 
+                    WHERE $userIdColumn = :user_id";
             $stmt = $this->db->prepare($sql);
             $stmt->bindParam(':user_name', $user_name);
             $stmt->bindParam(':password', $hashed_password);
@@ -77,7 +135,7 @@ class Action
             $stmt->execute();
 
             if ($stmt->rowCount() > 0) {
-                $_SESSION['user_name'] = $user_name;
+                $_SESSION[($user_type === 'admin') ? 'admin_name' : 'user_name'] = $user_name;
                 $_SESSION['user_status'] = 0;
                 $redirectUrl = ($user_type === 'admin') ? '/mips/admin/' : '/mips';
                 return json_encode(['success' => true, 'redirect' => $redirectUrl]);

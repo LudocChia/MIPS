@@ -49,38 +49,6 @@ class Action
         return json_encode(['success' => true]);
     }
 
-    public function login($email, $password)
-    {
-        try {
-            $sql = "SELECT * FROM Admin WHERE admin_email = :email AND status IN (0, -1)";
-            $stmt = $this->db->prepare($sql);
-            $stmt->bindParam(':email', $email);
-            $stmt->execute();
-
-            $admin = $stmt->fetch(PDO::FETCH_ASSOC);
-
-            if ($admin && password_verify($password, $admin['admin_password'])) {
-                session_start();
-                $_SESSION['user_type'] = 'admin';
-                $_SESSION['user_id'] = $admin['admin_id'];
-                $_SESSION['user_name'] = $admin['admin_name'];
-                $_SESSION['user_email'] = $admin['admin_email'];
-                $_SESSION['user_status'] = $admin['status'];
-                $_SESSION['user_image'] = $admin['admin_image'] ?? '/mips/images/default_profile.png';
-
-                if ($admin['status'] == -1) {
-                    return json_encode(['new_user' => true, 'redirect' => '/mips/activate.php']);
-                }
-
-                return json_encode(['success' => true, 'redirect' => '/mips/admin']);
-            } else {
-                return json_encode(['success' => false, 'error' => 'Invalid email or password.']);
-            }
-        } catch (PDOException $e) {
-            return json_encode(['error' => 'Database error: ' . $e->getMessage()]);
-        }
-    }
-
     // Admin Functions
     public function deactivate_admin($admin_id)
     {
@@ -88,6 +56,84 @@ class Action
         $stmt = $this->db->prepare($sql);
         $stmt->bindParam(':admin_id', $admin_id);
         return $this->execute_statement($stmt);
+    }
+    public function delete_admin($admin_id)
+    {
+        try {
+            $this->db->beginTransaction();
+
+            $sqlParent = "UPDATE Parent SET admin_id = NULL WHERE admin_id = :admin_id";
+            $stmtParent = $this->db->prepare($sqlParent);
+            $stmtParent->bindParam(':admin_id', $admin_id);
+            $stmtParent->execute();
+
+            $sqlGrade = "UPDATE Grade SET admin_id = NULL WHERE admin_id = :admin_id";
+            $stmtGrade = $this->db->prepare($sqlGrade);
+            $stmtGrade->bindParam(':admin_id', $admin_id);
+            $stmtGrade->execute();
+
+            $sqlClass = "UPDATE Class SET admin_id = NULL WHERE admin_id = :admin_id";
+            $stmtClass = $this->db->prepare($sqlClass);
+            $stmtClass->bindParam(':admin_id', $admin_id);
+            $stmtClass->execute();
+
+            $sqlClassTeacher = "UPDATE Class SET admin_id = NULL WHERE admin_id = :admin_id";
+            $stmtClassTeacher = $this->db->prepare($sqlClassTeacher);
+            $stmtClassTeacher->bindParam(':admin_id', $admin_id);
+            $stmtClassTeacher->execute();
+
+            $sqlStudent = "UPDATE Student SET admin_id = NULL WHERE admin_id = :admin_id";
+            $stmtStudent = $this->db->prepare($sqlStudent);
+            $stmtStudent->bindParam(':admin_id', $admin_id);
+            $stmtStudent->execute();
+
+            $sqlCategory = "UPDATE Product_Category SET admin_id = NULL WHERE admin_id = :admin_id";
+            $stmtCategory = $this->db->prepare($sqlCategory);
+            $stmtCategory->bindParam(':admin_id', $admin_id);
+            $stmtCategory->execute();
+
+            $sqlProduct = "UPDATE Product SET admin_id = NULL WHERE admin_id = :admin_id";
+            $stmtProduct = $this->db->prepare($sqlProduct);
+            $stmtProduct->bindParam(':admin_id', $admin_id);
+            $stmtProduct->execute();
+
+            $sqlProductImage = "UPDATE Product_Image SET admin_id = NULL WHERE admin_id = :admin_id";
+            $stmtProductImage = $this->db->prepare($sqlProductImage);
+            $stmtProductImage->bindParam(':admin_id', $admin_id);
+            $stmtProductImage->execute();
+
+            $sqlSize = "UPDATE Sizes SET admin_id = NULL WHERE admin_id = :admin_id";
+            $stmtSize = $this->db->prepare($sqlSize);
+            $stmtSize->bindParam(':admin_id', $admin_id);
+            $stmtSize->execute();
+
+            $sqlPayment = "UPDATE Payment SET admin_id = NULL WHERE admin_id = :admin_id";
+            $stmtPayment = $this->db->prepare($sqlPayment);
+            $stmtPayment->bindParam(':admin_id', $admin_id);
+            $stmtPayment->execute();
+
+            $sqlAnnouncement = "UPDATE Announcement SET admin_id = NULL WHERE admin_id = :admin_id";
+            $stmtAnnouncement = $this->db->prepare($sqlAnnouncement);
+            $stmtAnnouncement->bindParam(':admin_id', $admin_id);
+            $stmtAnnouncement->execute();
+
+            $sqlNotification = "UPDATE Notification SET admin_id = NULL WHERE admin_id = :admin_id";
+            $stmtNotification = $this->db->prepare($sqlNotification);
+            $stmtNotification->bindParam(':admin_id', $admin_id);
+            $stmtNotification->execute();
+
+            $sqlAdmin = "DELETE FROM Admin WHERE admin_id = :admin_id";
+            $stmtAdmin = $this->db->prepare($sqlAdmin);
+            $stmtAdmin->bindParam(':admin_id', $admin_id);
+            $stmtAdmin->execute();
+
+            $this->db->commit();
+
+            return json_encode(['success' => 'Admin and related references deleted successfully.']);
+        } catch (PDOException $e) {
+            $this->db->rollBack();
+            return json_encode(['error' => 'Error deleting admin: ' . $e->getMessage()]);
+        }
     }
 
     public function recover_admin($admin_id)
@@ -162,6 +208,70 @@ class Action
         return $this->execute_statement($stmt);
     }
 
+    public function delete_parent($parent_id)
+    {
+        try {
+            $this->db->beginTransaction();
+
+            $sqlCartItems = "DELETE ci FROM Cart_Item ci
+                             INNER JOIN Cart c ON ci.cart_id = c.cart_id
+                             WHERE c.parent_id = :parent_id";
+            $stmtCartItems = $this->db->prepare($sqlCartItems);
+            $stmtCartItems->bindParam(':parent_id', $parent_id);
+            $stmtCartItems->execute();
+
+            $sqlCart = "DELETE FROM Cart WHERE parent_id = :parent_id";
+            $stmtCart = $this->db->prepare($sqlCart);
+            $stmtCart->bindParam(':parent_id', $parent_id);
+            $stmtCart->execute();
+
+            $sqlNotification = "DELETE FROM Notification WHERE parent_id = :parent_id";
+            $stmtNotification = $this->db->prepare($sqlNotification);
+            $stmtNotification->bindParam(':parent_id', $parent_id);
+            $stmtNotification->execute();
+
+            $sqlParentStudent = "DELETE FROM Parent_Student WHERE parent_id = :parent_id";
+            $stmtParentStudent = $this->db->prepare($sqlParentStudent);
+            $stmtParentStudent->bindParam(':parent_id', $parent_id);
+            $stmtParentStudent->execute();
+
+            $sqlOrders = "UPDATE Orders SET parent_id = NULL WHERE parent_id = :parent_id";
+            $stmtOrders = $this->db->prepare($sqlOrders);
+            $stmtOrders->bindParam(':parent_id', $parent_id);
+            $stmtOrders->execute();
+
+            $sqlPayment = "UPDATE Payment SET parent_id = NULL WHERE parent_id = :parent_id";
+            $stmtPayment = $this->db->prepare($sqlPayment);
+            $stmtPayment->bindParam(':parent_id', $parent_id);
+            $stmtPayment->execute();
+
+            $stmtGetImage = $this->db->prepare("SELECT parent_image FROM Parent WHERE parent_id = :parent_id");
+            $stmtGetImage->bindParam(':parent_id', $parent_id);
+            $stmtGetImage->execute();
+            $parentImage = $stmtGetImage->fetch(PDO::FETCH_ASSOC);
+
+            if ($parentImage && !empty($parentImage['parent_image'])) {
+                $imagePath = $_SERVER['DOCUMENT_ROOT'] . '/mips/uploads/parents/' . $parentImage['parent_image'];
+                if (file_exists($imagePath)) {
+                    unlink($imagePath);
+                }
+            }
+
+            $sqlParent = "DELETE FROM Parent WHERE parent_id = :parent_id";
+            $stmtParent = $this->db->prepare($sqlParent);
+            $stmtParent->bindParam(':parent_id', $parent_id);
+            $stmtParent->execute();
+
+            $this->db->commit();
+
+            return json_encode(['success' => 'Parent and associated data, including the profile image, deleted successfully.']);
+        } catch (PDOException $e) {
+            $this->db->rollBack();
+            return json_encode(['error' => 'Error deleting parent: ' . $e->getMessage()]);
+        }
+    }
+
+
     public function recover_parent($parent_id)
     {
         $sql = "UPDATE Parent SET status = 0 WHERE parent_id = :parent_id";
@@ -188,7 +298,6 @@ class Action
 
     public function save_parent($parent_id, $parent_name, $parent_email, $parent_phone, $parent_password, $confirm_password, $admin_id)
     {
-        // 调用 check_email_exists 函数时，传入 'parent_email' 作为字段名
         $emailCheck = json_decode($this->check_email_exists($parent_email, 'Parent', 'parent_email', 'parent_id', $parent_id), true);
         if (isset($emailCheck['error'])) {
             return json_encode($emailCheck);

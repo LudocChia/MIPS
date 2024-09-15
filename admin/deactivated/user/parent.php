@@ -46,7 +46,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                         <a href="/mips/admin/deactivated/user/"><i class="bi bi-arrow-90deg-up"></i></i>Deactivated User Menu</a>
                     </div>
                 </div>
-                <div class="table-body">
+                <div class="table-container">
                     <?php if (!empty($deactivated_parents)) : ?>
                         <table>
                             <thead>
@@ -72,9 +72,9 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                                                 <form action="" method="POST" style="display:inline;" onsubmit="return showDeleteConfirmDialog(event);">
                                                     <input type="hidden" name="parent_id" value="<?= htmlspecialchars($parent['parent_id']); ?>">
                                                     <input type="hidden" name="action" value="delete_parent">
-                                                    <button type="submit" class="delete-parent-btn"><i class="bi bi-trash-fill"></i></button>
+                                                    <button type="submit" class="delete-parent-btn"><i class="bi bi-x-square"></i></button>
                                                 </form>
-                                                <button type="button" class="view-order-detail-btn" data-order-id="<?= htmlspecialchars($order['order_id']); ?>"><i class="bi bi-info-circle-fill"></i></button>
+                                                <!-- <button type="button" class="view-order-detail-btn" data-order-id="</?= htmlspecialchars($order['order_id']); ?>"><i class="bi bi-info-circle-fill"></i></button> -->
                                                 <form action="" method="POST" style="display:inline;" onsubmit="return showRecoverConfirmDialog(event);">
                                                     <input type="hidden" name="parent_id" value="<?= htmlspecialchars($parent['parent_id']); ?>">
                                                     <input type="hidden" name="action" value="recover_parent">

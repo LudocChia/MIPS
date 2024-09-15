@@ -77,7 +77,7 @@ function getParentChildren($pdo, $user_id)
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
-$children = getParentChildren($pdo, $_SESSION['user_id'] ?? null);
+$children = getParentChildren($pdo, $_SESSION['admin_id'] ?? null);
 
 $stockQuantity = $product['stock_quantity'] ?? 0;
 
@@ -137,12 +137,12 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                                 <p>MYR <?php echo number_format($product['product_price'], 2); ?></p>
                             </div>
                             <div class="product-details-container">
-                                <h2>Quantity</h2>
+                                <!-- <h2>Quantity</h2>
                                 <div class="product-actions">
                                     <input type="number" id="qty" name="qty" min="1" max="<?php echo $stockQuantity; ?>" value="1">
                                     <button type="button" class="add-to-cart-btn btn btn-outline-primary" data-product-id="<?php echo $product['product_id']; ?>">Add to Cart</button>
                                     <button type="button" class="buy-now btn btn-full">Buy Now</button>
-                                </div>
+                                </div> -->
                             </div>
                         </div>
                     </div>
@@ -199,7 +199,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
         <script type="text/javascript">
             document.addEventListener("DOMContentLoaded", function() {
                 document.querySelector('.buy-now').addEventListener('click', function() {
-                    <?php if (!isset($_SESSION['user_id'])) : ?>
+                    <?php if (!isset($_SESSION['admin_id'])) : ?>
                         const productId = <?= json_encode($product_id) ?>;
                         document.getElementById('login-form').querySelector('form').action += `?pid=${productId}`;
                         document.getElementById('login-form').showModal();
@@ -334,7 +334,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                                 body: new URLSearchParams({
                                     product_id: productId,
                                     qty: qty,
-                                    customer_id: '<?php echo $_SESSION['user_id']; ?>',
+                                    customer_id: '<?php echo $_SESSION['admin_id']; ?>',
                                     product_size_id: sizeId
                                 })
                             })

@@ -85,7 +85,7 @@ if (isset($_POST["submit"])) {
             $stmt->bindParam(':title', $announcementTitle);
             $stmt->bindParam(':message', $announcementMessage);
             $stmt->bindParam(':announcement_id', $announcementId);
-            $stmt->bindParam(':admin_id', $_SESSION['user_id']);
+            $stmt->bindParam(':admin_id', $_SESSION['admin_id']);
 
 
             if ($newImageName) {
@@ -98,7 +98,7 @@ if (isset($_POST["submit"])) {
             $stmt->bindParam(':title', $announcementTitle);
             $stmt->bindParam(':message', $announcementMessage);
             $stmt->bindParam(':image_url', $newImageName);
-            $stmt->bindParam(':admin_id', $_SESSION['user_id']);
+            $stmt->bindParam(':admin_id', $_SESSION['admin_id']);
         }
 
         include $_SERVER['DOCUMENT_ROOT'] . "/mips/php/refresh_page.php";
@@ -201,6 +201,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
     <script>
         document.querySelectorAll('.edit-announcement-btn').forEach(button => {
             button.addEventListener('click', function() {
+                document.querySelector('.confirm').textContent = "Publish";
                 const announcementId = this.dataset.announcementId;
                 fetch(`/mips/admin/ajax.php?action=get_announcement&announcement_id=${announcementId}`)
                     .then(response => response.json())

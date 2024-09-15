@@ -3,7 +3,7 @@ session_start();
 include "../../components/db_connect.php";
 
 // Check if user is logged in as admin
-if (!isset($_SESSION['user_id'])) {
+if (!isset($_SESSION['admin_id'])) {
     header('Location: /mips/admin/login.php');
     exit();
 }

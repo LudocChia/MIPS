@@ -184,7 +184,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/customer_header.php"; ?>
                     <div class="right">
                     </div>
                 </div>
-                <div class="table-body">
+                <div class="table-container">
                     <table>
                         <thead>
                             <tr>

@@ -7,15 +7,15 @@ include 'customer_class.php';
 $crud = new Action();
 
 switch ($action) {
-    case 'login':
-        if (isset($_POST['email'], $_POST['password'])) {
-            $currentPage = $_POST['current_page'] ?? null;
-            $productId = $_POST['pid'] ?? null;
-            echo $crud->login($_POST['email'], $_POST['password'], $currentPage, $productId);
-        } else {
-            echo json_encode(['error' => 'Email and password are required']);
-        }
-        break;
+        // case 'login':
+        //     if (isset($_POST['email'], $_POST['password'])) {
+        //         $currentPage = $_POST['current_page'] ?? null;
+        //         $productId = $_POST['pid'] ?? null;
+        //         echo $crud->login($_POST['email'], $_POST['password'], $currentPage, $productId);
+        //     } else {
+        //         echo json_encode(['error' => 'Email and password are required']);
+        //     }
+        //     break;
 
         // Order Functions
     case 'get_orders':

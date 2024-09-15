@@ -3,7 +3,7 @@ session_start();
 include "../../components/db_connect.php";
 // include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/db_connect.php";
 
-if (!isset($_SESSION['user_id'])) {
+if (!isset($_SESSION['admin_id'])) {
     header('Location: /mips/admin/login.php');
     exit();
 }

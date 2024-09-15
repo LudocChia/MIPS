@@ -13,6 +13,7 @@ $currentPage = basename($_SERVER['PHP_SELF']);
 </head>
 
 <dialog class="login-form">
+    <input type="hidden" name="user_type" value="parent">
     <div class="logo-container">
         <img src="/mips/images/MIPS_icon.png" alt="MIPS_Logo">
     </div>
@@ -53,10 +54,11 @@ $currentPage = basename($_SERVER['PHP_SELF']);
 
             const email = document.querySelector('input[name="email"]').value;
             const password = document.querySelector('input[name="password"]').value;
+            const userType = 'parent';
             const productId = "<?php echo $product_id; ?>";
             const currentPage = window.location.pathname;
 
-            fetch('/mips/ajax.php?action=login', {
+            fetch('/mips/php/ajax.php?action=login', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded'
@@ -64,6 +66,7 @@ $currentPage = basename($_SERVER['PHP_SELF']);
                     body: new URLSearchParams({
                         email: email,
                         password: password,
+                        user_type: userType,
                         pid: productId,
                         current_page: currentPage
                     })

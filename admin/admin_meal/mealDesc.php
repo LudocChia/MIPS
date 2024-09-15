@@ -3,7 +3,7 @@ session_start();
 include "../../components/db_connect.php";
 
 // Check if user is logged in as admin
-if (!isset($_SESSION['user_id'])) {
+if (!isset($_SESSION['admin_id'])) {
     header('Location: /mips/admin/login.php');
     exit();
 }
@@ -89,7 +89,7 @@ if (isset($_GET['event_id']) && isset($_GET['meal_type_id'])) {
         // echo '<p>No donators found for this meal type.</p>';
     }
 
-    
+
     //use for tracking parent's name
     $parent_id = $donator['parent_id'];
     $sql = $pdo->prepare("SELECT * FROM `parent` 
@@ -112,7 +112,6 @@ if (isset($_GET['event_id']) && isset($_GET['meal_type_id'])) {
     } else {
         // echo '<p>No donators found for this meal type.</p>';
     }
-    
 } else {
     // Handle the case where the parameters are not set
     echo '<p>Error: Missing event_id or meal_type_id.</p>';

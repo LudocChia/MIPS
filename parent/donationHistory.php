@@ -44,8 +44,7 @@ if ($donators) {
 
 <body>
     <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/customer_header.php"; ?>
-    <div class="container aside-main">
-        <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/customer_sidebar.php"; ?>
+    <div class="container">
         <main class="purchase">
             <div class="wrapper">
                 <div class="title">
@@ -53,9 +52,8 @@ if ($donators) {
                         <h1>My Donation History</h1>
                     </div>
                 </div>
-                
-                <div >
-                    <table>
+                <div>
+                    <table class="table-container">
                         <thead>
                             <tr>
                                 <th>Donator ID</th>
@@ -66,31 +64,31 @@ if ($donators) {
                             </tr>
                         </thead>
                         <tbody>
-                        <?php if (!empty($donators)): ?>
-                            <?php foreach ($donators as $donator): ?>
+                            <?php if (!empty($donators)): ?>
+                                <?php foreach ($donators as $donator): ?>
                                     <div class="donatorBox">
                                         <tr id="tableRow">
                                             <td id="tableData">
-                                                <p>  <?=htmlspecialchars($donator['donator_id'])?></p>
+                                                <p> <?= htmlspecialchars($donator['donator_id']) ?></p>
                                             </td>
                                             <td id="tableData">
-                                                <p> <?=htmlspecialchars($donator['name'])?> </p>
+                                                <p> <?= htmlspecialchars($donator['name']) ?> </p>
                                             </td>
                                             <td id="tableData">
-                                                <p><?=htmlspecialchars($donator['date'])?></p>
+                                                <p><?= htmlspecialchars($donator['date']) ?></p>
                                             </td>
                                             <td id="tableData">
-                                                <p> <?=htmlspecialchars($donator['meal_name'])?> </p>
+                                                <p> <?= htmlspecialchars($donator['meal_name']) ?> </p>
                                             </td>
                                             <td id="tableData">
-                                                <p> <?=htmlspecialchars($donator['p_set'])?> </p>
+                                                <p> <?= htmlspecialchars($donator['p_set']) ?> </p>
                                             </td>
                                         </tr>
                                     </div>
-                            <?php endforeach; ?>
-                        <?php else: ?>
-                            <p id="nRecord">No donators for now.</p>
-                        <?php endif; ?>
+                                <?php endforeach; ?>
+                            <?php else: ?>
+                                <p id="nRecord">No donators for now.</p>
+                            <?php endif; ?>
                         </tbody>
                     </table>
                 </div>

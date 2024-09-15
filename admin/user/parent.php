@@ -41,7 +41,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
                         <button class="btn btn-outline-primary" id="open-popup"><i class="bi bi-person-fill-add"></i>Add New Parent</button>
                     </div>
                 </div>
-                <div class="table-body">
+                <div class="table-container">
                     <?php if (!empty($all_parents)) : ?>
                         <table>
                             <thead>
@@ -50,7 +50,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
                                     <th>Parent Name</th>
                                     <th>Parent Email</th>
                                     <th>Parent Phone</th>
-                                    <th>Register Date</th>
+                                    <th>Activated Date</th>
                                     <th>Status</th>
                                     <th>Actions</th>
                                 </tr>
@@ -62,7 +62,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
                                         <td><?php echo htmlspecialchars($parent['parent_name']); ?></td>
                                         <td><?php echo htmlspecialchars($parent['parent_email']); ?></td>
                                         <td style="text-align: center;"><?php echo htmlspecialchars($parent['parent_phone']) ? htmlspecialchars($parent['parent_phone']) : '-'; ?></td>
-                                        <td><?php echo htmlspecialchars($parent['created_at']); ?></td>
+                                        <td style="text-align: center;"><?php echo htmlspecialchars($parent['created_at']) ? htmlspecialchars($parent['created_at']) : '-'; ?></td>
                                         <td style="text-align: center;"><?php echo getStatusLabel($parent['status']); ?></td>
                                         <td>
                                             <div class="actions">
@@ -89,7 +89,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
         </main>
     </div>
     <dialog id="add-edit-data">
-        <form id="parent-form-ajax" method="post">
+        <form id="form-ajax" method="post">
             <div class="title">
                 <div class="left">
                     <h1>Add New Parent</h1>
@@ -103,14 +103,14 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
             <div class="input-container">
                 <h2>Parent Name<sup>*</sup></h2>
                 <div class="input-field">
-                    <input type="text" name="name" required>
+                    <input type="text" name="name" value="<?php echo isset($_POST['name']) ? htmlspecialchars($_POST['name']) : ''; ?>" required novalidate>
                 </div>
                 <p>Please enter the parent's full name.</p>
             </div>
             <div class="input-container">
                 <h2>Parent Email<sup>*</sup></h2>
                 <div class="input-field">
-                    <input type="email" name="email" required>
+                    <input type="email" name="email" value="<?php echo isset($_POST['email']) ? htmlspecialchars($_POST['email']) : ''; ?>" required novalidate>
                 </div>
                 <p>Please enter the parent's email address.</p>
             </div>
@@ -124,14 +124,14 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
             <div class="input-container">
                 <h2>Password<sup>*</sup></h2>
                 <div class="input-field">
-                    <input type="password" name="password" required>
+                    <input type="password" name="password" required novalidate>
                 </div>
                 <p>Please enter a secure password.</p>
             </div>
             <div class="input-container">
                 <h2>Confirm Password<sup>*</sup></h2>
                 <div class="input-field">
-                    <input type="password" name="confirm_password" required>
+                    <input type="password" name="confirm_password" required novalidate>
                 </div>
                 <p>Please confirm the password.</p>
             </div>
@@ -148,21 +148,21 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
     <script>
         document.querySelectorAll('.edit-parent-btn').forEach(button => {
             button.addEventListener('click', function() {
+                document.querySelector('.confirm').textContent = "Publish";
                 const parentId = this.dataset.parentId;
                 fetch(`/mips/admin/ajax.php?action=get_parent`, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/x-www-form-urlencoded'
                         },
-                        body: new URLSearchParams({
-                            parent_id: parentId
-                        })
+                        body: `parent_id=${encodeURIComponent(parentId)}`
                     })
                     .then(response => response.json())
                     .then(parent => {
                         if (parent.error) {
                             alert(parent.error);
                         } else {
+
                             document.querySelector('#add-edit-data [name="name"]').value = parent.parent_name;
                             document.querySelector('#add-edit-data [name="email"]').value = parent.parent_email;
                             document.querySelector('#add-edit-data [name="phone"]').value = parent.parent_phone;
@@ -182,7 +182,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
             });
         });
 
-        const parentForm = document.getElementById('parent-form-ajax');
+        const parentForm = document.getElementById('form-ajax');
 
         parentForm.addEventListener('submit', function(e) {
             e.preventDefault();
@@ -192,7 +192,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
             const phone = document.querySelector('#add-edit-data [name="phone"]').value;
             const password = document.querySelector('#add-edit-data [name="password"]').value;
             const confirmPassword = document.querySelector('#add-edit-data [name="confirm_password"]').value;
-            const adminId = '<?php echo $_SESSION['user_id']; ?>';
+            const adminId = '<?php echo $_SESSION['admin_id']; ?>';
 
             if (password !== confirmPassword) {
                 showAlert('Passwords do not match!');
@@ -245,6 +245,8 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
         document.querySelectorAll('#add-edit-data .cancel').forEach(button => {
             button.addEventListener('click', function() {
                 document.querySelector('#add-edit-data h1').textContent = "Add New Parent";
+                dialog.querySelector('[name="password"]').setAttribute('required', 'required');
+                dialog.querySelector('[name="confirm_password"]').setAttribute('required', 'required');
             });
         });
     </script>

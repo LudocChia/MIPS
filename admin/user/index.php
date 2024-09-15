@@ -40,7 +40,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
                         <button class="btn btn-outline-primary" id="open-popup"><i class="bi bi-person-fill-add"></i>Add New Admin</button>
                     </div>
                 </div>
-                <div class="table-body">
+                <div class="table-container">
                     <?php if (!empty($all_admins)) : ?>
                         <table>
                             <thead>
@@ -48,7 +48,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
                                     <th>Admin ID</th>
                                     <th>Admin Name</th>
                                     <th>Admin Email</th>
-                                    <th>Admin Register Date</th>
+                                    <th>Activated Date</th>
                                     <th>Status</th>
                                     <th>Actions</th>
                                 </tr>
@@ -59,7 +59,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
                                         <td><?php echo htmlspecialchars($admin['admin_id']); ?></td>
                                         <td><?php echo htmlspecialchars($admin['admin_name']); ?></td>
                                         <td><?php echo htmlspecialchars($admin['admin_email']); ?></td>
-                                        <td><?php echo htmlspecialchars($admin['created_at']); ?></td>
+                                        <td style="text-align: center;"><?php echo htmlspecialchars($admin['created_at']) ? htmlspecialchars($admin['created_at']) : '-'; ?></td>
                                         <td style="text-align: center;"><?php echo getStatusLabel($admin['status']); ?></td>
                                         <td>
                                             <div class="actions">
@@ -86,7 +86,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
         </main>
     </div>
     <dialog id="add-edit-data">
-        <form id="admin-form-ajax" method="post">
+        <form id="form-ajax" method="post">
             <div class="title">
                 <div class="left">
                     <h1>Add New Admin</h1>
@@ -102,28 +102,28 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
                 <div class="input-field">
                     <input type="text" name="name" value="<?php echo isset($_POST['name']) ? htmlspecialchars($_POST['name']) : ''; ?>" required>
                 </div>
-                <p>Please enter the admin's full name</p>
+                <p>Please enter the admin's full name.</p>
             </div>
             <div class="input-container">
                 <h2>Admin Email<sup>*</sup></h2>
                 <div class="input-field">
                     <input type="email" name="email" value="<?php echo isset($_POST['email']) ? htmlspecialchars($_POST['email']) : ''; ?>" required>
                 </div>
-                <p>Please enter the admin's email address</p>
+                <p>Please enter the admin's email address.</p>
             </div>
             <div class="input-container">
                 <h2>Password<sup>*</sup></h2>
                 <div class="input-field">
                     <input type="password" name="password" required>
                 </div>
-                <p>Please enter a secure password</p>
+                <p>Please enter a secure password.</p>
             </div>
             <div class="input-container">
                 <h2>Confirm Password<sup>*</sup></h2>
                 <div class="input-field">
                     <input type="password" name="confirm_password" required>
                 </div>
-                <p>Please confirm the password</p>
+                <p>Please confirm the password.</p>
             </div>
             <div class="controls">
                 <button type="button" class="cancel">Cancel</button>
@@ -138,6 +138,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
     <script>
         document.querySelectorAll('.edit-admin-btn').forEach(button => {
             button.addEventListener('click', function() {
+                document.querySelector('.confirm').textContent = "Publish";
                 const adminId = this.dataset.adminId;
                 fetch(`/mips/admin/ajax.php?action=get_admin`, {
                         method: 'POST',
@@ -169,7 +170,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
             });
         });
 
-        const adminForm = document.getElementById('admin-form-ajax');
+        const adminForm = document.getElementById('form-ajax');
 
         adminForm.addEventListener('submit', function(e) {
             e.preventDefault();

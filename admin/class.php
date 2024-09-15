@@ -42,7 +42,7 @@ if (isset($_POST["submit"])) {
     $classId = isset($_POST["class_id"]) && !empty($_POST["class_id"]) ? $_POST["class_id"] : generateClassId();
     $className = $_POST["class_name"];
     $gradeId = $_POST["grade_id"];
-    $adminId = $_SESSION['user_id'];
+    $adminId = $_SESSION['admin_id'];
 
     if (isset($_POST['class_id']) && !empty($_POST['class_id'])) {
         $sql = "UPDATE Class SET class_name = :className, grade_id = :gradeId WHERE class_id = :classId";
@@ -79,7 +79,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                         <button id="open-popup" class="btn btn-outline-primary"><i class="bi bi-plus-circle"></i>Add New Class</button>
                     </div>
                 </div>
-                <div class="table-body">
+                <div class="table-container">
                     <?php if (!empty($all_classes)) : ?>
                         <table>
                             <thead>
@@ -166,6 +166,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
     <script>
         document.querySelectorAll('.edit-class-btn').forEach(button => {
             button.addEventListener('click', function() {
+                document.querySelector('.confirm').textContent = "Publish";
                 const classId = this.dataset.classId;
 
                 fetch(`/mips/admin/ajax.php?action=get_class&class_id=${classId}`)

@@ -47,7 +47,7 @@ if (isset($_POST["submit"])) {
         $stmt->bindParam(':gradeName', $gradeName);
         $stmt->bindParam(':gradeLevel', $gradeLevel);
         $stmt->bindParam(':studentIdPrefix', $studentIdPrefix);
-        $stmt->bindParam(':adminId', $_SESSION['user_id']);
+        $stmt->bindParam(':adminId', $_SESSION['admin_id']);
     } else {
         $sql = "INSERT INTO Grade (grade_id, grade_name, grade_level, student_id_prefix, status, admin_id) VALUES (:gradeId, :gradeName, :gradeLevel, :studentIdPrefix, 0, :adminId)";
         $stmt = $pdo->prepare($sql);
@@ -55,7 +55,7 @@ if (isset($_POST["submit"])) {
         $stmt->bindParam(':gradeName', $gradeName);
         $stmt->bindParam(':gradeLevel', $gradeLevel);
         $stmt->bindParam(':studentIdPrefix', $studentIdPrefix);
-        $stmt->bindParam(':adminId', $_SESSION['user_id']);
+        $stmt->bindParam(':adminId', $_SESSION['admin_id']);
     }
 
     include $_SERVER['DOCUMENT_ROOT'] . "/mips/php/refresh_page.php";
@@ -78,7 +78,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                         <button id="open-popup" class="btn btn-outline-primary"><i class="bi bi-plus-circle"></i>Add New Grade</button>
                     </div>
                 </div>
-                <div class="table-body">
+                <div class="table-container">
                     <?php if (!empty($all_grades)) : ?>
                         <table>
                             <thead>
@@ -168,6 +168,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
     <script>
         document.querySelectorAll('.edit-grade-btn').forEach(button => {
             button.addEventListener('click', function() {
+                document.querySelector('.confirm').textContent = "Publish";
                 const gradeId = this.dataset.gradeId;
                 fetch(`/mips/admin/ajax.php?action=get_grade&grade_id=${gradeId}`)
                     .then(response => response.json())

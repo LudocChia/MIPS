@@ -1,18 +1,15 @@
 <?php
 
-$database_table = "Student";
+$database_table = "Admin";
 $rows_per_page = 12;
 include $_SERVER['DOCUMENT_ROOT'] . "/mips/php/admin.php";
 include $_SERVER['DOCUMENT_ROOT'] . "/mips/php/deactivated_pagination.php";
 
-function getDeactivatedStudents($pdo, $start, $rows_per_page)
+function getDeactivatedAdmins($pdo, $start, $rows_per_page)
 {
-    $sql = "SELECT s.*, c.class_name, p.parent_name
-            FROM Student s
-            LEFT JOIN Class c ON s.class_id = c.class_id
-            LEFT JOIN Parent_Student ps ON s.student_id = ps.student_id
-            LEFT JOIN Parent p ON ps.parent_id = p.parent_id
-            WHERE s.status = 1
+    $sql = "SELECT *
+            FROM Admin
+            WHERE status = 1
             LIMIT :start, :rows_per_page";
     $stmt = $pdo->prepare($sql);
     $stmt->bindParam(':start', $start, PDO::PARAM_INT);
@@ -21,9 +18,9 @@ function getDeactivatedStudents($pdo, $start, $rows_per_page)
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
-$deactivated_students = getDeactivatedStudents($pdo, $start, $rows_per_page);
+$deactivated_admins = getDeactivatedAdmins($pdo, $start, $rows_per_page);
 
-$pageTitle = "Deactivated Students - MIPS";
+$pageTitle = "Deactivated Admins - MIPS";
 include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
 ?>
 
@@ -31,48 +28,48 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
     <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_header.php"; ?>
     <div class="container">
         <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_sidebar.php"; ?>
-        <main class="student">
+        <main class="admin">
             <div class="wrapper">
                 <div class="title">
                     <div class="left">
-                        <h1>Deactivated Student Accounts</h1>
+                        <h1>Deactivated Admin Accounts</h1>
                     </div>
                     <div class="right">
                         <a href="/mips/admin/deactivated/user/"><i class="bi bi-arrow-90deg-up"></i>Deactivated User Menu</a>
                     </div>
                 </div>
-                <?php if (!empty($deactivated_students)) : ?>
+                <?php if (!empty($deactivated_admins)) : ?>
                     <div class="table-container">
                         <table>
                             <thead>
                                 <tr>
-                                    <th>Student ID</th>
-                                    <th>Student Name</th>
-                                    <th>Student Parent Name</th>
-                                    <th>Class</th>
-                                    <th>Register Date</th>
+                                    <th>Admin ID</th>
+                                    <th>Admin Name</th>
+                                    <th>Admin Email</th>
+                                    <th>Admin Type</th>
+                                    <th>Created At</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php foreach ($deactivated_students as $student) : ?>
+                                <?php foreach ($deactivated_admins as $admin) : ?>
                                     <tr>
-                                        <td><?= htmlspecialchars($student['student_id']); ?></td>
-                                        <td><?= htmlspecialchars($student['student_name']); ?></td>
-                                        <td><?= htmlspecialchars($student['parent_name'] ?? '-') ?></td>
-                                        <td><?= htmlspecialchars($student['class_name']); ?></td>
-                                        <td><?= htmlspecialchars($student['created_at']); ?></td>
+                                        <td><?= htmlspecialchars($admin['admin_id']); ?></td>
+                                        <td><?= htmlspecialchars($admin['admin_name']); ?></td>
+                                        <td><?= htmlspecialchars($admin['admin_email']); ?></td>
+                                        <td><?= htmlspecialchars($admin['admin_type']); ?></td>
+                                        <td><?= htmlspecialchars($admin['created_at']); ?></td>
                                         <td>
                                             <div class="actions">
                                                 <form action="" method="POST" style="display:inline;" onsubmit="return showDeleteConfirmDialog(event);">
-                                                    <input type="hidden" name="student_id" value="<?= htmlspecialchars($student['student_id']); ?>">
-                                                    <input type="hidden" name="action" value="delete_student">
-                                                    <button type="submit" class="delete-student-btn"><i class="bi bi-x-square"></i></button>
+                                                    <input type="hidden" name="admin_id" value="<?= htmlspecialchars($admin['admin_id']); ?>">
+                                                    <input type="hidden" name="action" value="delete_admin">
+                                                    <button type="submit" class="delete-admin-btn"><i class="bi bi-x-square"></i></button>
                                                 </form>
                                                 <form action="" method="POST" style="display:inline;" onsubmit="return showRecoverConfirmDialog(event);">
-                                                    <input type="hidden" name="student_id" value="<?= htmlspecialchars($student['student_id']); ?>">
-                                                    <input type="hidden" name="action" value="recover_student">
-                                                    <button type="submit" class="recover-student-btn"><i class="bi bi-arrow-clockwise"></i></button>
+                                                    <input type="hidden" name="admin_id" value="<?= htmlspecialchars($admin['admin_id']); ?>">
+                                                    <input type="hidden" name="action" value="recover_admin">
+                                                    <button type="submit" class="recover-admin-btn"><i class="bi bi-arrow-clockwise"></i></button>
                                                 </form>
                                             </div>
                                         </td>
@@ -84,7 +81,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
                         <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/no_data_found.php"; ?>
                     <?php endif; ?>
                     </div>
-                    <?php if (!empty($deactivated_students)) : ?>
+                    <?php if (!empty($deactivated_admins)) : ?>
                         <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/pagination.php"; ?>
                     <?php endif; ?>
             </div>

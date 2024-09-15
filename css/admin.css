@@ -54,10 +54,10 @@
 
 .container {
     display: grid;
-    width: 96%;
+    width: 100%;
     margin: 0 auto;
     gap: 1.8rem;
-    grid-template-columns: 20rem auto;
+    grid-template-columns: 23rem auto;
     overflow-y: auto;
 }
 
@@ -116,7 +116,7 @@ ul.bookshop-show.second {
 
 /* Sidebar */
 aside {
-    margin: var(--marging-1);
+    margin: 1rem 0 1rem 4rem;
     height: 82vh;
     overflow-y: scroll;
 }
@@ -215,12 +215,19 @@ aside .sidebar h4 {
 }
 
 main {
+    padding: 2rem;
     display: grid;
     grid-template-columns: 1fr;
     gap: 1.8rem;
-    margin-top: 2rem;
-    height: 80vh;
+    /* margin-top: 2rem; */
+    height: 85vh;
     overflow-y: auto;
+}
+
+main.login-form,
+main.set-new-password-form {
+    margin-top: 10px;
+    padding: 0;
 }
 
 
@@ -238,7 +245,6 @@ main .insights>div {
     background: var(--color-white);
     padding: var(--card-padding);
     border-radius: var(--card-border-radius);
-    margin-top: 1rem;
     transition: all 300ms ease;
 }
 
@@ -609,10 +615,6 @@ main .recent-orders a {
 }
 
 @media screen and (max-width: 768px) {
-    h1 {
-        font-size: 1.7rem;
-    }
-
     .wrapper {
         width: 100%;
         grid-template-columns: 1fr;
