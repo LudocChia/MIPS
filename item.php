@@ -12,6 +12,7 @@ if (!$product_id) {
     exit();
 }
 
+
 function getProductDetail($pdo, $product_id)
 {
     $stmt = $pdo->prepare("
