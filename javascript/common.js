@@ -54,4 +54,14 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     }
+
+    const formAjax = document.getElementById('form-ajax');
+    if (formAjax) {
+        formAjax.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                document.querySelector('.confirm').click();
+            }
+        });
+    }
 });

@@ -40,9 +40,7 @@ class Action
     public function add_to_cart($parent_id, $product_id, $quantity, $product_size_id)
     {
         try {
-            $sql_cart = "SELECT cart_id 
-                            FROM Cart 
-                            WHERE parent_id = :parent_id";
+            $sql_cart = "SELECT cart_id FROM Cart WHERE parent_id = :parent_id";
             $stmt_cart = $this->db->prepare($sql_cart);
             $stmt_cart->bindParam(':parent_id', $parent_id);
             $stmt_cart->execute();
@@ -50,10 +48,9 @@ class Action
 
             $cart_id = $cart['cart_id'];
 
-            $sql_cart_item = "
-            SELECT cart_item_id, product_quantity 
-            FROM Cart_Item 
-            WHERE cart_id = :cart_id AND product_id = :product_id AND product_size_id = :product_size_id
+            $sql_cart_item = "SELECT cart_item_id, product_quantity 
+                                FROM Cart_Item 
+                                WHERE cart_id = :cart_id AND product_id = :product_id AND product_size_id = :product_size_id
         ";
             $stmt_cart_item = $this->db->prepare($sql_cart_item);
             $stmt_cart_item->bindParam(':cart_id', $cart_id);
@@ -80,9 +77,8 @@ class Action
                 }
             } else {
                 $cart_item_id = uniqid('CRIT');
-                $sql_insert_item = "
-                INSERT INTO Cart_Item (cart_item_id, cart_id, product_id, product_size_id, product_quantity) 
-                VALUES (:cart_item_id, :cart_id, :product_id, :product_size_id, :quantity)
+                $sql_insert_item = "INSERT INTO Cart_Item (cart_item_id, cart_id, product_id, product_size_id, product_quantity) 
+                                    VALUES (:cart_item_id, :cart_id, :product_id, :product_size_id, :quantity)
             ";
                 $stmt_insert_item = $this->db->prepare($sql_insert_item);
                 $stmt_insert_item->bindParam(':cart_item_id', $cart_item_id);

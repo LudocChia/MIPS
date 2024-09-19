@@ -27,7 +27,7 @@ function isActive($targetPage, $currentPage)
                     <h5>Bookshop</h5>
                     <i class="bi bi-chevron-down <?= strpos($currentPage, 'mainCategory') !== false || strpos($currentPage, 'subcategory') !== false || strpos($currentPage, 'size') !== false || strpos($currentPage, 'product') !== false ? 'rotate' : ''; ?>"></i>
                 </a>
-                <ul class="bookshop-show" style="display: <?= strpos($currentPage, 'mainCategory') !== false || strpos($currentPage, 'subcategory') !== false || strpos($currentPage, 'size') !== false || strpos($currentPage, 'product') !== false ? 'block' : 'none'; ?>">
+                <ul class="bookshop-show" style="display: <?= strpos($currentPage, '/mips/admin/bookshop/mainCategory.php') !== false || strpos($currentPage, '/mips/admin/bookshop/subcategory.php') !== false || strpos($currentPage, '/mips/admin/bookshop/size.php') !== false || strpos($currentPage, '/mips/admin/bookshop/') !== false ? 'block' : 'none'; ?>">
                     <li><a href="/mips/admin/bookshop/mainCategory.php" class="<?= isActive('/mips/admin/bookshop/mainCategory.php', $currentPage); ?>"><i class="bi bi-tags-fill"></i>
                             <h5>Main Category</h5>
                         </a>
@@ -66,6 +66,29 @@ function isActive($targetPage, $currentPage)
                 </a>
             </li>
             <li>
+                <a href="javascript:void(0);" class="ebook-btn">
+                    <i class="bi bi-book-fill"></i>
+                    <h5>E-Book</h5>
+                    <i class="bi bi-chevron-down <?= strpos($currentPage, '/mips/admin/ebook/mainCategory.php') !== false || strpos($currentPage, '/mips/admin/ebook/subcategory.php') !== false || strpos($currentPage, '/mips/admin/ebook/') !== false ? 'rotate' : ''; ?>"></i>
+                </a>
+                <ul class="user-show" style="display: <?= strpos($currentPage, '/mips/admin/ebook/mainCategory.php') !== false || strpos($currentPage, '/mips/admin/ebook/subcategory.php') !== false || strpos($currentPage, '/mips/admin/ebook/') !== false ? 'block' : 'none'; ?>">
+                    <li>
+                    <li><a href="/mips/admin/ebook/mainCategory.php" class="<?= isActive('/mips/admin/ebook/mainCategory.php', $currentPage); ?>"><i class="bi bi-tags-fill"></i>
+                            <h5>Main Category</h5>
+                        </a>
+                    </li>
+                    <li><a href="/mips/admin/ebook/subcategory.php" class="<?= isActive('/mips/admin/ebook/subcategory.php', $currentPage); ?>"><i class="bi bi-tags-fill"></i>
+                            <h5>Subcategory</h5>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/mips/admin/ebook/" class="<?= isActive('/mips/admin/ebook/', $currentPage); ?>"><i class="bi bi-journal"></i>
+                            <h5>All Books</h5>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li>
                 <a href="/mips/admin/announcement.php" class="<?= isActive('/mips/admin/announcement.php', $currentPage); ?>">
                     <i class="bi bi-megaphone-fill"></i>
                     <h5>Announment</h5>
@@ -81,9 +104,9 @@ function isActive($targetPage, $currentPage)
                 <a href="javascript:void(0);" class="user-btn">
                     <i class="bi bi-person-fill"></i>
                     <h5>User Type</h5>
-                    <i class="bi bi-chevron-down second <?= strpos($currentPage, 'admin') !== false || strpos($currentPage, 'teacher') !== false || strpos($currentPage, 'parent') !== false ? 'rotate' : ''; ?>"></i>
+                    <i class="bi bi-chevron-down <?= strpos($currentPage, '/mips/admin/user/') !== false || strpos($currentPage, '/mips/admin/user/parent.php') !== false || strpos($currentPage, '/mips/admin/user/student.php') !== false ? 'rotate' : ''; ?>"></i>
                 </a>
-                <ul class="user-show" style="display: <?= strpos($currentPage, 'admin') !== false || strpos($currentPage, 'teacher') !== false || strpos($currentPage, 'parent') !== false ? 'block' : 'none'; ?>">
+                <ul class="user-show" style="display: <?= strpos($currentPage, '/mips/admin/user/') !== false || strpos($currentPage, '/mips/admin/user/student.php') !== false || strpos($currentPage, 'mips/admin/user/parent.php') !== false ? 'block' : 'none'; ?>">
                     <li>
                         <a href="/mips/admin/user/" class="<?= isActive('/mips/admin/user/', $currentPage); ?>"><i class="bi bi-person-fill-gear"></i>
                             <h5>All Admin</h5>
@@ -111,7 +134,7 @@ function isActive($targetPage, $currentPage)
                 </ul>
             </li>
             <li>
-                <a href="/mips/admin/deactivated/" class="<?= isActive('/mips/admin/deactivated.php', $currentPage); ?>">
+                <a href="/mips/admin/deactivated/" class="<?= isActive('/mips/admin/deactivated/', $currentPage); ?>">
                     <i class="bi bi-trash2-fill"></i>
                     <h5>Deactivated</h5>
                 </a>

@@ -36,7 +36,7 @@ $parentId = $_SESSION['user_id'] ?? null;
                         <a href="/mips/bookshop.php"><button class='btn btn-outline-primary'>Start Browsing</button></a>
                     </div>
                 </div>
-                <div id="cart-items" style="display:none;">
+                <div class="table-container" id="cart-items" style="display:none;">
                     <div class="table-cart-items">
                         <table>
                             <thead>

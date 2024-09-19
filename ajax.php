@@ -29,12 +29,15 @@ switch ($action) {
 
         // Checkout Functions
     case 'add_to_cart':
-        if (isset($_POST['customer_id'], $_POST['product_id'], $_POST['qty'], $_POST['product_size_id'])) {
-            echo $crud->add_to_cart($_POST['customer_id'], $_POST['product_id'], $_POST['qty'], $_POST['product_size_id']);
+        if (isset($_POST['customer_id'], $_POST['product_id'], $_POST['qty'])) {
+            // Check if product_size_id exists and is not an empty string, else set it to null
+            $product_size_id = !empty($_POST['product_size_id']) ? $_POST['product_size_id'] : null;
+            echo $crud->add_to_cart($_POST['customer_id'], $_POST['product_id'], $_POST['qty'], $product_size_id);
         } else {
             echo json_encode(['error' => 'Invalid or missing input data']);
         }
         break;
+
 
     case 'purchase':
         if (isset($_POST['product_id']) && isset($_POST['size_id']) && isset($_POST['total_item_quantities']) && isset($_POST['total_price_items']) && isset($_POST['total_price']) && isset($_POST['children']) && isset($_SESSION['user_id']) && isset($_FILES['payment_image'])) {

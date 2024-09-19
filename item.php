@@ -214,7 +214,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/customer_header.php"; ?>
     </section>
 <?php endif; ?>
 <dialog id="add-edit-data">
-    <form method="post" enctype="multipart/form-data">
+    <form id="form-ajax" method="post" enctype="multipart/form-data">
         <div class="title">
             <div class="right">
                 <h1>Purchase Product</h1>
@@ -233,12 +233,14 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/customer_header.php"; ?>
                 <input type="text" name="product_name" id="product-name-display" value="Product Name Here" readonly>
             </div>
         </div>
-        <div class="input-container">
-            <div class="input-field">
-                <h2>Selected Size</h2>
-                <input type="text" name="selected_size" id="selected-size-display" value="Selected Size Here" readonly>
+        <?php if (!empty($sizes)) : ?>
+            <div class="input-container">
+                <div class="input-field">
+                    <h2>Selected Size</h2>
+                    <input type="text" name="selected_size" id="selected-size-display" value="Selected Size Here" readonly>
+                </div>
             </div>
-        </div>
+        <?php endif; ?>
         <div class="input-container">
             <div class="input-field">
                 <h2>Price (RM)</h2>
@@ -292,7 +294,6 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/customer_header.php"; ?>
         </div>
         <div class="input-container controls">
             <button value="cancel" class="cancel">Cancel</button>
-            <button type="reset" class="delete">Clear</button>
             <button type="submit" class="confirm" name="submit">Purchase</button>
         </div>
     </form>
@@ -319,9 +320,6 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/customer_header.php"; ?>
                     const sizeId = selectedSizeButton.getAttribute('data-size-id');
                     document.getElementById('size-id').value = sizeId;
                     document.getElementById('selected-size-display').value = selectedSizeButton.textContent;
-                } else {
-                    document.getElementById('size-id').value = '';
-                    document.getElementById('selected-size-display').value = 'N/A';
                 }
 
                 const productName = '<?= htmlspecialchars($product['product_name']) ?>';
@@ -454,7 +452,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/customer_header.php"; ?>
                         product_id: productId,
                         qty: qty,
                         customer_id: '<?php echo $_SESSION['user_id']; ?>',
-                        product_size_id: sizeId
+                        product_size_id: sizeId || ''
                     })
                 })
                 .then(response => response.json())

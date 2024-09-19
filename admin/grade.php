@@ -124,7 +124,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
         </main>
     </div>
     <dialog id="add-edit-data">
-        <form action="" method="post" enctype="multipart/form-data">
+        <form method="post" enctype="multipart/form-data">
             <div class="title">
                 <div class="left">
                     <h1>Add New Grade</h1>

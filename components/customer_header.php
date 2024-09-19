@@ -17,9 +17,9 @@
                 <!-- <li>
                     <a href="event.php"><i class="bi bi-calendar4-event"></i>School Event</a>
                 </li> -->
-                <!-- <li>
-                    <a href="bookshop.php"><i class="bi bi-shop-window"></i>Bookshop</a>
-                </li> -->
+                <li>
+                    <a href="/mips/bookshop.php"><i class="bi bi-shop-window"></i>Bookshop</a>
+                </li>
             </ul>
         </div>
         <div class="profile-area">
@@ -27,9 +27,9 @@
                 <!-- <a href="mailbox.php"><i class="bi bi-bell-fill"></i> -->
                 <!-- <sup id="MessageCount"></?= $total_unread_messages > 0 ? $total_unread_messages : '0' ?></sup> -->
                 <!-- </a> -->
-                <!-- <a href="cart.php"><i class="bi bi-basket3-fill"></i> -->
-                <!-- <sup id="cartCount"></?= $total_cart_items > 0 ? $total_cart_items : '0' ?></sup> -->
-                <!-- </a> -->
+                <a href="cart.php"><i class="bi bi-basket3-fill"></i>
+                    <!-- <sup id="cartCount"></?= $total_cart_items > 0 ? $total_cart_items : '0' ?></sup> -->
+                </a>
                 <div class="profile">
                     <img src="<?= htmlspecialchars($_SESSION['user_image']) ?>" alt="User Image" class="user-img" id="user-btn">
                 </div>

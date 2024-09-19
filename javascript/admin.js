@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    document.querySelectorAll('.bookshop-btn, .user-btn, .deactivate-btn').forEach(button => {
+    document.querySelectorAll('.bookshop-btn, .user-btn, .ebook-btn').forEach(button => {
         if (button) {
             button.addEventListener('click', function () {
                 const sublist = this.nextElementSibling;
@@ -58,16 +58,6 @@ document.addEventListener('DOMContentLoaded', function () {
             const addEditDataDialog = document.getElementById('add-edit-data');
             if (addEditDataDialog) {
                 addEditDataDialog.showModal();
-            }
-        });
-    }
-
-    const formAjax = document.getElementById('form-ajax');
-    if (formAjax) {
-        formAjax.addEventListener('keydown', function (e) {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                document.querySelector('.confirm').click();
             }
         });
     }
