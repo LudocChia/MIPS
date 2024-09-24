@@ -744,6 +744,97 @@ class Action
         }
     }
 
+    function handleFileUpload($file, $studentId)
+    {
+        $uploadDir = $_SERVER['DOCUMENT_ROOT'] . '/mips/uploads/student/';
+
+        if ($file['error'] === UPLOAD_ERR_NO_FILE) {
+            return null;
+        }
+
+        $allowedfileExtensions = ['jpg', 'jpeg', 'png'];
+        $fileName = $file['name'];
+        $fileTmpPath = $file['tmp_name'];
+        $fileExtension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+
+        if (in_array($fileExtension, $allowedfileExtensions)) {
+            $newFileName = $studentId . '_' . uniqid() . '.' . $fileExtension;
+            $dest_path = $uploadDir . $newFileName;
+
+            if (move_uploaded_file($fileTmpPath, $dest_path)) {
+                return $newFileName;
+            } else {
+                echo "<script>alert('Error moving uploaded file: $fileName');</script>";
+                return null;
+            }
+        } else {
+            echo "<script>alert('Upload failed. Allowed file types: " . implode(',', $allowedfileExtensions) . "');</script>";
+            return null;
+        }
+    }
+
+    public function save_student($student_id, $class_id, $student_name, $parent_id, $parent_relationship)
+    {
+        try {
+            $this->db->beginTransaction();
+
+            $studentImage = handleFileUpload($_FILES['student_image'], $student_id);
+
+            if ($existingStudentId) {
+                $sql = "UPDATE Student 
+                        SET student_id = :studentId, student_name = :name, class_id = :classId, student_image = :student_image 
+                        WHERE student_id = :existing_student_id";
+                $stmt = $this->db->prepare($sql);
+                $stmt->bindParam(':existing_student_id', $existingStudentId);
+            } else {
+                $sql = "INSERT INTO Student (student_id, student_name, class_id, student_image, status) 
+                        VALUES (:studentId, :name, :classId, :student_image, 0)";
+                $stmt = $this->db->prepare($sql);
+            }
+
+            $stmt->bindParam(':studentId', $student_id);
+            $stmt->bindParam(':name', $student_name);
+            $stmt->bindParam(':classId', $class_id);
+            $stmt->bindParam(':student_image', $studentImage);
+            $stmt->execute();
+
+            if ($parent_id) {
+                $sqlCheck = "SELECT parent_student_id FROM Parent_Student WHERE student_id = :student_id";
+                $stmtCheck = $this->db->prepare($sqlCheck);
+                $stmtCheck->bindParam(':student_id', $student_id);
+                $stmtCheck->execute();
+                $oldParentStudent = $stmtCheck->fetch(PDO::FETCH_ASSOC);
+
+                if ($oldParentStudent) {
+                    $sqlUpdateParentStudent = "UPDATE Parent_Student 
+                                               SET parent_id = :parent_id, relationship = :relationship 
+                                               WHERE parent_student_id = :parent_student_id";
+                    $stmtUpdateParentStudent = $this->db->prepare($sqlUpdateParentStudent);
+                    $stmtUpdateParentStudent->bindParam(':parent_id', $parent_id);
+                    $stmtUpdateParentStudent->bindParam(':relationship', $parent_relationship);
+                    $stmtUpdateParentStudent->bindParam(':parent_student_id', $oldParentStudent['parent_student_id']);
+                    $stmtUpdateParentStudent->execute();
+                } else {
+                    $newParentStudentId = uniqid('PS');
+                    $sqlInsert = "INSERT INTO Parent_Student (parent_student_id, parent_id, student_id, relationship) 
+                                  VALUES (:parent_student_id, :parent_id, :student_id, :relationship)";
+                    $stmtInsert = $this->db->prepare($sqlInsert);
+                    $stmtInsert->bindParam(':parent_student_id', $newParentStudentId);
+                    $stmtInsert->bindParam(':parent_id', $parent_id);
+                    $stmtInsert->bindParam(':student_id', $student_id);
+                    $stmtInsert->bindParam(':relationship', $parent_relationship);
+                    $stmtInsert->execute();
+                }
+            } else {
+                echo "<script>alert('Please select a parent.');</script>";
+            }
+
+            $this->db->commit();
+        } catch (PDOException $e) {
+            $this->db->rollBack();
+            echo "Error: " . $e->getMessage();
+        }
+    }
 
     // Retrieve class data
     public function get_class($class_id)

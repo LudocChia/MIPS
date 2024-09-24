@@ -20,6 +20,9 @@
                 <li>
                     <a href="/mips/bookshop.php"><i class="bi bi-shop-window"></i>Bookshop</a>
                 </li>
+                <li>
+                    <a href="/mips/application.php"><i class="bi bi-list"></i>Job application</a>
+                </li>
             </ul>
         </div>
         <div class="profile-area">

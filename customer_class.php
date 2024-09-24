@@ -48,23 +48,25 @@ class Action
 
             $cart_id = $cart['cart_id'];
 
-            $sql_cart_item = "SELECT cart_item_id, product_quantity 
-                                FROM Cart_Item 
-                                WHERE cart_id = :cart_id AND product_id = :product_id AND product_size_id = :product_size_id
-        ";
+            $sql_cart_item = "SELECT cart_item_id, product_quantity FROM Cart_Item WHERE cart_id = :cart_id AND product_id = :product_id";
+
+            if ($product_size_id === null || $product_size_id === '') {
+                $sql_cart_item .= " AND product_size_id IS NULL";
+            } else {
+                $sql_cart_item .= " AND product_size_id = :product_size_id";
+            }
+
             $stmt_cart_item = $this->db->prepare($sql_cart_item);
             $stmt_cart_item->bindParam(':cart_id', $cart_id);
             $stmt_cart_item->bindParam(':product_id', $product_id);
-            $stmt_cart_item->bindParam(':product_size_id', $product_size_id);
+            if ($product_size_id !== null && $product_size_id !== '') {
+                $stmt_cart_item->bindParam(':product_size_id', $product_size_id);
+            }
             $stmt_cart_item->execute();
             $cart_item = $stmt_cart_item->fetch(PDO::FETCH_ASSOC);
 
             if ($cart_item) {
-                $sql_update = "
-                UPDATE Cart_Item 
-                SET product_quantity = product_quantity + :quantity 
-                WHERE cart_item_id = :cart_item_id
-            ";
+                $sql_update = "UPDATE Cart_Item SET product_quantity = product_quantity + :quantity WHERE cart_item_id = :cart_item_id";
                 $stmt_update = $this->db->prepare($sql_update);
                 $stmt_update->bindParam(':quantity', $quantity);
                 $stmt_update->bindParam(':cart_item_id', $cart_item['cart_item_id']);

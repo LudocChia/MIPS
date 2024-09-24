@@ -112,7 +112,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
     <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_header.php"; ?>
     <div class="container">
         <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_sidebar.php"; ?>
-        <main class="announcement">
+        <main class="gallery announcement">
             <div class="wrapper">
                 <div class="title">
                     <div class="left">

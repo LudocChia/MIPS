@@ -183,7 +183,6 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
         });
 
         const parentForm = document.getElementById('form-ajax');
-
         parentForm.addEventListener('submit', function(e) {
             e.preventDefault();
 

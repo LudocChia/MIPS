@@ -428,7 +428,7 @@ main .recent-orders a {
     cursor: pointer;
 }
 
-.announcement .box-container {
+.gallery .box-container {
     display: grid;
     grid-template-columns: repeat(auto-fit, 300px);
     border-color: #24262b;
@@ -436,7 +436,7 @@ main .recent-orders a {
     padding-bottom: 2%;
 }
 
-.announcement .box-container .box {
+.gallery .box-container .box {
     position: relative;
     border: 1px solid #dfe1e5;
     background-color: #f4f4f4;
@@ -444,7 +444,7 @@ main .recent-orders a {
     margin: 0.5rem;
 }
 
-.announcement .box-container .image-container img {
+.gallery .box-container .image-container img {
     background-color: white;
     object-fit: contain;
     border-top-left-radius: .5rem;
@@ -620,8 +620,9 @@ main .recent-orders a {
         grid-template-columns: 1fr;
     }
 
-    .main,
+    main,
     .two-columns {
+        padding: 1rem;
         grid-template-columns: 1fr;
     }
 
@@ -691,11 +692,6 @@ main .recent-orders a {
         cursor: pointer;
     }
 
-    main {
-        margin-top: 2rem;
-        /* padding: 0 1rem; */
-    }
-
     /* 
     main .recent-orders {
         position: relative;
@@ -756,5 +752,9 @@ main .recent-orders a {
 
     .container .right .top button i {
         font-size: 2rem;
+    }
+
+    .products .box-container {
+        grid-template-columns: repeat(auto-fit, 180px);
     }
 }

@@ -178,6 +178,22 @@ switch ($action) {
         }
         break;
 
+    case 'save_student':
+        if (
+            isset($_POST['student_id']) &&
+            isset($_POST['name']) &&
+            isset($_POST['email']) &&
+            isset($_POST['phone']) &&
+            isset($_POST['password']) &&
+            isset($_POST['confirm_password']) &&
+            isset($_POST['admin_id'])
+        ) {
+            $studentId = $_POST['student_id'] ?? '';
+        } else {
+            echo json_encode(['error' => 'Required fields not provided']);
+        }
+
+
         // Order Functions
         // case 'deactivate_order':
         //     if (isset($_POST['order_id'])) {

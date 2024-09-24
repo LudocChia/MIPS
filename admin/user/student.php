@@ -61,12 +61,13 @@ function handleFileUpload($file, $studentId)
         return null;
     }
 }
+
 if (isset($_POST["submit"])) {
     $studentId = $_POST["student_id"];
     $classId = $_POST["class_id"];
     $name = $_POST["name"];
     $parentId = $_POST['selected_parent_id'] ?? null;
-    $relationship = $_POST['relationship'] ?? 'father';
+    $relationship = $_POST['relationship'];
     $existingStudentId = isset($_POST['existing_student_id']) ? $_POST['existing_student_id'] : null;
 
     try {
@@ -99,36 +100,25 @@ if (isset($_POST["submit"])) {
             $stmtCheck->execute();
             $oldParentStudent = $stmtCheck->fetch(PDO::FETCH_ASSOC);
 
-            $newParentStudentId = uniqid('PS');
-
-            $sqlInsert = "INSERT INTO Parent_Student (parent_student_id, parent_id, student_id, relationship) 
-                          VALUES (:parent_student_id, :parent_id, :student_id, :relationship)";
-            $stmtInsert = $pdo->prepare($sqlInsert);
-            $stmtInsert->bindParam(':parent_student_id', $newParentStudentId);
-            $stmtInsert->bindParam(':parent_id', $parentId);
-            $stmtInsert->bindParam(':student_id', $studentId);
-            $stmtInsert->bindParam(':relationship', $relationship);
-            $stmtInsert->execute();
-
             if ($oldParentStudent) {
-                $oldParentStudentId = $oldParentStudent['parent_student_id'];
-
-                $sqlUpdateOrders = "UPDATE Orders SET parent_student_id = :new_parent_student_id WHERE parent_student_id = :old_parent_student_id";
-                $stmtUpdateOrders = $pdo->prepare($sqlUpdateOrders);
-                $stmtUpdateOrders->bindParam(':new_parent_student_id', $newParentStudentId);
-                $stmtUpdateOrders->bindParam(':old_parent_student_id', $oldParentStudentId);
-                $stmtUpdateOrders->execute();
-
-                $sqlUpdatePayment = "UPDATE Payment SET parent_student_id = :new_parent_student_id WHERE parent_student_id = :old_parent_student_id";
-                $stmtUpdatePayment = $pdo->prepare($sqlUpdatePayment);
-                $stmtUpdatePayment->bindParam(':new_parent_student_id', $newParentStudentId);
-                $stmtUpdatePayment->bindParam(':old_parent_student_id', $oldParentStudentId);
-                $stmtUpdatePayment->execute();
-
-                $sqlDeleteOldParent = "DELETE FROM Parent_Student WHERE parent_student_id = :old_parent_student_id";
-                $stmtDelete = $pdo->prepare($sqlDeleteOldParent);
-                $stmtDelete->bindParam(':old_parent_student_id', $oldParentStudentId);
-                $stmtDelete->execute();
+                $sqlUpdateParentStudent = "UPDATE Parent_Student 
+                                           SET parent_id = :parent_id, relationship = :relationship 
+                                           WHERE parent_student_id = :parent_student_id";
+                $stmtUpdateParentStudent = $pdo->prepare($sqlUpdateParentStudent);
+                $stmtUpdateParentStudent->bindParam(':parent_id', $parentId);
+                $stmtUpdateParentStudent->bindParam(':relationship', $relationship);
+                $stmtUpdateParentStudent->bindParam(':parent_student_id', $oldParentStudent['parent_student_id']);
+                $stmtUpdateParentStudent->execute();
+            } else {
+                $newParentStudentId = uniqid('PS');
+                $sqlInsert = "INSERT INTO Parent_Student (parent_student_id, parent_id, student_id, relationship) 
+                              VALUES (:parent_student_id, :parent_id, :student_id, :relationship)";
+                $stmtInsert = $pdo->prepare($sqlInsert);
+                $stmtInsert->bindParam(':parent_student_id', $newParentStudentId);
+                $stmtInsert->bindParam(':parent_id', $parentId);
+                $stmtInsert->bindParam(':student_id', $studentId);
+                $stmtInsert->bindParam(':relationship', $relationship);
+                $stmtInsert->execute();
             }
         }
 
@@ -141,6 +131,7 @@ if (isset($_POST["submit"])) {
         echo "<script>alert('Database error: " . $e->getMessage() . "');</script>";
     }
 }
+
 
 
 $pageTitle = "Student Management - MIPS";
@@ -208,7 +199,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
     </div>
 
     <dialog id="add-edit-data">
-        <form method="post" enctype="multipart/form-data">
+        <form id="form-ajax" method="post" enctype="multipart/form-data">
             <div class="title">
                 <div class="left">
                     <h1>Add New Student</h1>
@@ -252,6 +243,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
 
             <div class="input-container">
                 <h2>Search Parent</h2>
+                <input type="hidden" name="selected_parent_id" id="selected_parent_id" value="<?= isset($parentId) ? htmlspecialchars($parentId) : '' ?>">
                 <div class="input-field">
                     <input type="text" id="search-parent" placeholder="Search by parent name or ID" value="<?= isset($parentId) ? htmlspecialchars($selected_parent_name) : '' ?>">
                 </div>
@@ -259,14 +251,12 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
                     <!-- Search results will be appended here -->
                 </div>
             </div>
-            <input type="hidden" name="selected_parent_id" id="selected_parent_id" value="<?= isset($parentId) ? htmlspecialchars($parentId) : '' ?>">
-
             <div class="input-container">
                 <h2>Relationship<sup>*</sup></h2>
                 <div class="select-field">
                     <select class="select-box" name="relationship" id="relationship" required>
-                        <option value="father">Father</option>
                         <option value="mother">Mother</option>
+                        <option value="father">Father</option>
                         <option value="guardian">Guardian</option>
                     </select>
                     <div class="icon-container">
@@ -321,6 +311,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
                     });
             }
         });
+
         document.querySelectorAll('.edit-student-btn').forEach(button => {
             button.addEventListener('click', function() {
                 document.querySelector('.confirm').textContent = "Publish";

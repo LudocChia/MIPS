@@ -229,40 +229,6 @@ dialog {
     border: 1px solid var(--color-danger);
 }
 
-
-.controls button {
-    /* background: var(--color-gray-light); */
-    /* color: white; */
-    /* font-size: 18px; */
-    /* border-radius: 5px; */
-    /* border: 1px solid var(--color-gray-light); */
-    padding: auto 50px;
-}
-
-.controls {
-    text-align: center;
-}
-
-.controls .btn {
-    display: inline-block;
-}
-
-.controls .deactivate {
-    margin-left: 20px;
-    background: var(--color-danger);
-    border: 1px solid var(--color-danger);
-}
-
-.controls .cancel:hover {
-    transition: .5s;
-    background: #8c8c8c;
-}
-
-.controls .deactivate:hover {
-    transition: .5s;
-    background: #e60000;
-}
-
 /* LOGIN */
 .login-form .wrapper,
 .set-new-password-form .wrapper {
@@ -670,31 +636,12 @@ td {
 .title .right .more {
     margin: 0;
     display: flex;
-    /* align-items: center; */
 }
 
 .title .right i {
     margin-right: 5px;
 }
 
-/* Delete Confirm Dialog */
-/* #exclamation-confirm-dialog i {
-    font-size: 60px;
-    color: #eb9447;
-    border: 5px solid #eb9447;
-    padding: 20px 40px;
-    border-radius: 50%;
-    margin: -10px 0 20px 0;
-}
-
-#exclamation-confirm-dialog label {
-    font-size: 23px;
-    color: #404040;
-}
-
-#exclamation-confirm-dialog .controls {
-    margin: 40px 0 0 0;
-} */
 
 .breadcrumbs {
     padding: 10px 25px;
@@ -764,7 +711,6 @@ td {
     border-color: #24262b;
     justify-content: center;
     padding-bottom: 2%;
-    margin: 0 40px;
 }
 
 .category .box-container .box {
@@ -1049,6 +995,8 @@ td {
     color: #404040;
 }
 
+/* Control Button */
+
 #exclamation-confirm-dialog .controls,
 #check-confirm-dialog .controls {
     margin: 40px 0 0 0;
@@ -1058,12 +1006,17 @@ td {
     margin: 0;
 }
 
+.controls {
+    text-align: center;
+    margin: var(--marging-2);
+}
+
 .controls .cancel,
 .controls .delete,
 .controls .confirm {
     background: #999999;
     color: white;
-    font-size: 18px;
+    font-size: 1.2rem;
     border-radius: 5px;
     border: 1px solid #808080;
     padding: 10px 13px;
@@ -1074,14 +1027,10 @@ td {
 #confirm-dialog .controls .confirm {
     background: #999999;
     color: white;
-    font-size: 18px;
+    font-size: 1.2rem;
     border-radius: 5px;
     border: 1px solid #808080;
     padding: 10px 13px;
-}
-
-.controls {
-    margin: var(--marging-2);
 }
 
 .controls .delete {
@@ -1113,7 +1062,6 @@ td {
 }
 
 /* add-edit-search-results */
-
 #add-edit-search-results {
     margin-top: 0.5rem;
     width: 85%;
@@ -1189,6 +1137,53 @@ td {
 }
 
 @media screen and (max-width: 574px) {
+    sup {
+        color: var(--color-primary);
+        font-size: 1rem;
+    }
+
+    .category .box-container {
+        grid-template-columns: repeat(auto-fit, 150px);
+    }
+
+
+    /* Confirm Dialog */
+    #exclamation-confirm-dialog,
+    #check-confirm-dialog {
+        width: 300px;
+    }
+
+
+    #exclamation-confirm-dialog i,
+    #check-confirm-dialog i {
+        font-size: 5rem;
+    }
+
+
+    /* Control Button */
+    .controls {
+        margin: var(--marging-1);
+    }
+
+    .controls .cancel,
+    .controls .delete,
+    .controls .confirm {
+        padding: 5px 8px;
+    }
+
+    #confirm-dialog .controls .cancel,
+    #confirm-dialog .controls .delete,
+    #confirm-dialog .controls .confirm {
+        padding: 5px 8px;
+    }
+
+    .controls .delete {
+        margin-left: 15px;
+    }
+
+    .controls .confirm {
+        margin-left: 15px;
+    }
 
     header .profile-area img.login {
         display: flex;
@@ -1214,7 +1209,7 @@ td {
     }
 
     .breadcrumbs {
-        padding: 5px 10px;
+        padding: 10px;
         margin-left: 3%;
     }
 
