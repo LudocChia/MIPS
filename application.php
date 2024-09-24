@@ -102,18 +102,43 @@ $pageTitle = "Job Application - MIPS";
                         <h2>Emergency Contact</h2>
                     </div>
                     <div class="input-container">
-
+                        <h2>Relationship</h2>
                     </div>
                     <div class="input-container">
-
+                        <h2>Contact No.</h2>
                     </div>
                     <div class="input-container">
-
+                        <h2>Any Criminal Records?</h2>
+                        <h2>Please state reason</h2>
                     </div>
                     <div class="input-container">
+                        <h2>Education Record</h2>
+                    </div>
+                    <div class="input-container">
+                        <h2>Work Experience</h2>
+                    </div>
+                    <div class="input-container">
+                        <h2>Family Members</h2>
+                    </div>
+                    <div class="input-container">
+                        <h2>Self-Introduction</h2>
+                    </div>
+                    <div class="input-container">
+                        <h2>Health Condition</h2>
+                    </div>
+                    <div class="input-container">
+                        <h2>Job Application Details</h2>
+                    </div>
+                    <div class="input-container">
+                        <h2>Skills</h2>
+                    </div>
+                    <div class="input-container">
+                        <h2>Personal Learning and Practicing Experience: </h2>
+                    </div>
+                    <div class="input-container">
+                        <h2>Remarks</h2>
 
                     </div>
-
                 </div>
     </section>
     <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/customer_footer.php"; ?>

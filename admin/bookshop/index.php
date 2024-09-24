@@ -291,7 +291,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
                 <h2>Product Category<sup>*</sup></h2>
                 <div class="select-field">
                     <select class="select-box" name="subcategory" id="subcategory" required>
-                        <option value="">Select a category</option>
+                        <option hidden value="">Select a category</option>
                         <?php foreach ($all_subcategories as $subcategory) { ?>
                             <option value="<?= $subcategory['category_id'] ?>"><?= $subcategory['category_name'] ?></option>
                         <?php } ?>
@@ -374,7 +374,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
             <div class="input-container">
                 <div class="select-field">
                     <select class="select-box" name="gender" id="gender" required>
-                        <option value="">Select gender</option>
+                        <option hidden value="">Select gender</option>
                         <option value="Boy" <?= isset($_POST['gender']) && $_POST['gender'] == 'Boy' ? 'selected' : '' ?>>Boy</option>
                         <option value="Girl" <?= isset($_POST['gender']) && $_POST['gender'] == 'Girl' ? 'selected' : '' ?>>Girl</option>
                         <option value="Unisex" <?= isset($_POST['gender']) && $_POST['gender'] == 'Unisex' ? 'selected' : '' ?>>Unisex</option>
