@@ -11,9 +11,6 @@ class Action
 
     public function login($email, $password, $userType, $currentPage = null, $productId = null)
     {
-        session_unset();
-        session_destroy();
-        session_start();
 
         try {
             if ($userType === 'admin') {
@@ -40,15 +37,16 @@ class Action
                         $_SESSION['admin_name'] = $user['admin_name'];
                         $_SESSION['admin_email'] = $user['admin_email'];
                         $_SESSION['admin_image'] = !empty($user['admin_image']) ? $user['admin_image'] : '/mips/images/default_profile.png';
+                        $_SESSION['admin_status'] = $user['status'];
+                        $_SESSION['admin_type'] = $userType;
                     } else {
                         $_SESSION['user_id'] = $user['parent_id'];
                         $_SESSION['user_name'] = $user['parent_name'];
                         $_SESSION['user_email'] = $user['parent_email'];
                         $_SESSION['user_image'] = !empty($user['parent_image']) ? $user['parent_image'] : '/mips/images/default_profile.png';
+                        $_SESSION['user_status'] = $user['status'];
+                        $_SESSION['user_type'] = $userType;
                     }
-
-                    $_SESSION['user_type'] = $userType;
-                    $_SESSION['user_status'] = $user['status'];
 
                     if ($user['status'] == -1) {
                         $redirectUrl = ($userType === 'admin') ? '/mips/admin/activate.php' : '/mips/activate.php';
@@ -67,6 +65,36 @@ class Action
             return json_encode(['error' => 'Database error: ' . $e->getMessage()]);
         }
     }
+
+    public function logout($userType)
+    {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
+        if ($userType === 'admin') {
+            unset($_SESSION['admin_id']);
+            unset($_SESSION['admin_name']);
+            unset($_SESSION['admin_email']);
+            unset($_SESSION['admin_image']);
+            unset($_SESSION['admin_status']);
+            unset($_SESSION['admin_type']);
+        } else if ($userType === 'parent') {
+            unset($_SESSION['user_id']);
+            unset($_SESSION['user_name']);
+            unset($_SESSION['user_email']);
+            unset($_SESSION['user_image']);
+            unset($_SESSION['user_status']);
+            unset($_SESSION['user_type']);
+        }
+
+        if (empty($_SESSION)) {
+            session_destroy();
+        }
+
+        return json_encode(['success' => true, 'message' => 'Successfully logged out']);
+    }
+
 
     public function update_password($user_id, $user_type, $new_password, $confirm_password)
     {

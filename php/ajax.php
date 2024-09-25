@@ -21,6 +21,10 @@ switch ($action) {
         }
         break;
 
+    case 'logout':
+        echo $crud->logout($userType);
+        break;
+
     case 'update_password':
         $newPassword = $_POST['new_password'] ?? '';
         $confirmPassword = $_POST['confirm_password'] ?? '';

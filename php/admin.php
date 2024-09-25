@@ -9,7 +9,7 @@ if (!isset($_SESSION['admin_id'])) {
     exit();
 }
 
-if ($_SESSION['user_status'] == -1) {
+if ($_SESSION['admin_status'] == -1) {
     header('Location: /mips/admin/activate.php');
     exit();
 }

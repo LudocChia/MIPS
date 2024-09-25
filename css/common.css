@@ -886,6 +886,40 @@ td {
 
 .product-container .product-image {
     width: 85%;
+    cursor: pointer;
+}
+
+.popup-image {
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.9);
+    height: 100%;
+    width: 100%;
+    z-index: 100;
+    display: none;
+}
+
+.popup-image span {
+    position: absolute;
+    top: 0;
+    right: 10px;
+    font-size: 40px;
+    font-weight: bolder;
+    color: #fff;
+    cursor: pointer;
+    z-index: 100;
+}
+
+.popup-image img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border: 2px solid #fff;
+    border-radius: 5px;
+    width: 750px;
+    object-fit: cover;
 }
 
 #picture {
@@ -1061,7 +1095,6 @@ td {
     background: #e60000;
 }
 
-/* add-edit-search-results */
 #add-edit-search-results {
     margin-top: 0.5rem;
     width: 85%;
@@ -1114,9 +1147,9 @@ td {
         grid-template-columns: 1fr;
     }
 
-    /* .title {
-        justify-content: space-between;
-    } */
+    .popup-image img {
+        width: 95%;
+    }
 
     header .profile-area i {
         font-size: 1.5rem;
@@ -1146,8 +1179,6 @@ td {
         grid-template-columns: repeat(auto-fit, 150px);
     }
 
-
-    /* Confirm Dialog */
     #exclamation-confirm-dialog,
     #check-confirm-dialog {
         width: 300px;
@@ -1159,8 +1190,6 @@ td {
         font-size: 5rem;
     }
 
-
-    /* Control Button */
     .controls {
         margin: var(--marging-1);
     }

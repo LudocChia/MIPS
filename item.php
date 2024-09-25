@@ -12,7 +12,6 @@ if (!$product_id) {
     exit();
 }
 
-
 function getProductDetail($pdo, $product_id)
 {
     $stmt = $pdo->prepare("
@@ -131,6 +130,10 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/customer_header.php"; ?>
                         <div class="product-image">
                             <?php if (!empty($images)) : ?>
                                 <img id="picture" alt="<?php echo htmlspecialchars($images[0]['image_url']); ?>" src="/mips/uploads/product/<?php echo htmlspecialchars($images[0]['image_url']); ?>">
+                        </div>
+                        <div class="popup-image">
+                            <span class="close">&times;</span>
+                            <img id="popup-image" src="/mips/uploads/product/<?php echo htmlspecialchars($images[0]['image_url']); ?>">
                         </div>
                         <div class="thumbnails">
                             <?php foreach ($images as $image) : ?>
@@ -302,7 +305,40 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/customer_header.php"; ?>
 <script src="/mips/javascript/common.js"></script>
 <script src="/mips/javascript/customer.js"></script>
 <script type="text/javascript">
+    document.querySelectorAll('.product-image img').forEach(image => {
+        image.onclick = () => {
+            document.querySelector('.popup-image').style.display = 'block';
+            document.querySelector('.popup-image img').src = image.getAttribute('src');
+        }
+    });
+
+    document.querySelector('.popup-image span').onclick = () => {
+        document.querySelector('.popup-image').style.display = 'none';
+    }
+
     document.addEventListener("DOMContentLoaded", function() {
+
+        // const mainImage = document.getElementById('picture');
+
+        // mainImage.addEventListener('click', function() {
+        //     const modal = document.getElementById('imageModal');
+        //     const modalImg = document.getElementById('fullImage');
+        //     const closeBtn = modal.querySelector('.close');
+
+        //     modal.style.display = "block";
+        //     modalImg.src = this.src;
+
+        //     closeBtn.onclick = function() {
+        //         modal.style.display = "none";
+        //     };
+
+        //     modal.onclick = function(event) {
+        //         if (event.target == modal) {
+        //             modal.style.display = "none";
+        //         }
+        //     };
+        // });
+
         document.querySelector('.buy-now').addEventListener('click', function() {
             <?php if (!isset($_SESSION['user_id'])) : ?>
                 const productId = <?= json_encode($product_id) ?>;
@@ -366,6 +402,11 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/customer_header.php"; ?>
 
         if (selectedChildren.length === 0) {
             alert('Please select at least one child.');
+            return;
+        }
+
+        if (!paymentImage) {
+            alert('Please upload the transfer receipt.');
             return;
         }
 

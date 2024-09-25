@@ -9,7 +9,6 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/admin/admin_class.php";
 $crud = new Action();
 
 switch ($action) {
-        // Admin Functions
     case 'get_admin':
         if (isset($_POST['admin_id'])) {
             echo $crud->get_admin($_POST['admin_id']);

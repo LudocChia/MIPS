@@ -26,12 +26,9 @@ $pageTitle = "Job Application - MIPS";
                     <div class="input-container">
                         <h2>Staff Category</h2>
                         <div class="input-field">
-                            <input type="radio" name="staff_category" value="Full-Time">
-                            <label>Full-Time</label>
-                            <input type="radio" name="staff_category" value="Part-Time">
-                            <label>Part-Time</label>
-                            <input type="radio" name="staff_category" value="Contract">
-                            <label>Contract</label>
+                            <label><input type="radio" name="staff_category" value="Full-Time">Full-Time</label>
+                            <label><input type="radio" name="staff_category" value="Part-Time">Part-Time</label>
+                            <label><input type="radio" name="staff_category" value="Contract">Contract</label>
                         </div>
                         <p>Please enter the company name.</p>
                     </div>
