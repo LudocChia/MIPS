@@ -311,9 +311,9 @@ document.addEventListener('DOMContentLoaded', function () {
         const formData = new FormData(form);
         formData.append('product_id', productIds);
         formData.append('size_id', sizeIds);
+        formData.append('children', childrenIds);
         formData.append('total_item_quantities', quantities);
         formData.append('total_price_items', totalPriceItems);
-        formData.append('children', childrenIds);
         formData.append('total_price', totalPrice);
 
         fetch('/mips/ajax.php?action=purchase', {

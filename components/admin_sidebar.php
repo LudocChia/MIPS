@@ -89,6 +89,24 @@ function isActive($targetPage, $currentPage)
                 </ul>
             </li>
             <li>
+                <a href="javascript:void(0);" class="ebook-btn">
+                    <i class="fa-solid fa-memo"></i>
+                    <h5>Application</h5>
+                    <i class="bi bi-chevron-down <?= strpos($currentPage, '/mips/admin/application/job.php') !== false || strpos($currentPage, '/mips/admin/ebook/dorm.php') !== false || strpos($currentPage, '/mips/admin/application/') !== false ? 'rotate' : ''; ?>"></i>
+                </a>
+                <ul class="user-show" style="display: <?= strpos($currentPage, '/mips/admin/ebook/mainCategory.php') !== false || strpos($currentPage, '/mips/admin/ebook/subcategory.php') !== false || strpos($currentPage, '/mips/admin/ebook/') !== false ? 'block' : 'none'; ?>">
+                    <li>
+                    <li><a href="/mips/admin/ebook/mainCategory.php" class="<?= isActive('/mips/admin/ebook/mainCategory.php', $currentPage); ?>"><i class="bi bi-tags-fill"></i>
+                            <h5>Job</h5>
+                        </a>
+                    </li>
+                    <li><a href="/mips/admin/ebook/subcategory.php" class="<?= isActive('/mips/admin/ebook/subcategory.php', $currentPage); ?>"><i class="bi bi-tags-fill"></i>
+                            <h5>Dorm</h5>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li>
                 <a href="/mips/admin/announcement.php" class="<?= isActive('/mips/admin/announcement.php', $currentPage); ?>">
                     <i class="bi bi-megaphone-fill"></i>
                     <h5>Announment</h5>

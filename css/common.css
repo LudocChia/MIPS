@@ -1143,6 +1143,13 @@ td {
 }
 
 @media screen and (max-width: 768px) {
+
+    table,
+    th,
+    td {
+        padding: 0.5rem;
+    }
+
     .product-detail .product-container {
         grid-template-columns: 1fr;
     }

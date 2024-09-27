@@ -226,10 +226,10 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/customer_header.php"; ?>
                 <button class="actions cancel"><i class="bi bi-x-circle"></i>
             </div>
         </div>
-        <input type="hidden" name="product_id" id="product-id" value="">
-        <input type="hidden" name="size_id" id="size-id" value="">
-        <input type="hidden" name="product_price" id="product-price" value="">
-        <input type="hidden" name="total_price" id="total-price" value="">
+        <input type="text" name="product_id" id="product-id" value="">
+        <input type="text" name="size_id" id="size-id" value="">
+        <input type="text" name="product_price" id="product-price" value="">
+        <input type="text" name="total_price" id="total-price" value="">
         <div class="input-container">
             <div class="input-field">
                 <h2>Product Name</h2>
@@ -365,6 +365,8 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/customer_header.php"; ?>
 
                 document.getElementById('product-id').value = '<?= $product_id ?>';
                 document.getElementById('product-price').value = productPrice;
+                document.getElementById('total-price').value = totalPrice;
+
                 document.getElementById('product-name-display').value = productName;
                 document.getElementById('product-price-display').value = `${quantity} x MYR ${productPrice} = MYR ${totalPrice}`;
 
