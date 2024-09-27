@@ -69,6 +69,10 @@
     .select-box select {
         height: 100%;
         width: 100%;
+        outline: none;
+        border: none;
+        color: #707070;
+        font-size: 1rem;
     }
 
     .input-box input:focus {
@@ -111,15 +115,6 @@
 
     .address :where(input, .select-box) {
         margin-top: 15px;
-    }
-
-    .select-box select {
-        height: 100%;
-        width: 100%;
-        outline: none;
-        border: none;
-        color: #707070;
-        font-size: 1rem;
     }
 
     .form button {

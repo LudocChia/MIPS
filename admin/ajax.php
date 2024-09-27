@@ -63,7 +63,6 @@ switch ($action) {
         }
         break;
 
-
         // Parent Functions
     case 'deactivate_parent':
         if (isset($_POST['parent_id'])) {

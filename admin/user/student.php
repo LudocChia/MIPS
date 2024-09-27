@@ -69,6 +69,7 @@ if (isset($_POST["submit"])) {
     $parentId = $_POST['selected_parent_id'] ?? null;
     $relationship = $_POST['relationship'];
     $existingStudentId = isset($_POST['existing_student_id']) ? $_POST['existing_student_id'] : null;
+    echo "<script>alert('$existingStudentId');</script>";
 
     try {
         $pdo->beginTransaction();
@@ -102,8 +103,8 @@ if (isset($_POST["submit"])) {
 
             if ($oldParentStudent) {
                 $sqlUpdateParentStudent = "UPDATE Parent_Student 
-                                           SET parent_id = :parent_id, relationship = :relationship 
-                                           WHERE parent_student_id = :parent_student_id";
+                                       SET parent_id = :parent_id, relationship = :relationship 
+                                       WHERE parent_student_id = :parent_student_id";
                 $stmtUpdateParentStudent = $pdo->prepare($sqlUpdateParentStudent);
                 $stmtUpdateParentStudent->bindParam(':parent_id', $parentId);
                 $stmtUpdateParentStudent->bindParam(':relationship', $relationship);
@@ -131,8 +132,6 @@ if (isset($_POST["submit"])) {
         echo "<script>alert('Database error: " . $e->getMessage() . "');</script>";
     }
 }
-
-
 
 $pageTitle = "Student Management - MIPS";
 include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
@@ -248,7 +247,6 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
                     <input type="text" id="search-parent" placeholder="Search by parent name or ID" value="<?= isset($parentId) ? htmlspecialchars($selected_parent_name) : '' ?>">
                 </div>
                 <div id="add-edit-search-results">
-                    <!-- Search results will be appended here -->
                 </div>
             </div>
             <div class="input-container">
@@ -265,7 +263,6 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
                 </div>
                 <p>Please select the relationship between the student and the parent.</p>
             </div>
-            <input type="hidden" name="selected_parent_id" id="selected_parent_id">
             <div class="input-container">
                 <h2>Student Image<sup>*</sup></h2>
                 <div class="input-field">
@@ -334,6 +331,15 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
                             document.querySelector('#add-edit-data [name="class_id"]').value = student.class_id;
                             document.querySelector('#existing_student_id').value = student.student_id;
                             document.querySelector('#add-edit-data h1').textContent = "Edit Student";
+
+                            if (student.parent_id) {
+                                document.getElementById('selected_parent_id').value = student.parent_id;
+                                document.getElementById('search-parent').value = `${student.parent_id} - ${student.parent_name}`;
+                                document.querySelector('#add-edit-data [name="relationship"]').value = student.relationship;
+                            } else {
+                                document.getElementById('selected_parent_id').value = '';
+                                document.getElementById('search-parent').value = '';
+                            }
 
                             document.getElementById('add-edit-data').showModal();
                         }
@@ -404,7 +410,6 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
                     });
             }
         });
-
 
         document.querySelectorAll('#add-edit-data .cancel').forEach(button => {
             button.addEventListener('click', function() {

@@ -79,7 +79,6 @@ $parentId = $_SESSION['user_id'] ?? null;
             <input type="hidden" name="product_id" id="product-id" value="">
             <input type="hidden" name="size_id" id="size-id" value="">
             <input type="hidden" name="product_price" id="product-price" value="">
-
             <table>
                 <thead>
                     <tr>
@@ -92,7 +91,6 @@ $parentId = $_SESSION['user_id'] ?? null;
                 <tbody id="checkout-items-body">
                 </tbody>
             </table>
-
             <div class="input-container">
                 <div class="input-field">
                     <h2>Total Price (RM)</h2>
@@ -135,8 +133,8 @@ $parentId = $_SESSION['user_id'] ?? null;
             </div>
             <div class="input-container controls">
                 <button value="cancel" class="cancel">Cancel</button>
-                <button type="reset">Clear</button>
-                <button type="submit" name="submit">Purchase</button>
+                <button type="reset" class="delete">Clear</button>
+                <button type="submit" class="confirm" name="submit">Purchase</button>
             </div>
         </form>
     </dialog>

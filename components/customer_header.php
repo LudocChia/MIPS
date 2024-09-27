@@ -60,7 +60,7 @@
                     <p>My Activities</p>
                     <i class="bi bi-chevron-right"></i>
                 </a>
-                <a href="/mips/logout.php" class="profile-menu-link">
+                <a href="javascript:void(0)" class="profile-menu-link logout">
                     <i class="bi bi-box-arrow-right"></i>
                     <p>Logout</p>
                     <i class="bi bi-chevron-right"></i>
@@ -93,3 +93,27 @@
         </div>
     </div>
 </header>
+
+<script>
+    document.querySelector('.profile-menu-link.logout').addEventListener('click', function(e) {
+        e.preventDefault();
+
+        fetch('/mips/php/ajax.php?action=logout', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    window.location.href = '/mips/';
+                } else {
+                    console.error('Logout failed:', data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    });
+</script>

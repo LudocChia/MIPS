@@ -111,10 +111,8 @@ class Action
         try {
             $this->db->beginTransaction();
 
-            $orderQuery = "
-                INSERT INTO Orders (order_id, parent_student_id, order_price) 
-                VALUES (:order_id, (SELECT parent_student_id FROM Parent_Student WHERE parent_id = :parent_id LIMIT 1), :order_price)
-            ";
+            $orderQuery = "INSERT INTO Orders (order_id, parent_id, order_price) 
+                            VALUES (:order_id, (SELECT parent_id FROM Parent_Student WHERE parent_id = :parent_id LIMIT 1), :order_price)";
             $orderStmt = $this->db->prepare($orderQuery);
             $orderId = uniqid('ORD');
             $orderStmt->bindParam(':order_id', $orderId);
@@ -141,7 +139,7 @@ class Action
                 $childrenIds = explode(',', $selectedChildren[$index]);
                 foreach ($childrenIds as $childId) {
                     $orderItemStudentQuery = "INSERT INTO Order_Item_Student (order_item_student_id, order_item_id, student_id)
-                                VALUES (:order_item_student_id, :order_item_id, :student_id)";
+                                                VALUES (:order_item_student_id, :order_item_id, :student_id)";
                     $orderItemStudentStmt = $this->db->prepare($orderItemStudentQuery);
                     $orderItemStudentId = uniqid('OIS');
                     $orderItemStudentStmt->bindParam(':order_item_student_id', $orderItemStudentId);
@@ -151,10 +149,8 @@ class Action
                 }
             }
 
-            $paymentQuery = "
-                INSERT INTO Payment (payment_id, parent_student_id, order_id, payment_amount, payment_status, payment_image) 
-                VALUES (:payment_id, (SELECT parent_student_id FROM Parent_Student WHERE parent_id = :parent_id LIMIT 1), :order_id, :payment_amount, 'pending', :payment_image)
-            ";
+            $paymentQuery = "INSERT INTO Payment (payment_id, parent_id, order_id, payment_amount, payment_status, payment_image) 
+                                VALUES (:payment_id, :parent_id, :order_id, :payment_amount, 'pending', :payment_image)";
             $paymentStmt = $this->db->prepare($paymentQuery);
             $paymentId = uniqid('PAY');
             $paymentStmt->bindParam(':payment_id', $paymentId);

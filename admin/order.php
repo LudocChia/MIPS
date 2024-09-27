@@ -99,7 +99,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                         <h1>Bookshop Order</h1>
                     </div>
                 </div>
-                <div class="table-body">
+                <div class="table-container">
                     <?php if (!empty($all_orders)) : ?>
                         <table>
                             <thead>
@@ -160,7 +160,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
         <form action="" method="post" enctype="multipart/form-data">
             <div class="input-container">
                 <h2>Parent ID<sup>*</sup></h2>
-                <select name="parent_id" required> <!-- Changed from parent_student_id to parent_id -->
+                <select name="parent_id" required>
                 </select>
                 <p>Please select the parent.</p>
             </div>

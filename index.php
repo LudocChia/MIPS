@@ -1,5 +1,7 @@
 <?php
 
+$pageTitle = "Home - MIPS";
+$currentPage = basename($_SERVER['PHP_SELF']);
 include $_SERVER['DOCUMENT_ROOT'] . "/mips/php/customer.php";
 
 function getAnnouncements($pdo)
@@ -11,10 +13,6 @@ function getAnnouncements($pdo)
 }
 
 $announcements = getAnnouncements($pdo);
-
-$pageTitle = "Home - MIPS";
-$currentPage = basename($_SERVER['PHP_SELF']);
-include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/customer_head.php";
 ?>
 
 <body>
