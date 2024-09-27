@@ -3,7 +3,7 @@
 $database_table = "Orders";
 $rows_per_page = 12;
 include $_SERVER['DOCUMENT_ROOT'] . "/mips/php/admin.php";
-include $_SERVER['DOCUMENT_ROOT'] . "/mips/php/activate_pagination.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/mips/php/activated_pagination.php";
 
 function getAllOrders($pdo, $start, $rows_per_page)
 {
@@ -212,6 +212,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
             </div>
         </form>
     </dialog>
+    <?php include  $_SERVER['DOCUMENT_ROOT'] . "/mips/components/confirm_dialog.php"; ?>
     <script src="/mips/javascript/common.js"></script>
     <script src="/mips/javascript/admin.js"></script>
     <script>

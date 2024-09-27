@@ -3,7 +3,7 @@
 $database_table = "Announcement";
 $rows_per_page = 5;
 include $_SERVER['DOCUMENT_ROOT'] . "/mips/php/admin.php";
-include $_SERVER['DOCUMENT_ROOT'] . "/mips/php/activate_pagination.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/mips/php/activated_pagination.php";
 
 function getDeactivateAnnouncements($pdo, $start, $rows_per_page)
 {
@@ -24,7 +24,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
     <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_header.php"; ?>
     <div class="container">
         <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_sidebar.php"; ?>
-        <main class="announcement">
+        <main class="gallery">
             <div class="wrapper">
                 <div class="title">
                     <div class="left">

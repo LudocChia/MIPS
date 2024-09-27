@@ -3,7 +3,7 @@
 $database_table = "Parent";
 $rows_per_page = 12;
 include $_SERVER['DOCUMENT_ROOT'] . "/mips/php/admin.php";
-include $_SERVER['DOCUMENT_ROOT'] . "/mips/php/activate_pagination.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/mips/php/activated_pagination.php";
 
 function getAllParents($pdo, $start, $rows_per_page)
 {

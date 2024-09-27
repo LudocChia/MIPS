@@ -3,7 +3,7 @@
 $database_table = "grade";
 $rows_per_page = 12;
 include $_SERVER['DOCUMENT_ROOT'] . "/mips/php/admin.php";
-include $_SERVER['DOCUMENT_ROOT'] . "/mips/php/activate_pagination.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/mips/php/activated_pagination.php";
 
 function getGrades($pdo, $start, $rows_per_page)
 {

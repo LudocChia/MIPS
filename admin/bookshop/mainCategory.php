@@ -3,7 +3,7 @@
 $database_table = "Product Category";
 $rows_per_page = 10;
 include $_SERVER['DOCUMENT_ROOT'] . "/mips/php/admin.php";
-include $_SERVER['DOCUMENT_ROOT'] . "/mips/php/activate_pagination.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/mips/php/activated_pagination.php";
 
 function getMainCategories($pdo, $start, $rows_per_page)
 {

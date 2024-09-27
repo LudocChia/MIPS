@@ -11,11 +11,11 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
     <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_header.php"; ?>
     <div class="container">
         <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_sidebar.php"; ?>
-        <main class="announcement">
+        <main class="gallery">
             <div class="wrapper">
                 <div class="title">
                     <div class="left">
-                        <h1>Deactivated User Menu</h1>
+                        <h1>Deactivated Bookshop Item</h1>
                     </div>
                 </div>
                 <div class="box-container">

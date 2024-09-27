@@ -3,7 +3,7 @@
 $database_table = "announcement";
 $rows_per_page = 5;
 include $_SERVER['DOCUMENT_ROOT'] . "/mips/php/admin.php";
-include $_SERVER['DOCUMENT_ROOT'] . "/mips/php/activate_pagination.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/mips/php/activated_pagination.php";
 
 function getAnnouncements($pdo, $start, $rows_per_page)
 {

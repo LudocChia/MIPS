@@ -585,6 +585,29 @@ class Action
         }
     }
 
+    public function deactivate_order($order_id)
+    {
+        try {
+            $stmt = $this->db->prepare("UPDATE Orders SET status = 1 WHERE order_id = :order_id");
+            $stmt->bindParam(':order_id', $order_id);
+            $stmt->execute();
+            return json_encode(['success' => 'Order deactivated successfully']);
+        } catch (PDOException $e) {
+            return json_encode(['error' => 'Database error: ' . $e->getMessage()]);
+        }
+    }
+
+    public function recover_order($order_id)
+    {
+        try {
+            $stmt = $this->db->prepare("UPDATE Orders SET status = 0 WHERE order_id = :order_id");
+            $stmt->bindParam(':order_id', $order_id);
+            $stmt->execute();
+            return json_encode(['success' => 'Order recovered successfully']);
+        } catch (PDOException $e) {
+            return json_encode(['error' => 'Database error: ' . $e->getMessage()]);
+        }
+    }
 
     public function delete_order($order_id)
     {
@@ -773,68 +796,68 @@ class Action
         }
     }
 
-    public function save_student($student_id, $class_id, $student_name, $parent_id, $parent_relationship)
-    {
-        try {
-            $this->db->beginTransaction();
+    // public function save_student($student_id, $class_id, $student_name, $parent_id, $parent_relationship)
+    // {
+    //     try {
+    //         $this->db->beginTransaction();
 
-            $studentImage = handleFileUpload($_FILES['student_image'], $student_id);
+    //         $studentImage = handleFileUpload($_FILES['student_image'], $student_id);
 
-            if ($existingStudentId) {
-                $sql = "UPDATE Student 
-                        SET student_id = :studentId, student_name = :name, class_id = :classId, student_image = :student_image 
-                        WHERE student_id = :existing_student_id";
-                $stmt = $this->db->prepare($sql);
-                $stmt->bindParam(':existing_student_id', $existingStudentId);
-            } else {
-                $sql = "INSERT INTO Student (student_id, student_name, class_id, student_image, status) 
-                        VALUES (:studentId, :name, :classId, :student_image, 0)";
-                $stmt = $this->db->prepare($sql);
-            }
+    //         if ($existingStudentId) {
+    //             $sql = "UPDATE Student 
+    //                     SET student_id = :studentId, student_name = :name, class_id = :classId, student_image = :student_image 
+    //                     WHERE student_id = :existing_student_id";
+    //             $stmt = $this->db->prepare($sql);
+    //             $stmt->bindParam(':existing_student_id', $existingStudentId);
+    //         } else {
+    //             $sql = "INSERT INTO Student (student_id, student_name, class_id, student_image, status) 
+    //                     VALUES (:studentId, :name, :classId, :student_image, 0)";
+    //             $stmt = $this->db->prepare($sql);
+    //         }
 
-            $stmt->bindParam(':studentId', $student_id);
-            $stmt->bindParam(':name', $student_name);
-            $stmt->bindParam(':classId', $class_id);
-            $stmt->bindParam(':student_image', $studentImage);
-            $stmt->execute();
+    //         $stmt->bindParam(':studentId', $student_id);
+    //         $stmt->bindParam(':name', $student_name);
+    //         $stmt->bindParam(':classId', $class_id);
+    //         $stmt->bindParam(':student_image', $studentImage);
+    //         $stmt->execute();
 
-            if ($parent_id) {
-                $sqlCheck = "SELECT parent_student_id FROM Parent_Student WHERE student_id = :student_id";
-                $stmtCheck = $this->db->prepare($sqlCheck);
-                $stmtCheck->bindParam(':student_id', $student_id);
-                $stmtCheck->execute();
-                $oldParentStudent = $stmtCheck->fetch(PDO::FETCH_ASSOC);
+    //         if ($parent_id) {
+    //             $sqlCheck = "SELECT parent_student_id FROM Parent_Student WHERE student_id = :student_id";
+    //             $stmtCheck = $this->db->prepare($sqlCheck);
+    //             $stmtCheck->bindParam(':student_id', $student_id);
+    //             $stmtCheck->execute();
+    //             $oldParentStudent = $stmtCheck->fetch(PDO::FETCH_ASSOC);
 
-                if ($oldParentStudent) {
-                    $sqlUpdateParentStudent = "UPDATE Parent_Student 
-                                               SET parent_id = :parent_id, relationship = :relationship 
-                                               WHERE parent_student_id = :parent_student_id";
-                    $stmtUpdateParentStudent = $this->db->prepare($sqlUpdateParentStudent);
-                    $stmtUpdateParentStudent->bindParam(':parent_id', $parent_id);
-                    $stmtUpdateParentStudent->bindParam(':relationship', $parent_relationship);
-                    $stmtUpdateParentStudent->bindParam(':parent_student_id', $oldParentStudent['parent_student_id']);
-                    $stmtUpdateParentStudent->execute();
-                } else {
-                    $newParentStudentId = uniqid('PS');
-                    $sqlInsert = "INSERT INTO Parent_Student (parent_student_id, parent_id, student_id, relationship) 
-                                  VALUES (:parent_student_id, :parent_id, :student_id, :relationship)";
-                    $stmtInsert = $this->db->prepare($sqlInsert);
-                    $stmtInsert->bindParam(':parent_student_id', $newParentStudentId);
-                    $stmtInsert->bindParam(':parent_id', $parent_id);
-                    $stmtInsert->bindParam(':student_id', $student_id);
-                    $stmtInsert->bindParam(':relationship', $parent_relationship);
-                    $stmtInsert->execute();
-                }
-            } else {
-                echo "<script>alert('Please select a parent.');</script>";
-            }
+    //             if ($oldParentStudent) {
+    //                 $sqlUpdateParentStudent = "UPDATE Parent_Student 
+    //                                            SET parent_id = :parent_id, relationship = :relationship 
+    //                                            WHERE parent_student_id = :parent_student_id";
+    //                 $stmtUpdateParentStudent = $this->db->prepare($sqlUpdateParentStudent);
+    //                 $stmtUpdateParentStudent->bindParam(':parent_id', $parent_id);
+    //                 $stmtUpdateParentStudent->bindParam(':relationship', $parent_relationship);
+    //                 $stmtUpdateParentStudent->bindParam(':parent_student_id', $oldParentStudent['parent_student_id']);
+    //                 $stmtUpdateParentStudent->execute();
+    //             } else {
+    //                 $newParentStudentId = uniqid('PS');
+    //                 $sqlInsert = "INSERT INTO Parent_Student (parent_student_id, parent_id, student_id, relationship) 
+    //                               VALUES (:parent_student_id, :parent_id, :student_id, :relationship)";
+    //                 $stmtInsert = $this->db->prepare($sqlInsert);
+    //                 $stmtInsert->bindParam(':parent_student_id', $newParentStudentId);
+    //                 $stmtInsert->bindParam(':parent_id', $parent_id);
+    //                 $stmtInsert->bindParam(':student_id', $student_id);
+    //                 $stmtInsert->bindParam(':relationship', $parent_relationship);
+    //                 $stmtInsert->execute();
+    //             }
+    //         } else {
+    //             echo "<script>alert('Please select a parent.');</script>";
+    //         }
 
-            $this->db->commit();
-        } catch (PDOException $e) {
-            $this->db->rollBack();
-            echo "Error: " . $e->getMessage();
-        }
-    }
+    //         $this->db->commit();
+    //     } catch (PDOException $e) {
+    //         $this->db->rollBack();
+    //         echo "Error: " . $e->getMessage();
+    //     }
+    // }
 
     // Retrieve class data
     public function get_class($class_id)

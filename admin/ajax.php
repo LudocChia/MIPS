@@ -190,24 +190,24 @@ switch ($action) {
         } else {
             echo json_encode(['error' => 'Required fields not provided']);
         }
-
+        break;
 
         // Order Functions
-        // case 'deactivate_order':
-        //     if (isset($_POST['order_id'])) {
-        //         echo $crud->deactivate_order($_POST['order_id']);
-        //     } else {
-        //         echo json_encode(['error' => 'Order ID not provided']);
-        //     }
-        //     break;
+    case 'deactivate_order':
+        if (isset($_POST['order_id'])) {
+            echo $crud->deactivate_order($_POST['order_id']);
+        } else {
+            echo json_encode(['error' => 'Order ID not provided']);
+        }
+        break;
 
-        // case 'recover_order':
-        //     if (isset($_POST['order_id'])) {
-        //         echo $crud->recover_order($_POST['order_id']);
-        //     } else {
-        //         echo json_encode(['error' => 'Order ID not provided']);
-        //     }
-        //     break;
+    case 'recover_order':
+        if (isset($_POST['order_id'])) {
+            echo $crud->recover_order($_POST['order_id']);
+        } else {
+            echo json_encode(['error' => 'Order ID not provided']);
+        }
+        break;
 
     case 'delete_order':
         if (isset($_POST['order_id'])) {

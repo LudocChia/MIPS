@@ -3,13 +3,13 @@
 $database_table = "Orders";
 $rows_per_page = 12;
 include $_SERVER['DOCUMENT_ROOT'] . "/mips/php/admin.php";
-include $_SERVER['DOCUMENT_ROOT'] . "/mips/php/activate_pagination.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/mips/php/activated_pagination.php";
 
 function getAllDeactivatedOrders($pdo, $start, $rows_per_page)
 {
     $sql = "SELECT o.order_id, o.order_datetime, o.order_price, p.parent_name, pm.payment_status
             FROM Orders o
-            JOIN Parent_Student ps ON o.parent_student_id = ps.parent_student_id
+            JOIN Parent_Student ps ON o.parent_id = ps.parent_id
             JOIN Parent p ON ps.parent_id = p.parent_id
             JOIN Payment pm ON o.order_id = pm.order_id
             WHERE o.status = 1
@@ -35,10 +35,10 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
             <div class="wrapper">
                 <div class="title">
                     <div class="left">
-                        <h1>Bookshop Order Recycle Bin</h1>
+                        <h1>Deactivated Bookshop Order</h1>
                     </div>
                     <div class="right">
-                        <a href="/mips/admin/recycleBin.php"><i class="bi bi-arrow-90deg-up"></i>Recycle Bin Menu</a>
+                        <a href="/mips/admin/deactivated/"><i class="bi bi-arrow-90deg-up"></i>Deactivated List Menu</a>
                     </div>
                 </div>
                 <div class="table-container">
@@ -46,22 +46,22 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                         <thead>
                             <tr>
                                 <th>
-                                    <h3>Order ID</h3>
+                                    Order ID
                                 </th>
                                 <th>
-                                    <h3>Parent Name</h3>
+                                    Parent Name
                                 </th>
                                 <th>
-                                    <h3>Order Date</h3>
+                                    Order Date
                                 </th>
                                 <th>
-                                    <h3>Order Amount</h3>
+                                    Order Amount
                                 </th>
                                 <th>
-                                    <h3>Status</h3>
+                                    Status
                                 </th>
                                 <th>
-                                    <h3>Actions</h3>
+                                    Actions
                                 </th>
                             </tr>
                         </thead>
