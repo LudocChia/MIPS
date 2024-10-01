@@ -156,12 +156,24 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
                         <table>
                             <thead>
                                 <tr>
-                                    <th>Student ID</th>
-                                    <th>Student Name</th>
-                                    <th>Student Parent Name</th>
-                                    <th>Class</th>
-                                    <th>Register Date</th>
-                                    <th>Actions</th>
+                                    <th>
+                                        <h3>Student ID</h3>
+                                    </th>
+                                    <th>
+                                        <h3>Student Name</h3>
+                                    </th>
+                                    <th>
+                                        <h3>Student Parent Name</h3>
+                                    </th>
+                                    <th>
+                                        <h3>Class</h3>
+                                    </th>
+                                    <th>
+                                        <h3>Register Date</h3>
+                                    </th>
+                                    <th>
+                                        <h3>Actions</h3>
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody>

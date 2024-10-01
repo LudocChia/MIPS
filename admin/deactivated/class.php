@@ -3,7 +3,7 @@
 $database_table = "Class";
 $rows_per_page = 5;
 include $_SERVER['DOCUMENT_ROOT'] . "/mips/php/admin.php";
-include $_SERVER['DOCUMENT_ROOT'] . "/mips/php/activated_pagination.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/mips/php/deactivated_pagination.php";
 
 function getDeactivatedClasses($pdo, $start, $rows_per_page)
 {

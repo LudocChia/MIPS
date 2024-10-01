@@ -43,12 +43,24 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
                         <table>
                             <thead>
                                 <tr>
-                                    <th>Admin ID</th>
-                                    <th>Admin Name</th>
-                                    <th>Admin Email</th>
-                                    <th>Admin Type</th>
-                                    <th>Created At</th>
-                                    <th>Actions</th>
+                                    <th>
+                                        <h3>Admin ID</h3>
+                                    </th>
+                                    <th>
+                                        <h3>Admin Name</h3>
+                                    </th>
+                                    <th>
+                                        <h3>Admin Email</h3>
+                                    </th>
+                                    <th>
+                                        <h3>Admin Type</h3>
+                                    </th>
+                                    <th>
+                                        <h3>Created At<h3>
+                                    </th>
+                                    <th>
+                                        <h3>Actions</h3>
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody>

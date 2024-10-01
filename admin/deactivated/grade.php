@@ -3,7 +3,7 @@
 $database_table = "Grade";
 $rows_per_page = 12;
 include $_SERVER['DOCUMENT_ROOT'] . "/mips/php/admin.php";
-include $_SERVER['DOCUMENT_ROOT'] . "/mips/php/activated_pagination.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/mips/php/deactivated_pagination.php";
 
 function getDeactivatedGrades($pdo, $start, $rows_per_page)
 {
@@ -50,12 +50,24 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                         <table>
                             <thead>
                                 <tr>
-                                    <th>Grade Name</th>
-                                    <th>Grade Level</th>
-                                    <th>Student ID Prefix</th>
-                                    <th>Total Classes</th>
-                                    <th>Total Students</th>
-                                    <th>Actions</th>
+                                    <th>
+                                        <h3>Grade Name</h3>
+                                    </th>
+                                    <th>
+                                        <h3>Grade Level</h3>
+                                    </th>
+                                    <th>
+                                        <h3>Student ID Prefix</h3>
+                                    </th>
+                                    <th>
+                                        <h3>Total Classes</h3>
+                                    </th>
+                                    <th>
+                                        <h3>Total Students</h3>
+                                    </th>
+                                    <th>
+                                        <h3>Actions</h3>
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody>

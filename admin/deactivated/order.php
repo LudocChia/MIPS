@@ -3,7 +3,7 @@
 $database_table = "Orders";
 $rows_per_page = 12;
 include $_SERVER['DOCUMENT_ROOT'] . "/mips/php/admin.php";
-include $_SERVER['DOCUMENT_ROOT'] . "/mips/php/activated_pagination.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/mips/php/deactivated_pagination.php";
 
 function getAllDeactivatedOrders($pdo, $start, $rows_per_page)
 {
@@ -24,7 +24,7 @@ function getAllDeactivatedOrders($pdo, $start, $rows_per_page)
 
 $all_orders = getAllDeactivatedOrders($pdo, $start, $rows_per_page);
 
-$pageTitle = "Bookshop Order Recycle Bin - MIPS";
+$pageTitle = "Deactivated Bookshop Order - MIPS";
 include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
 
 <body>
@@ -42,61 +42,67 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                     </div>
                 </div>
                 <div class="table-container">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>
-                                    Order ID
-                                </th>
-                                <th>
-                                    Parent Name
-                                </th>
-                                <th>
-                                    Order Date
-                                </th>
-                                <th>
-                                    Order Amount
-                                </th>
-                                <th>
-                                    Status
-                                </th>
-                                <th>
-                                    Actions
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php foreach ($all_orders as $order) { ?>
+                    <?php if (!empty($all_orders)) : ?>
+                        <table>
+                            <thead>
                                 <tr>
-                                    <td><?php echo htmlspecialchars($order['order_id']); ?></td>
-                                    <td><?php echo htmlspecialchars($order['parent_name']); ?></td>
-                                    <td><?php echo htmlspecialchars($order['order_datetime']); ?></td>
-                                    <td>MYR <?php echo htmlspecialchars($order['order_price']); ?></td>
-                                    <td><?php echo htmlspecialchars($order['payment_status']); ?></td>
-                                    <td>
-                                        <form method="POST" style="display:inline;" onsubmit="return showDeleteConfirmDialog(event);">
-                                            <input type="hidden" name="order_id" value="<?= htmlspecialchars($order['order_id']); ?>">
-                                            <input type="hidden" name="action" value="delete_order">
-                                            <button type="submit" class="delete-order-btn"><i class="bi bi-x-square"></i></button>
-                                        </form>
-                                        <button type="button" class="view-order-detail-btn" data-order-id="<?= htmlspecialchars($order['order_id']); ?>"><i class="bi bi-info-circle-fill"></i></button>
-                                        <form action="" method="POST" style="display:inline;" onsubmit="return showRecoverConfirmDialog(event);">
-                                            <input type="hidden" name="order_id" value="<?= htmlspecialchars($order['order_id']); ?>">
-                                            <input type="hidden" name="action" value="recover_order">
-                                            <button type="submit" class="recover-order-btn"><i class="bi bi-arrow-repeat"></i></button>
-                                        </form>
-                                    </td>
+                                    <th>
+                                        <h3>Order ID</h3>
+                                    </th>
+                                    <th>
+                                        <h3>Parent Name</h3>
+                                    </th>
+                                    <th>
+                                        <h3>Order Date</h3>
+                                    </th>
+                                    <th>
+                                        <h3>Order Amount</h3>
+                                    </th>
+                                    <th>
+                                        <h3>Status</h3>
+                                    </th>
+                                    <th>
+                                        <h3>Actions</h3>
+                                    </th>
                                 </tr>
-                            <?php } ?>
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($all_orders as $order) : ?>
+                                    <tr>
+                                        <td><?php echo htmlspecialchars($order['order_id']); ?></td>
+                                        <td><?php echo htmlspecialchars($order['parent_name']); ?></td>
+                                        <td><?php echo htmlspecialchars($order['order_datetime']); ?></td>
+                                        <td>MYR <?php echo htmlspecialchars($order['order_price']); ?></td>
+                                        <td><?php echo htmlspecialchars($order['payment_status']); ?></td>
+                                        <td>
+                                            <form method="POST" style="display:inline;" onsubmit="return showDeleteConfirmDialog(event);">
+                                                <input type="hidden" name="order_id" value="<?= htmlspecialchars($order['order_id']); ?>">
+                                                <input type="hidden" name="action" value="delete_order">
+                                                <button type="submit" class="delete-order-btn"><i class="bi bi-x-square"></i></button>
+                                            </form>
+                                            <button type="button" class="view-order-detail-btn" data-order-id="<?= htmlspecialchars($order['order_id']); ?>"><i class="bi bi-info-circle-fill"></i></button>
+                                            <form action="" method="POST" style="display:inline;" onsubmit="return showRecoverConfirmDialog(event);">
+                                                <input type="hidden" name="order_id" value="<?= htmlspecialchars($order['order_id']); ?>">
+                                                <input type="hidden" name="action" value="recover_order">
+                                                <button type="submit" class="recover-order-btn"><i class="bi bi-arrow-repeat"></i></button>
+                                            </form>
+                                        </td>
+                                    </tr>
+
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    <?php else : ?>
+                        <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/no_data_found.php"; ?>
+                    <?php endif; ?>
                 </div>
-                <?php include  $_SERVER['DOCUMENT_ROOT'] . "/mips/components/pagination.php"; ?>
+                <?php if (!empty($all_orders)) : ?>
+                    <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/pagination.php"; ?>
+                <?php endif; ?>
             </div>
         </main>
     </div>
     <dialog id="detail-dialog">
-        <!-- The dialog content remains the same as in the original order.php for viewing order details -->
     </dialog>
     <?php include  $_SERVER['DOCUMENT_ROOT'] . "/mips/components/confirm_dialog.php"; ?>
     <script src="/mips/javascript/admin.js"></script>

@@ -97,8 +97,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                         <p><?php echo htmlspecialchars($product['category_name']); ?></p>
                     </div>
                     <div class="right">
-                        <a href="/mips/admin/bookshop/product.php"><i class="bi bi-arrow-return-left"></i>Product Menu</a>
-                        <p><?php echo $stockQuantity; ?> pieces available</p>
+                        <a href="/mips/admin/bookshop/"><i class="bi bi-arrow-90deg-up"></i>Bookshop Product Menu</a>
                     </div>
                 </div>
                 <div class="product-details">
@@ -108,9 +107,13 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                                 <?php if (!empty($images)) : ?>
                                     <img id="picture" alt="<?php echo htmlspecialchars($images[0]['image_url']); ?>" src="/mips/uploads/product/<?php echo htmlspecialchars($images[0]['image_url']); ?>">
                             </div>
+                            <div class="popup-image">
+                                <span class="close">&times;</span>
+                                <img id="popup-image" src="/mips/uploads/product/<?php echo htmlspecialchars($images[0]['image_url']); ?>">
+                            </div>
                             <div class="thumbnails">
                                 <?php foreach ($images as $image) : ?>
-                                    <img class="thumbnail" src="/mips/uploads/product/<?php echo htmlspecialchars($image['image_url']); ?>" data-src="uploads/product/<?php echo htmlspecialchars($image['image_url']); ?>" style="width: 80px;">
+                                    <img class="thumbnail" src="/mips/uploads/product/<?php echo htmlspecialchars($image['image_url']); ?>" data-src="/mips/uploads/product/<?php echo htmlspecialchars($image['image_url']); ?>">
                                 <?php endforeach; ?>
                             </div>
                         <?php else : ?>
@@ -121,15 +124,13 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                             <h2>Product Description</h2>
                             <p><?php echo nl2br(htmlspecialchars($product['product_description'])); ?></p>
                             <div class="product-details-container">
-                                <h2>Size</h2>
                                 <?php if (!empty($sizes)) : ?>
+                                    <h2>Size</h2>
                                     <?php foreach ($sizes as $size) : ?>
                                         <button type="button" class="size-button" data-size-id="<?php echo htmlspecialchars($size['product_size_id']); ?>">
                                             <?php echo htmlspecialchars($size['size_name']); ?>
                                         </button>
                                     <?php endforeach; ?>
-                                <?php else : ?>
-                                    <p>No sizes available.</p>
                                 <?php endif; ?>
                             </div>
                             <div class="product-details-container">
@@ -137,12 +138,8 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                                 <p>MYR <?php echo number_format($product['product_price'], 2); ?></p>
                             </div>
                             <div class="product-details-container">
-                                <!-- <h2>Quantity</h2>
-                                <div class="product-actions">
-                                    <input type="number" id="qty" name="qty" min="1" max="<?php echo $stockQuantity; ?>" value="1">
-                                    <button type="button" class="add-to-cart-btn btn btn-outline-primary" data-product-id="<?php echo $product['product_id']; ?>">Add to Cart</button>
-                                    <button type="button" class="buy-now btn btn-full">Buy Now</button>
-                                </div> -->
+                                <h2>Stock</h2>
+                                <p><?php echo $stockQuantity; ?> pieces available</p>
                             </div>
                         </div>
                     </div>
@@ -196,165 +193,6 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
             </section> -->
         <script src="/mips/javascript/common.js"></script>
         <script src="/mips/javascript/admin.js"></script>
-        <script type="text/javascript">
-            document.addEventListener("DOMContentLoaded", function() {
-                document.querySelector('.buy-now').addEventListener('click', function() {
-                    <?php if (!isset($_SESSION['admin_id'])) : ?>
-                        const productId = <?= json_encode($product_id) ?>;
-                        document.getElementById('login-form').querySelector('form').action += `?pid=${productId}`;
-                        document.getElementById('login-form').showModal();
-                    <?php else : ?>
-                        const selectedSizeButton = document.querySelector('.size-button.selected');
-                        if (!selectedSizeButton) {
-                            alert('Please select a size.');
-                            return;
-                        }
-
-                        const sizeId = selectedSizeButton.getAttribute('data-size-id');
-                        const productName = '<?= htmlspecialchars($product['product_name']) ?>';
-                        const productPrice = parseFloat('<?= number_format($product['product_price'], 2) ?>');
-                        const quantity = parseInt(document.getElementById('qty').value);
-                        const totalPrice = (productPrice * quantity).toFixed(2);
-
-                        document.getElementById('product-id').value = '<?= $product_id ?>';
-                        document.getElementById('size-id').value = sizeId;
-                        document.getElementById('product-price').value = productPrice;
-
-                        document.getElementById('product-name-display').value = productName;
-                        document.getElementById('selected-size-display').value = selectedSizeButton.textContent;
-                        document.getElementById('product-price-display').value = `${quantity} x MYR ${productPrice} = MYR ${totalPrice}`;
-
-                        const dialog = document.getElementById('add-edit-data');
-                        dialog.showModal();
-                    <?php endif; ?>
-                });
-
-                const form = document.querySelector('#add-edit-data form');
-                const qtyInput = document.getElementById('qty');
-                const totalPriceInput = document.getElementById('total-price');
-                const productPrice = parseFloat('<?= $product['product_price'] ?>');
-
-                function updateTotalPrice() {
-                    const quantity = parseInt(qtyInput.value);
-                    const totalPrice = (productPrice * quantity).toFixed(2);
-                    document.getElementById('product-price-display').value = 'MYR ' + totalPrice;
-                    totalPriceInput.value = totalPrice;
-                }
-
-                qtyInput.addEventListener('input', updateTotalPrice);
-
-                form.addEventListener('submit', function(event) {
-                    event.preventDefault();
-
-                    const selectedSizeButton = document.querySelector('.size-button.selected');
-                    if (!selectedSizeButton) {
-                        alert('Please select a size.');
-                        return;
-                    }
-
-                    const selectedChildren = Array.from(document.querySelectorAll('input[name="child[]"]:checked')).map(el => el.value);
-                    const paymentImage = document.querySelector('input[name="payment_image"]').files[0];
-
-                    if (selectedChildren.length === 0) {
-                        alert('Please select at least one child.');
-                        return;
-                    }
-
-                    const formData = new FormData(form);
-                    formData.append('size_id', selectedSizeButton.getAttribute('data-size-id'));
-                    formData.append('children', selectedChildren.join(','));
-                    formData.append('total_item_quantities', qtyInput.value);
-                    formData.append('total_price_items', totalPriceInput.value);
-                    formData.append('total_price', totalPriceInput.value);
-
-                    fetch('/mips/ajax.php?action=purchase', {
-                            method: 'POST',
-                            body: formData
-                        })
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.success) {
-                                alert('Purchase successful!');
-                                document.querySelector('#add-edit-data').close();
-                            } else {
-                                alert('Failed to complete purchase: ' + data.error);
-                            }
-                        })
-                        .catch(error => {
-                            console.error('Error completing purchase:', error);
-                            alert('An error occurred while processing your request.');
-                        });
-                });
-
-                const thumbnails = document.querySelectorAll('.thumbnail');
-                const mainImage = document.querySelector('.product-image img');
-
-                if (thumbnails.length > 0) {
-                    thumbnails[0].classList.add('active');
-                    const firstImageSrc = thumbnails[0].getAttribute('data-src');
-                    mainImage.setAttribute('src', firstImageSrc);
-                    mainImage.setAttribute('alt', firstImageSrc);
-                }
-
-                thumbnails.forEach(thumbnail => {
-                    thumbnail.addEventListener('click', function() {
-                        thumbnails.forEach(thumb => thumb.classList.remove('active'));
-
-                        this.classList.add('active');
-
-                        const newSrc = this.getAttribute('data-src');
-                        mainImage.setAttribute('src', newSrc);
-                        mainImage.setAttribute('alt', newSrc);
-                    });
-                });
-
-                document.querySelectorAll('.size-button').forEach(button => {
-                    button.addEventListener('click', function() {
-                        document.querySelectorAll('.size-button').forEach(btn => btn.classList.remove('selected'));
-                        this.classList.add('selected');
-                    });
-                });
-
-                document.querySelectorAll('.add-to-cart-btn').forEach(button => {
-                    button.addEventListener('click', function() {
-                        const selectedSizeButton = document.querySelector('.size-button.selected');
-                        if (!selectedSizeButton) {
-                            alert('Please select a size.');
-                            return;
-                        }
-                        const productId = button.dataset.productId;
-                        const sizeId = selectedSizeButton.dataset.sizeId;
-                        const qty = document.getElementById('qty').value;
-
-                        fetch('/mips/ajax.php?action=add_to_cart', {
-                                method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/x-www-form-urlencoded'
-                                },
-                                body: new URLSearchParams({
-                                    product_id: productId,
-                                    qty: qty,
-                                    customer_id: '<?php echo $_SESSION['admin_id']; ?>',
-                                    product_size_id: sizeId
-                                })
-                            })
-                            .then(response => response.json())
-                            .then(result => {
-                                if (result.success) {
-                                    alert('Product added to cart successfully!');
-                                } else if (result.error) {
-                                    alert('Error: ' + result.error);
-                                } else {
-                                    alert('Unexpected error occurred.');
-                                }
-                            })
-                            .catch(() => {
-                                alert('Failed to add product to cart. Please try again.');
-                            });
-                    });
-                });
-            });
-        </script>
 </body>
 
 </html>

@@ -7,17 +7,6 @@ include 'customer_class.php';
 $crud = new Action();
 
 switch ($action) {
-        // case 'login':
-        //     if (isset($_POST['email'], $_POST['password'])) {
-        //         $currentPage = $_POST['current_page'] ?? null;
-        //         $productId = $_POST['pid'] ?? null;
-        //         echo $crud->login($_POST['email'], $_POST['password'], $currentPage, $productId);
-        //     } else {
-        //         echo json_encode(['error' => 'Email and password are required']);
-        //     }
-        //     break;
-
-        // Order Functions
     case 'get_orders':
         if (isset($_GET['parent_id'], $_GET['status'])) {
             echo $crud->get_Orders($_GET['parent_id'], $_GET['status']);
@@ -30,7 +19,6 @@ switch ($action) {
         // Checkout Functions
     case 'add_to_cart':
         if (isset($_POST['customer_id'], $_POST['product_id'], $_POST['qty'])) {
-            // Check if product_size_id exists and is not an empty string, else set it to null
             $product_size_id = !empty($_POST['product_size_id']) ? $_POST['product_size_id'] : null;
             echo $crud->add_to_cart($_POST['customer_id'], $_POST['product_id'], $_POST['qty'], $product_size_id);
         } else {
@@ -42,7 +30,7 @@ switch ($action) {
     case 'purchase':
         if (isset($_POST['product_id']) && isset($_POST['size_id']) && isset($_POST['total_item_quantities']) && isset($_POST['total_price_items']) && isset($_POST['total_price']) && isset($_POST['children']) && isset($_SESSION['user_id']) && isset($_FILES['payment_image'])) {
             $productIds = explode(',', $_POST['product_id']);
-            $sizeIds = explode(',', $_POST['size_id']);
+            $sizeIds = !empty($_POST['size_id']) ? explode(',', $_POST['size_id']) : array_fill(0, count($productIds), null);
             $totalItemQuantities = explode(',', $_POST['total_item_quantities']);
             $totalPriceItems = explode(',', $_POST['total_price_items']);
             $childrenGroups = explode(';', $_POST['children']);

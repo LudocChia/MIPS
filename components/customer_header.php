@@ -93,7 +93,6 @@
         </div>
     </div>
 </header>
-
 <script>
     document.querySelector('.profile-menu-link.logout').addEventListener('click', function(e) {
         e.preventDefault();

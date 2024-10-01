@@ -137,7 +137,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/customer_header.php"; ?>
                         </div>
                         <div class="thumbnails">
                             <?php foreach ($images as $image) : ?>
-                                <img class="thumbnail" src="/mips/uploads/product/<?php echo htmlspecialchars($image['image_url']); ?>" data-src="uploads/product/<?php echo htmlspecialchars($image['image_url']); ?>" style="width: 80px;">
+                                <img class="thumbnail" src="/mips/uploads/product/<?php echo htmlspecialchars($image['image_url']); ?>" data-src="/mips/uploads/product/<?php echo htmlspecialchars($image['image_url']); ?>">
                             <?php endforeach; ?>
                         </div>
                     <?php else : ?>
@@ -148,15 +148,13 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/customer_header.php"; ?>
                         <h2>Product Description</h2>
                         <p><?php echo nl2br(htmlspecialchars($product['product_description'])); ?></p>
                         <div class="product-details-container">
-                            <h2>Size</h2>
                             <?php if (!empty($sizes)) : ?>
+                                <h2>Size</h2>
                                 <?php foreach ($sizes as $size) : ?>
                                     <button type="button" class="size-button" data-size-id="<?php echo htmlspecialchars($size['product_size_id']); ?>">
                                         <?php echo htmlspecialchars($size['size_name']); ?>
                                     </button>
                                 <?php endforeach; ?>
-                            <?php else : ?>
-                                <p>No sizes available.</p>
                             <?php endif; ?>
                         </div>
                         <div class="product-details-container">
@@ -192,11 +190,21 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/customer_header.php"; ?>
                     <table>
                         <thead>
                             <tr>
-                                <th>Apparel Size Name</th>
-                                <th>Shoulder Width</th>
-                                <th>Bust</th>
-                                <th>Waist</th>
-                                <th>Length</th>
+                                <th>
+                                    <h3>Apparel Size Name</h3>
+                                </th>
+                                <th>
+                                    <h3>Shoulder Width</h3>
+                                </th>
+                                <th>
+                                    <h3>Bust</h3>
+                                </th>
+                                <th>
+                                    <h3>Waist</h3>
+                                </th>
+                                <th>
+                                    <h3>Length</h3>
+                                </th>
                             </tr>
                         </thead>
                         <tbody>
@@ -305,212 +313,175 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/customer_header.php"; ?>
 <script src="/mips/javascript/common.js"></script>
 <script src="/mips/javascript/customer.js"></script>
 <script type="text/javascript">
-    document.querySelectorAll('.product-image img').forEach(image => {
-        image.onclick = () => {
-            document.querySelector('.popup-image').style.display = 'block';
-            document.querySelector('.popup-image img').src = image.getAttribute('src');
-        }
-    });
-
-    document.querySelector('.popup-image span').onclick = () => {
-        document.querySelector('.popup-image').style.display = 'none';
-    }
-
     document.addEventListener("DOMContentLoaded", function() {
-
-        // const mainImage = document.getElementById('picture');
-
-        // mainImage.addEventListener('click', function() {
-        //     const modal = document.getElementById('imageModal');
-        //     const modalImg = document.getElementById('fullImage');
-        //     const closeBtn = modal.querySelector('.close');
-
-        //     modal.style.display = "block";
-        //     modalImg.src = this.src;
-
-        //     closeBtn.onclick = function() {
-        //         modal.style.display = "none";
-        //     };
-
-        //     modal.onclick = function(event) {
-        //         if (event.target == modal) {
-        //             modal.style.display = "none";
-        //         }
-        //     };
-        // });
+        const isLoggedIn = <?= isset($_SESSION['user_id']) ? 'true' : 'false'; ?>;
 
         document.querySelector('.buy-now').addEventListener('click', function() {
-            <?php if (!isset($_SESSION['user_id'])) : ?>
+            if (!isLoggedIn) {
                 const productId = <?= json_encode($product_id) ?>;
-                document.querySelector('.login-form').querySelector('form').action += `?pid=${productId}`;
-                document.querySelector('.login-form').showModal();
-            <?php else : ?>
-                const sizeButtons = document.querySelectorAll('.size-button');
+                const loginForm = document.querySelector('.login-form');
+                if (loginForm) {
+                    loginForm.querySelector('form').action += `?pid=${productId}`;
+                    loginForm.showModal();
+                } else {
+                    console.error('Login form not found.');
+                }
+                return;
+            }
 
+            const sizeButtons = document.querySelectorAll('.size-button');
+            const selectedSizeButton = document.querySelector('.size-button.selected');
+
+            if (sizeButtons.length > 0 && !selectedSizeButton) {
+                alert('Please select a size.');
+                return;
+            }
+
+            if (selectedSizeButton) {
+                const sizeId = selectedSizeButton.getAttribute('data-size-id');
+                document.getElementById('size-id').value = sizeId;
+                document.getElementById('selected-size-display').value = selectedSizeButton.textContent;
+            }
+
+            const productName = '<?= htmlspecialchars($product['product_name']) ?>';
+            const productPrice = parseFloat('<?= $product['product_price'] ?>');
+            const quantity = parseInt(document.getElementById('qty').value) || 1;
+            const totalPrice = (productPrice * quantity).toFixed(2);
+
+            document.getElementById('product-id').value = '<?= $product_id ?>';
+            document.getElementById('product-price').value = productPrice;
+            document.getElementById('total-price').value = totalPrice;
+
+            document.getElementById('product-name-display').value = productName;
+            document.getElementById('product-price-display').value = `${quantity} x MYR ${productPrice.toFixed(2)} = MYR ${totalPrice}`;
+
+            const dialog = document.getElementById('add-edit-data');
+            dialog.showModal();
+        });
+
+        const form = document.querySelector('#add-edit-data form');
+        const qtyInput = document.getElementById('qty');
+        const totalPriceInput = document.getElementById('total-price');
+        const productPrice = parseFloat('<?= $product['product_price'] ?>');
+
+        function updateTotalPrice() {
+            const quantity = parseInt(qtyInput.value) || 1;
+            const totalPrice = (productPrice * quantity).toFixed(2);
+            document.getElementById('product-price-display').value = 'MYR ' + totalPrice;
+            totalPriceInput.value = totalPrice;
+        }
+
+        qtyInput.addEventListener('input', updateTotalPrice);
+        updateTotalPrice();
+
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const selectedSizeButton = document.querySelector('.size-button.selected');
+            const selectedChildren = Array.from(document.querySelectorAll('input[name="child[]"]:checked')).map(el => el.value);
+            const paymentImage = document.querySelector('input[name="payment_image"]').files[0];
+
+            if (selectedChildren.length === 0) {
+                alert('Please select at least one child.');
+                return;
+            }
+
+            if (!paymentImage) {
+                alert('Please upload the transfer receipt.');
+                return;
+            }
+
+            const formData = new FormData(form);
+            if (selectedSizeButton) {
+                formData.append('size_id', selectedSizeButton.getAttribute('data-size-id'));
+            } else {
+                formData.append('size_id', '');
+            }
+            formData.append('children', selectedChildren.join(','));
+            formData.append('total_item_quantities', qtyInput.value);
+            formData.append('total_price_items', totalPriceInput.value);
+            formData.append('total_price', totalPriceInput.value);
+
+            fetch('/mips/ajax.php?action=purchase', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('Purchase successful!');
+                        document.querySelector('#add-edit-data').close();
+                    } else {
+                        alert('Failed to complete purchase: ' + data.error);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error completing purchase:', error);
+                    alert('An error occurred while processing your request.');
+                });
+        });
+
+        document.querySelectorAll('.size-button').forEach(button => {
+            button.addEventListener('click', function() {
+                document.querySelectorAll('.size-button').forEach(btn => btn.classList.remove('selected'));
+                this.classList.add('selected');
+            });
+        });
+
+        document.querySelectorAll('.add-to-cart-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                if (!isLoggedIn) {
+                    const productId = <?= json_encode($product_id) ?>;
+                    const loginForm = document.querySelector('.login-form');
+                    if (loginForm) {
+                        loginForm.querySelector('form').action += `?pid=${productId}`;
+                        loginForm.showModal();
+                    } else {
+                        console.error('Login form not found.');
+                    }
+                    return;
+                }
+
+                const sizeButtons = document.querySelectorAll('.size-button');
+                let sizeId = null;
                 if (sizeButtons.length > 0) {
                     const selectedSizeButton = document.querySelector('.size-button.selected');
                     if (!selectedSizeButton) {
                         alert('Please select a size.');
                         return;
                     }
-                    const sizeId = selectedSizeButton.getAttribute('data-size-id');
-                    document.getElementById('size-id').value = sizeId;
-                    document.getElementById('selected-size-display').value = selectedSizeButton.textContent;
+                    sizeId = selectedSizeButton.dataset.sizeId;
                 }
 
-                const productName = '<?= htmlspecialchars($product['product_name']) ?>';
-                const productPrice = parseFloat('<?= number_format($product['product_price'], 2) ?>');
-                const quantity = parseInt(document.getElementById('qty').value);
-                const totalPrice = (productPrice * quantity).toFixed(2);
+                const productId = button.dataset.productId;
+                const qty = document.getElementById('qty').value;
 
-                document.getElementById('product-id').value = '<?= $product_id ?>';
-                document.getElementById('product-price').value = productPrice;
-                document.getElementById('total-price').value = totalPrice;
-
-                document.getElementById('product-name-display').value = productName;
-                document.getElementById('product-price-display').value = `${quantity} x MYR ${productPrice} = MYR ${totalPrice}`;
-
-                const dialog = document.getElementById('add-edit-data');
-                dialog.showModal();
-            <?php endif; ?>
-        });
-    });
-
-    const form = document.querySelector('#add-edit-data form');
-    const qtyInput = document.getElementById('qty');
-    const totalPriceInput = document.getElementById('total-price');
-    const productPrice = parseFloat('<?= $product['product_price'] ?>');
-
-    function updateTotalPrice() {
-        const quantity = parseInt(qtyInput.value);
-        const totalPrice = (productPrice * quantity).toFixed(2);
-        document.getElementById('product-price-display').value = 'MYR ' + totalPrice;
-        totalPriceInput.value = totalPrice;
-    }
-
-    qtyInput.addEventListener('input', updateTotalPrice);
-
-    form.addEventListener('submit', function(event) {
-        event.preventDefault();
-
-        const selectedSizeButton = document.querySelector('.size-button.selected');
-        if (!selectedSizeButton) {
-            alert('Please select a size.');
-            return;
-        }
-
-        const selectedChildren = Array.from(document.querySelectorAll('input[name="child[]"]:checked')).map(el => el.value);
-        const paymentImage = document.querySelector('input[name="payment_image"]').files[0];
-
-        if (selectedChildren.length === 0) {
-            alert('Please select at least one child.');
-            return;
-        }
-
-        if (!paymentImage) {
-            alert('Please upload the transfer receipt.');
-            return;
-        }
-
-        const formData = new FormData(form);
-        formData.append('size_id', selectedSizeButton.getAttribute('data-size-id'));
-        formData.append('children', selectedChildren.join(','));
-        formData.append('total_item_quantities', qtyInput.value);
-        formData.append('total_price_items', totalPriceInput.value);
-        formData.append('total_price', totalPriceInput.value);
-
-        fetch('/mips/ajax.php?action=purchase', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    alert('Purchase successful!');
-                    document.querySelector('#add-edit-data').close();
-                } else {
-                    alert('Failed to complete purchase: ' + data.error);
-                }
-            })
-            .catch(error => {
-                console.error('Error completing purchase:', error);
-                alert('An error occurred while processing your request.');
-            });
-    });
-
-    const thumbnails = document.querySelectorAll('.thumbnail');
-    const mainImage = document.querySelector('.product-image img');
-
-    if (thumbnails.length > 0) {
-        thumbnails[0].classList.add('active');
-        const firstImageSrc = thumbnails[0].getAttribute('data-src');
-        mainImage.setAttribute('src', firstImageSrc);
-        mainImage.setAttribute('alt', firstImageSrc);
-    }
-
-    thumbnails.forEach(thumbnail => {
-        thumbnail.addEventListener('click', function() {
-            thumbnails.forEach(thumb => thumb.classList.remove('active'));
-
-            this.classList.add('active');
-
-            const newSrc = this.getAttribute('data-src');
-            mainImage.setAttribute('src', newSrc);
-            mainImage.setAttribute('alt', newSrc);
-        });
-    });
-
-    document.querySelectorAll('.size-button').forEach(button => {
-        button.addEventListener('click', function() {
-            document.querySelectorAll('.size-button').forEach(btn => btn.classList.remove('selected'));
-            this.classList.add('selected');
-        });
-    });
-
-    document.querySelectorAll('.add-to-cart-btn').forEach(button => {
-        button.addEventListener('click', function() {
-            const sizeButtons = document.querySelectorAll('.size-button');
-
-            let sizeId = null;
-            if (sizeButtons.length > 0) {
-                const selectedSizeButton = document.querySelector('.size-button.selected');
-                if (!selectedSizeButton) {
-                    alert('Please select a size.');
-                    return;
-                }
-                sizeId = selectedSizeButton.dataset.sizeId;
-            }
-
-            console.log(sizeId);
-
-            const productId = button.dataset.productId;
-            const qty = document.getElementById('qty').value;
-
-            fetch('/mips/ajax.php?action=add_to_cart', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded'
-                    },
-                    body: new URLSearchParams({
-                        product_id: productId,
-                        qty: qty,
-                        customer_id: '<?php echo $_SESSION['user_id']; ?>',
-                        product_size_id: sizeId || ''
+                fetch('/mips/ajax.php?action=add_to_cart', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded'
+                        },
+                        body: new URLSearchParams({
+                            product_id: productId,
+                            qty: qty,
+                            customer_id: '<?= $_SESSION['user_id'] ?>',
+                            product_size_id: sizeId || ''
+                        })
                     })
-                })
-                .then(response => response.json())
-                .then(result => {
-                    if (result.success) {
-                        alert('Product added to cart successfully!');
-                    } else if (result.error) {
-                        alert('Error: ' + result.error);
-                    } else {
-                        alert('Unexpected error occurred.');
-                    }
-                })
-                .catch(() => {
-                    alert('Failed to add product to cart. Please try again.');
-                });
+                    .then(response => response.json())
+                    .then(result => {
+                        if (result.success) {
+                            alert('Product added to cart successfully!');
+                        } else if (result.error) {
+                            alert('Error: ' + result.error);
+                        } else {
+                            alert('Unexpected error occurred.');
+                        }
+                    })
+                    .catch(() => {
+                        alert('Failed to add product to cart. Please try again.');
+                    });
+            });
         });
     });
 </script>

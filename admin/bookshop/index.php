@@ -329,12 +329,24 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
                     <table class="add-edit-table">
                         <thead>
                             <tr>
-                                <th>Select</th>
-                                <th>Size Name</th>
-                                <th>Shoulder Width</th>
-                                <th>Bust</th>
-                                <th>Waist</th>
-                                <th>Length</th>
+                                <th>
+                                    <h3>Select</h3>
+                                </th>
+                                <th>
+                                    <h3>Size Name</h3>
+                                </th>
+                                <th>
+                                    <h3>Shoulder Width</h3>
+                                </th>
+                                <th>
+                                    <h3>Bust</h3>
+                                </th>
+                                <th>
+                                    <h3>Waist</h3>
+                                </th>
+                                <th>
+                                    <h3>Length</h3>
+                                </th>
                             </tr>
                         </thead>
                         <tbody>
@@ -345,10 +357,10 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
                                             <?php if (in_array($size['size_id'], $_POST['sizes'] ?? [])) echo 'checked'; ?>>
                                     </td>
                                     <td><?= htmlspecialchars($size['size_name']) ?></td>
-                                    <td><?= htmlspecialchars($size['shoulder_width']) ?></td>
-                                    <td><?= htmlspecialchars($size['bust']) ?></td>
-                                    <td><?= htmlspecialchars($size['waist']) ?></td>
-                                    <td><?= htmlspecialchars($size['length']) ?></td>
+                                    <td><?= htmlspecialchars($size['shoulder_width']) === null || $size['shoulder_width'] == 0 ? '-' : $size['shoulder_width'] ?? '-' ?></td>
+                                    <td><?= htmlspecialchars($size['bust']) === null || $size['bust'] == 0 ? '-' : $size['bust'] ?? '-' ?></td>
+                                    <td><?= htmlspecialchars($size['waist']) === null || $size['waist'] == 0 ? '-' : $size['waist'] ?? '-' ?></td>
+                                    <td><?= htmlspecialchars($size['length']) === null || $size['length'] == 0 ? '-' : $size['length'] ?? '-' ?></td>
                                 </tr>
                             <?php } ?>
                         </tbody>

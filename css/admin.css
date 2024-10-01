@@ -114,105 +114,6 @@ ul.bookshop-show.second {
     display: block;
 }
 
-/* Sidebar */
-aside {
-    margin: 1rem 0 1rem 4rem;
-    height: 82vh;
-    overflow-y: scroll;
-}
-
-aside::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
-}
-
-aside::-webkit-scrollbar-track {
-    background: #f0f0f0;
-    border-radius: 4px;
-}
-
-aside::-webkit-scrollbar-thumb {
-    background-color: #888;
-    border-radius: 4px;
-    border: 2px solid #f0f0f0;
-}
-
-aside::-webkit-scrollbar-thumb:hover {
-    background-color: #555;
-}
-
-aside::-webkit-scrollbar-button {
-    background-color: #ccc;
-    display: none;
-}
-
-aside::-webkit-scrollbar-corner {
-    background-color: #f0f0f0;
-}
-
-aside button#close-btn {
-    display: none;
-}
-
-aside .sidebar ul li a {
-    position: relative;
-    display: flex;
-    align-items: center;
-    gap: 1.2rem;
-    height: 4.2rem;
-    color: var(--color-gray-light);
-
-}
-
-aside .sidebar ul li .count {
-    color: var(--color-white);
-    background-color: var(--color-primary);
-    padding: 5px 10px;
-    font-size: 0.75rem;
-    border-radius: 5px;
-}
-
-/* #pending-order-count {
-    display: none;
-} */
-
-aside .sidebar a i,
-aside .sidebar a span,
-aside .sidebar a svg {
-    font-size: 1.7rem;
-    margin-left: 3rem;
-}
-
-aside .sidebar ul ul {
-    display: none;
-    padding: 0 0 1rem 1rem;
-}
-
-aside .sidebar a.active {
-    background: var(--color-white);
-    color: var(--color-primary);
-}
-
-aside .sidebar a.active::before {
-    content: "";
-    width: 6px;
-    height: 100%;
-    position: absolute;
-    background: var(--color-primary);
-}
-
-aside .sidebar a:hover {
-    color: var(--color-primary);
-}
-
-.rotate {
-    transform: rotate(180deg);
-    transition: transform 0.3s ease;
-}
-
-aside .sidebar h4 {
-    font-weight: 500;
-}
 
 main {
     padding: 2rem;
@@ -474,24 +375,6 @@ main .recent-orders a {
     transition: background-color 0.3s ease;
 }
 
-/* .pagination a:hover {
-    background-color: #005580;
-} */
-
-/* .pagination .page-numbers a {
-    padding: 8px 16px;
-    margin: 0 5px;
-    background-color: #003455;
-    color: #fff;
-    border-radius: 5px;
-    text-decoration: none;
-    transition: background-color 0.3s ease;
-} */
-
-/* .pagination .page-numbers a:hover {
-    background-color: #005580;
-} */
-
 .pagination a.active {
     background-color: black;
     color: #fff;
@@ -523,60 +406,6 @@ main .recent-orders a {
         grid-template-columns: 1fr;
     }
 
-    aside {
-        display: block;
-        margin: 0;
-        top: 0;
-        left: 0;
-        position: fixed;
-        left: -100%;
-        background: var(--color-white);
-        width: 22rem;
-        z-index: 3;
-        height: 100vh;
-        /* padding-right: var(--card-padding); */
-        display: none;
-        animation: showMenu 400ms ease forwards;
-    }
-
-    @keyframes showMenu {
-        to {
-            left: 0;
-        }
-    }
-
-    aside.active {
-        display: block;
-    }
-
-    aside button#close-btn {
-        display: inline-block;
-        width: 3rem;
-        height: 3rem;
-        position: absolute;
-        top: 1rem;
-        z-index: 4;
-        background: transparent;
-        color: var(--color-dark);
-    }
-
-    button:hover {
-        cursor: pointer;
-    }
-
-    aside .sidebar {
-        margin-top: 4rem;
-    }
-
-    aside .sidebar h3 {
-        display: none;
-    }
-
-    aside .sidebar a {
-        width: 100%;
-        height: 3.4rem;
-    }
-
     main .insights {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
@@ -597,32 +426,6 @@ main .recent-orders a {
         grid-template-columns: 1fr;
     }
 
-    aside {
-        display: block;
-    }
-
-    aside.active {
-        display: block;
-    }
-
-    aside {
-        position: fixed;
-        left: -100%;
-        background: var(--color-white);
-        width: 18rem;
-        z-index: 3;
-        height: 100vh;
-        padding-right: var(--card-padding);
-        display: none;
-        animation: showMenu 400ms ease forwards;
-    }
-
-    @keyframes showMenu {
-        to {
-            left: 0;
-        }
-    }
-
     header img.logo {
         width: 20rem;
     }
@@ -639,70 +442,12 @@ main .recent-orders a {
         height: 3rem;
     }
 
-    aside .sidebar h3 {
-        display: inline;
-    }
-
-    aside .sidebar a {
-        width: 100%;
-        height: 3.4rem;
-    }
-
-    /* aside .sidebar a:last-child {
-        position: absolute;
-        bottom: 5rem;
-    } */
-
-    aside .close {
-        font-size: 4rem;
-        display: inline-block;
-        cursor: pointer;
-    }
-
-    /* 
-    main .recent-orders {
-        position: relative;
-        margin: 3rem 0 0 0;
-        width: 100%;
-    }
-
-    main .recent-orders table {
-        width: 100%;
-        margin: 0;
-    } */
-
-    /* 
-    .right {
-        width: 94%;
-        margin: 0 auto 4rem;
-    } */
-    /* 
-    .right .top {
-        position: fixed;
-        top: 0;
-        left: 0;
-        align-items: center;
-        padding: 0 0.8rem;
-        height: 4.6rem;
-        background: var(--color-white);
-        width: 100%;
-        margin: 0;
-        z-index: 2;
-        box-shadow: 0 1rem 1rem var(--color-light);
-    } */
-
     .login-form .container,
     .set-new-password-form .container {
         position: fixed;
         width: auto;
         margin: 1%;
     }
-
-    /* .login-form .wrapper,
-    .set-new-password-form .wrapper {
-        width: 100%;
-        margin: 0 auto;
-    } */
 
     .container .right .profile .info {
         display: none;
@@ -724,4 +469,16 @@ main .recent-orders a {
     .products .box-container {
         grid-template-columns: repeat(auto-fit, 180px);
     }
+
+    /* Pagination */
+    .pagination a {
+        padding: 5px 10px;
+    }
+
+    @media screen and (max-width: 574px) {
+        .products .box-container {
+            grid-template-columns: repeat(auto-fit, 150px);
+        }
+    }
+
 }

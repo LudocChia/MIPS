@@ -51,12 +51,22 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                         <table>
                             <thead>
                                 <tr>
-                                    <!-- <th><input type="checkbox"></th> -->
-                                    <th>Parent ID</th>
-                                    <th>Parent Name</th>
-                                    <th>Parent Email</th>
-                                    <th>Register Date</th>
-                                    <th>Actions</th>
+                                    <!-- <th><h3><input type="checkbox"></h3></th> -->
+                                    <th>
+                                        <h3>Parent ID</h3>
+                                    </th>
+                                    <th>
+                                        <h3>Parent Name</h3>
+                                    </th>
+                                    <th>
+                                        <h3>Parent Email</h3>
+                                    </th>
+                                    <th>
+                                        <h3>Register Date</h3>
+                                    </th>
+                                    <th>
+                                        <h3>Actions</h3>
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody>

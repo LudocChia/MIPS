@@ -72,22 +72,34 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                         <table>
                             <thead>
                                 <tr>
-                                    <th>Apparel Size Name</th>
-                                    <th>Shoulder Width (cm)</th>
-                                    <th>Bust (cm)</th>
-                                    <th>Waist (cm)</th>
-                                    <th>Length (cm)</th>
-                                    <th>Actions</th>
+                                    <th>
+                                        <h3>Apparel Size Name</h3>
+                                    </th>
+                                    <th>
+                                        <h3>Shoulder Width (cm)</h3>
+                                    </th>
+                                    <th>
+                                        <h3>Bust (cm)</h3>
+                                    </th>
+                                    <th>
+                                        <h3>Waist (cm)</h3>
+                                    </th>
+                                    <th>
+                                        <h3>Length (cm)</h3>
+                                    </th>
+                                    <th>
+                                        <h3>Actions</h3>
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <?php foreach ($all_product_sizes as $size) { ?>
                                     <tr>
                                         <td style="text-align: center;"><?= htmlspecialchars($size['size_name']); ?></td>
-                                        <td style="text-align: center;"><?= htmlspecialchars($size['shoulder_width'] === null ? '-' : $size['shoulder_width']); ?></td>
-                                        <td style="text-align: center;"><?= htmlspecialchars($size['bust'] === null ? '-' : $size['bust']); ?></td>
-                                        <td style="text-align: center;"><?= htmlspecialchars($size['waist'] === null ? '-' : $size['waist']); ?></td>
-                                        <td style="text-align: center;"><?= htmlspecialchars($size['length'] === null ? '-' : $size['length']); ?></td>
+                                        <td style="text-align: center;"><?= htmlspecialchars($size['shoulder_width'] === null || $size['shoulder_width'] == 0 ? '-' : $size['shoulder_width']); ?></td>
+                                        <td style="text-align: center;"><?= htmlspecialchars($size['bust'] === null || $size['bust'] == 0 ? '-' : $size['bust']); ?></td>
+                                        <td style="text-align: center;"><?= htmlspecialchars($size['waist'] === null  || $size['waist'] == 0 ? '-' : $size['waist']); ?></td>
+                                        <td style="text-align: center;"><?= htmlspecialchars($size['length'] === null || $size['length'] == 0 ? '-' : $size['length']); ?></td>
                                         <td>
                                             <div class="actions">
                                                 <form action="" method="POST" style="display:inline;" onsubmit="return showDeactivateConfirmDialog(event);">
