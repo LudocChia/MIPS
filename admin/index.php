@@ -78,14 +78,6 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
                                     <h4>Total Registered Parents and Students</h4>
                                     <h1><?php echo $totalParentsAndStudents; ?></h1>
                                 </div>
-                                <!-- <div class="progress">
-                                <svg>
-                                    <circle cx="38" cy="38" r="36"></circle>
-                                </svg>
-                                <div class="number">
-                                    <p>81%</p>
-                                </div>
-                            </div> -->
                             </div>
                             <small class="text-muted">Last 12 Months</small>
                         </div>
@@ -99,14 +91,6 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
                                     <h4>Total Registered Admin and Staff</h4>
                                     <h1><?php echo $totalAdmins; ?></h1>
                                 </div>
-                                <!-- <div class="progress">
-                                <svg>
-                                    <circle cx="38" cy="38" r="36"></circle>
-                                </svg>
-                                <div class="number">
-                                    <p>81%</p>
-                                </div>
-                            </div> -->
                             </div>
                             <small class="text-muted">Last 12 Months</small>
                         </div>
@@ -120,14 +104,6 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
                                     <h4>Total Cash in Amount</h4>
                                     <h1>MYR <?php echo number_format($totalCashIn, 2); ?></h1>
                                 </div>
-                                <!-- <div class="progress">
-                                <svg>
-                                    <circle cx="38" cy="38" r="36"></circle>
-                                </svg>
-                                <div class="number">
-                                    <p>81%</p>
-                                </div>
-                            </div> -->
                             </div>
                             <small class="text-muted">Last 12 Months</small>
                         </div>

@@ -88,9 +88,6 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/customer_head.php";
             </div>
         </div>
     </section>
-    <a href="#" class="back-to-top">
-        <span class="material-symbols-outlined">arrow_upward</span>
-    </a>
     <?php include $_SERVER['DOCUMENT_ROOT'] . '/mips/components/customer_footer.php'; ?>
     <script src="/mips/javascript/common.js"></script>
     <script src="/mips/javascript/customer.js"></script>

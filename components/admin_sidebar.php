@@ -121,7 +121,7 @@ function isActive($targetPage, $currentPage)
                     </li>
                 </ul>
             </li>
-            <li>
+            <!-- <li>
                 <a href="javascript:void(0);" class="ebook-btn">
                     <div class="left-content">
                         <i class="fa-solid fa-memo"></i>
@@ -146,7 +146,7 @@ function isActive($targetPage, $currentPage)
                         </a>
                     </li>
                 </ul>
-            </li>
+            </li> -->
             <li>
                 <a href="/mips/admin/announcement.php" class="<?= isActive('/mips/admin/announcement.php', $currentPage); ?>">
                     <div class="left-content">

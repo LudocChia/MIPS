@@ -15,3 +15,7 @@
     <link rel="stylesheet" href="/mips/css/common.css">
     <link rel="stylesheet" href="/mips/css/customer.css">
 </head>
+
+<a href="#" class="back-to-top">
+    <i class="bi bi-chevron-bar-up"></i>
+</a>

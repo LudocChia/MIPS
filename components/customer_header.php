@@ -11,18 +11,18 @@
                 <!-- <li>
                     <a href="index.php"><span class="material-symbols-outlined icon-adjust">local_library</span></i>Meal Donation</a>
                 </li> -->
-                <li>
+                <!-- <li>
                     <a href="/mips/parent/donationMain.php"><i class="fa fa-cutlery" aria-hidden="true"></i>Meal Donation</a>
-                </li>
+                </li> -->
                 <!-- <li>
                     <a href="event.php"><i class="bi bi-calendar4-event"></i>School Event</a>
                 </li> -->
                 <li>
                     <a href="/mips/bookshop.php"><i class="bi bi-shop-window"></i>Bookshop</a>
                 </li>
-                <li>
+                <!-- <li>
                     <a href="/mips/application.php"><i class="bi bi-list"></i>Job application</a>
-                </li>
+                </li> -->
             </ul>
         </div>
         <div class="profile-area">
