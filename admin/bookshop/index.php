@@ -201,7 +201,7 @@ if (isset($_POST['submit'])) {
         }
 
         $pdo->commit();
-        header('Location: /mips/admin/bookshop/');
+        header('Location: /mips/admin/bookshop/?page-nr=' . $id);
         exit();
     } catch (Exception $e) {
         $pdo->rollBack();
@@ -233,7 +233,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
                             <div class="box" data-product-id="<?= htmlspecialchars($product['product_id']); ?>">
                                 <a href="/mips/admin/bookshop/item.php?pid=<?= htmlspecialchars($product['product_id']); ?>">
                                     <div class="image-container">
-                                        <img src="/mips/uploads/product/<?php echo htmlspecialchars($product['image_url']); ?>" alt="Icon for <?php echo htmlspecialchars($product['product_name']); ?>">
+                                        <img src=<?= !empty($product['image_url']) ? "/mips/uploads/product/" . htmlspecialchars($product['image_url']) : "/mips/images/no-pictures.png" ?> alt="Icon for <?= htmlspecialchars($product['product_name']); ?>">
                                     </div>
                                     <div class="info-container">
                                         <div class="name-field">

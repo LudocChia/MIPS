@@ -376,7 +376,6 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/customer_header.php"; ?>
 
         form.addEventListener('submit', function(event) {
             event.preventDefault();
-
             const selectedSizeButton = document.querySelector('.size-button.selected');
             const selectedChildren = Array.from(document.querySelectorAll('input[name="child[]"]:checked')).map(el => el.value);
             const paymentImage = document.querySelector('input[name="payment_image"]').files[0];
@@ -421,12 +420,13 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/customer_header.php"; ?>
                 });
         });
 
-        document.querySelectorAll('.size-button').forEach(button => {
-            button.addEventListener('click', function() {
-                document.querySelectorAll('.size-button').forEach(btn => btn.classList.remove('selected'));
-                this.classList.add('selected');
-            });
-        });
+        const sizeButtons = document.querySelectorAll('.size-button');
+        if (sizeButtons.length === 1) {
+            sizeButtons[0].classList.add('selected');
+            const sizeId = sizeButtons[0].getAttribute('data-size-id');
+            document.getElementById('size-id').value = sizeId;
+            document.getElementById('selected-size-display').value = sizeButtons[0].textContent;
+        }
 
         document.querySelectorAll('.add-to-cart-btn').forEach(button => {
             button.addEventListener('click', function() {

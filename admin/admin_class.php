@@ -49,14 +49,128 @@ class Action
         return json_encode(['success' => true]);
     }
 
-    // Admin Functions
-    public function deactivate_admin($admin_id)
+    private function update_status($table, $id_field, $id_value, $status)
     {
-        $sql = "UPDATE Admin SET status = 1 WHERE admin_id = :admin_id";
+        $sql = "UPDATE $table SET status = :status WHERE $id_field = :id_value";
         $stmt = $this->db->prepare($sql);
-        $stmt->bindParam(':admin_id', $admin_id);
+        $stmt->bindParam(':status', $status, PDO::PARAM_INT);
+        $stmt->bindParam(':id_value', $id_value, PDO::PARAM_STR);
         return $this->execute_statement($stmt);
     }
+
+    public function deactivate_entity($table, $id_field, $id_value)
+    {
+        return $this->update_status($table, $id_field, $id_value, 1);
+    }
+
+    public function recover_entity($table, $id_field, $id_value)
+    {
+        return $this->update_status($table, $id_field, $id_value, 0);
+    }
+
+    // Deactivate Functions
+    public function deactivate_admin($admin_id)
+    {
+        return $this->deactivate_entity('Admin', 'admin_id', $admin_id);
+    }
+
+    public function deactivate_parent($parent_id)
+    {
+        return $this->deactivate_entity('Parent', 'parent_id', $parent_id);
+    }
+
+    public function deactivate_announcement($announcement_id)
+    {
+        return $this->update_status('Announcement', 'announcement_id', $announcement_id, 1);
+    }
+
+    public function deactivate_student($student_id)
+    {
+        return $this->deactivate_entity('Student', 'student_id', $student_id);
+    }
+
+    public function deactivate_product($product_id)
+    {
+        return $this->update_status('Product', 'product_id', $product_id, 1);
+    }
+
+    public function deactivate_class($class_id)
+    {
+        return $this->deactivate_entity('Class', 'class_id', $class_id);
+    }
+
+    public function deactivate_grade($grade_id)
+    {
+        return $this->deactivate_entity('Grade', 'grade_id', $grade_id);
+    }
+
+    public function deactivate_order($order_id)
+    {
+        return $this->update_status('Orders', 'order_id', $order_id, 1);
+    }
+
+    public function deactivate_product_size($product_size_id)
+    {
+        return $this->update_status('Product_Size', 'product_size_id', $product_size_id, -1);
+    }
+
+    public function deactivate_product_category($category_id)
+    {
+        return $this->update_status('Product_Category', 'category_id', $category_id, 1);
+    }
+
+    // Recover Functions
+    public function recover_product_size($product_size_id)
+    {
+        return $this->update_status('Product_Size', 'product_size_id', $product_size_id, 0);
+    }
+
+    public function recover_admin($admin_id)
+    {
+        return $this->recover_entity('Admin', 'admin_id', $admin_id);
+    }
+
+    public function recover_parent($parent_id)
+    {
+        return $this->recover_entity('Parent', 'parent_id', $parent_id);
+    }
+
+    public function recover_product_category($category_id)
+    {
+        return $this->update_status('Product_Category', 'category_id', $category_id, 0);
+    }
+
+    public function recover_announcement($announcement_id)
+    {
+        return $this->update_status('Announcement', 'announcement_id', $announcement_id, 0);
+    }
+
+    public function recover_order($order_id)
+    {
+        return $this->update_status('Orders', 'order_id', $order_id, 0);
+    }
+
+    public function recover_student($student_id)
+    {
+        return $this->update_status('Student', 'student_id', $student_id, 0);
+    }
+
+    public function recover_product($product_id)
+    {
+        return $this->update_status('Product', 'product_id', $product_id, 0);
+    }
+
+    public function recover_class($class_id)
+    {
+        return $this->update_status('Class', 'class_id', $class_id, 0);
+    }
+
+    public function recover_grade($grade_id)
+    {
+        return $this->recover_entity('Grade', 'grade_id', $grade_id);
+    }
+
+    // Delete Functions
     public function delete_admin($admin_id)
     {
         try {
@@ -136,78 +250,6 @@ class Action
         }
     }
 
-    public function recover_admin($admin_id)
-    {
-        $sql = "UPDATE Admin SET status = 0 WHERE admin_id = :admin_id";
-        $stmt = $this->db->prepare($sql);
-        $stmt->bindParam(':admin_id', $admin_id);
-        return $this->execute_statement($stmt);
-    }
-
-    public function get_admin($admin_id)
-    {
-        $sql = "
-            SELECT admin_id, admin_name, admin_email, created_at
-            FROM Admin
-            WHERE admin_id = :admin_id AND status in (-1, 0)
-        ";
-        $stmt = $this->db->prepare($sql);
-        $stmt->bindParam(':admin_id', $admin_id);
-        $stmt->execute();
-        $admin = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        return $admin ? json_encode($admin) : json_encode(['error' => 'Admin not found']);
-    }
-
-
-    public function save_admin($admin_id, $admin_name, $admin_email, $admin_password, $confirm_password, $admin_type = 'admin')
-    {
-        $emailCheck = json_decode($this->check_email_exists($admin_email, 'Admin', 'admin_email', 'admin_id', $admin_id), true);
-        if (isset($emailCheck['error'])) {
-            return json_encode($emailCheck);
-        }
-
-        $passwordCheck = json_decode($this->validate_password($admin_password, $confirm_password), true);
-        if (isset($passwordCheck['error'])) {
-            return json_encode($passwordCheck);
-        }
-
-        $hashed_password = password_hash($admin_password, PASSWORD_DEFAULT);
-
-        if (!empty($admin_id)) {
-            if (!empty($admin_password)) {
-                $sql = "UPDATE Admin SET admin_name = :name, admin_email = :email, admin_password = :password, admin_type = :adminType WHERE admin_id = :adminId";
-                $stmt = $this->db->prepare($sql);
-                $stmt->bindParam(':password', $hashed_password);
-            } else {
-                $sql = "UPDATE Admin SET admin_name = :name, admin_email = :email, admin_type = :adminType WHERE admin_id = :adminId";
-                $stmt = $this->db->prepare($sql);
-            }
-            $stmt->bindParam(':adminId', $admin_id);
-        } else {
-            $admin_id = uniqid("AD");
-            $sql = "INSERT INTO Admin (admin_id, admin_name, admin_email, admin_password, admin_type) VALUES (:adminId, :name, :email, :password, :adminType)";
-            $stmt = $this->db->prepare($sql);
-            $stmt->bindParam(':adminId', $admin_id);
-            $stmt->bindParam(':password', $hashed_password);
-        }
-
-        $stmt->bindParam(':name', $admin_name);
-        $stmt->bindParam(':email', $admin_email);
-        $stmt->bindParam(':adminType', $admin_type);
-
-        return $this->execute_statement($stmt);
-    }
-
-    // Parent Functions
-    public function deactivate_parent($parent_id)
-    {
-        $sql = "UPDATE Parent SET status = 1 WHERE parent_id = :parent_id";
-        $stmt = $this->db->prepare($sql);
-        $stmt->bindParam(':parent_id', $parent_id);
-        return $this->execute_statement($stmt);
-    }
-
     public function delete_parent($parent_id)
     {
         try {
@@ -271,13 +313,124 @@ class Action
         }
     }
 
-
-    public function recover_parent($parent_id)
+    public function delete_product_category($category_id)
     {
-        $sql = "UPDATE Parent SET status = 0 WHERE parent_id = :parent_id";
+        try {
+            $stmt = $this->db->prepare("SELECT category_icon FROM Product_Category WHERE category_id = :category_id");
+            $stmt->bindParam(':category_id', $category_id);
+            $stmt->execute();
+            $category = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($category && !empty($category['category_icon'])) {
+                $imagePath = $_SERVER['DOCUMENT_ROOT'] . '/mips/uploads/category/' . $category['category_icon'];
+                if (file_exists($imagePath)) {
+                    unlink($imagePath);
+                }
+            }
+
+            $stmt = $this->db->prepare("DELETE FROM Product_Category WHERE category_id = :category_id");
+            $stmt->bindParam(':category_id', $category_id);
+            $stmt->execute();
+        } catch (PDOException $e) {
+            return json_encode(['error' => 'Failed to delete product category: ' . $e->getMessage()]);
+        }
+
+        return json_encode(['success' => true]);
+    }
+
+    public function delete_announcement($announcement_id)
+    {
+        try {
+            $stmt = $this->db->prepare("SELECT announcement_image_url FROM Announcement WHERE announcement_id = :announcement_id");
+            $stmt->bindParam(':announcement_id', $announcement_id);
+            $stmt->execute();
+            $announcement = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($announcement && !empty($announcement['announcement_image_url'])) {
+                $imagePath = $_SERVER['DOCUMENT_ROOT'] . '/mips/uploads/announcement/' . $announcement['announcement_image_url'];
+                if (file_exists($imagePath)) {
+                    unlink($imagePath);
+                }
+            }
+
+            $stmt = $this->db->prepare("DELETE FROM Announcement WHERE announcement_id = :announcement_id");
+            $stmt->bindParam(':announcement_id', $announcement_id);
+            $stmt->execute();
+
+            return json_encode(['success' => 'Announcement deleted successfully']);
+        } catch (PDOException $e) {
+            return json_encode(['error' => 'Database error: ' . $e->getMessage()]);
+        }
+    }
+
+
+    public function delete_order($order_id)
+    {
+        try {
+            $this->db->beginTransaction();
+
+            $sqlGetImage = "SELECT payment_image FROM Payment WHERE order_id = :order_id";
+            $stmtGetImage = $this->db->prepare($sqlGetImage);
+            $stmtGetImage->bindParam(':order_id', $order_id);
+            $stmtGetImage->execute();
+            $paymentImage = $stmtGetImage->fetch(PDO::FETCH_ASSOC);
+
+            if ($paymentImage && !empty($paymentImage['payment_image'])) {
+                $imagePath = $_SERVER['DOCUMENT_ROOT'] . '/mips/uploads/receipts/' . $paymentImage['payment_image'];
+                if (file_exists($imagePath)) {
+                    unlink($imagePath);
+                }
+            }
+
+            $sqlPayment = "DELETE FROM Payment WHERE order_id = :order_id";
+            $stmtPayment = $this->db->prepare($sqlPayment);
+            $stmtPayment->bindParam(':order_id', $order_id);
+            $stmtPayment->execute();
+
+            $sqlOrderItemStudent = "DELETE FROM Order_Item_Student WHERE order_item_id IN (SELECT order_item_id FROM Order_Item WHERE order_id = :order_id)";
+            $stmtOrderItemStudent = $this->db->prepare($sqlOrderItemStudent);
+            $stmtOrderItemStudent->bindParam(':order_id', $order_id);
+            $stmtOrderItemStudent->execute();
+
+            $sqlOrderItem = "DELETE FROM Order_Item WHERE order_id = :order_id";
+            $stmtOrderItem = $this->db->prepare($sqlOrderItem);
+            $stmtOrderItem->bindParam(':order_id', $order_id);
+            $stmtOrderItem->execute();
+
+            $sqlOrder = "DELETE FROM Orders WHERE order_id = :order_id";
+            $stmtOrder = $this->db->prepare($sqlOrder);
+            $stmtOrder->bindParam(':order_id', $order_id);
+            $stmtOrder->execute();
+
+            $this->db->commit();
+            return json_encode(['success' => 'Order and all related data including payment image deleted successfully']);
+        } catch (PDOException $e) {
+            return json_encode(['error' => 'Database error: ' . $e->getMessage()]);
+        }
+    }
+
+    public function delete_student($student_id)
+    {
+        $sql = "DELETE FROM Student WHERE student_id = :student_id";
         $stmt = $this->db->prepare($sql);
-        $stmt->bindParam(':parent_id', $parent_id);
+        $stmt->bindParam(':student_id', $student_id);
         return $this->execute_statement($stmt);
+    }
+
+    // Get Functions
+    public function get_admin($admin_id)
+    {
+        $sql = "
+            SELECT admin_id, admin_name, admin_email, created_at
+            FROM Admin
+            WHERE admin_id = :admin_id AND status in (-1, 0)
+        ";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':admin_id', $admin_id);
+        $stmt->execute();
+        $admin = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        return $admin ? json_encode($admin) : json_encode(['error' => 'Admin not found']);
     }
 
     public function get_parent($parent_id)
@@ -295,6 +448,47 @@ class Action
 
         return $parent ? json_encode($parent) : json_encode(['error' => 'Parent not found']);
     }
+
+    // Save Functions
+    public function save_admin($admin_id, $admin_name, $admin_email, $admin_password, $confirm_password, $admin_type = 'admin')
+    {
+        $emailCheck = json_decode($this->check_email_exists($admin_email, 'Admin', 'admin_email', 'admin_id', $admin_id), true);
+        if (isset($emailCheck['error'])) {
+            return json_encode($emailCheck);
+        }
+
+        $passwordCheck = json_decode($this->validate_password($admin_password, $confirm_password), true);
+        if (isset($passwordCheck['error'])) {
+            return json_encode($passwordCheck);
+        }
+
+        $hashed_password = password_hash($admin_password, PASSWORD_DEFAULT);
+
+        if (!empty($admin_id)) {
+            if (!empty($admin_password)) {
+                $sql = "UPDATE Admin SET admin_name = :name, admin_email = :email, admin_password = :password, admin_type = :adminType WHERE admin_id = :adminId";
+                $stmt = $this->db->prepare($sql);
+                $stmt->bindParam(':password', $hashed_password);
+            } else {
+                $sql = "UPDATE Admin SET admin_name = :name, admin_email = :email, admin_type = :adminType WHERE admin_id = :adminId";
+                $stmt = $this->db->prepare($sql);
+            }
+            $stmt->bindParam(':adminId', $admin_id);
+        } else {
+            $admin_id = uniqid("AD");
+            $sql = "INSERT INTO Admin (admin_id, admin_name, admin_email, admin_password, admin_type) VALUES (:adminId, :name, :email, :password, :adminType)";
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindParam(':adminId', $admin_id);
+            $stmt->bindParam(':password', $hashed_password);
+        }
+
+        $stmt->bindParam(':name', $admin_name);
+        $stmt->bindParam(':email', $admin_email);
+        $stmt->bindParam(':adminType', $admin_type);
+
+        return $this->execute_statement($stmt);
+    }
+
 
     public function save_parent($parent_id, $parent_name, $parent_email, $parent_phone, $parent_password, $confirm_password, $admin_id)
     {
@@ -384,47 +578,6 @@ class Action
         return json_encode($parents);
     }
 
-    // Product Category Functions
-    public function deactivate_product_category($category_id)
-    {
-        $sql = "UPDATE Product_Category SET status = 1 WHERE category_id = :category_id";
-        $stmt = $this->db->prepare($sql);
-        $stmt->bindParam(':category_id', $category_id);
-        return $this->execute_statement($stmt);
-    }
-
-    public function delete_product_category($category_id)
-    {
-        try {
-            $stmt = $this->db->prepare("SELECT category_icon FROM Product_Category WHERE category_id = :category_id");
-            $stmt->bindParam(':category_id', $category_id);
-            $stmt->execute();
-            $category = $stmt->fetch(PDO::FETCH_ASSOC);
-
-            if ($category && !empty($category['category_icon'])) {
-                $imagePath = $_SERVER['DOCUMENT_ROOT'] . '/mips/uploads/category/' . $category['category_icon'];
-                if (file_exists($imagePath)) {
-                    unlink($imagePath);
-                }
-            }
-
-            $stmt = $this->db->prepare("DELETE FROM Product_Category WHERE category_id = :category_id");
-            $stmt->bindParam(':category_id', $category_id);
-            $stmt->execute();
-        } catch (PDOException $e) {
-            return json_encode(['error' => 'Failed to delete product category: ' . $e->getMessage()]);
-        }
-
-        return json_encode(['success' => true]);
-    }
-
-    public function recover_product_category($category_id)
-    {
-        $sql = "UPDATE Product_Category SET status = 0 WHERE category_id = :category_id";
-        $stmt = $this->db->prepare($sql);
-        $stmt->bindParam(':category_id', $category_id);
-        return $this->execute_statement($stmt);
-    }
 
     public function get_category($category_id)
     {
@@ -459,40 +612,6 @@ class Action
     }
 
 
-    // Product Size Functions
-    public function deactivate_product_size($product_size_id)
-    {
-        $sql = "UPDATE Product_Size SET status = 1 WHERE product_size_id = :product_size_id";
-        $stmt = $this->db->prepare($sql);
-        $stmt->bindParam(':product_size_id', $product_size_id);
-        return $this->execute_statement($stmt);
-    }
-
-    public function recover_product_size($product_size_id)
-    {
-        $sql = "UPDATE Product_Size SET status = 0 WHERE product_size_id = :product_size_id";
-        $stmt = $this->db->prepare($sql);
-        $stmt->bindParam(':product_size_id', $product_size_id);
-        return $this->execute_statement($stmt);
-    }
-
-    // Announcement Functions
-    public function deactivate_announcement($announcement_id)
-    {
-        $sql = "UPDATE Announcement SET status = 1 WHERE announcement_id = :announcement_id";
-        $stmt = $this->db->prepare($sql);
-        $stmt->bindParam(':announcement_id', $announcement_id);
-        return $this->execute_statement($stmt);
-    }
-
-    public function recover_announcement($announcement_id)
-    {
-        $sql = "UPDATE Announcement SET status = 0 WHERE announcement_id = :announcement_id";
-        $stmt = $this->db->prepare($sql);
-        $stmt->bindParam(':announcement_id', $announcement_id);
-        return $this->execute_statement($stmt);
-    }
-
     public function get_announcement($announcement_id)
     {
         $sql = "SELECT announcement_id, admin_id, announcement_image_url, announcement_url, announcement_title, announcement_message, created_at, updated_at
@@ -505,33 +624,7 @@ class Action
         return $announcement ? json_encode($announcement) : json_encode(['error' => 'Announcement not found']);
     }
 
-    public function delete_announcement($announcement_id)
-    {
-        try {
-            $stmt = $this->db->prepare("SELECT announcement_image_url FROM Announcement WHERE announcement_id = :announcement_id");
-            $stmt->bindParam(':announcement_id', $announcement_id);
-            $stmt->execute();
-            $announcement = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            if ($announcement && !empty($announcement['announcement_image_url'])) {
-                $imagePath = $_SERVER['DOCUMENT_ROOT'] . '/mips/uploads/announcement/' . $announcement['announcement_image_url'];
-                if (file_exists($imagePath)) {
-                    unlink($imagePath);
-                }
-            }
-
-            $stmt = $this->db->prepare("DELETE FROM Announcement WHERE announcement_id = :announcement_id");
-            $stmt->bindParam(':announcement_id', $announcement_id);
-            $stmt->execute();
-
-            return json_encode(['success' => 'Announcement deleted successfully']);
-        } catch (PDOException $e) {
-            return json_encode(['error' => 'Database error: ' . $e->getMessage()]);
-        }
-    }
-
-
-    // Order Functions
     public function update_order_status($order_id, $new_status)
     {
         try {
@@ -585,74 +678,8 @@ class Action
         }
     }
 
-    public function deactivate_order($order_id)
-    {
-        try {
-            $stmt = $this->db->prepare("UPDATE Orders SET status = 1 WHERE order_id = :order_id");
-            $stmt->bindParam(':order_id', $order_id);
-            $stmt->execute();
-            return json_encode(['success' => 'Order deactivated successfully']);
-        } catch (PDOException $e) {
-            return json_encode(['error' => 'Database error: ' . $e->getMessage()]);
-        }
-    }
 
-    public function recover_order($order_id)
-    {
-        try {
-            $stmt = $this->db->prepare("UPDATE Orders SET status = 0 WHERE order_id = :order_id");
-            $stmt->bindParam(':order_id', $order_id);
-            $stmt->execute();
-            return json_encode(['success' => 'Order recovered successfully']);
-        } catch (PDOException $e) {
-            return json_encode(['error' => 'Database error: ' . $e->getMessage()]);
-        }
-    }
 
-    public function delete_order($order_id)
-    {
-        try {
-            $this->db->beginTransaction();
-
-            $sqlGetImage = "SELECT payment_image FROM Payment WHERE order_id = :order_id";
-            $stmtGetImage = $this->db->prepare($sqlGetImage);
-            $stmtGetImage->bindParam(':order_id', $order_id);
-            $stmtGetImage->execute();
-            $paymentImage = $stmtGetImage->fetch(PDO::FETCH_ASSOC);
-
-            if ($paymentImage && !empty($paymentImage['payment_image'])) {
-                $imagePath = $_SERVER['DOCUMENT_ROOT'] . '/mips/uploads/receipts/' . $paymentImage['payment_image'];
-                if (file_exists($imagePath)) {
-                    unlink($imagePath);
-                }
-            }
-
-            $sqlPayment = "DELETE FROM Payment WHERE order_id = :order_id";
-            $stmtPayment = $this->db->prepare($sqlPayment);
-            $stmtPayment->bindParam(':order_id', $order_id);
-            $stmtPayment->execute();
-
-            $sqlOrderItemStudent = "DELETE FROM Order_Item_Student WHERE order_item_id IN (SELECT order_item_id FROM Order_Item WHERE order_id = :order_id)";
-            $stmtOrderItemStudent = $this->db->prepare($sqlOrderItemStudent);
-            $stmtOrderItemStudent->bindParam(':order_id', $order_id);
-            $stmtOrderItemStudent->execute();
-
-            $sqlOrderItem = "DELETE FROM Order_Item WHERE order_id = :order_id";
-            $stmtOrderItem = $this->db->prepare($sqlOrderItem);
-            $stmtOrderItem->bindParam(':order_id', $order_id);
-            $stmtOrderItem->execute();
-
-            $sqlOrder = "DELETE FROM Orders WHERE order_id = :order_id";
-            $stmtOrder = $this->db->prepare($sqlOrder);
-            $stmtOrder->bindParam(':order_id', $order_id);
-            $stmtOrder->execute();
-
-            $this->db->commit();
-            return json_encode(['success' => 'Order and all related data including payment image deleted successfully']);
-        } catch (PDOException $e) {
-            return json_encode(['error' => 'Database error: ' . $e->getMessage()]);
-        }
-    }
 
     // Retrieve pending order count
     public function get_pending_count()
@@ -703,31 +730,6 @@ class Action
         } else {
             return json_encode(['error' => 'Order not found']);
         }
-    }
-
-    // student Functions
-    public function deactivate_student($student_id)
-    {
-        $sql = "UPDATE Student SET status = 1 WHERE student_id = :student_id";
-        $stmt = $this->db->prepare($sql);
-        $stmt->bindParam(':student_id', $student_id);
-        return $this->execute_statement($stmt);
-    }
-
-    public function delete_student($student_id)
-    {
-        $sql = "DELETE FROM Student WHERE student_id = :student_id";
-        $stmt = $this->db->prepare($sql);
-        $stmt->bindParam(':student_id', $student_id);
-        return $this->execute_statement($stmt);
-    }
-
-    public function recover_student($student_id)
-    {
-        $sql = "UPDATE Student SET status = 0 WHERE student_id = :student_id";
-        $stmt = $this->db->prepare($sql);
-        $stmt->bindParam(':student_id', $student_id);
-        return $this->execute_statement($stmt);
     }
 
     public function activate_student($student_id)
@@ -795,70 +797,6 @@ class Action
             return null;
         }
     }
-
-    // public function save_student($student_id, $class_id, $student_name, $parent_id, $parent_relationship)
-    // {
-    //     try {
-    //         $this->db->beginTransaction();
-
-    //         $studentImage = handleFileUpload($_FILES['student_image'], $student_id);
-
-    //         if ($existingStudentId) {
-    //             $sql = "UPDATE Student 
-    //                     SET student_id = :studentId, student_name = :name, class_id = :classId, student_image = :student_image 
-    //                     WHERE student_id = :existing_student_id";
-    //             $stmt = $this->db->prepare($sql);
-    //             $stmt->bindParam(':existing_student_id', $existingStudentId);
-    //         } else {
-    //             $sql = "INSERT INTO Student (student_id, student_name, class_id, student_image, status) 
-    //                     VALUES (:studentId, :name, :classId, :student_image, 0)";
-    //             $stmt = $this->db->prepare($sql);
-    //         }
-
-    //         $stmt->bindParam(':studentId', $student_id);
-    //         $stmt->bindParam(':name', $student_name);
-    //         $stmt->bindParam(':classId', $class_id);
-    //         $stmt->bindParam(':student_image', $studentImage);
-    //         $stmt->execute();
-
-    //         if ($parent_id) {
-    //             $sqlCheck = "SELECT parent_student_id FROM Parent_Student WHERE student_id = :student_id";
-    //             $stmtCheck = $this->db->prepare($sqlCheck);
-    //             $stmtCheck->bindParam(':student_id', $student_id);
-    //             $stmtCheck->execute();
-    //             $oldParentStudent = $stmtCheck->fetch(PDO::FETCH_ASSOC);
-
-    //             if ($oldParentStudent) {
-    //                 $sqlUpdateParentStudent = "UPDATE Parent_Student 
-    //                                            SET parent_id = :parent_id, relationship = :relationship 
-    //                                            WHERE parent_student_id = :parent_student_id";
-    //                 $stmtUpdateParentStudent = $this->db->prepare($sqlUpdateParentStudent);
-    //                 $stmtUpdateParentStudent->bindParam(':parent_id', $parent_id);
-    //                 $stmtUpdateParentStudent->bindParam(':relationship', $parent_relationship);
-    //                 $stmtUpdateParentStudent->bindParam(':parent_student_id', $oldParentStudent['parent_student_id']);
-    //                 $stmtUpdateParentStudent->execute();
-    //             } else {
-    //                 $newParentStudentId = uniqid('PS');
-    //                 $sqlInsert = "INSERT INTO Parent_Student (parent_student_id, parent_id, student_id, relationship) 
-    //                               VALUES (:parent_student_id, :parent_id, :student_id, :relationship)";
-    //                 $stmtInsert = $this->db->prepare($sqlInsert);
-    //                 $stmtInsert->bindParam(':parent_student_id', $newParentStudentId);
-    //                 $stmtInsert->bindParam(':parent_id', $parent_id);
-    //                 $stmtInsert->bindParam(':student_id', $student_id);
-    //                 $stmtInsert->bindParam(':relationship', $parent_relationship);
-    //                 $stmtInsert->execute();
-    //             }
-    //         } else {
-    //             echo "<script>alert('Please select a parent.');</script>";
-    //         }
-
-    //         $this->db->commit();
-    //     } catch (PDOException $e) {
-    //         $this->db->rollBack();
-    //         echo "Error: " . $e->getMessage();
-    //     }
-    // }
-
     // Retrieve class data
     public function get_class($class_id)
     {
@@ -933,25 +871,6 @@ class Action
     }
 
 
-    // Product Functions
-    public function deactivate_product($product_id)
-    {
-        $sql = "UPDATE Product SET status = 1 WHERE product_id = :product_id";
-        $stmt = $this->db->prepare($sql);
-        $stmt->bindParam(':product_id', $product_id);
-        return $this->execute_statement($stmt);
-    }
-
-    public function delete_product($product_id) {}
-
-    public function recover_product($product_id)
-    {
-        $sql = "UPDATE Product SET status = 0 WHERE product_id = :product_id";
-        $stmt = $this->db->prepare($sql);
-        $stmt->bindParam(':product_id', $product_id);
-        return $this->execute_statement($stmt);
-    }
-
     public function get_product($product_id)
     {
         $sql = "
@@ -995,39 +914,6 @@ class Action
         } else {
             return json_encode(['error' => 'Product not found']);
         }
-    }
-
-    // Grade and Class Functions
-    public function deactivate_class($class_id)
-    {
-        $sql = "UPDATE Class SET status = 1 WHERE class_id = :class_id";
-        $stmt = $this->db->prepare($sql);
-        $stmt->bindParam(':class_id', $class_id);
-        return $this->execute_statement($stmt);
-    }
-
-    public function recover_class($class_id)
-    {
-        $sql = "UPDATE Class SET status = 0 WHERE class_id = :class_id";
-        $stmt = $this->db->prepare($sql);
-        $stmt->bindParam(':class_id', $class_id);
-        return $this->execute_statement($stmt);
-    }
-
-    public function deactivate_grade($grade_id)
-    {
-        $sql = "UPDATE Grade SET status = 1 WHERE grade_id = :grade_id";
-        $stmt = $this->db->prepare($sql);
-        $stmt->bindParam(':grade_id', $grade_id);
-        return $this->execute_statement($stmt);
-    }
-
-    public function recover_grade($grade_id)
-    {
-        $sql = "UPDATE Grade SET status = 0 WHERE grade_id = :grade_id";
-        $stmt = $this->db->prepare($sql);
-        $stmt->bindParam(':grade_id', $grade_id);
-        return $this->execute_statement($stmt);
     }
 
     // Event functions

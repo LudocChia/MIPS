@@ -112,7 +112,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         .then(response => response.json())
                         .then(result => {
                             if (result.success) {
-                                location.reload();
+                                window.location.href = window.location.href;
                             } else {
                                 alert('Error recovering: ' + result.error);
                             }
@@ -151,7 +151,20 @@ document.addEventListener('DOMContentLoaded', function () {
                         .then(response => response.json())
                         .then(result => {
                             if (result.success) {
-                                location.reload();
+                                const currentPage = parseInt(new URLSearchParams(window.location.search).get('page-nr')) || 1;
+                                const totalPages = result.total_pages;
+
+                                console.log(`Current page: ${currentPage}, Total pages: ${totalPages}`);
+
+                                let redirectPage = currentPage;
+
+                                if (currentPage > totalPages) {
+                                    redirectPage = totalPages > 0 ? totalPages : 1;
+                                }
+
+                                const url = new URL(window.location.href);
+                                url.searchParams.set('page-nr', redirectPage);
+                                window.location.href = url.toString();
                             } else {
                                 alert('Error deactivating: ' + result.error);
                             }
@@ -194,7 +207,8 @@ document.addEventListener('DOMContentLoaded', function () {
                                 if (actionType === 'delete_event') {
                                     window.location.href = '/mips/admin/admin_meal/adminMain.php';
                                 } else {
-                                    location.reload();
+                                    window.location.href = window.location.href;
+
                                 }
                             } else {
                                 alert('Error deleting: ' + result.error);

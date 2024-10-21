@@ -1,9 +1,10 @@
 <?php
 
-$database_table = "Product Category";
+$database_table = "Product_Category";
+$parent_id_condition = "NULL";
 $rows_per_page = 10;
 include $_SERVER['DOCUMENT_ROOT'] . "/mips/php/admin.php";
-include $_SERVER['DOCUMENT_ROOT'] . "/mips/php/activated_pagination.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/mips/php/activated_sub_pagination.php";
 
 function getMainCategories($pdo, $start, $rows_per_page)
 {
@@ -102,7 +103,8 @@ if (isset($_POST["submit"])) {
 }
 
 $pageTitle = "Bookshop Main Category - MIPS";
-include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
+include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php";
+?>
 
 <body id="<?php echo $id ?>">
     <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_header.php"; ?>
@@ -123,7 +125,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                         <?php foreach ($all_main_categories as $category) : ?>
                             <div class="box" data-category-id="<?= htmlspecialchars($category['category_id']); ?>">
                                 <div class="image-container">
-                                    <img src="/mips/uploads/category/<?php echo htmlspecialchars($category['category_icon']); ?>" alt="Icon for <?php echo htmlspecialchars($category['category_name']); ?>">
+                                    <img src=<?= !empty($category['category_icon']) ? "/mips/uploads/category/" . htmlspecialchars($category['category_icon']) : "/mips/images/no-pictures.png"; ?> alt="Icon for <?= htmlspecialchars($category['category_name']); ?>">
                                 </div>
                                 <div class="actions">
                                     <form action="" method="POST" style="display:inline;" onsubmit="return showDeactivateConfirmDialog(event);">
@@ -144,10 +146,10 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                 <?php else : ?>
                     <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/no_data_found.php"; ?>
                 <?php endif; ?>
+                <?php if (!empty($all_main_categories)) : ?>
+                    <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/pagination.php"; ?>
+                <?php endif; ?>
             </div>
-            <?php if (!empty($all_classes)) : ?>
-                <?php include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/pagination.php"; ?>
-            <?php endif; ?>
         </main>
     </div>
     <dialog id="add-edit-data">
@@ -160,7 +162,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                     <button class="actions cancel"><i class="bi bi-x-circle"></i></button>
                 </div>
             </div>
-            <input type="hidden" name="category_id" value="">
+            <input type="text" name="category_id" value="">
             <div class="input-container">
                 <h2>Category Name<sup>*</sup></h2>
                 <div class="input-field">

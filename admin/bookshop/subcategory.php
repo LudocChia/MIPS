@@ -1,34 +1,10 @@
 <?php
 
+$database_table = "Product_Category";
+$parent_id_condition = "NOT NULL";
 $rows_per_page = 10;
 include $_SERVER['DOCUMENT_ROOT'] . "/mips/php/admin.php";
-
-function getPageCount($pdo, $rows_per_page)
-{
-    $sql = "SELECT COUNT(*) AS count FROM product_category WHERE parent_id IS NOT NULL AND status = 0";
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute();
-    $result = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    $total_rows = $result['count'];
-    $total_pages = ceil($total_rows / $rows_per_page);
-
-    return $total_pages;
-}
-
-$pageCount = getPageCount($pdo, $rows_per_page);
-
-if (isset($_GET['page-nr'])) {
-    $page = $_GET['page-nr'] - 1;
-    $start = $page * $rows_per_page;
-}
-
-if (isset($_GET['page-nr'])) {
-    $id = $_GET['page-nr'];
-} else {
-    $id = 1;
-}
-
+include $_SERVER['DOCUMENT_ROOT'] . "/mips/php/activated_sub_pagination.php";
 
 function getSubcategories($pdo, $start, $rows_per_page)
 {
@@ -157,7 +133,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                         <?php foreach ($all_subcategories as $subcategory) : ?>
                             <div class="box" data-subcategory-id="<?= htmlspecialchars($subcategory['category_id']); ?>">
                                 <div class="image-container">
-                                    <img src="/mips/uploads/category/<?php echo htmlspecialchars($subcategory['category_icon']); ?>" alt="Icon for <?php echo htmlspecialchars($subcategory['category_name']); ?>">
+                                    <img src=<?= !empty($subcategory['category_icon']) ? "/mips/uploads/category/" . htmlspecialchars($subcategory['category_icon']) : "/mips/images/no-pictures.png"; ?> alt="Icon for <?= htmlspecialchars($subcategory['category_name']); ?>">
                                 </div>
                                 <div class="actions">
                                     <form method="POST" style="display:inline;" onsubmit="return showDeactivateConfirmDialog(event);">

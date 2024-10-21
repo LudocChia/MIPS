@@ -113,7 +113,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/mips/components/admin_head.php"; ?>
                             </div>
                             <div class="thumbnails">
                                 <?php foreach ($images as $image) : ?>
-                                    <img class="thumbnail" src="/mips/uploads/product/<?php echo htmlspecialchars($image['image_url']); ?>" data-src="/mips/uploads/product/<?php echo htmlspecialchars($image['image_url']); ?>">
+                                    <img class="thumbnail" src="/mips/uploads/product/<?php echo htmlspecialchars($image['image_url']); ?>" data-src="/mips/uploads/product/<?= htmlspecialchars($image['image_url']); ?>">
                                 <?php endforeach; ?>
                             </div>
                         <?php else : ?>
